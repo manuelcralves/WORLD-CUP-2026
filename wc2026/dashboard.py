@@ -13,6 +13,7 @@ from pathlib import Path
 
 from . import analysis as AN
 from . import facts as FACTS
+from . import fifa as FIFA
 from . import goldenboot as GB
 from . import predictions as PR
 from . import schedule as SCH
@@ -52,6 +53,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "p_ko": float(r["p_ko"]), "p_r16": float(r["p_r16"]),
         "p_qf": float(r["p_qf"]), "p_sf": float(r["p_sf"]),
         "p_final": float(r["p_final"]), "p_champion": float(r["p_champion"]),
+        "fifa_rank": FIFA.rank_of(r["team"]),
         "opponents": PR.opponents_for(table, r["team"]),
     } for _, r in table.iterrows()]
 
@@ -114,6 +116,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "odds_history": odds_history,
         "elo_by_year": elo_by_year(bundle["matches"]),
         "kickoffs": SCH.all_lisbon(),
+        "fifa": FIFA.compare(table),
         "fixtures": _fixtures(bundle),
         "structure": {
             "groups": OFFICIAL_GROUPS,
@@ -336,7 +339,7 @@ function renderDetail(){
   const t=byName[selected];
   let h=`<div style="display:flex;align-items:center;gap:12px">${flag(t.team,"lg")}
   <div><div style="font-size:21px;font-weight:800">${t.team}</div>
-  <div class="tag">Group ${t.group} · Elo ${t.elo} · ${t.exp_points.toFixed(1)} exp. pts</div></div></div>
+  <div class="tag">Group ${t.group} · Elo ${t.elo}${t.fifa_rank?' · FIFA #'+t.fifa_rank:''} · ${t.exp_points.toFixed(1)} exp. pts</div></div></div>
   <div style="margin-top:14px">`;
   STAGES.forEach(s=>{h+=`<div class="prow"><span class="lb">${s[1]}</span>${bar(t[s[0]],"#ffd34d")}</div>`;});
   h+=`</div>`;
@@ -503,6 +506,31 @@ function renderReview(){
   document.getElementById("review").innerHTML=h+`</tbody></table>`;
 }
 
+function renderFifa(){
+  const f=D.fifa,el=document.getElementById("fifa");if(!el)return;
+  if(!f||!f.rows||!f.rows.length){el.style.display="none";return;}
+  const chip=r=>`<div class="chip">${flag(r.team,'sm')} ${r.team}
+    <span style="color:#8b95ab">model #${r.model_rank} · FIFA #${r.fifa_rank48}</span>
+    <b style="color:${r.edge>0?'#00e0a4':'#ff6b6b'}">${r.edge>0?'+':''}${r.edge}</b></div>`;
+  const believers=[...f.rows].sort((a,b)=>b.edge-a.edge).slice(0,5);
+  const doubters=[...f.rows].sort((a,b)=>a.edge-b.edge).slice(0,5);
+  let h=`<p class="note">The model's own strength ranking (by Elo) vs the official
+   <b>FIFA ranking</b> (${f.date}), both re-ranked among the 48 finalists. They line up
+   closely — rank correlation <b>${f.spearman.toFixed(2)}</b> — but the model has opinions:</p>
+   <p class="note" style="margin-top:10px"><b>📈 Model's believers</b> — rates them higher than FIFA:</p>
+   <div class="chips">${believers.map(chip).join("")}</div>
+   <p class="note" style="margin-top:12px"><b>📉 Model's doubters</b> — rates them lower than FIFA:</p>
+   <div class="chips">${doubters.map(chip).join("")}</div>`;
+  h+=`<table style="margin-top:16px"><thead><tr><th>Team</th><th>Model rank</th>
+   <th>FIFA rank</th><th>FIFA world #</th><th>FIFA pts</th><th>Δ</th></tr></thead><tbody>`;
+  f.rows.forEach(r=>{const c=r.edge>0?'#00e0a4':(r.edge<0?'#ff6b6b':'#8b95ab');
+    h+=`<tr><td><span class="row-team">${flag(r.team,'sm')} ${r.team}</span></td>
+    <td>#${r.model_rank}</td><td>#${r.fifa_rank48}</td>
+    <td style="color:#8b95ab">#${r.fifa_rank}</td>
+    <td style="color:#8b95ab">${r.fifa_pts.toFixed(0)}</td>
+    <td style="color:${c};font-weight:700">${r.edge>0?'+':''}${r.edge}</td></tr>`;});
+  el.innerHTML=h+`</tbody></table>`;
+}
 function renderAnalysis(){
   const a=D.analysis;if(!a)return;
   const god=a.group_of_death[0];
@@ -634,7 +662,7 @@ function renderEloYear(){
         y:{ticks:{color:"#eef1f7"},grid:{display:false}}}}});}
 
 renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
-renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();
+renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();renderFifa();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
   document.getElementById("elo-year").oninput=renderEloYear;}
 document.getElementById("mfilter").onchange=renderMatches;
@@ -769,6 +797,8 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div class='layout'><div><input class='search' id='search' "
         "placeholder='🔎 Search a team…'><div id='ranking'></div></div>"
         "<div class='panel sticky' id='detail'></div></div>"
+        "<h2>🏅 Model vs FIFA ranking <span class='tag'>does the model agree?</span></h2>"
+        "<div id='fifa'></div>"
         "<h2>The 12 groups <span class='tag'>expected standings</span></h2>"
         "<div class='grid' id='groups'></div>"
         "<h2>Group-stage matches <span class='tag'>times in Portugal · WEST (UTC+1)</span></h2>"
