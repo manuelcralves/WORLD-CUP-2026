@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from .tournament import STAGES, STAGE_LABELS
-from .viz import CODES, FAVICON, GOLD, GREEN, INK, MUTED, TEXT, flag
+from .viz import CODES, FAVICON, GOLD, GREEN, INK, MUTED, SITE, TEXT, flag
 
 
 def _flag_img(team: str, h: int = 13) -> str:
@@ -136,6 +136,16 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
         f"<!doctype html><html lang='en'><head><meta charset='utf-8'>"
         f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
         f"<title>World Cup 2026 — comparison</title>{FAVICON}"
+        '<meta property="og:title" content="World Cup 2026 — live vs pre-tournament">'
+        '<meta property="og:description" content="Compare the live and blind '
+        'pre-tournament title odds for all 48 teams.">'
+        f'<meta property="og:image" content="{SITE}/outputs/share_title.png">'
+        f'<meta property="og:url" content="{SITE}/compare.html">'
+        '<meta property="og:type" content="website">'
+        '<meta name="twitter:card" content="summary_large_image">'
+        '<meta name="theme-color" content="#0c1018">'
+        '<link rel="manifest" href="manifest.json">'
+        '<link rel="apple-touch-icon" href="apple-touch-icon.png">'
         f"<style>{css}</style></head><body>"
         f"<a class='homebtn' href='index.html'>🏠 Home</a>"
         f"<h1>🏆 World Cup 2026 — live vs. pre-tournament</h1>"

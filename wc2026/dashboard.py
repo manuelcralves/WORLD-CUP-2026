@@ -19,7 +19,7 @@ from . import goldenboot as GB
 from . import predictions as PR
 from . import schedule as SCH
 from .tournament import HOSTS, LATER, OFFICIAL_GROUPS, R32, THIRD_ELIGIBLE
-from .viz import CODES, FAVICON, FLAGS, elo_by_year
+from .viz import CODES, FAVICON, FLAGS, SITE, elo_by_year
 
 
 def _num(x, default=1.3):
@@ -363,6 +363,8 @@ const pct=x=>(x*100).toFixed(1)+"%", pc0=x=>(x*100).toFixed(0)+"%";
 const pctv=x=>{const v=x*100;if(v<=0)return"0%";if(v<0.01)return"<0.01%";
   if(v<0.1)return v.toFixed(2)+"%";return v.toFixed(1)+"%";};
 let sortKey="p_champion",sortDir=-1,selected=D.teams[0].team,query="";
+const qteam=new URLSearchParams(location.search).get("team");  // ?team= deep link
+if(qteam&&byName[qteam])selected=qteam;
 
 function flag(team,cls){const t=byName[team]||{};const c=t.code!==undefined?t.code:(D.favorite.team===team?D.favorite.code:"");
   if(c) return `<img class="flag ${cls||''}" src="https://flagcdn.com/w40/${c}.png" alt="" loading="lazy">`;
@@ -390,6 +392,7 @@ function renderRanking(){
   c.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;
     if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=-1;}renderRanking();});
   c.querySelectorAll("tr.row").forEach(tr=>tr.onclick=()=>{selected=tr.dataset.t;
+    history.replaceState(null,"","?team="+encodeURIComponent(selected));
     renderRanking();renderDetail();renderGroups();});
 }
 
@@ -761,6 +764,8 @@ document.getElementById("mfilter").onchange=renderMatches;
 document.getElementById("search").oninput=e=>{query=e.target.value.toLowerCase();renderRanking();};
 document.getElementById("sim-btn").onclick=rollTournament;
 makeCollapsible();
+if(qteam&&byName[qteam]){const r=document.querySelector("tr.sel");
+  if(r)r.scrollIntoView({behavior:"smooth",block:"center"});}
 """
 
 
@@ -854,6 +859,24 @@ def build_interactive(data: dict, out_path) -> Path:
     fl = lambda d: (f'<img class="flag" src="https://flagcdn.com/w40/{d["code"]}.png">'
                     if d.get("code") else d.get("flag", ""))
     mode = (data.get("mode_label") + " · ") if data.get("mode_label") else ""
+    pre = "Pre-tournament" in (data.get("mode_label") or "")
+    ogdir = "/outputs_pretournament" if pre else "/outputs"
+    og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
+        f'<meta property="og:title" content="World Cup 2026 — ML prediction'
+        f'{" (pre-tournament)" if pre else ""}">'
+        '<meta property="og:description" content="Who wins the 2026 World Cup? A '
+        f'Poisson + Elo model over {data["n_sims"]:,} simulations — title odds, the '
+        'bracket, a Match Lab and more.">'
+        f'<meta property="og:image" content="{SITE}{ogdir}/share_title.png">'
+        f'<meta property="og:url" content="{SITE}{ogdir}/dashboard.html">'
+        '<meta property="og:type" content="website">'
+        '<meta name="twitter:card" content="summary_large_image">'
+        '<meta name="theme-color" content="#0c1018">'
+        '<meta name="apple-mobile-web-app-capable" content="yes">'
+        '<meta name="apple-mobile-web-app-title" content="WC 2026">'
+        '<link rel="manifest" href="../manifest.json">'
+        '<link rel="apple-touch-icon" href="../apple-touch-icon.png">'
+    )
     review_html = ("<h2 class='col mcol'>✅ Results so far <span class='tag'>predicted vs actual</span></h2>"
                    "<div id='review'></div>") if data.get("played_review") else ""
 
@@ -861,7 +884,7 @@ def build_interactive(data: dict, out_path) -> Path:
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         "<title>FIFA World Cup 2026 — ML Prediction</title>"
-        f"{FAVICON}"
+        f"{FAVICON}{og}"
         "<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>"
         "<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800"
         "&display=swap' rel='stylesheet'>"
