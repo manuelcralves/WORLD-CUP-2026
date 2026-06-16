@@ -116,7 +116,7 @@ def lisbon(home: str, away: str) -> dict | None:
     if not iso:
         return None
     t = pd.Timestamp(iso) + pd.Timedelta(hours=1)  # WEST = UTC+1
-    return {"hm": t.strftime("%H:%M"),
+    return {"hm": t.strftime("%H:%M"), "date": t.strftime("%Y-%m-%d"),
             "label": f"{_WD[t.weekday()]} {t.day} {_MO[t.month]} · {t.strftime('%H:%M')}"}
 
 

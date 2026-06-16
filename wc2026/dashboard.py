@@ -319,6 +319,15 @@ font-size:12.5px;color:var(--muted)}.h2hl .r b{color:var(--text)}
 display:flex;align-items:flex-end;overflow:hidden}
 .gmbar>div{width:100%;border-radius:6px 6px 0 0;transition:height .7s cubic-bezier(.22,1,.36,1)}
 .gmlbl{font-size:10px;color:var(--muted)}.gmval{font-size:10px;color:var(--muted);font-weight:700}
+/* ---- today's matches ---- */
+.todaycards{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:10px;margin-top:4px}
+.todaycard{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);
+border-radius:14px;padding:12px 14px}
+.tdtime{font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px}
+.tdteams{font-weight:700;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px}
+.tdvs{color:var(--muted);font-weight:400;font-size:12px}
+.tdpred,.tdres{font-size:12.5px;color:var(--muted);margin-top:8px}
+.tdres b,.tdpred b{color:var(--text)}
 .homebtn{position:fixed;top:14px;left:14px;z-index:50;display:inline-flex;align-items:center;
 gap:6px;background:rgba(22,29,43,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
 border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:13px;font-weight:600;
@@ -593,6 +602,38 @@ function renderFifa(){
     <td style="color:${c};font-weight:700">${r.edge>0?'+':''}${r.edge}</td></tr>`;});
   el.innerHTML=h+`</tbody></table>`;
 }
+function renderToday(){
+  const sec=document.getElementById("todaysec");if(!sec)return;
+  const ko=D.kickoffs||{},K=(a,b)=>ko[[a,b].sort().join("|")];
+  const predBy={};(D.matches||[]).forEach(m=>predBy[[m.home,m.away].sort().join("|")]=m);
+  const revBy={};(D.played_review||[]).forEach(m=>revBy[[m.home,m.away].sort().join("|")]=m);
+  const fx=(D.fixtures||[]).map(f=>{const k=K(f.home,f.away);return k?Object.assign({},f,{ko:k}):null;}).filter(Boolean);
+  const now=new Date(),lis=new Date(now.getTime()+(now.getTimezoneOffset()+60)*60000);  // Lisbon = UTC+1
+  const today=lis.toISOString().slice(0,10);
+  let day=fx.filter(f=>f.ko.date===today),head="Today's matches";
+  if(!day.length){const fut=fx.filter(f=>f.ko.date>today).sort((a,b)=>a.ko.date<b.ko.date?-1:1);
+    if(fut.length){const d=fut[0].ko.date;day=fx.filter(f=>f.ko.date===d);
+      head="Next up · "+fut.find(f=>f.ko.date===d).ko.label.split(" · ")[0];}}
+  if(!day.length){sec.style.display="none";return;}
+  day.sort((a,b)=>a.ko.hm<b.ko.hm?-1:1);
+  const hd=document.getElementById("todayhead");if(hd)hd.textContent=head;
+  let h=`<div class="todaycards">`;
+  day.forEach(f=>{const key=[f.home,f.away].sort().join("|"),rev=revBy[key],pred=predBy[key];let info="";
+    if(rev)info=`<div class="tdres">Full time <b>${rev.hs}-${rev["as"]}</b> ${rev.hit?'<span class="badge2 y">model ✓</span>':'<span class="badge2 n">model ✗</span>'}</div>`;
+    else if(f.played)info=`<div class="tdres">Full time <b>${f.hs}-${f["as"]}</b></div>`;
+    else if(pred)info=`<div class="tdpred">Model ${pc0(pred.p_home)} / ${pc0(pred.p_draw)} / ${pc0(pred.p_away)} · likely <b>${pred.top[0].score}</b></div>`;
+    h+=`<div class="todaycard"><div class="tdtime">🕒 ${f.ko.hm} · Group ${f.group}</div>
+    <div class="tdteams">${flag(f.home,'sm')} ${f.home} <span class="tdvs">v</span> ${f.away} ${flag(f.away,'sm')}</div>${info}</div>`;});
+  document.getElementById("today").innerHTML=h+`</div>`;
+}
+function renderSurprises(){
+  const rv=D.played_review,el=document.getElementById("surprises");if(!el)return;
+  if(!rv||!rv.length){el.style.display="none";return;}
+  const shocks=[...rv].sort((a,b)=>a.p_actual-b.p_actual).slice(0,5);
+  let h=`<p class="note">The results the model least saw coming — it gave the actual outcome only a slim chance:</p><div class="chips">`;
+  h+=shocks.map(m=>`<div class="chip">${flag(m.home,'sm')} ${m.home} <b>${m.hs}-${m["as"]}</b> ${m.away} ${flag(m.away,'sm')} <span style="color:#ff6b6b;font-weight:700">${pc0(m.p_actual)}</span></div>`).join("");
+  el.innerHTML=h+`</div>`;
+}
 function renderGoals(){
   const g=D.goals,el=document.getElementById("goals-an");if(!el)return;
   if(!g||!g.by_minute){el.style.display="none";return;}
@@ -758,6 +799,7 @@ function makeCollapsible(){
 }
 renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
 renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();renderFifa();renderGoals();
+renderToday();renderSurprises();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
   document.getElementById("elo-year").oninput=renderEloYear;}
 document.getElementById("mfilter").onchange=renderMatches;
@@ -878,7 +920,9 @@ def build_interactive(data: dict, out_path) -> Path:
         '<link rel="apple-touch-icon" href="../apple-touch-icon.png">'
     )
     review_html = ("<h2 class='col mcol'>✅ Results so far <span class='tag'>predicted vs actual</span></h2>"
-                   "<div id='review'></div>") if data.get("played_review") else ""
+                   "<div id='review'></div>"
+                   "<h2 class='col mcol'>😱 Biggest surprises <span class='tag'>model's worst calls</span></h2>"
+                   "<div id='surprises'></div>") if data.get("played_review") else ""
 
     html = (
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
@@ -905,6 +949,8 @@ def build_interactive(data: dict, out_path) -> Path:
         f"<div class='lbl'>Most likely finalists</div></div>"
         f"<div class='kpi'><div class='big'>{contenders}</div>"
         f"<div class='lbl'>teams above 5% to win</div></div></div>"
+        "<div id='todaysec'><h2>📅 <span id='todayhead'>Today's matches</span> "
+        "<span class='tag'>kickoffs in Portugal time</span></h2><div id='today'></div></div>"
         f"{ev_html}"
         f"{review_html}"
         "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
