@@ -11,7 +11,17 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from .tournament import STAGES, STAGE_LABELS
-from .viz import GOLD, GREEN, INK, MUTED, TEXT, flag
+from .viz import CODES, GOLD, GREEN, INK, MUTED, TEXT, flag
+
+
+def _flag_img(team: str, h: int = 13) -> str:
+    """flagcdn <img> (emoji flags render as 'AR'/'ES' text on Windows)."""
+    code = CODES.get(team, "")
+    if not code:
+        return "🏳️"
+    return (f"<img src='https://flagcdn.com/w40/{code}.png' alt='' "
+            f"style='width:{round(h*1.4)}px;height:{h}px;border-radius:2px;"
+            f"object-fit:cover;vertical-align:middle;margin-right:7px'>")
 
 FOOT = "World Cup 2026  ·  ML model (Poisson + Elo)  ·  data 1872–2026"
 
@@ -107,18 +117,23 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
         s = snap.loc[t, "p_champion"] * 100
         p = pre.loc[t, "p_champion"] * 100 if t in pre.index else 0.0
         hl = " style='color:#ffd34d;font-weight:700'" if t == order[0] else ""
-        rows += (f"<tr{hl}><td>{flag(t)} {t}</td><td>{s:.1f}%</td>"
+        rows += (f"<tr{hl}><td>{_flag_img(t)}{t}</td><td>{s:.1f}%</td>"
                  f"<td>{p:.1f}%</td><td>{s-p:+.1f}</td></tr>")
 
     css = ("body{background:#0f1420;color:#e6e9ef;font-family:-apple-system,"
            "Segoe UI,Roboto,Arial,sans-serif;max-width:680px;margin:0 auto;"
-           "padding:30px 18px}h1{font-size:24px}table{width:100%;border-collapse:"
+           "padding:64px 18px 30px}h1{font-size:24px}table{width:100%;border-collapse:"
            "collapse}td,th{padding:8px;border-bottom:1px solid #232c40;text-align:"
-           "left;font-size:14px}th{color:#8a93a8}.sub{color:#8a93a8}")
+           "left;font-size:14px}th{color:#8a93a8}.sub{color:#8a93a8}"
+           ".homebtn{position:fixed;top:14px;left:14px;display:inline-flex;align-items:"
+           "center;gap:6px;background:#161d2b;border:1px solid #243049;color:#e6e9ef;"
+           "text-decoration:none;font-size:13px;font-weight:600;padding:7px 13px;"
+           "border-radius:999px}.homebtn:hover{border-color:#00e0a4;color:#00e0a4}")
     html = (
         f"<!doctype html><html lang='en'><head><meta charset='utf-8'>"
         f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
         f"<title>World Cup 2026 — comparison</title><style>{css}</style></head><body>"
+        f"<a class='homebtn' href='index.html'>🏠 Home</a>"
         f"<h1>🏆 World Cup 2026 — live vs. pre-tournament</h1>"
         f"<p class='sub'>Probability of winning the title: the <b>live</b> version (with "
         f"the results already known) vs. the <b>pre-tournament</b> prediction (blind). "

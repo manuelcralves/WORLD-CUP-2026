@@ -127,6 +127,22 @@ def save_charts(table, outdir: Path):
     return paths
 
 
+def elo_by_year(matches, start_year=1960, top=12):
+    """Top teams by Elo at the end of each year (data for the year slider)."""
+    from .elo import compute_elo
+    _, _, hist = compute_elo(matches, keep_history=True)
+    hist = hist.sort_values("date")
+    out = {}
+    for y in range(start_year, 2027):
+        snap = hist[hist["date"] <= pd.Timestamp(f"{y}-12-31")]
+        if snap.empty:
+            continue
+        s = snap.groupby("team")["rating"].last().sort_values(
+            ascending=False).head(top)
+        out[str(y)] = [{"team": t, "elo": int(round(r))} for t, r in s.items()]
+    return out
+
+
 def elo_race_gif(matches, out_path, start_year=1960, top=10, fps=5):
     """Bar chart race (GIF) of the top teams by Elo throughout history."""
     from .elo import compute_elo

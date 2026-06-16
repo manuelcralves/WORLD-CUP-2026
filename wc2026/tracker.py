@@ -60,6 +60,48 @@ def movers(path, n: int = 6) -> list[dict]:
              "delta": float(b[t] - a[t])} for t in delta.index]
 
 
+def history_series(path, top: int = 8) -> dict:
+    """Top teams' title-probability series over time, for the interactive chart."""
+    hist = load_history(path)
+    if hist.empty:
+        return None
+    dates = sorted(hist["date"].unique())
+    piv = hist.pivot_table(index="date", columns="team",
+                           values="p_champion").reindex(dates)
+    leaders = piv.iloc[-1].sort_values(ascending=False).head(top).index
+    return {"dates": list(dates),
+            "series": [{"team": t,
+                        "data": [round(float(piv.loc[d, t]), 4) for d in dates]}
+                       for t in leaders]}
+
+
+def backfill_history(history_path, n_sims: int = 15000) -> Path:
+    """Rebuild history.csv with one snapshot per as-of date: the eve of the
+    tournament plus each World Cup match-day we already have results for.
+
+    This pre-populates the odds-over-time chart so it looks alive from day one.
+    """
+    from . import data as D, model as M, tournament as T
+    full = D.load_all()
+    played = full["wc"][full["wc"]["home_score"].notna()]
+    if played.empty:
+        return Path(history_path)
+    days = sorted(played["date"].dt.normalize().unique())
+    eve = pd.Timestamp(days[0]) - pd.Timedelta(days=1)
+    asof_dates = [eve] + list(days)
+
+    path = Path(history_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        path.unlink()
+    for d in asof_dates:
+        label = str(pd.Timestamp(d).date())
+        b = D.load_all(asof=label)
+        table = T.simulate(b, M.train_full(b), n_sims=n_sims)
+        record_snapshot(table, label, path)
+    return path
+
+
 def evolution_chart(path, out_png, top: int = 8, highlight=None):
     """Time line of title probabilities (top-N + highlight of the favourite)."""
     hist = load_history(path)

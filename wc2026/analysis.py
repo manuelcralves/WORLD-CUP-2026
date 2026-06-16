@@ -10,17 +10,25 @@ from __future__ import annotations
 
 
 def group_of_death(table) -> list:
-    """Each group ranked by combined strength (sum of title probabilities)."""
+    """Each group ranked by raw strength, the way fans actually judge a "group
+    of death": the average Elo of its four teams, and how strong the 3rd-best
+    team is — a high 3rd-seed Elo means even a good side risks elimination, so
+    it captures the *difficulty of advancing*, not just star power.
+    """
     rows = []
     for L in sorted(table["group"].unique()):
-        g = table[table["group"] == L]
+        g = table[table["group"] == L].sort_values("elo", ascending=False)
+        elos = [int(e) for e in g["elo"]]
         rows.append({
             "group": L,
             "avg_elo": int(round(g["elo"].mean())),
+            "third_elo": elos[2] if len(elos) >= 3 else elos[-1],
+            "elos": elos,
             "sum_champion": round(float(g["p_champion"].sum()), 4),
-            "teams": list(g.sort_values("p_champion", ascending=False)["team"]),
+            "teams": list(g["team"]),  # strongest first, by Elo
         })
-    return sorted(rows, key=lambda r: -r["sum_champion"])
+    # toughest = highest average Elo, tie-broken by the strength of the 3rd seed
+    return sorted(rows, key=lambda r: (-r["avg_elo"], -r["third_elo"]))
 
 
 def dark_horses(table, n: int = 5, elo_rank_min: int = 12) -> list:

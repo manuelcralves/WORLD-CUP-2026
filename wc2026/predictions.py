@@ -175,7 +175,8 @@ def most_likely_bracket(table: pd.DataFrame, trained: dict) -> list:
         a, b = team_of(sa), team_of(sb)
         adv, p = advance(a, b)
         win[mno] = adv
-        r32.append({"home": a, "away": b, "advances": adv, "p": round(p, 3)})
+        r32.append({"home": a, "away": b, "advances": adv, "p": round(p, 3),
+                    "m": mno})
     bracket.append(("Round of 32", r32))
 
     names = {(89, 96): "Round of 16", (97, 100): "Quarter-finals",
@@ -189,9 +190,78 @@ def most_likely_bracket(table: pd.DataFrame, trained: dict) -> list:
             a, b = win[m1], win[m2]
             adv, p = advance(a, b)
             win[mno] = adv
-            rnd.append({"home": a, "away": b, "advances": adv, "p": round(p, 3)})
+            rnd.append({"home": a, "away": b, "advances": adv, "p": round(p, 3),
+                        "m": mno})
         bracket.append((label, rnd))
     return bracket
+
+
+def recent_form(bundle, teams, n: int = 5) -> dict:
+    """Last-N results (W/D/L string, most recent last) for each team."""
+    res = {t: [] for t in teams}
+    for m in bundle["played"].itertuples(index=False):
+        for team, gf, ga in ((m.home_team, m.home_score, m.away_score),
+                             (m.away_team, m.away_score, m.home_score)):
+            if team in res:
+                res[team].append("W" if gf > ga else ("D" if gf == ga else "L"))
+    return {t: "".join(v[-n:]) for t, v in res.items()}
+
+
+def h2h_records(bundle, teams, recent: int = 5) -> dict:
+    """All-time head-to-head record between every pair of these teams, plus the
+    last `recent` meetings (date + scoreline) so the dashboard can show *how*
+    the recent games actually went, not only the aggregate W-D-L count.
+    """
+    tset = set(teams)
+    rec = {}
+    for m in bundle["played"].itertuples(index=False):
+        h, a = m.home_team, m.away_team
+        if h in tset and a in tset:
+            t1, t2 = sorted([h, a])
+            r = rec.setdefault("|".join([t1, t2]),
+                               {"t1": t1, "t2": t2, "w1": 0, "d": 0, "w2": 0,
+                                "n": 0, "recent": []})
+            r["n"] += 1
+            if m.home_score == m.away_score:
+                r["d"] += 1
+            else:
+                winner = h if m.home_score > m.away_score else a
+                r["w1" if winner == t1 else "w2"] += 1
+            r["recent"].append({"date": str(pd.Timestamp(m.date).date()),
+                                 "home": h, "away": a,
+                                 "hs": int(m.home_score), "as": int(m.away_score)})
+    for r in rec.values():  # keep only the most recent meetings, newest first
+        r["recent"] = sorted(r["recent"], key=lambda x: x["date"],
+                             reverse=True)[:recent]
+    return rec
+
+
+def played_review(bundle, trained) -> list:
+    """For each World Cup match already played: the model's *pre-match* W/D/L
+    probabilities and most likely score vs. the actual result.
+
+    `trained` should be the pre-tournament model (trained before the first
+    World Cup match) so the prediction is a genuine blind call, not in-sample.
+    """
+    team_letter = {t: L for L, ts in OFFICIAL_GROUPS.items() for t in ts}
+    out = []
+    for g in bundle["wc_played"].itertuples(index=False):
+        rep = match_report(trained, g.home_team, g.away_team, neutral=bool(g.neutral))
+        hs, as_ = int(g.home_score), int(g.away_score)
+        actual = "home" if hs > as_ else ("away" if as_ > hs else "draw")
+        probs = {"home": rep["p_home"], "draw": rep["p_draw"], "away": rep["p_away"]}
+        pred = max(probs, key=probs.get)
+        out.append({
+            "date": str(pd.Timestamp(g.date).date()),
+            "group": team_letter.get(g.home_team, "?"),
+            "home": g.home_team, "away": g.away_team, "hs": hs, "as": as_,
+            "p_home": rep["p_home"], "p_draw": rep["p_draw"], "p_away": rep["p_away"],
+            "ml_score": rep["most_likely"], "p_ml": rep["p_most_likely"],
+            "actual": actual, "pred": pred, "hit": pred == actual,
+            "p_actual": probs[actual],
+        })
+    out.sort(key=lambda r: (r["date"], r["group"]))
+    return out
 
 
 if __name__ == "__main__":

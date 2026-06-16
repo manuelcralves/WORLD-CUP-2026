@@ -27,6 +27,7 @@ from wc2026 import viz
 from wc2026 import tournament as T
 from wc2026 import predictions as PR
 from wc2026 import backtest as BT
+from wc2026 import backtest_all as BT_ALL
 from wc2026 import dashboard as DASH
 from wc2026 import tracker as TRK
 from wc2026 import share as SH
@@ -42,7 +43,7 @@ def _train(bundle, model):
     return M.train_full(bundle)
 
 
-def _run(n_sims, model, cutoff, out_dir, label, backtests):
+def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     out_dir.mkdir(parents=True, exist_ok=True)
     print(f"\n===== {label} =====")
     bundle = D.load_all(cutoff=cutoff)
@@ -57,13 +58,17 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests):
     val = V.evaluate(bundle)
     table = T.simulate(bundle, trained, n_sims=n_sims)
 
-    # Tracker (live version only): records the snapshot and plots the evolution.
-    evolution = None
+    # Tracker (live version only): records the snapshot and the odds history.
+    evolution, odds_history = None, None
     if cutoff is None:
         hist = out_dir / "history.csv"
+        h0 = TRK.load_history(hist)
+        if h0.empty or h0["date"].nunique() < 3:   # one-time backfill if sparse
+            TRK.backfill_history(hist, n_sims=12000)
         TRK.record_snapshot(table, TRK.data_asof(bundle), hist)
         chart = TRK.evolution_chart(hist, out_dir / "odds_evolution.png")
         evolution = {"movers": TRK.movers(hist), "has_chart": chart is not None}
+        odds_history = TRK.history_series(hist)
 
     viz.save_charts(table, out_dir)
     SH.share_cards(table, out_dir)
@@ -73,7 +78,10 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests):
     PR.expected_standings(table).to_csv(
         out_dir / "expected_standings.csv", index=False, encoding="utf-8")
     data = DASH.collect(bundle, trained, table, val, backtests,
-                        gb_before=cutoff, mode_label=label, evolution=evolution)
+                        gb_before=cutoff, mode_label=label, evolution=evolution,
+                        odds_history=odds_history, mega_backtest=mega,
+                        # "results so far" only makes sense for the live version
+                        played_review=(review if cutoff is None else None))
     DASH.build_interactive(data, out_dir / "dashboard.html")
     pd.DataFrame(data["golden_boot"]).to_csv(
         out_dir / "golden_boot.csv", index=False, encoding="utf-8")
@@ -87,8 +95,13 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests):
 
 
 def main(n_sims: int = 30000, model: str = "poisson", mode: str = "snapshot"):
-    print("Preparing backtesting (2018/2022, shared by both versions)...")
-    backtests = [BT.summary(D.load_all(), y) for y in (2018, 2022)]
+    print("Preparing backtesting (champion-rank + walk-forward skill test)...")
+    live_bundle = D.load_all()
+    backtests = [BT.summary(live_bundle, y) for y in (2018, 2022)]
+    mega = BT_ALL.run_all(live_bundle)
+    # blind pre-tournament model -> predicted-vs-actual for the games already played
+    pre_trained = _train(D.load_all(cutoff="2026-06-11"), model)
+    review = PR.played_review(live_bundle, pre_trained)
 
     runs = []
     if mode in ("snapshot", "both"):
@@ -99,7 +112,7 @@ def main(n_sims: int = 30000, model: str = "poisson", mode: str = "snapshot"):
                      "2026-06-11", BASE / "outputs_pretournament"))
 
     for label, cutoff, out_dir in runs:
-        _run(n_sims, model, cutoff, out_dir, label, backtests)
+        _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review)
 
     snap = BASE / "outputs" / "predictions.csv"
     pre = BASE / "outputs_pretournament" / "predictions.csv"

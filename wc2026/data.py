@@ -93,7 +93,7 @@ def reconstruct_groups(wc: pd.DataFrame) -> dict[str, list[str]]:
     return {chr(ord("A") + i): comp for i, comp in enumerate(comps)}
 
 
-def load_all(data_dir: Path | str = DATA_DIR, cutoff=None) -> dict:
+def load_all(data_dir: Path | str = DATA_DIR, cutoff=None, asof=None) -> dict:
     """Shortcut that returns everything the rest of the pipeline needs.
 
     With `cutoff` (e.g. "2026-06-11") you enter **pre-tournament** mode: training
@@ -116,6 +116,22 @@ def load_all(data_dir: Path | str = DATA_DIR, cutoff=None) -> dict:
 
     wc = world_cup_2026(df)
     groups = reconstruct_groups(wc)
+
+    if asof is not None:
+        # "live as of date D": train on everything up to D, fix WC games played
+        # by then, simulate the rest. (Used to backfill the odds-over-time chart.)
+        cut = pd.Timestamp(asof)
+        train = df[df["date"] <= cut].copy()
+        done = wc[(wc["date"] <= cut) & is_played(wc)]
+        return {
+            "matches": train,
+            "played": train[is_played(train)].copy(),
+            "wc": wc,
+            "wc_played": done.copy(),
+            "wc_remaining": wc[~wc.index.isin(done.index)].copy(),
+            "groups": groups,
+            "cutoff": cut,
+        }
 
     if cutoff is not None:
         cut = pd.Timestamp(cutoff)
