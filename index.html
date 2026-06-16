@@ -2,35 +2,87 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FIFA World Cup 2026 — ML Prediction</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230c1018%22/%3E%3Cpath%20d%3D%22M19%2017h-6a8%208%200%200%200%208%2010%22%20fill%3D%22none%22%20stroke%3D%22%23ffd34d%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M45%2017h6a8%208%200%200%201-8%2010%22%20fill%3D%22none%22%20stroke%3D%22%23ffd34d%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22round%22/%3E%3Cg%20fill%3D%22%23ffd34d%22%3E%3Cpath%20d%3D%22M18%2014h28v7a14%2014%200%200%201-28%200z%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2233%22%20width%3D%224%22%20height%3D%229%22/%3E%3Crect%20x%3D%2222%22%20y%3D%2242%22%20width%3D%2220%22%20height%3D%224%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2217%22%20y%3D%2246%22%20width%3D%2230%22%20height%3D%225%22%20rx%3D%222%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-background:linear-gradient(180deg,#0c1018,#0b0f17 60%);color:#eef1f7;
+:root{--panel:#161d2b;--panel2:#1c2536;--line:#243049;--text:#eef1f7;--muted:#8b95ab;
+--green:#00e0a4;--gold:#ffd34d;--red:#ff6b6b}
+body{margin:0;min-height:100vh;color:var(--text);line-height:1.55;text-align:center;
 font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-text-align:center;padding:24px}
-.wrap{max-width:560px}
-.badge{display:inline-block;margin-bottom:16px;padding:5px 14px;border-radius:999px;
-background:rgba(0,224,164,.12);color:#00e0a4;font-size:12px;font-weight:700;
-border:1px solid rgba(0,224,164,.3);letter-spacing:.5px}
-h1{font-size:clamp(26px,5vw,38px);margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
-p{color:#8b95ab;margin:0 0 28px;line-height:1.6}
-.links{display:flex;flex-direction:column;gap:12px}
-a{display:block;padding:15px 20px;border-radius:14px;text-decoration:none;font-weight:700;
-font-size:16px;border:1px solid #243049;background:#161d2b;color:#eef1f7;transition:all .2s}
-a:hover{transform:translateY(-2px);border-color:rgba(0,224,164,.5);background:#1c2536}
-a .s{display:block;font-weight:400;font-size:13px;color:#8b95ab;margin-top:2px}
-.foot{margin-top:26px;color:#5d6a85;font-size:12px}
-</style></head><body><div class="wrap">
+display:flex;flex-direction:column;align-items:center;padding:48px 18px 56px;
+background:
+radial-gradient(1100px 520px at 50% -140px,rgba(0,224,164,.14),transparent 70%),
+radial-gradient(820px 420px at 88% 8%,rgba(255,211,77,.07),transparent 60%),
+radial-gradient(820px 460px at 8% 26%,rgba(91,141,239,.06),transparent 60%),
+linear-gradient(180deg,#0c1018,#090d15 80%)}
+.logo{width:72px;height:72px;filter:drop-shadow(0 6px 18px rgba(255,211,77,.25))}
+.badge{display:inline-block;margin:14px 0 16px;padding:5px 14px;border-radius:999px;
+background:rgba(0,224,164,.12);color:var(--green);font-size:12px;font-weight:700;
+border:1px solid rgba(0,224,164,.3);letter-spacing:.6px}
+h1{font-family:'Outfit',-apple-system,Segoe UI,sans-serif;font-size:clamp(28px,6.4vw,46px);
+margin:0 0 16px;font-weight:800;letter-spacing:-.5px;max-width:740px}
+h1 .hl{color:var(--gold)}
+.lead{color:var(--muted);max-width:620px;margin:0 0 36px;font-size:clamp(14.5px,2.4vw,17px)}
+.picker{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:780px}
+.simcard{display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+text-decoration:none;color:var(--text);background:linear-gradient(160deg,var(--panel),var(--panel2));
+border:1px solid var(--line);border-radius:18px;padding:22px 22px 20px;
+transition:transform .2s,border-color .2s,box-shadow .2s}
+.simcard:hover{transform:translateY(-4px);border-color:rgba(0,224,164,.5);
+box-shadow:0 16px 44px rgba(0,0,0,.45)}
+.simcard .ic{font-size:13px;font-weight:700;letter-spacing:.5px;display:inline-flex;
+align-items:center;gap:7px;padding:5px 11px;border-radius:999px;margin-bottom:14px}
+.live .ic{background:rgba(255,107,107,.14);color:var(--red)}
+.pre .ic{background:rgba(91,141,239,.16);color:#7da2f5}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--red);
+box-shadow:0 0 0 0 rgba(255,107,107,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,107,107,.5)}70%{box-shadow:0 0 0 7px rgba(255,107,107,0)}100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}}
+.simcard h2{font-family:'Outfit',-apple-system,sans-serif;font-size:20px;margin:0 0 7px;font-weight:800}
+.simcard p{color:var(--muted);font-size:14px;margin:0 0 18px}
+.simcard .cta{margin-top:auto;color:var(--green);font-weight:700;font-size:14px}
+.comparelink{display:inline-block;margin:22px 0 0;color:var(--muted);text-decoration:none;
+font-size:14px;font-weight:600;border-bottom:1px dashed #36425e;padding-bottom:2px}
+.comparelink:hover{color:var(--green);border-color:var(--green)}
+.features{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:700px;margin:38px 0 0}
+.features span{background:var(--panel);border:1px solid var(--line);border-radius:999px;
+padding:7px 13px;font-size:13px;color:var(--muted)}
+.foot{margin-top:42px;color:#5d6a85;font-size:12px;max-width:520px}
+@media(max-width:620px){.picker{grid-template-columns:1fr}body{padding:34px 14px 48px}}
+</style></head><body>
+<svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+<path d="M19 17h-6a8 8 0 0 0 8 10" fill="none" stroke="#ffd34d" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M45 17h6a8 8 0 0 1-8 10" fill="none" stroke="#ffd34d" stroke-width="3.5" stroke-linecap="round"/>
+<g fill="#ffd34d"><path d="M18 14h28v7a14 14 0 0 1-28 0z"/><rect x="30" y="33" width="4" height="9"/>
+<rect x="22" y="42" width="20" height="4" rx="1.5"/><rect x="17" y="46" width="30" height="5" rx="2"/></g></svg>
 <div class="badge">MACHINE LEARNING PREDICTION</div>
-<h1>🏆 FIFA World Cup 2026</h1>
-<p>Who wins the World Cup? A Poisson (Dixon-Coles) + Elo model, trained on 150 years
-of results and run through tens of thousands of Monte Carlo simulations.</p>
-<div class="links">
-  <a href="outputs/dashboard.html">🔴 Live dashboard
-    <span class="s">Uses the results already played — updated daily</span></a>
-  <a href="outputs_pretournament/dashboard.html">🔮 Pre-tournament forecast
-    <span class="s">Trained blind, before the tournament started</span></a>
-  <a href="compare.html">⚖️ Compare the two versions</a>
+<h1>Who wins the <span class="hl">World Cup 2026</span>?</h1>
+<p class="lead">A machine-learning model — Poisson (Dixon-Coles) + Elo, trained on 150 years
+of international football and run through tens of thousands of Monte Carlo simulations.
+Title odds, the full bracket, a head-to-head Match Lab, the Golden Boot race and every
+match. Just for fun. Pick a version:</p>
+<div class="picker">
+  <a class="simcard live" href="outputs/dashboard.html">
+    <span class="ic"><span class="dot"></span> LIVE</span>
+    <h2>🔴 Live dashboard</h2>
+    <p>The current picture — results already played are locked in, so the favourite shifts
+       after every match. Rebuilt daily.</p>
+    <span class="cta">Open the live dashboard →</span>
+  </a>
+  <a class="simcard pre" href="outputs_pretournament/dashboard.html">
+    <span class="ic">🔮 BLIND</span>
+    <h2>🔮 Pre-tournament forecast</h2>
+    <p>The model's blind call from before a ball was kicked — trained with zero knowledge
+       of any 2026 result.</p>
+    <span class="cta">Open the forecast →</span>
+  </a>
 </div>
-<p class="foot">Data-driven model, just for fun. ⚽ Data: martj42/international_results.</p>
-</div></body></html>
+<a class="comparelink" href="compare.html">⚖️ Or see the two side by side →</a>
+<div class="features">
+  <span>🆚 Match Lab</span><span>🏆 Full bracket</span><span>🏅 Model vs FIFA</span>
+  <span>✅ Predicted vs actual</span><span>👟 Golden Boot</span><span>🎲 Roll a tournament</span>
+  <span>📊 Odds over time</span>
+</div>
+<p class="foot">Data-driven model, just for fun. ⚽ Data: 150 years of international results
+(martj42/international_results).</p>
+</body></html>

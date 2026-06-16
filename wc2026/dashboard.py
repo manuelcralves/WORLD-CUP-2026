@@ -158,6 +158,10 @@ border:1px solid rgba(0,224,164,.3);letter-spacing:.5px}
 h2{font-size:21px;margin:42px 0 16px;font-weight:700;display:flex;align-items:center;gap:8px}
 h2::before{content:"";width:4px;height:22px;background:linear-gradient(var(--green),#00b083);
 border-radius:3px}
+h2.col{cursor:pointer;user-select:none}
+h2.col::after{content:"⌄";margin-left:auto;color:var(--muted);font-size:21px;line-height:1;
+transition:transform .25s}
+h2.col.open::after{transform:rotate(180deg)}
 .tag{font-size:11px;color:var(--muted);font-weight:500;background:var(--panel);
 padding:2px 9px;border-radius:999px;border:1px solid var(--line)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:18px 0}
@@ -689,6 +693,21 @@ function renderEloYear(){
       scales:{x:{min:1400,ticks:{color:"#8b95ab"},grid:{color:"#243049"}},
         y:{ticks:{color:"#eef1f7"},grid:{display:false}}}}});}
 
+/* collapsible sections: tap the heading to expand/collapse (chevron). The
+   sections marked 'mcol' start collapsed on phones to keep the page short. */
+function makeCollapsible(){
+  const mob=innerWidth<=680;
+  document.querySelectorAll("h2.col").forEach(h=>{
+    const body=document.createElement("div");body.className="secbody";
+    let n=h.nextElementSibling;
+    while(n&&n.tagName!=="H2"&&!n.classList.contains("foot")){
+      const nx=n.nextElementSibling;body.appendChild(n);n=nx;}
+    h.after(body);
+    const set=o=>{h.classList.toggle("open",o);body.style.display=o?"":"none";};
+    h.addEventListener("click",()=>set(!h.classList.contains("open")));
+    set(!(mob&&h.classList.contains("mcol")));
+  });
+}
 renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
 renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();renderFifa();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
@@ -696,6 +715,7 @@ if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
 document.getElementById("mfilter").onchange=renderMatches;
 document.getElementById("search").oninput=e=>{query=e.target.value.toLowerCase();renderRanking();};
 document.getElementById("sim-btn").onclick=rollTournament;
+makeCollapsible();
 """
 
 
@@ -739,7 +759,7 @@ def _facts_html(f: dict) -> str:
             f"<b>{c['longest_unbeaten']}</b> · rival {c['rival']} ({c['rival_record']}) · "
             f"peak Elo {peak}</div></div>")
     return (
-        "<h2>🕰️ Historical facts <span class='tag'>1872–2026</span></h2>"
+        "<h2 class='col mcol'>🕰️ Historical facts <span class='tag'>1872–2026</span></h2>"
         f"<p class='note'>Biggest win ever: <b>{g['biggest_win'][0]}</b> ({g['biggest_win'][1]}) · "
         f"top international scorer: <b>{g['top_scorer'][0]}</b> ({g['top_scorer'][1]} goals) · "
         f"{g['n_matches']:,} matches, {g['total_goals']:,} goals.</p>"
@@ -789,7 +809,7 @@ def build_interactive(data: dict, out_path) -> Path:
     fl = lambda d: (f'<img class="flag" src="https://flagcdn.com/w40/{d["code"]}.png">'
                     if d.get("code") else d.get("flag", ""))
     mode = (data.get("mode_label") + " · ") if data.get("mode_label") else ""
-    review_html = ("<h2>✅ Results so far <span class='tag'>predicted vs actual</span></h2>"
+    review_html = ("<h2 class='col mcol'>✅ Results so far <span class='tag'>predicted vs actual</span></h2>"
                    "<div id='review'></div>") if data.get("played_review") else ""
 
     html = (
@@ -825,26 +845,26 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div class='layout'><div><input class='search' id='search' "
         "placeholder='🔎 Search a team…'><div id='ranking'></div></div>"
         "<div class='panel sticky' id='detail'></div></div>"
-        "<h2>🏅 Model vs FIFA ranking <span class='tag'>does the model agree?</span></h2>"
+        "<h2 class='col mcol'>🏅 Model vs FIFA ranking <span class='tag'>does the model agree?</span></h2>"
         "<div id='fifa'></div>"
-        "<h2>The 12 groups <span class='tag'>expected standings</span></h2>"
+        "<h2 class='col mcol'>The 12 groups <span class='tag'>expected standings</span></h2>"
         "<div class='grid' id='groups'></div>"
-        "<h2>Group-stage matches <span class='tag'>times in Portugal · WEST (UTC+1)</span></h2>"
+        "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in Portugal · WEST (UTC+1)</span></h2>"
         f"<select id='mfilter'>{opts}</select><div id='matches' style='margin-top:10px'></div>"
-        "<h2>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
+        "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
         "<div id='bracket'></div>"
-        "<h2>📈 Extra analysis</h2><div id='analysis'></div>"
-        "<h2>🎲 Roll a tournament <span class='tag'>one full simulation</span></h2>"
+        "<h2 class='col mcol'>📈 Extra analysis</h2><div id='analysis'></div>"
+        "<h2 class='col mcol'>🎲 Roll a tournament <span class='tag'>one full simulation</span></h2>"
         "<p class='note'>One possible World Cup — group tables, every knockout result "
         "and the champion. Roll again for another timeline.</p>"
         "<button class='btn' id='sim-btn'>🎲 Roll a World Cup</button>"
         "<div id='sim-out' style='margin-top:14px'></div>"
-        "<h2>🎯 Does it actually work? <span class='tag'>track record</span></h2>"
+        "<h2 class='col mcol'>🎯 Does it actually work? <span class='tag'>track record</span></h2>"
         f"{_mega_html(data.get('mega_backtest'))}"
         "<p class='note' style='margin-top:16px'>And zooming in on two tournaments the "
         "model had never seen when it was trained:</p>"
         "<div id='backtest'></div>"
-        "<h2>👟 Golden Boot <span class='tag'>top scorer</span></h2><div id='golden'></div>"
+        "<h2 class='col mcol'>👟 Golden Boot <span class='tag'>top scorer</span></h2><div id='golden'></div>"
         "<h2>📉 Elo through history <span class='tag'>drag the year</span></h2>"
         "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px'>"
         "<span class='note'>Year</span>"
