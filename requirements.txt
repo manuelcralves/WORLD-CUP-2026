@@ -1,0 +1,8 @@
+numpy>=1.26
+pandas>=2.0
+scipy>=1.11
+matplotlib>=3.7
+pillow>=10.0
+# Optional — only needed for the `xgboost` / `ensemble` model:
+# xgboost>=2.0
+# scikit-learn>=1.3

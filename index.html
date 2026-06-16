@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FIFA World Cup 2026 — ML Prediction</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:linear-gradient(180deg,#0c1018,#0b0f17 60%);color:#eef1f7;
+font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+text-align:center;padding:24px}
+.wrap{max-width:560px}
+.badge{display:inline-block;margin-bottom:16px;padding:5px 14px;border-radius:999px;
+background:rgba(0,224,164,.12);color:#00e0a4;font-size:12px;font-weight:700;
+border:1px solid rgba(0,224,164,.3);letter-spacing:.5px}
+h1{font-size:clamp(26px,5vw,38px);margin:0 0 10px;font-weight:800;letter-spacing:-.5px}
+p{color:#8b95ab;margin:0 0 28px;line-height:1.6}
+.links{display:flex;flex-direction:column;gap:12px}
+a{display:block;padding:15px 20px;border-radius:14px;text-decoration:none;font-weight:700;
+font-size:16px;border:1px solid #243049;background:#161d2b;color:#eef1f7;transition:all .2s}
+a:hover{transform:translateY(-2px);border-color:rgba(0,224,164,.5);background:#1c2536}
+a .s{display:block;font-weight:400;font-size:13px;color:#8b95ab;margin-top:2px}
+.foot{margin-top:26px;color:#5d6a85;font-size:12px}
+</style></head><body><div class="wrap">
+<div class="badge">MACHINE LEARNING PREDICTION</div>
+<h1>🏆 FIFA World Cup 2026</h1>
+<p>Who wins the World Cup? A Poisson (Dixon-Coles) + Elo model, trained on 150 years
+of results and run through tens of thousands of Monte Carlo simulations.</p>
+<div class="links">
+  <a href="outputs/dashboard.html">🔴 Live dashboard
+    <span class="s">Uses the results already played — updated daily</span></a>
+  <a href="outputs_pretournament/dashboard.html">🔮 Pre-tournament forecast
+    <span class="s">Trained blind, before the tournament started</span></a>
+  <a href="compare.html">⚖️ Compare the two versions</a>
+</div>
+<p class="foot">Data-driven model, just for fun. ⚽ Data: martj42/international_results.</p>
+</div></body></html>
