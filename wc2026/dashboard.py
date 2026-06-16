@@ -14,6 +14,7 @@ from pathlib import Path
 from . import analysis as AN
 from . import facts as FACTS
 from . import fifa as FIFA
+from . import goals as GOALS
 from . import goldenboot as GB
 from . import predictions as PR
 from . import schedule as SCH
@@ -95,6 +96,21 @@ def collect(bundle, trained, table, val=None, backtests=None,
         t["form"] = form.get(t["team"], "")
     h2h = PR.h2h_records(bundle, list(names))
 
+    # goal timelines for the played matches + the all-time "anatomy of a goal"
+    goals_an = GOALS.scoring_analysis()
+    top_scorers = []
+    if played_review:
+        from collections import Counter
+        cnt = Counter()
+        for m in played_review:
+            m["goals"] = GOALS.match_goals(m["home"], m["away"], m["date"])
+            for gl in m["goals"]:
+                if not gl["og"]:
+                    cnt[(gl["scorer"], gl["team"])] += 1
+        top_scorers = [{"scorer": s, "team": t, "goals": c}
+                       for (s, t), c in cnt.most_common(6)]
+    goals_an["top_scorers"] = top_scorers
+
     return {
         "n_sims": int(table.attrs.get("n_sims", 0)),
         "teams": teams, "matches": matches, "bracket": bracket,
@@ -117,6 +133,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "elo_by_year": elo_by_year(bundle["matches"]),
         "kickoffs": SCH.all_lisbon(),
         "fifa": FIFA.compare(table),
+        "goals": goals_an,
         "fixtures": _fixtures(bundle),
         "structure": {
             "groups": OFFICIAL_GROUPS,
@@ -293,6 +310,15 @@ font-size:12.5px;color:var(--muted)}.h2hl .r b{color:var(--text)}
 .gres summary{cursor:pointer;color:var(--green);font-size:11.5px}
 .gres .gr{display:flex;align-items:center;gap:5px;padding:2px 0;margin-top:2px}
 .gres .gr b{color:var(--text)}
+/* ---- goal timelines + 'anatomy of a goal' minute bars ---- */
+.goalsline{font-size:11.5px;color:var(--muted);margin-top:4px;white-space:normal}
+.goalsline b{color:var(--text)}
+.gminutes{display:flex;gap:7px;align-items:flex-end;height:140px;margin-top:6px;max-width:480px}
+.gminute{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%}
+.gmbar{flex:1;width:100%;max-width:48px;background:var(--line);border-radius:6px 6px 0 0;
+display:flex;align-items:flex-end;overflow:hidden}
+.gmbar>div{width:100%;border-radius:6px 6px 0 0;transition:height .7s cubic-bezier(.22,1,.36,1)}
+.gmlbl{font-size:10px;color:var(--muted)}.gmval{font-size:10px;color:var(--muted);font-weight:700}
 .homebtn{position:fixed;top:14px;left:14px;z-index:50;display:inline-flex;align-items:center;
 gap:6px;background:rgba(22,29,43,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
 border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:13px;font-weight:600;
@@ -528,8 +554,9 @@ function renderReview(){
     const wdl=probs.map(([k,v])=>{const pick=k===m.pred;
       const c=pick?(m.hit?"#00e0a4":"#ff6b6b"):"#8b95ab";
       return `<span style="color:${c};font-weight:${pick?700:400}">${pc0(v)}</span>`;}).join(" / ");
+    const gl=(m.goals||[]).map(x=>`${x.minute!=null?x.minute+"'":""} ${x.scorer}${x.pen?" (p)":""}${x.og?" (og)":""}`).join(" · ");
     h+=`<tr><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td>
-    <td><span class="row-team">${flag(m.home,'sm')} ${m.home} <b>${m.hs}-${m["as"]}</b> ${m.away} ${flag(m.away,'sm')}</span></td>
+    <td><span class="row-team">${flag(m.home,'sm')} ${m.home} <b>${m.hs}-${m["as"]}</b> ${m.away} ${flag(m.away,'sm')}</span>${gl?`<div class="goalsline">⚽ ${gl}</div>`:""}</td>
     <td>${oc(m.actual)}</td><td>${wdl}</td>
     <td>${m.ml_score===(m.hs+"-"+m["as"])
       ?`<span class="badge2 y" title="nailed the exact score!">🎯 ${m.ml_score} <span style="font-weight:400">${pc0(m.p_ml)}</span></span>`
@@ -562,6 +589,24 @@ function renderFifa(){
     <td style="color:#8b95ab">${r.fifa_pts.toFixed(0)}</td>
     <td style="color:${c};font-weight:700">${r.edge>0?'+':''}${r.edge}</td></tr>`;});
   el.innerHTML=h+`</tbody></table>`;
+}
+function renderGoals(){
+  const g=D.goals,el=document.getElementById("goals-an");if(!el)return;
+  if(!g||!g.by_minute){el.style.display="none";return;}
+  const mx=Math.max(...g.by_minute.map(b=>b.count))||1;
+  const bars=g.by_minute.map(b=>{const top=b.count===mx;
+    return `<div class="gminute"><div class="gmval">${b.count.toLocaleString()}</div>
+    <div class="gmbar" title="${b.label} min: ${b.count.toLocaleString()} goals">
+    <div style="height:${(b.count/mx*100).toFixed(0)}%;background:${top?'linear-gradient(#ffd34d,#e0a800)':'linear-gradient(var(--green),#00b083)'}"></div></div>
+    <div class="gmlbl">${b.label}</div></div>`;}).join("");
+  let h=`<p class="note">An x-ray of <b>${g.total_goals.toLocaleString()}</b> international goals since ${g.since} — World Cups, qualifiers and friendlies, the lot.</p>
+  <div class="note" style="margin:8px 0 2px">⏱️ When goals are scored <span class="tag">by minute</span></div>
+  <div class="gminutes">${bars}</div>
+  <p class="note" style="margin-top:12px">The final 15 minutes are the deadliest. 🎯 <b>${g.pen_pct}%</b> of goals come from the penalty spot · 🙃 <b>${g.og_pct}%</b> are own goals.</p>`;
+  if(g.top_scorers&&g.top_scorers.length){
+    h+=`<p class="note" style="margin-top:12px"><b>👟 Top scorers of the World Cup so far:</b></p><div class="chips">`+
+      g.top_scorers.map(s=>`<div class="chip">${flag(s.team,'sm')} ${s.scorer} <b style="color:#00e0a4">${s.goals}</b></div>`).join("")+`</div>`;}
+  el.innerHTML=h;
 }
 function renderAnalysis(){
   const a=D.analysis;if(!a)return;
@@ -709,7 +754,7 @@ function makeCollapsible(){
   });
 }
 renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
-renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();renderFifa();
+renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();renderFifa();renderGoals();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
   document.getElementById("elo-year").oninput=renderEloYear;}
 document.getElementById("mfilter").onchange=renderMatches;
@@ -865,6 +910,8 @@ def build_interactive(data: dict, out_path) -> Path:
         "model had never seen when it was trained:</p>"
         "<div id='backtest'></div>"
         "<h2 class='col mcol'>👟 Golden Boot <span class='tag'>top scorer</span></h2><div id='golden'></div>"
+        "<h2 class='col mcol'>⚽ Anatomy of a goal <span class='tag'>every international goal</span></h2>"
+        "<div id='goals-an'></div>"
         "<h2>📉 Elo through history <span class='tag'>drag the year</span></h2>"
         "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px'>"
         "<span class='note'>Year</span>"
