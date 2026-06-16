@@ -295,6 +295,34 @@ border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:13
 padding:7px 13px;border-radius:999px;transition:all .2s}
 .homebtn:hover{border-color:rgba(0,224,164,.5);color:var(--green);transform:translateY(-1px)}
 @media(max-width:560px){.homebtn{top:8px;left:8px;font-size:12px;padding:6px 10px}}
+/* ---- mobile / responsive ---- */
+@media(max-width:680px){
+  html{-webkit-text-size-adjust:100%}
+  body{background-attachment:scroll}
+  .wrap{padding:0 12px 56px}
+  .hero{padding:26px 0 16px}
+  h2{font-size:18px;margin:28px 0 12px}
+  /* every wide table becomes its own horizontally-scrollable block instead of
+     being crushed; cells stay on one line and the table swipes sideways */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    white-space:nowrap;font-size:12.5px}
+  th,td{padding:7px 9px}
+  .cards{gap:10px}.kpi{padding:15px}.kpi .big{font-size:23px}
+  .grid{grid-template-columns:1fr;gap:12px}
+  .heat{max-width:100%}
+  .tcol{min-width:80px;padding:0 3px}
+  .tch{font-size:8px}.tmatch{font-size:9.5px;padding:4px 5px}
+  .prow .lb{width:84px}
+  .mkts{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+  .scorelines{gap:6px}
+}
+@media(max-width:430px){
+  .hero h1{font-size:25px}
+  .cards{grid-template-columns:1fr 1fr}
+  .kpi .big{font-size:20px}
+  th,td{padding:6px 7px;font-size:12px}
+  .chip{font-size:12px;padding:5px 10px}
+}
 """
 
 _JS = r"""

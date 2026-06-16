@@ -128,7 +128,10 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
            ".homebtn{position:fixed;top:14px;left:14px;display:inline-flex;align-items:"
            "center;gap:6px;background:#161d2b;border:1px solid #243049;color:#e6e9ef;"
            "text-decoration:none;font-size:13px;font-weight:600;padding:7px 13px;"
-           "border-radius:999px}.homebtn:hover{border-color:#00e0a4;color:#00e0a4}")
+           "border-radius:999px}.homebtn:hover{border-color:#00e0a4;color:#00e0a4}"
+           "@media(max-width:560px){body{padding:56px 12px 30px}h1{font-size:20px}"
+           "table{display:block;overflow-x:auto;white-space:nowrap}"
+           "td,th{font-size:13px;padding:7px}}")
     html = (
         f"<!doctype html><html lang='en'><head><meta charset='utf-8'>"
         f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
