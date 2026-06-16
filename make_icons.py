@@ -17,17 +17,18 @@ def make(px: int, path: str):
         return [x * sc for x in v]
 
     d.rounded_rectangle(R(2, 2, 62, 62), radius=14 * sc, fill=DARK)
-    lw = int(3.6 * sc)
-    # handles (left/right) — C-shaped arcs hugging the cup
-    d.arc(R(6, 13, 22, 31), start=90, end=270, fill=GOLD, width=lw)
-    d.arc(R(42, 13, 58, 31), start=270, end=90, fill=GOLD, width=lw)
-    # cup: top bar + rounded bowl
-    d.rectangle(R(18, 14, 46, 21), fill=GOLD)
-    d.pieslice(R(18, 7, 46, 35), start=0, end=180, fill=GOLD)
+    cx, cy, r = 32, 24, 13.5
+    lw = max(1, int(1.7 * sc))
+    # globe (with equator/meridian grid lines)
+    d.ellipse(R(cx - r, cy - r, cx + r, cy + r), fill=GOLD)
+    d.line(R(cx - r, cy, cx + r, cy), fill=DARK, width=lw)
+    d.ellipse(R(cx - r, cy - r * 0.5, cx + r, cy + r * 0.5), outline=DARK, width=lw)
+    d.line(R(cx, cy - r, cx, cy + r), fill=DARK, width=lw)
+    d.ellipse(R(cx - r * 0.5, cy - r, cx + r * 0.5, cy + r), outline=DARK, width=lw)
     # stem + two-tier base
-    d.rectangle(R(30, 33, 34, 42), fill=GOLD)
-    d.rounded_rectangle(R(22, 42, 42, 46), radius=2 * sc, fill=GOLD)
-    d.rounded_rectangle(R(17, 46, 47, 51), radius=2 * sc, fill=GOLD)
+    d.rectangle(R(30.5, 37, 33.5, 46), fill=GOLD)
+    d.rounded_rectangle(R(23, 46, 41, 50), radius=2 * sc, fill=GOLD)
+    d.rounded_rectangle(R(18, 50, 46, 55), radius=2.5 * sc, fill=GOLD)
 
     img.resize((px, px), Image.LANCZOS).save(path)
     print("wrote", path)
