@@ -17,7 +17,7 @@ from . import goldenboot as GB
 from . import predictions as PR
 from . import schedule as SCH
 from .tournament import HOSTS, LATER, OFFICIAL_GROUPS, R32, THIRD_ELIGIBLE
-from .viz import CODES, FLAGS, elo_by_year
+from .viz import CODES, FAVICON, FLAGS, elo_by_year
 
 
 def _num(x, default=1.3):
@@ -740,11 +740,7 @@ def build_interactive(data: dict, out_path) -> Path:
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         "<title>FIFA World Cup 2026 — ML Prediction</title>"
-        '<link rel="icon" href="data:image/svg+xml,'
-        "%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%2032%2032%22%3E"
-        "%3Ccircle%20cx=%2216%22%20cy=%2216%22%20r=%2214%22%20fill=%22%23ffd34d%22/%3E"
-        "%3Ccircle%20cx=%2216%22%20cy=%2216%22%20r=%2214%22%20fill=%22none%22%20"
-        'stroke=%22%2300b083%22%20stroke-width=%223%22/%3E%3C/svg%3E">'
+        f"{FAVICON}"
         "<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>"
         "<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800"
         "&display=swap' rel='stylesheet'>"

@@ -4,6 +4,7 @@ chart race (GIF). The highlight colour marks the favourite / selected team.
 from __future__ import annotations
 
 from pathlib import Path
+from urllib.parse import quote as _quote
 
 import pandas as pd
 # Note: the backend is not forced here (so the notebook can show inline).
@@ -63,6 +64,25 @@ CODES = {
 
 def flag_code(team: str) -> str:
     return CODES.get(team, "")
+
+
+# A gold World Cup-style trophy on a dark rounded tile, as a self-contained data
+# URI so the SAME favicon shows on every page (the dashboards live in sub-folders,
+# so a relative file path would not work everywhere; a data URI sidesteps that).
+_TROPHY_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
+    '<rect width="64" height="64" rx="15" fill="#0c1018"/>'
+    '<path d="M19 17h-6a8 8 0 0 0 8 10" fill="none" stroke="#ffd34d" '
+    'stroke-width="3.5" stroke-linecap="round"/>'
+    '<path d="M45 17h6a8 8 0 0 1-8 10" fill="none" stroke="#ffd34d" '
+    'stroke-width="3.5" stroke-linecap="round"/>'
+    '<g fill="#ffd34d"><path d="M18 14h28v7a14 14 0 0 1-28 0z"/>'
+    '<rect x="30" y="33" width="4" height="9"/>'
+    '<rect x="22" y="42" width="20" height="4" rx="1.5"/>'
+    '<rect x="17" y="46" width="30" height="5" rx="2"/></g></svg>'
+)
+FAVICON = ('<link rel="icon" type="image/svg+xml" '
+           'href="data:image/svg+xml,' + _quote(_TROPHY_SVG) + '">')
 
 
 # --------------------------------------------------------------------------- #
