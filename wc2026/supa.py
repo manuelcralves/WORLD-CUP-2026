@@ -27,8 +27,10 @@ def push_matches(data: dict) -> None:
         h, a = m["home"], m["away"]
         mh, ma = (m["top"][0]["score"].split("-") if m.get("top") else ("1", "1"))
         rows[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
-                            "kickoff": _ko_iso(ko, h, a), "model_home": int(mh),
-                            "model_away": int(ma), "stage": "group", "played": False}
+                            "kickoff": _ko_iso(ko, h, a),
+                            "home_score": None, "away_score": None,   # uniform keys
+                            "model_home": int(mh), "model_away": int(ma),
+                            "stage": "group", "played": False}
     for m in data.get("played_review") or []:        # played: model pick + result
         h, a = m["home"], m["away"]
         mh, ma = m["ml_score"].split("-")
