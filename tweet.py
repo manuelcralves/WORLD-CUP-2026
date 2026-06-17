@@ -214,7 +214,8 @@ def build_thread() -> list:
         tweets.append(title)
     if not tweets:
         return []
-    cta = f"🔗 Full bracket, odds & Match Lab:\n{SITE}"
+    cta = (f"🔗 Full bracket, odds & Match Lab:\n{SITE}"
+           "\n\n#WorldCup2026 #WorldCup #Football")
     if _eff_len(tweets[-1] + "\n\n" + cta) <= LIMIT:
         tweets[-1] += "\n\n" + cta
     else:
