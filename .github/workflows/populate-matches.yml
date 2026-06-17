@@ -1,0 +1,26 @@
+name: Populate matches
+
+# Manual one-off: push the match table to Supabase (no tweet, no site rebuild).
+# Run it from the Actions tab whenever you want to refresh the leaderboard data.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  populate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Update dataset (latest results)
+        run: python update_data.py
+      - name: Push matches to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python populate_matches.py
