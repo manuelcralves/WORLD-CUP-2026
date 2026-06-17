@@ -194,7 +194,20 @@ box-shadow:0 1px 3px rgba(0,0,0,.5);background:#243049}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
 .layout{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;align-items:start}
 @media(max-width:880px){.layout{grid-template-columns:1fr}}
-.sticky{position:sticky;top:14px}
+.sticky{position:sticky;top:60px}
+.tab{padding-top:4px}
+.tabnav{position:sticky;top:0;z-index:40;display:flex;gap:5px;align-items:center;flex-wrap:wrap;
+padding:9px 0;margin:0 0 8px;background:rgba(12,16,24,.92);
+-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tabnav button{background:transparent;border:1px solid transparent;color:var(--muted);font-size:13.5px;
+font-weight:700;padding:8px 13px;border-radius:10px;cursor:pointer;transition:all .15s;font-family:inherit}
+.tabnav button:hover{color:var(--text)}
+.tabnav button.on{background:var(--panel);color:var(--green);border-color:var(--line)}
+.tabhome{text-decoration:none;color:var(--text);font-size:15px;padding:7px 9px;border-radius:10px;
+border:1px solid var(--line);margin-right:3px}
+.tabhome:hover{border-color:var(--green)}
+@media(max-width:560px){.tabnav{gap:3px}.tabnav button{padding:7px 9px;font-size:12.5px}
+.tabhome{padding:6px 8px}}
 input.search{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);
 border-radius:10px;padding:9px 12px;font-size:14px;margin-bottom:10px}
 input.search:focus{outline:none;border-color:var(--green)}
@@ -815,7 +828,7 @@ function renderRoll(gres,qual,ko,champ){
 function renderOdds(){
   const oh=D.odds_history;if(!oh||typeof Chart==="undefined")return;
   const cols=["#00e0a4","#ffd34d","#5b8def","#ff6b6b","#c08cff","#ff9f43","#4dd0e1","#9ccc65"];
-  new Chart(document.getElementById("odds-chart"),{type:"line",
+  oddsChart=new Chart(document.getElementById("odds-chart"),{type:"line",
     data:{labels:oh.dates.map(d=>d.slice(5)),datasets:oh.series.map((s,i)=>({label:s.team,
       data:s.data.map(v=>+(v*100).toFixed(1)),borderColor:cols[i%8],backgroundColor:cols[i%8],
       tension:.3,borderWidth:i===0?3:2,pointRadius:3}))},
@@ -824,7 +837,15 @@ function renderOdds(){
       scales:{y:{title:{display:true,text:"Title probability (%)",color:"#8b95ab"},
         ticks:{color:"#8b95ab"},grid:{color:"#243049"}},
         x:{ticks:{color:"#8b95ab"},grid:{color:"#243049"}}}}});}
-let eloChart=null;
+let eloChart=null,oddsChart=null;
+function showTab(name,scroll){
+  document.querySelectorAll(".tab").forEach(t=>t.style.display=t.id==="tab-"+name?"":"none");
+  document.querySelectorAll(".tabnav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===name));
+  const u=new URLSearchParams(location.search);u.set("tab",name);
+  history.replaceState(null,"","?"+u.toString());
+  [oddsChart,eloChart].forEach(c=>{if(c)try{c.resize();}catch(e){}});
+  if(scroll){const n=document.querySelector(".tabnav");if(n)n.scrollIntoView({block:"start"});}
+}
 function renderEloYear(){
   if(typeof Chart==="undefined")return;
   const y=document.getElementById("elo-year").value;
@@ -868,6 +889,10 @@ document.getElementById("sim-btn").onclick=rollTournament;
 if(document.getElementById("whatif")){wifRender();
   const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();};}
 makeCollapsible();
+document.querySelectorAll(".tabnav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab,true));
+let _tab=new URLSearchParams(location.search).get("tab");
+if(qteam&&byName[qteam]&&!_tab)_tab="teams";
+showTab(["overview","teams","play","insights"].includes(_tab)?_tab:"overview",false);
 if(qteam&&byName[qteam]){const r=document.querySelector("tr.sel");
   if(r)r.scrollIntoView({behavior:"smooth",block:"center"});}
 """
@@ -996,12 +1021,19 @@ def build_interactive(data: dict, out_path) -> Path:
         "&display=swap' rel='stylesheet'>"
         "<script src='https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'></script>"
         f"<style>{_CSS}</style></head><body>"
-        "<a class='homebtn' href='../index.html'>🏠 Home</a><div class='wrap'>"
+        "<div class='wrap'>"
         "<div class='hero'><div class='badge'>MACHINE LEARNING PREDICTION</div>"
         "<h1>🏆 FIFA World Cup 2026</h1>"
         f"<p class='sub'>{mode}Poisson (Dixon-Coles) + Elo · {data['n_sims']:,} Monte Carlo "
         f"simulations · click a team or try the Match Lab</p>"
         f"{val_html}</div>"
+        "<div class='tabnav'>"
+        "<a class='tabhome' href='../index.html' aria-label='Home'>🏠</a>"
+        "<button data-tab='overview' class='on'>🔮 Overview</button>"
+        "<button data-tab='teams'>📊 Teams</button>"
+        "<button data-tab='play'>🎮 Play</button>"
+        "<button data-tab='insights'>📈 Insights</button></div>"
+        "<div class='tab' id='tab-overview'>"
         "<div class='cards'>"
         f"<div class='kpi'><div class='big'>{fl(fav)} {fav['p']*100:.1f}%</div>"
         f"<div class='lbl'>Favourite: {fav['team']}</div></div>"
@@ -1014,32 +1046,38 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div id='todaysec'><h2>📅 <span id='todayhead'>Today's matches</span> "
         "<span class='tag'>kickoffs in WEST (UTC+1)</span></h2><div id='today'></div></div>"
         f"{ev_html}"
-        f"{review_html}"
-        "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
-        "<div class='lab' id='lab'></div><div class='mlab-out' id='lab-out'></div>"
+        "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
+        "<div id='bracket'></div>"
+        "</div>"
+        "<div class='tab' id='tab-teams'>"
         "<h2>Ranking & path <span class='tag'>click a row</span></h2>"
         "<div class='layout'><div><input class='search' id='search' "
         "placeholder='🔎 Search a team…'><div id='ranking'></div></div>"
         "<div class='panel sticky' id='detail'></div></div>"
-        "<h2 class='col mcol'>🏅 Model vs FIFA ranking <span class='tag'>does the model agree?</span></h2>"
-        "<div id='fifa'></div>"
         "<h2 class='col mcol'>The 12 groups <span class='tag'>expected standings</span></h2>"
         "<div class='grid' id='groups'></div>"
-        "<h2 class='col mcol'>🎮 What if…? <span class='tag'>you pick the results</span></h2>"
-        "<p class='note'>Set the outcome of every remaining group match (1 = home win, "
-        "X = draw, 2 = away win) and watch the tables — and who qualifies — update live. "
-        "<button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset to the model</button></p>"
-        "<div id='whatif'></div>"
         "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in WEST (UTC+1)</span></h2>"
         f"<select id='mfilter'>{opts}</select><div id='matches' style='margin-top:10px'></div>"
-        "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
-        "<div id='bracket'></div>"
         "<h2 class='col mcol'>📈 Extra analysis</h2><div id='analysis'></div>"
+        "</div>"
+        "<div class='tab' id='tab-play'>"
+        "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
+        "<div class='lab' id='lab'></div><div class='mlab-out' id='lab-out'></div>"
+        "<h2 class='col mcol'>🎮 What if…? <span class='tag'>you pick the results</span></h2>"
+        "<p class='note'>Set the score of every remaining group match (−/+ the goals, "
+        "starting from the model's prediction) and watch the tables — and who qualifies — "
+        "update live. <button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset to the model</button></p>"
+        "<div id='whatif'></div>"
         "<h2 class='col mcol'>🎲 Roll a tournament <span class='tag'>one full simulation</span></h2>"
         "<p class='note'>One possible World Cup — group tables, every knockout result "
         "and the champion. Roll again for another timeline.</p>"
         "<button class='btn' id='sim-btn'>🎲 Roll a World Cup</button>"
         "<div id='sim-out' style='margin-top:14px'></div>"
+        "</div>"
+        "<div class='tab' id='tab-insights'>"
+        f"{review_html}"
+        "<h2 class='col mcol'>🏅 Model vs FIFA ranking <span class='tag'>does the model agree?</span></h2>"
+        "<div id='fifa'></div>"
         "<h2 class='col mcol'>🎯 Does it actually work? <span class='tag'>track record</span></h2>"
         f"{_mega_html(data.get('mega_backtest'))}"
         "<p class='note' style='margin-top:16px'>And zooming in on two tournaments the "
@@ -1056,6 +1094,7 @@ def build_interactive(data: dict, out_path) -> Path:
         f"<span id='elo-year-lbl' style='font-weight:700;width:48px;text-align:right'>{ely_max}</span></div>"
         "<div style='position:relative;height:430px'><canvas id='elo-chart'></canvas></div>"
         f"{_facts_html(data.get('facts'))}"
+        "</div>"
         "<p class='foot'>Data-driven model, just for fun. ⚽ "
         "Data: International football results 1872–2026.</p>"
         "</div>"
