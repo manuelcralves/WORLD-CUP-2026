@@ -32,6 +32,18 @@ jobs:
       - name: Run predictions (live + pre-tournament)
         run: python run_pipeline.py 40000 both
 
+      # Post a daily update to X/Twitter. Only on the scheduled run (or a manual
+      # dispatch) — never on push — so it tweets at most once a day. Safely
+      # no-ops if the X_* secrets are not set.
+      - name: Daily tweet
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: python tweet.py || true
+
       - name: Commit refreshed data & odds history
         run: |
           git config user.name "github-actions[bot]"
