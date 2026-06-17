@@ -334,10 +334,12 @@ border-radius:14px;padding:12px 14px}
 .wifm.wifp{color:var(--muted)}.wifm.wifp b{color:var(--text)}
 .wifteam{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wifteam.ar{text-align:right}
-.wif12{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:0 0 auto}
-.wif12 button{background:var(--panel);color:var(--muted);border:none;padding:3px 9px;font-size:12px;
-font-weight:700;cursor:pointer;transition:background .15s}
-.wif12 button.on{background:var(--green);color:#06231b}
+.wifsc{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto}
+.wifsc i{font-style:normal;color:var(--muted)}
+.wifsc>b{min-width:11px;text-align:center;color:var(--text)}
+.wifb{background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:6px;
+width:20px;height:20px;line-height:18px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;padding:0}
+.wifb:hover{border-color:var(--green);color:var(--green)}
 .wift{width:100%;margin-top:8px;border-top:1px solid var(--line)}
 .wift td{padding:3px 4px;font-size:12px;border:none}
 .wift .pos{width:14px;color:#5d6a85}
@@ -456,7 +458,7 @@ function koLabel(home,away,date){const k=D.kickoffs&&D.kickoffs[[home,away].sort
 function renderMatches(){
   const sel=document.getElementById("mfilter").value;
   const ms=D.matches.filter(m=>sel==="all"||m.group===sel);
-  let h=`<table class="mtable"><thead><tr><th>Kickoff (Portugal)</th><th>Gr</th><th>Match</th>
+  let h=`<table class="mtable"><thead><tr><th>Kickoff (WEST)</th><th>Gr</th><th>Match</th>
   <th>Top scorelines</th><th>W/D/L</th></tr></thead><tbody>`;
   ms.forEach(m=>{const top=m.top.map((s,i)=>`<b>${s.score}</b> ${pc0(s.p)}`).join(" · ");
     h+=`<tr><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td><td>${m.group}</td>
@@ -509,7 +511,7 @@ function renderLab(){
   const mk=(l,v)=>`<div class="mk"><span>${l}</span><b>${pc0(v)}</b></div>`;
   const tops=r.top.map(t=>`<b>${t.s}</b> ${pc0(t.p)}`).join(" · ");
   const ki=D.kickoffs&&D.kickoffs[[a,b].sort().join("|")];
-  const koLine=ki?`<div class="note" style="text-align:center;margin-top:4px">🕒 World Cup kickoff: <b>${ki.label}</b> &nbsp;<span style="color:#5d6a85">Portugal · WEST (UTC+1)</span></div>`:"";
+  const koLine=ki?`<div class="note" style="text-align:center;margin-top:4px">🕒 World Cup kickoff: <b>${ki.label}</b> &nbsp;<span style="color:#5d6a85">WEST (UTC+1)</span></div>`:"";
   const markets=`<div class="mkts">
     ${mk("Over 1.5",r.o15)}${mk("Over 2.5",r.o25)}${mk("Over 3.5",r.o35)}${mk("Under 2.5",1-r.o25)}
     ${mk("Both teams score",r.btts)}${mk(flag(a,'sm')+" clean sheet",r.csa)}${mk(flag(b,'sm')+" clean sheet",r.csb)}
@@ -618,24 +620,20 @@ function renderFifa(){
   el.innerHTML=h+`</tbody></table>`;
 }
 /* ---- "what if?" editor: you set the remaining group results, tables update ---- */
-let wifState=null,wifRep=null;
+let wifScores=null;
 function wifInit(){
-  wifState={};wifRep={};
+  wifScores={};
   const predBy={};(D.matches||[]).forEach(m=>predBy[[m.home,m.away].sort().join("|")]=m);
   (D.fixtures||[]).forEach((f,i)=>{if(f.played)return;
-    const p=predBy[[f.home,f.away].sort().join("|")],rep={h:[1,0],d:[1,1],a:[0,1]},seen={};
-    if(p)(p.top||[]).forEach(s=>{const a=+s.score.split("-")[0],b=+s.score.split("-")[1];
-      const o=a>b?"h":(a<b?"a":"d");if(!seen[o]){rep[o]=[a,b];seen[o]=1;}});
-    wifRep[i]=rep;
-    let o="d";if(p){const mx=Math.max(p.p_home,p.p_draw,p.p_away);
-      o=mx===p.p_home?"h":(mx===p.p_away?"a":"d");}
-    wifState[i]=o;});
+    const p=predBy[[f.home,f.away].sort().join("|")];let hs=1,as=1;
+    if(p&&p.top&&p.top[0]){const s=p.top[0].score.split("-");hs=+s[0];as=+s[1];}
+    wifScores[i]={hs,as};});  // default = the model's most likely score
 }
-function wifScore(i,f){return f.played?[f.hs,f["as"]]:wifRep[i][wifState[i]];}
+function wifSc(i,f){return f.played?[f.hs,f["as"]]:[wifScores[i].hs,wifScores[i].as];}
 function wifGroups(){
   const G=D.structure.groups,fx=D.fixtures,gres={};
   for(const L in G){const ts=G[L],st={};ts.forEach(t=>st[t]={t,pts:0,gf:0,ga:0});
-    fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifScore(i,f);
+    fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifSc(i,f);
       const H=st[f.home],A=st[f.away];H.gf+=hs;H.ga+=as;A.gf+=as;A.ga+=hs;
       if(hs>as)H.pts+=3;else if(as>hs)A.pts+=3;else{H.pts++;A.pts++;}});
     gres[L]={order:ts.slice().sort((x,y)=>st[y].pts-st[x].pts||(st[y].gf-st[y].ga)-(st[x].gf-st[x].ga)||st[y].gf-st[x].gf||(x<y?-1:1)),st};}
@@ -645,23 +643,24 @@ function wifGroups(){
   return{gres,qual3:new Set(thirds.slice(0,8).map(t=>t.L))};
 }
 function wifRender(){
-  const el=document.getElementById("whatif");if(!el)return;if(!wifState)wifInit();
+  const el=document.getElementById("whatif");if(!el)return;if(!wifScores)wifInit();
   const {gres,qual3}=wifGroups(),G=D.structure.groups,fx=D.fixtures;
   const sn=t=>t.length>14?t.slice(0,13)+"…":t;
+  const sb=(i,s,d,l)=>`<button class="wifb" data-i="${i}" data-s="${s}" data-d="${d}">${l}</button>`;
   let h=`<div class="wifgrid">`;
   for(const L in G){h+=`<div class="group"><h3>GROUP ${L}</h3>`;
-    fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifScore(i,f);
+    fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifSc(i,f);
       if(f.played)h+=`<div class="wifm wifp">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span> <b>${hs}-${as}</b> <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;
-      else{const o=wifState[i];
-        h+=`<div class="wifm">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span>
-        <span class="wif12"><button class="${o==='h'?'on':''}" data-i="${i}" data-o="h">1</button><button class="${o==='d'?'on':''}" data-i="${i}" data-o="d">X</button><button class="${o==='a'?'on':''}" data-i="${i}" data-o="a">2</button></span>
-        <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;}});
+      else h+=`<div class="wifm">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span>
+        <span class="wifsc">${sb(i,'h',-1,'−')}<b>${hs}</b>${sb(i,'h',1,'+')}<i>-</i>${sb(i,'a',-1,'−')}<b>${as}</b>${sb(i,'a',1,'+')}</span>
+        <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;});
     h+=`<table class="wift"><tbody>`;
     gres[L].order.forEach((t,idx)=>{const s=gres[L].st[t],gd=s.gf-s.ga,c=idx<2?'q':(idx===2&&qual3.has(L)?'q3':'');
       h+=`<tr class="${c}"><td class="pos">${idx+1}</td><td>${flag(t,'sm')} ${sn(t)}</td><td>${s.pts}</td><td>${gd>=0?'+':''}${gd}</td></tr>`;});
     h+=`</tbody></table></div>`;}
   el.innerHTML=h+`</div>`;
-  el.querySelectorAll(".wif12 button").forEach(b=>b.onclick=()=>{wifState[+b.dataset.i]=b.dataset.o;wifRender();});
+  el.querySelectorAll(".wifsc .wifb").forEach(btn=>btn.onclick=()=>{const i=+btn.dataset.i,k=btn.dataset.s==='h'?'hs':'as';
+    wifScores[i][k]=Math.max(0,Math.min(19,wifScores[i][k]+ +btn.dataset.d));wifRender();});
 }
 function renderToday(){
   const sec=document.getElementById("todaysec");if(!sec)return;
@@ -1013,7 +1012,7 @@ def build_interactive(data: dict, out_path) -> Path:
         f"<div class='kpi'><div class='big'>{contenders}</div>"
         f"<div class='lbl'>teams above 5% to win</div></div></div>"
         "<div id='todaysec'><h2>📅 <span id='todayhead'>Today's matches</span> "
-        "<span class='tag'>kickoffs in Portugal time</span></h2><div id='today'></div></div>"
+        "<span class='tag'>kickoffs in WEST (UTC+1)</span></h2><div id='today'></div></div>"
         f"{ev_html}"
         f"{review_html}"
         "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
@@ -1031,7 +1030,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "X = draw, 2 = away win) and watch the tables — and who qualifies — update live. "
         "<button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset to the model</button></p>"
         "<div id='whatif'></div>"
-        "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in Portugal · WEST (UTC+1)</span></h2>"
+        "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in WEST (UTC+1)</span></h2>"
         f"<select id='mfilter'>{opts}</select><div id='matches' style='margin-top:10px'></div>"
         "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
         "<div id='bracket'></div>"
