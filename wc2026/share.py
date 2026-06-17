@@ -8,7 +8,10 @@ from __future__ import annotations
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as _fm
+import numpy as np
 import pandas as pd
+from PIL import Image, ImageDraw, ImageFont
 
 from .tournament import STAGES, STAGE_LABELS
 from .viz import CODES, FAVICON, GOLD, GREEN, INK, MUTED, SITE, TEXT, flag
@@ -99,9 +102,107 @@ def spotlight_card(table, out, team=None):
     return out
 
 
+# --------------------------------------------------------------------------- #
+# Hero share card (1200x630) — a branded, homepage-style image for rich link
+# previews (WhatsApp / Twitter / Facebook), rather than a bare bar chart.
+# Drawn with Pillow; text uses the DejaVu Sans that matplotlib bundles, so it
+# renders the same locally (Windows) and in the GitHub Action (Ubuntu).
+# --------------------------------------------------------------------------- #
+_HERO = (1200, 630)
+_GOLD = (255, 211, 77)
+_GREEN = (0, 224, 164)
+_WHITE = (238, 241, 247)
+_GREY = (139, 149, 171)
+_DARK = (12, 16, 24)
+
+
+def _ttf(size: int, bold: bool = True):
+    fp = _fm.FontProperties(family="DejaVu Sans", weight="bold" if bold else "normal")
+    return ImageFont.truetype(_fm.findfont(fp), size)
+
+
+def _hero_bg(w: int, h: int) -> Image.Image:
+    """Dark vertical gradient with soft radial glows (the homepage's backdrop)."""
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    t = (yy / h)[..., None]
+    img = np.array([12, 16, 24], np.float32) * (1 - t) + np.array([7, 10, 17], np.float32) * t
+
+    def glow(cx, cy, rx, ry, col, peak):
+        dd = ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2
+        return (np.clip(1 - dd, 0, 1) ** 1.7 * peak)[..., None] * np.array(col, np.float32)
+
+    img = img + glow(600, -40, 660, 380, _GREEN, 0.17)      # green, top-centre
+    img = img + glow(1080, 20, 560, 400, _GOLD, 0.09)       # gold, top-right
+    img = img + glow(130, 260, 560, 430, (91, 141, 239), 0.07)  # blue, left
+    return Image.fromarray(np.clip(img, 0, 255).astype("uint8"), "RGB")
+
+
+def _hero_trophy(d: ImageDraw.ImageDraw, left: float, top: float, px: float):
+    """The gold globe-trophy (same drawing as the favicon / app icons)."""
+    sc = px / 64.0
+
+    def R(a, b, c, e):
+        return [left + a * sc, top + b * sc, left + c * sc, top + e * sc]
+
+    cx, cy, r = 32, 24, 13.5
+    lw = max(1, round(1.7 * sc))
+    d.ellipse(R(cx - r, cy - r, cx + r, cy + r), fill=_GOLD)
+    d.line(R(cx - r, cy, cx + r, cy), fill=_DARK, width=lw)
+    d.ellipse(R(cx - r, cy - r * 0.5, cx + r, cy + r * 0.5), outline=_DARK, width=lw)
+    d.line(R(cx, cy - r, cx, cy + r), fill=_DARK, width=lw)
+    d.ellipse(R(cx - r * 0.5, cy - r, cx + r * 0.5, cy + r), outline=_DARK, width=lw)
+    d.rectangle(R(30.5, 37, 33.5, 46), fill=_GOLD)
+    d.rounded_rectangle(R(23, 46, 41, 50), radius=2 * sc, fill=_GOLD)
+    d.rounded_rectangle(R(18, 50, 46, 55), radius=2.5 * sc, fill=_GOLD)
+
+
+def _hero_pill(d, cx, cy, text, font, textcol, bg, border, h=44, padx=20):
+    w = d.textlength(text, font=font) + padx * 2
+    x0, y0 = cx - w / 2, cy - h / 2
+    d.rounded_rectangle([x0, y0, x0 + w, y0 + h], radius=h / 2,
+                        fill=bg, outline=border, width=2)
+    d.text((cx, cy), text, font=font, fill=textcol, anchor="mm")
+    return w
+
+
+def hero_card(table, out):
+    """A 1200x630 branded card (the homepage in a single image) for link previews."""
+    W, H = _HERO
+    img = _hero_bg(W, H)
+    d = ImageDraw.Draw(img)
+
+    _hero_trophy(d, 600 - 32 * (118 / 64), 28, 118)         # centred trophy
+    _hero_pill(d, 600, 170, "MACHINE-LEARNING PREDICTION", _ttf(19),
+               _GREEN, (14, 33, 30), (0, 92, 76), h=38)
+    fh = _ttf(62)
+    d.text((600, 238), "Who wins the", font=fh, fill=_WHITE, anchor="mm")
+    d.text((600, 306), "World Cup 2026?", font=fh, fill=_GOLD, anchor="mm")
+    d.text((600, 372), "A machine-learning model — Poisson + Elo, 150 years of football",
+           font=_ttf(25, bold=False), fill=_GREY, anchor="mm")
+
+    # top-3 contenders as pills (a hook, not a chart) — favourite in gold
+    fp = _ttf(26)
+    labels = [f"{r['team']}  {r['p_champion'] * 100:.0f}%"
+              for _, r in table.head(3).iterrows()]
+    widths = [d.textlength(s, font=fp) + 40 for s in labels]
+    gap, x = 22, 600 - (sum(widths) + 22 * (len(widths) - 1)) / 2
+    for i, (s, w) in enumerate(zip(labels, widths)):
+        if i == 0:
+            _hero_pill(d, x + w / 2, 448, s, fp, _GOLD, (40, 33, 13), (150, 120, 30), h=54)
+        else:
+            _hero_pill(d, x + w / 2, 448, s, fp, _WHITE, (22, 29, 43), (36, 48, 73), h=54)
+        x += w + gap
+
+    d.text((600, 556), "manuelcralves.github.io/WORLD-CUP-2026",
+           font=_ttf(24), fill=_GREEN, anchor="mm")
+    img.save(out, "PNG")
+    return out
+
+
 def share_cards(table, outdir, team=None):
     outdir = Path(outdir)
-    champions_card(table, outdir / "share_title.png")
+    hero_card(table, outdir / "share_card.png")          # the rich-link preview
+    champions_card(table, outdir / "share_title.png")    # standalone title chart
     spotlight_card(table, outdir / "share_spotlight.png", team)
     return outdir
 
@@ -139,7 +240,9 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
         '<meta property="og:title" content="World Cup 2026 — live vs pre-tournament">'
         '<meta property="og:description" content="Compare the live and blind '
         'pre-tournament title odds for all 48 teams.">'
-        f'<meta property="og:image" content="{SITE}/outputs/share_title.png">'
+        f'<meta property="og:image" content="{SITE}/outputs/share_card.png">'
+        '<meta property="og:image:width" content="1200">'
+        '<meta property="og:image:height" content="630">'
         f'<meta property="og:url" content="{SITE}/compare.html">'
         '<meta property="og:type" content="website">'
         '<meta name="twitter:card" content="summary_large_image">'
