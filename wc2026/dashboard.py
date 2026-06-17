@@ -291,6 +291,8 @@ border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
 border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;font-size:13.5px}
 .pbtn{background:#243049;color:#eef1f7;border:0;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer}
 .pbtn:hover{background:#2c3a57}.pbtn.pg{background:#00e0a4;color:#062018}.pbtn.pg:hover{filter:brightness(1.08)}
+.plink{background:none;border:0;color:#8b95ab;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px}
+.plink:hover{color:#00e0a4}
 .lbx{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:4px 14px;margin-bottom:6px}
 .lbrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #1c2536;font-size:14px}
 .lbrow:last-child{border:none}
@@ -795,7 +797,7 @@ function bywRender(){
 const PKEY="wc2026_preds_v1";
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
-let sb=null,sbUser=null,lbRows=[],predCache=null;
+let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null;
 function predLoad(){if(predCache)return predCache;
   try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
@@ -815,26 +817,31 @@ function supaLbRefresh(){if(!sb)return;clearTimeout(_lbT);_lbT=setTimeout(async(
 async function supaInit(){
   if(typeof supabase==="undefined"||!document.getElementById("predict"))return;
   try{sb=supabase.createClient(SUPA_URL,SUPA_KEY);
-    let{data:{session}}=await sb.auth.getSession();
-    if(!session){const r=await sb.auth.signInAnonymously();session=r.data&&r.data.session;}
+    sb.auth.onAuthStateChange((_e,s)=>{sbUser=s?s.user:null;if(!s){myName=null;predCache={};}supaSync();});
+    const{data:{session}}=await sb.auth.getSession();
     sbUser=session?session.user:null;await supaSync();
   }catch(e){console.warn("Supabase init:",e);}}
 async function supaSync(){
   if(!sb)return;
   try{if(sbUser){const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away");
       if(data){predCache={};data.forEach(p=>predCache[p.match_id]=[p.pred_home,p.pred_away]);
-        try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}}}
+        try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}}
+      const{data:pf}=await sb.from("profiles").select("name").eq("id",sbUser.id).maybeSingle();
+      myName=pf&&pf.name?pf.name:((sbUser.user_metadata||{}).full_name||(sbUser.user_metadata||{}).name||null);}
     const{data:lb}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
     lbRows=lb||[];}catch(e){console.warn("Supabase sync:",e);}
   predRender();}
-function supaName(){if(!sbUser||sbUser.is_anonymous)return null;
-  const m=sbUser.user_metadata||{};return m.full_name||m.name||null;}
 async function supaSignIn(){if(sb)try{await sb.auth.signInWithOAuth(
   {provider:"google",options:{redirectTo:location.href.split("#")[0]}});}
-  catch(e){alert("Google sign-in isn't enabled yet — coming soon!");}}
-async function supaSignOut(){if(!sb)return;await sb.auth.signOut();predCache=null;
-  const r=await sb.auth.signInAnonymously();
-  sbUser=r.data&&r.data.session?r.data.session.user:null;supaSync();}
+  catch(e){alert("Couldn't start Google sign-in. Try again.");}}
+async function supaSignOut(){if(!sb)return;await sb.auth.signOut();
+  sbUser=null;myName=null;predCache={};lbRows=[];predRender();supaSync();}
+async function supaEditName(){if(!sb||!sbUser)return;
+  const n=(prompt("Choose your username (shown on the leaderboard):",myName||"")||"").trim().slice(0,24);
+  if(!n)return;
+  const{error}=await sb.from("profiles").update({name:n}).eq("id",sbUser.id);
+  if(error){predToast("⚠️ Couldn't save name");return;}
+  myName=n;predToast("✓ Username saved");supaSync();}
 function predScore(p,a){
   if(p[0]===a[0]&&p[1]===a[1])return 5;            // exact score
   const pd=p[0]-p[1],ad=a[0]-a[1];
@@ -853,15 +860,15 @@ function predRender(){
     const a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
     you+=yp;mac+=mp;n++;if(yp>=2){hits++;run++;}else run=0;streak=run;if(yp===5)exact++;if(yp>mp)beat++;
     scored.push({m,yp,mp,a});});
-  const nm=supaName();
-  let h=`<div class="pauth"><span>${nm?'👤 <b>'+nm+'</b>':'👤 Playing as guest'}</span>`
-    +(nm?'<button class="pbtn" id="p-signout">Sign out</button>'
-        :'<button class="pbtn pg" id="p-signin">Sign in with Google</button>')+`</div>`;
-  if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
+  const signedIn=!!sbUser;
+  let h=signedIn
+    ?`<div class="pauth"><span>👤 <b>${myName||'You'}</b> <button class="plink" id="p-editname">✎ username</button></span><button class="pbtn" id="p-signout">Sign out</button></div>`
+    :`<div class="pauth"><span>🔒 Sign in to predict &amp; climb the leaderboard</span><button class="pbtn pg" id="p-signin">Sign in with Google</button></div>`;
+  if(signedIn){if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
     h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
       +`<div class="pbvs">${lead}</div><div class="pb"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine</div></div></div>`
       +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
-  }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;
+  }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
   const _lb=lbRows.filter(r=>r.is_model||r.played>0||(sbUser&&r.uid===sbUser.id));
   if(_lb.length){h+=`<h3 class="psec">🏆 Global leaderboard</h3><div class="lbx">`;
     _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id;
@@ -869,6 +876,7 @@ function predRender(){
         +`<span class="lbname">${r.is_model?'🤖':(me?'🟢':'🧑')} ${r.name||'Player'}${me?' · you':''}</span>`
         +`<span class="lbpts">${r.points}</span></div>`;});
     h+=`</div>`;}
+  if(signedIn){
   const up=(D.matches||[]).map(m=>({m,ko:predKO(m.home,m.away)}))
     .sort((a,b)=>(a.ko?a.ko:9e15)-(b.ko?b.ko:9e15));
   const more=Math.max(0,up.length-12),show=up.slice(0,12);
@@ -892,9 +900,12 @@ function predRender(){
         +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=2?'g':'r'}">${tag(yp)}</span></div>`
         +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':'r'}">${tag(mp)}</span></div>`
         +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
+  }else h+=`<div class="pcard" style="text-align:center;padding:22px 16px"><div style="font-size:15px;font-weight:700;margin-bottom:6px">🔒 Sign in to make your predictions</div><div class="note" style="margin:0">Log in with Google to pick scores, challenge the model and climb the leaderboard.</div><button class="pbtn pg" id="p-signin2" style="margin-top:12px">Sign in with Google</button></div>`;
   el.innerHTML=h;
   const _si=document.getElementById("p-signin");if(_si)_si.onclick=supaSignIn;
+  const _si2=document.getElementById("p-signin2");if(_si2)_si2.onclick=supaSignIn;
   const _so=document.getElementById("p-signout");if(_so)_so.onclick=supaSignOut;
+  const _en=document.getElementById("p-editname");if(_en)_en.onclick=supaEditName;
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||predModel(key)).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
   el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=c.dataset.sc.split("-").map(Number);predSet(c.dataset.k,s[0],s[1]);});
@@ -1227,9 +1238,8 @@ def build_interactive(data: dict, out_path) -> Path:
         "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
         "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
         "or set your own with −/+. Locked at kickoff. Points: 🎯 exact 5 · result + goal "
-        "difference 3 · right result 2. The model plays too — can you beat it? Your picks "
-        "are saved automatically — sign in with Google to claim your name on the leaderboard "
-        "and keep them across devices.</p>"
+        "difference 3 · right result 2. The model plays too — can you beat it? Sign in with "
+        "Google to make your picks, choose a username and climb the global leaderboard.</p>"
         "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
         f'<meta property="og:title" content="World Cup 2026 — ML prediction'
