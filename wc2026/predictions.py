@@ -65,6 +65,8 @@ def group_stage_predictions(bundle, trained, only_remaining=True) -> pd.DataFram
             "p_home": round(rep["p_home"], 3), "p_draw": round(rep["p_draw"], 3),
             "p_away": round(rep["p_away"], 3),
             "ml_score": rep["most_likely"], "p_ml": round(rep["p_most_likely"], 3),
+            "top3": ",".join(f"{s['score']}:{round(s['p'] * 100)}"
+                             for s in rep["top_scorelines"][:3]),
         })
     return pd.DataFrame(rows).sort_values(["date", "group"]).reset_index(drop=True)
 
