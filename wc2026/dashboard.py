@@ -261,6 +261,32 @@ align-items:center;gap:7px}
 .g-row .grec{flex:0 0 auto;color:#8b95ab;font-size:12px;white-space:nowrap}
 .g-row .qbadge{flex:0 0 50px;text-align:right;font-weight:800;font-size:12px}
 .qbadge.q-in{color:#00e0a4}.qbadge.q-out{color:#ff6b6b}.qbadge.q-hunt{color:#cbd3e1}
+.pcard{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:12px 14px;margin:0 0 10px}
+.pcard.plk{opacity:.6}
+.prow{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700}
+.pteam{flex:1;display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pteam.ar{justify-content:flex-end;text-align:right}
+.psc{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto}
+.psc b{min-width:16px;text-align:center;font-size:16px}.psc i{color:#8b95ab;font-style:normal}
+.pmeta{color:#8b95ab;font-size:12px;margin-top:7px}
+.pdone{color:#00e0a4;font-weight:700}
+.psugg{margin-top:9px;font-size:12.5px;color:#ffd34d}
+.pchip{background:#1c2536;border:1px solid #243049;color:#cbd3e1;border-radius:999px;
+padding:5px 11px;font-size:12.5px;cursor:pointer;font-weight:600;margin:0 5px 5px 0}
+.pchip:hover{border-color:#00e0a4;color:#fff}
+.pboard{display:flex;align-items:center;justify-content:center;gap:14px;background:#161d2b;
+border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
+.pb{text-align:center;min-width:64px}
+.pbn{font-size:30px;font-weight:800;font-family:'Outfit',sans-serif}
+.pbl{color:#8b95ab;font-size:12.5px}
+.pbvs{font-weight:700;font-size:13.5px;text-align:center;flex:1;max-width:170px}
+.pstats{color:#8b95ab;font-size:13px;text-align:center;margin-bottom:18px}
+.psec{font-size:15px;margin:18px 0 10px}
+.presrow{display:flex;justify-content:space-between;font-size:13.5px;margin-top:7px}
+.presrow.mac{color:#9fb0c9}
+.ppts{font-weight:800}.ppts.g{color:#00e0a4}.ppts.r{color:#8b95ab}
+.pbeat{color:#00e0a4;font-weight:700;font-size:12.5px;text-align:center;margin-top:6px}
+.pbeat.lose{color:#8b95ab}
 select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;
 padding:8px 12px;font-size:14px}
 .lab{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;
@@ -748,6 +774,63 @@ function bywRender(){
   el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{const t=tt.dataset.team;
     if(t){bywState[+tt.dataset.m]=t;bywRender();}});
 }
+/* ---- Beat the Machine: predict upcoming matches and score against the model.
+   Phase 1 — saved in localStorage, no backend. Only on the live dashboard. ---- */
+const PKEY="wc2026_preds_v1";
+function predLoad(){try{return JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){return {};}}
+function predSave(o){try{localStorage.setItem(PKEY,JSON.stringify(o));}catch(e){}}
+function predScore(p,a){
+  if(p[0]===a[0]&&p[1]===a[1])return 5;            // exact score
+  const pd=p[0]-p[1],ad=a[0]-a[1];
+  if(pd===ad)return 3;                              // right result + goal difference
+  if(Math.sign(pd)===Math.sign(ad))return 2;        // right result only
+  return 0;}
+function predKO(home,away){const k=D.kickoffs&&D.kickoffs[[home,away].sort().join("|")];
+  return k?new Date(k.date+"T"+k.hm+":00+01:00"):null;}   // WEST = UTC+1
+function predModel(key){const m=(D.matches||[]).find(x=>x.home+"|"+x.away===key);
+  return m&&m.top&&m.top[0]?m.top[0].score.split("-").map(Number):[1,1];}
+function predRender(){
+  const el=document.getElementById("predict");if(!el)return;
+  const store=predLoad(),now=new Date();
+  let you=0,mac=0,n=0,hits=0,exact=0,beat=0,run=0,streak=0;const scored=[];
+  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in store))return;
+    const a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
+    you+=yp;mac+=mp;n++;if(yp>=2){hits++;run++;}else run=0;streak=run;if(yp===5)exact++;if(yp>mp)beat++;
+    scored.push({m,yp,mp,a});});
+  let h="";
+  if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
+    h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
+      +`<div class="pbvs">${lead}</div><div class="pb"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine</div></div></div>`
+      +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
+  }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;
+  const up=(D.matches||[]).map(m=>({m,ko:predKO(m.home,m.away)}))
+    .sort((a,b)=>(a.ko?a.ko:9e15)-(b.ko?b.ko:9e15));
+  const more=Math.max(0,up.length-12),show=up.slice(0,12);
+  h+=`<h3 class="psec">📥 Predict the upcoming matches</h3>`;
+  const sb=(key,s,d,l)=>`<button class="wifb" data-k="${key}" data-s="${s}" data-d="${d}">${l}</button>`;
+  show.forEach(({m,ko})=>{const key=m.home+"|"+m.away,mine=key in store,cur=store[key]||predModel(key),
+    locked=ko&&now>=ko,kl=ko?D.kickoffs[[m.home,m.away].sort().join("|")].label:"";
+    let sc;
+    if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
+    else sc=`<span class="psc">${sb(key,'h',-1,'−')}<b>${cur[0]}</b>${sb(key,'h',1,'+')}<i>-</i>${sb(key,'a',-1,'−')}<b>${cur[1]}</b>${sb(key,'a',1,'+')}</span>`;
+    h+=`<div class="pcard${locked?' plk':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
+    const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
+    h+=`<div class="pmeta">${meta}</div>`;
+    if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
+    h+=`</div>`;});
+  if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
+  if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;
+    const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':'❌ +0';
+    scored.slice().reverse().forEach(({m,yp,mp,a})=>{const key=m.home+"|"+m.away;
+      h+=`<div class="pcard pres"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
+        +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=2?'g':'r'}">${tag(yp)}</span></div>`
+        +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':'r'}">${tag(mp)}</span></div>`
+        +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
+  el.innerHTML=h;
+  el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1,s=predLoad();
+    const cur=s[key]||predModel(key);cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));s[key]=cur;predSave(s);predRender();});
+  el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=predLoad();s[c.dataset.k]=c.dataset.sc.split("-").map(Number);predSave(s);predRender();});
+}
 function renderToday(){
   const sec=document.getElementById("todaysec");if(!sec)return;
   const ko=D.kickoffs||{},K=(a,b)=>ko[[a,b].sort().join("|")];
@@ -963,11 +1046,12 @@ if(document.getElementById("whatif")){wifRender();
   const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();bywRender();};}
 if(document.getElementById("byw")){bywRender();
   const _br=document.getElementById("byw-reset");if(_br)_br.onclick=()=>{bywState={};bywRender();};}
+if(document.getElementById("predict"))predRender();
 makeCollapsible();
 document.querySelectorAll(".tabnav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab,true));
 let _tab=new URLSearchParams(location.search).get("tab");
 if(qteam&&byName[qteam]&&!_tab)_tab="teams";
-showTab(["overview","teams","play","insights"].includes(_tab)?_tab:"overview",false);
+showTab(["overview","teams","play","predict","insights"].includes(_tab)?_tab:"overview",false);
 const _sec=new URLSearchParams(location.search).get("sec");   // deep-link to a section
 if(_sec){const _se=document.getElementById(_sec);
   if(_se)setTimeout(()=>_se.scrollIntoView({behavior:"smooth",block:"center"}),180);}
@@ -1068,6 +1152,16 @@ def build_interactive(data: dict, out_path) -> Path:
     mode = (data.get("mode_label") + " · ") if data.get("mode_label") else ""
     pre = "Pre-tournament" in (data.get("mode_label") or "")
     ogdir = "/outputs_pretournament" if pre else "/outputs"
+    # Beat-the-Machine prediction game: live version only (needs real results)
+    pred_btn = "" if pre else "<button data-tab='predict'>⚔️ Predict</button>"
+    pred_tab = ("" if pre else
+        "<div class='tab' id='tab-predict'>"
+        "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
+        "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
+        "or set your own with −/+. Locked at kickoff. Points: 🎯 exact 5 · result + goal "
+        "difference 3 · right result 2. The model plays too — can you beat it? Saved in "
+        "your browser, no login.</p>"
+        "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
         f'<meta property="og:title" content="World Cup 2026 — ML prediction'
         f'{" (pre-tournament)" if pre else ""}">'
@@ -1112,6 +1206,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "<button data-tab='overview' class='on'>🔮 Overview</button>"
         "<button data-tab='teams'>📊 Teams</button>"
         "<button data-tab='play'>🎮 Play</button>"
+        f"{pred_btn}"
         "<button data-tab='insights'>📈 Insights</button></div>"
         "<div class='tab' id='tab-overview'>"
         "<div class='cards'>"
@@ -1184,6 +1279,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div style='position:relative;height:430px'><canvas id='elo-chart'></canvas></div>"
         f"{_facts_html(data.get('facts'))}"
         "</div>"
+        f"{pred_tab}"
         "<p class='foot'>Data-driven model, just for fun. ⚽ "
         "Data: International football results 1872–2026.</p>"
         "</div>"
