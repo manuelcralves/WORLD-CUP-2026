@@ -145,28 +145,29 @@ def _standings_from_review() -> dict:
     return pts
 
 
-def _qualif_text():
-    p = OUT / "predictions.csv"
-    if not p.exists():
-        return None
-    d = pd.read_csv(p)
+def _qualif_today(today: str) -> list:
+    """One standings + advance-odds snapshot per group that plays today."""
+    gm, pr = OUT / "group_matches.csv", OUT / "predictions.csv"
+    if not gm.exists() or not pr.exists():
+        return []
+    groups = sorted(pd.read_csv(gm).query("date == @today")["group"].unique())
+    if not groups:
+        return []                                # e.g. a knockout day — skip
+    d = pd.read_csv(pr)
     if "p_ko" not in d.columns or "group" not in d.columns:
-        return None
-    pts = _standings_from_review()
-    best, best_score = None, 1e9                 # tightest = closest to a coin-flip
-    for L, g in d.groupby("group"):
-        score = (g["p_ko"] - 0.5).abs().sum()
-        if score < best_score:
-            best, best_score = L, score
-    g = d[d["group"] == best].sort_values("p_ko", ascending=False)
-    lines = []
-    for r in g.itertuples(index=False):
-        s = pts.get(r.team, {"played": 0, "pts": 0})
-        rec = f"{s['pts']}pt{'s' if s['pts'] != 1 else ''}" if s["played"] else "—"
-        lines.append(f"{_flag(r.team) or '⚽'} {r.team} · {rec} · "
-                     f"{r.p_ko * 100:.0f}% to advance")
-    head = f"🎟️ Group {best} is wide open — who reaches the last 32?\n\n"
-    return head + _fit(lines, head, "")
+        return []
+    pts, out = _standings_from_review(), []
+    for L in groups:
+        g = d[d["group"] == L].sort_values("p_ko", ascending=False)
+        lines = []
+        for r in g.itertuples(index=False):
+            s = pts.get(r.team, {"played": 0, "pts": 0})
+            rec = f"{s['pts']}pt{'s' if s['pts'] != 1 else ''}" if s["played"] else "—"
+            lines.append(f"{_flag(r.team) or '⚽'} {r.team} · {rec} · "
+                         f"{r.p_ko * 100:.0f}% to advance")
+        head = f"🎟️ Group {L} today — standings & chance to reach the last 32:\n\n"
+        out.append(head + _fit(lines, head, ""))
+    return out
 
 
 def _mover_line():
@@ -204,10 +205,13 @@ def _title_text():
 def build_thread() -> list:
     today = _today_utc()
     tweets = list(_today_previews(today))
-    for fn in (_recap_text, _qualif_text, _title_text):
-        t = fn()
-        if t:
-            tweets.append(t)
+    recap = _recap_text()
+    if recap:
+        tweets.append(recap)
+    tweets += _qualif_today(today)
+    title = _title_text()
+    if title:
+        tweets.append(title)
     if not tweets:
         return []
     cta = f"🔗 Full bracket, odds & Match Lab:\n{SITE}"
