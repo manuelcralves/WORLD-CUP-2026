@@ -32,9 +32,10 @@ jobs:
       - name: Run predictions (live + pre-tournament)
         run: python run_pipeline.py 40000 both
 
-      # Always builds the copy-ready outputs/tweets.html (free, manual posting).
-      # Auto-posts to X only when AUTO_TWEET=true AND it is the daily scheduled
-      # run — so a push never tweets, and by default nothing is paid.
+      # Always builds the copy-ready outputs/tweets.html. Also auto-posts the
+      # full thread to X on the daily scheduled run and on a manual "Run
+      # workflow" (never on a code push). Off switch: set repo Variable
+      # AUTO_TWEET=false. Cap the thread length with the MAX_TWEETS Variable.
       - name: Daily tweet kit
         env:
           X_API_KEY: ${{ secrets.X_API_KEY }}
@@ -42,7 +43,7 @@ jobs:
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
           MAX_TWEETS: ${{ vars.MAX_TWEETS }}
-          AUTO_TWEET: ${{ github.event_name == 'schedule' && vars.AUTO_TWEET || '' }}
+          AUTO_TWEET: ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && vars.AUTO_TWEET != 'false' && 'true' || '' }}
         run: python tweet.py || true
 
       - name: Commit refreshed data & odds history

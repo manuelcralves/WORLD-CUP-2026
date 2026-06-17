@@ -33,7 +33,7 @@ KEYS = ("X_API_KEY", "X_API_SECRET", "X_ACCESS_TOKEN", "X_ACCESS_SECRET")
 LIMIT = 280
 URL_LEN = 23
 COST = 0.20
-MAX_TWEETS = int(os.environ.get("MAX_TWEETS") or 3)
+MAX_TWEETS = int(os.environ.get("MAX_TWEETS") or 0)   # 0 = no cap (full thread)
 
 INTRO = ("🤖⚽ Hello! This account posts daily machine-learning predictions for "
          "the 2026 World Cup — Elo + Poisson + Monte Carlo over 150 years of "
@@ -323,7 +323,7 @@ def main() -> int:
     if missing:
         print(f"Missing credentials {missing}; skipping post.")
         return 0
-    batch = tweets[:MAX_TWEETS]
+    batch = tweets[:MAX_TWEETS] if MAX_TWEETS else tweets
     try:
         print(f"Auto-posting {len(batch)} (~${len(batch) * COST:.2f})…")
         print(f"Posted {post_thread(batch)} ✓")
