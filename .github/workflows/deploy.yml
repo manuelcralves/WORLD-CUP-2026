@@ -42,6 +42,7 @@ jobs:
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          MAX_TWEETS: ${{ vars.MAX_TWEETS }}   # optional repo Variable; blank → default 3
         run: python tweet.py || true
 
       - name: Commit refreshed data & odds history

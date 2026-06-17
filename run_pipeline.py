@@ -86,6 +86,9 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     pd.DataFrame(data["golden_boot"]).to_csv(
         out_dir / "golden_boot.csv", index=False, encoding="utf-8")
     table.to_csv(out_dir / "predictions.csv", index=False, encoding="utf-8")
+    if cutoff is None and review:                # for the daily tweet (recap/upsets)
+        pd.DataFrame(review).to_csv(
+            out_dir / "played_review.csv", index=False, encoding="utf-8")
 
     fav, sec = table.iloc[0], table.iloc[1]
     print(f"  Favourite: {fav['team']} {fav['p_champion']*100:.1f}% · "
