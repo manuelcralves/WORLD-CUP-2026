@@ -293,6 +293,12 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pbtn:hover{background:#2c3a57}.pbtn.pg{background:#00e0a4;color:#062018}.pbtn.pg:hover{filter:brightness(1.08)}
 .plink{background:none;border:0;color:#8b95ab;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px}
 .plink:hover{color:#00e0a4}
+.lbclick{cursor:pointer}.lbclick:hover{background:rgba(0,224,164,.06)}
+.pmodbg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:18px}
+.pmod{background:#0f1726;border:1px solid #243049;border-radius:16px;max-width:520px;width:100%;max-height:82vh;overflow:auto;padding:16px 18px}
+.pmodh{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin-bottom:2px}
+.presrow2{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:8px 0;border-bottom:1px solid #1c2536}
+.presrow2:last-child{border:none}
 .lbx{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:4px 14px;margin-bottom:6px}
 .lbrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #1c2536;font-size:14px}
 .lbrow:last-child{border:none}
@@ -842,6 +848,29 @@ async function supaEditName(){if(!sb||!sbUser)return;
   const{error}=await sb.from("profiles").update({name:n}).eq("id",sbUser.id);
   if(error){predToast("⚠️ Couldn't save name");return;}
   myName=n;predToast("✓ Username saved");supaSync();}
+async function showProfile(uid,name){
+  if(!sb)return;
+  let preds={};
+  try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
+    (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
+  let pts=0,n=0,exact=0,beat=0;const rows=[];
+  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;
+    const a=[m.hs,m["as"]],yp=predScore(preds[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
+    pts+=yp;n++;if(yp===5)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp});});
+  const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':'❌ +0';
+  let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>👤 ${name}</b>`
+    +`<button class="pbtn" id="pmodx">✕</button></div>`
+    +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact · 🏆 beat the model ${beat}×</div>`;
+  if(rows.length)rows.reverse().forEach(({m,pick,a,yp})=>{
+    html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
+      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=2?'g':'r'}">${tag(yp)}</span></span></div>`;});
+  else html+=`<div class="note" style="text-align:center;padding:14px 0">No scored picks yet — only matches that have kicked off appear here.</div>`;
+  html+=`</div></div>`;
+  const old=document.getElementById("pmodbg");if(old)old.remove();
+  document.body.insertAdjacentHTML("beforeend",html);
+  const bg=document.getElementById("pmodbg");
+  bg.onclick=e=>{if(e.target===bg)bg.remove();};
+  document.getElementById("pmodx").onclick=()=>bg.remove();}
 function predScore(p,a){
   if(p[0]===a[0]&&p[1]===a[1])return 5;            // exact score
   const pd=p[0]-p[1],ad=a[0]-a[1];
@@ -869,11 +898,11 @@ function predRender(){
       +`<div class="pbvs">${lead}</div><div class="pb"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine</div></div></div>`
       +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
-  const _lb=lbRows.filter(r=>r.is_model||r.played>0||(sbUser&&r.uid===sbUser.id));
-  if(_lb.length){h+=`<h3 class="psec">🏆 Global leaderboard</h3><div class="lbx">`;
+  const _lb=lbRows.filter(r=>!r.is_model&&(r.played>0||(sbUser&&r.uid===sbUser.id)));
+  if(_lb.length){h+=`<h3 class="psec">🏆 Global leaderboard <span class="tag">tap a player to see their picks</span></h3><div class="lbx">`;
     _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id;
-      h+=`<div class="lbrow${r.is_model?' lbmac':''}${me?' lbme':''}"><span class="lbrank">${i+1}</span>`
-        +`<span class="lbname">${r.is_model?'🤖':(me?'🟢':'🧑')} ${r.name||'Player'}${me?' · you':''}</span>`
+      h+=`<div class="lbrow lbclick${me?' lbme':''}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}"><span class="lbrank">${i+1}</span>`
+        +`<span class="lbname">${me?'🟢':'🧑'} ${r.name||'Player'}${me?' · you':''}</span>`
         +`<span class="lbpts">${r.points}</span></div>`;});
     h+=`</div>`;}
   if(signedIn){
@@ -906,6 +935,7 @@ function predRender(){
   const _si2=document.getElementById("p-signin2");if(_si2)_si2.onclick=supaSignIn;
   const _so=document.getElementById("p-signout");if(_so)_so.onclick=supaSignOut;
   const _en=document.getElementById("p-editname");if(_en)_en.onclick=supaEditName;
+  el.querySelectorAll(".lbclick").forEach(r=>r.onclick=()=>showProfile(r.dataset.uid,r.dataset.name));
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||predModel(key)).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
   el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=c.dataset.sc.split("-").map(Number);predSet(c.dataset.k,s[0],s[1]);});

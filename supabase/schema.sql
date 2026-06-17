@@ -103,8 +103,14 @@ create policy "profiles own" on public.profiles
 create policy "matches readable" on public.matches
   for select using (true);                       -- only the service key writes
 
-create policy "preds read own" on public.predictions
-  for select using (auth.uid() = user_id);
+-- read your own predictions any time; other players' only once the match has
+-- kicked off (so nobody can copy upcoming picks)
+create policy "preds read own or post-kickoff" on public.predictions
+  for select using (
+    auth.uid() = user_id
+    or now() >= coalesce(
+      (select kickoff from public.matches m where m.match_id = predictions.match_id),
+      'infinity'::timestamptz));
 create policy "preds insert before kickoff" on public.predictions
   for insert to authenticated with check (
     auth.uid() = user_id and now() < coalesce(
