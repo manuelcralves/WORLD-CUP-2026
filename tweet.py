@@ -27,6 +27,12 @@ KEYS = ("X_API_KEY", "X_API_SECRET", "X_ACCESS_TOKEN", "X_ACCESS_SECRET")
 LIMIT = 280
 URL_LEN = 23          # t.co shortens every link to a fixed 23 characters
 
+# One-off "hello world" used by `--test` to verify the credentials (and a nice
+# first/pinned post for the account).
+INTRO = ("🤖⚽ Hello! This account posts daily machine-learning predictions for "
+         "the 2026 World Cup — Elo + Poisson + Monte Carlo over 150 years of "
+         f"football. Just for fun.\n\nLive dashboard 👇\n{SITE}")
+
 # Emoji flags render fine on X (unlike a Windows console). Optional import.
 try:
     from wc2026.viz import FLAGS
@@ -127,7 +133,8 @@ def post(text: str):
 
 def main() -> int:
     dry = "--dry-run" in sys.argv
-    text = build_text()
+    test = "--test" in sys.argv                  # one-off credential check
+    text = INTRO if test else build_text()
     if not text:
         print("Nothing to post (no data found).")
         return 0
@@ -138,12 +145,13 @@ def main() -> int:
         return 0
     if missing:
         print(f"Missing credentials {missing}; skipping post (no-op).")
-        return 0
+        return 1 if test else 0                  # the test should fail loudly
     try:
         post(text)
         print("Posted ✓")
-    except Exception as e:                       # never fail the daily build
-        print("Post failed (not failing the build):", type(e).__name__, e)
+    except Exception as e:
+        print("Post failed:", type(e).__name__, e)
+        return 1 if test else 0                  # never break the daily build
     return 0
 
 
