@@ -287,6 +287,17 @@ border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
 .ppts{font-weight:800}.ppts.g{color:#00e0a4}.ppts.r{color:#8b95ab}
 .pbeat{color:#00e0a4;font-weight:700;font-size:12.5px;text-align:center;margin-top:6px}
 .pbeat.lose{color:#8b95ab}
+.pauth{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#161d2b;
+border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;font-size:13.5px}
+.pbtn{background:#243049;color:#eef1f7;border:0;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.pbtn:hover{background:#2c3a57}.pbtn.pg{background:#00e0a4;color:#062018}.pbtn.pg:hover{filter:brightness(1.08)}
+.lbx{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:4px 14px;margin-bottom:6px}
+.lbrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #1c2536;font-size:14px}
+.lbrow:last-child{border:none}
+.lbrank{width:22px;color:#8b95ab;font-weight:700;text-align:right}
+.lbname{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbpts{font-weight:800}
+.lbmac{color:#ffd34d}.lbmac .lbrank{color:#ffd34d}.lbme{color:#00e0a4}.lbme .lbpts{color:#00e0a4}
 select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;
 padding:8px 12px;font-size:14px}
 .lab{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;
@@ -777,8 +788,43 @@ function bywRender(){
 /* ---- Beat the Machine: predict upcoming matches and score against the model.
    Phase 1 — saved in localStorage, no backend. Only on the live dashboard. ---- */
 const PKEY="wc2026_preds_v1";
-function predLoad(){try{return JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){return {};}}
-function predSave(o){try{localStorage.setItem(PKEY,JSON.stringify(o));}catch(e){}}
+const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
+const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
+let sb=null,sbUser=null,lbRows=[],predCache=null;
+function predLoad(){if(predCache)return predCache;
+  try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
+function predSet(key,h,a){predLoad();predCache[key]=[h,a];
+  try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}
+  if(sb&&sbUser)sb.from("predictions").upsert({user_id:sbUser.id,match_id:key,pred_home:h,pred_away:a})
+    .then(({error})=>{if(error)console.warn("pred upsert:",error.message);else supaLbRefresh();});
+  predRender();}
+let _lbT=null;
+function supaLbRefresh(){if(!sb)return;clearTimeout(_lbT);_lbT=setTimeout(async()=>{
+  try{const{data}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
+    lbRows=data||[];predRender();}catch(e){}},900);}
+async function supaInit(){
+  if(typeof supabase==="undefined"||!document.getElementById("predict"))return;
+  try{sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+    let{data:{session}}=await sb.auth.getSession();
+    if(!session){const r=await sb.auth.signInAnonymously();session=r.data&&r.data.session;}
+    sbUser=session?session.user:null;await supaSync();
+  }catch(e){console.warn("Supabase init:",e);}}
+async function supaSync(){
+  if(!sb)return;
+  try{if(sbUser){const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away");
+      if(data){predCache={};data.forEach(p=>predCache[p.match_id]=[p.pred_home,p.pred_away]);
+        try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}}}
+    const{data:lb}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
+    lbRows=lb||[];}catch(e){console.warn("Supabase sync:",e);}
+  predRender();}
+function supaName(){if(!sbUser||sbUser.is_anonymous)return null;
+  const m=sbUser.user_metadata||{};return m.full_name||m.name||null;}
+async function supaSignIn(){if(sb)try{await sb.auth.signInWithOAuth(
+  {provider:"google",options:{redirectTo:location.href.split("#")[0]}});}
+  catch(e){alert("Google sign-in isn't enabled yet — coming soon!");}}
+async function supaSignOut(){if(!sb)return;await sb.auth.signOut();predCache=null;
+  const r=await sb.auth.signInAnonymously();
+  sbUser=r.data&&r.data.session?r.data.session.user:null;supaSync();}
 function predScore(p,a){
   if(p[0]===a[0]&&p[1]===a[1])return 5;            // exact score
   const pd=p[0]-p[1],ad=a[0]-a[1];
@@ -797,22 +843,32 @@ function predRender(){
     const a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
     you+=yp;mac+=mp;n++;if(yp>=2){hits++;run++;}else run=0;streak=run;if(yp===5)exact++;if(yp>mp)beat++;
     scored.push({m,yp,mp,a});});
-  let h="";
+  const nm=supaName();
+  let h=`<div class="pauth"><span>${nm?'👤 <b>'+nm+'</b>':'👤 Playing as guest'}</span>`
+    +(nm?'<button class="pbtn" id="p-signout">Sign out</button>'
+        :'<button class="pbtn pg" id="p-signin">Sign in with Google</button>')+`</div>`;
   if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
     h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
       +`<div class="pbvs">${lead}</div><div class="pb"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine</div></div></div>`
       +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;
+  const _lb=lbRows.filter(r=>r.is_model||r.played>0||(sbUser&&r.uid===sbUser.id));
+  if(_lb.length){h+=`<h3 class="psec">🏆 Global leaderboard</h3><div class="lbx">`;
+    _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id;
+      h+=`<div class="lbrow${r.is_model?' lbmac':''}${me?' lbme':''}"><span class="lbrank">${i+1}</span>`
+        +`<span class="lbname">${r.is_model?'🤖':(me?'🟢':'🧑')} ${r.name||'Player'}${me?' · you':''}</span>`
+        +`<span class="lbpts">${r.points}</span></div>`;});
+    h+=`</div>`;}
   const up=(D.matches||[]).map(m=>({m,ko:predKO(m.home,m.away)}))
     .sort((a,b)=>(a.ko?a.ko:9e15)-(b.ko?b.ko:9e15));
   const more=Math.max(0,up.length-12),show=up.slice(0,12);
   h+=`<h3 class="psec">📥 Predict the upcoming matches</h3>`;
-  const sb=(key,s,d,l)=>`<button class="wifb" data-k="${key}" data-s="${s}" data-d="${d}">${l}</button>`;
+  const stp=(key,s,d,l)=>`<button class="wifb" data-k="${key}" data-s="${s}" data-d="${d}">${l}</button>`;
   show.forEach(({m,ko})=>{const key=m.home+"|"+m.away,mine=key in store,cur=store[key]||predModel(key),
     locked=ko&&now>=ko,kl=ko?D.kickoffs[[m.home,m.away].sort().join("|")].label:"";
     let sc;
     if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
-    else sc=`<span class="psc">${sb(key,'h',-1,'−')}<b>${cur[0]}</b>${sb(key,'h',1,'+')}<i>-</i>${sb(key,'a',-1,'−')}<b>${cur[1]}</b>${sb(key,'a',1,'+')}</span>`;
+    else sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${cur[0]}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${cur[1]}</b>${stp(key,'a',1,'+')}</span>`;
     h+=`<div class="pcard${locked?' plk':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
     const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
@@ -827,9 +883,11 @@ function predRender(){
         +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':'r'}">${tag(mp)}</span></div>`
         +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
   el.innerHTML=h;
-  el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1,s=predLoad();
-    const cur=s[key]||predModel(key);cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));s[key]=cur;predSave(s);predRender();});
-  el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=predLoad();s[c.dataset.k]=c.dataset.sc.split("-").map(Number);predSave(s);predRender();});
+  const _si=document.getElementById("p-signin");if(_si)_si.onclick=supaSignIn;
+  const _so=document.getElementById("p-signout");if(_so)_so.onclick=supaSignOut;
+  el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
+    const cur=(predLoad()[key]||predModel(key)).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
+  el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=c.dataset.sc.split("-").map(Number);predSet(c.dataset.k,s[0],s[1]);});
 }
 function renderToday(){
   const sec=document.getElementById("todaysec");if(!sec)return;
@@ -1046,7 +1104,7 @@ if(document.getElementById("whatif")){wifRender();
   const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();bywRender();};}
 if(document.getElementById("byw")){bywRender();
   const _br=document.getElementById("byw-reset");if(_br)_br.onclick=()=>{bywState={};bywRender();};}
-if(document.getElementById("predict"))predRender();
+if(document.getElementById("predict")){predRender();supaInit();}
 makeCollapsible();
 document.querySelectorAll(".tabnav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab,true));
 let _tab=new URLSearchParams(location.search).get("tab");
@@ -1194,6 +1252,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "<link href='https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800"
         "&display=swap' rel='stylesheet'>"
         "<script src='https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js'></script>"
+        "<script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>"
         f"<style>{_CSS}</style></head><body>"
         "<div class='wrap'>"
         "<div class='hero'><div class='badge'>MACHINE LEARNING PREDICTION</div>"
