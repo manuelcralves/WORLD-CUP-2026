@@ -1,0 +1,118 @@
+-- Beat the Machine · Supabase schema
+-- Run once: Supabase dashboard → SQL Editor → New query → paste → Run.
+-- Tables: profiles (per user), matches (fed by the daily pipeline), predictions
+-- (written by users, locked at kickoff via RLS). A leaderboard view ranks the
+-- humans plus "The Machine" (the model's own picks). Anonymous (guest) auth is
+-- supported — a guest is a real auth user, so the same policies apply.
+
+-- ----------------------------------------------------------------- profiles --
+create table if not exists public.profiles (
+  id         uuid primary key references auth.users(id) on delete cascade,
+  name       text,
+  avatar     text,
+  created_at timestamptz default now()
+);
+
+-- create a profile automatically on sign-up (Google name/avatar, or "Player")
+create or replace function public.handle_new_user()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  insert into public.profiles (id, name, avatar) values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'full_name',
+             new.raw_user_meta_data->>'name', 'Player'),
+    new.raw_user_meta_data->>'avatar_url'
+  ) on conflict (id) do nothing;
+  return new;
+end; $$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users for each row
+  execute function public.handle_new_user();
+
+-- ------------------------------------------------------------------ matches --
+-- Upserted by the daily GitHub Action (service-role key). match_id = "home|away".
+create table if not exists public.matches (
+  match_id   text primary key,
+  home       text not null,
+  away       text not null,
+  kickoff    timestamptz,
+  home_score int,
+  away_score int,
+  model_home int,
+  model_away int,
+  stage      text,
+  played     boolean default false,
+  updated_at timestamptz default now()
+);
+
+-- -------------------------------------------------------------- predictions --
+create table if not exists public.predictions (
+  user_id    uuid not null references auth.users(id) on delete cascade,
+  match_id   text not null references public.matches(match_id) on delete cascade,
+  pred_home  int  not null check (pred_home between 0 and 30),
+  pred_away  int  not null check (pred_away between 0 and 30),
+  updated_at timestamptz default now(),
+  primary key (user_id, match_id)
+);
+
+-- ------------------------------------------------ scoring: 5 / 3 / 2 / 0 -----
+create or replace function public.pts(ph int, pa int, ah int, aa int)
+returns int language sql immutable as $$
+  select case
+    when ah is null or ph is null            then 0
+    when ph = ah and pa = aa                 then 5   -- exact score
+    when (ph - pa) = (ah - aa)               then 3   -- result + goal difference
+    when (ph > pa) = (ah > aa)
+     and (ph < pa) = (ah < aa)               then 2   -- result only
+    else 0 end;
+$$;
+
+-- ----------------------------------------- leaderboard (humans + Machine) ----
+create or replace view public.leaderboard as
+  select uid, name, avatar, points, played, is_model from (
+    select pr.id::text as uid, coalesce(pr.name, 'Player') as name, pr.avatar,
+           coalesce(sum(public.pts(pd.pred_home, pd.pred_away,
+                                   m.home_score, m.away_score)), 0)::int as points,
+           count(m.match_id) filter (where m.played)::int as played,
+           false as is_model
+    from public.profiles pr
+    left join public.predictions pd on pd.user_id = pr.id
+    left join public.matches m       on m.match_id = pd.match_id
+    group by pr.id, pr.name, pr.avatar
+    union all
+    select 'machine', '🤖 The Machine', null::text,
+           coalesce(sum(public.pts(model_home, model_away,
+                                   home_score, away_score)), 0)::int,
+           count(*) filter (where played)::int, true
+    from public.matches
+  ) t order by points desc;
+
+-- ------------------------------------------------------------------- RLS -----
+alter table public.profiles    enable row level security;
+alter table public.matches     enable row level security;
+alter table public.predictions enable row level security;
+
+create policy "profiles readable" on public.profiles
+  for select using (true);
+create policy "profiles own" on public.profiles
+  for all using (auth.uid() = id) with check (auth.uid() = id);
+
+create policy "matches readable" on public.matches
+  for select using (true);                       -- only the service key writes
+
+create policy "preds read own" on public.predictions
+  for select using (auth.uid() = user_id);
+create policy "preds insert before kickoff" on public.predictions
+  for insert to authenticated with check (
+    auth.uid() = user_id and now() < coalesce(
+      (select kickoff from public.matches m where m.match_id = predictions.match_id),
+      'infinity'::timestamptz));
+create policy "preds update before kickoff" on public.predictions
+  for update to authenticated using (auth.uid() = user_id) with check (
+    auth.uid() = user_id and now() < coalesce(
+      (select kickoff from public.matches m where m.match_id = predictions.match_id),
+      'infinity'::timestamptz));
+
+grant select on public.leaderboard to anon, authenticated;
