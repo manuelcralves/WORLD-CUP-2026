@@ -298,6 +298,11 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .lbname{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lbpts{font-weight:800}
 .lbmac{color:#ffd34d}.lbmac .lbrank{color:#ffd34d}.lbme{color:#00e0a4}.lbme .lbpts{color:#00e0a4}
+.pcard.pmine{border-color:rgba(0,224,164,.5)}
+.ptoast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(18px);
+background:#00e0a4;color:#062018;font-weight:800;padding:10px 20px;border-radius:999px;
+font-size:14px;opacity:0;transition:all .25s;z-index:100;pointer-events:none}
+.ptoast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;
 padding:8px 12px;font-size:14px}
 .lab{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;
@@ -796,8 +801,13 @@ function predLoad(){if(predCache)return predCache;
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
   try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}
   if(sb&&sbUser)sb.from("predictions").upsert({user_id:sbUser.id,match_id:key,pred_home:h,pred_away:a})
-    .then(({error})=>{if(error)console.warn("pred upsert:",error.message);else supaLbRefresh();});
-  predRender();}
+    .then(({error})=>{if(error){console.warn("pred upsert:",error.message);predToast("⚠️ Couldn't save — try again");}
+      else supaLbRefresh();});
+  predToast("✓ Pick saved");predRender();}
+function predToast(msg){let t=document.getElementById("ptoast");
+  if(!t){t=document.createElement("div");t.id="ptoast";t.className="ptoast";document.body.appendChild(t);}
+  t.textContent=msg;t.classList.add("show");clearTimeout(t._h);
+  t._h=setTimeout(()=>t.classList.remove("show"),1500);}
 let _lbT=null;
 function supaLbRefresh(){if(!sb)return;clearTimeout(_lbT);_lbT=setTimeout(async()=>{
   try{const{data}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
@@ -869,7 +879,7 @@ function predRender(){
     let sc;
     if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
     else sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${cur[0]}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${cur[1]}</b>${stp(key,'a',1,'+')}</span>`;
-    h+=`<div class="pcard${locked?' plk':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
+    h+=`<div class="pcard${locked?' plk':''}${mine?' pmine':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
     const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
     if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
@@ -1217,8 +1227,9 @@ def build_interactive(data: dict, out_path) -> Path:
         "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
         "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
         "or set your own with −/+. Locked at kickoff. Points: 🎯 exact 5 · result + goal "
-        "difference 3 · right result 2. The model plays too — can you beat it? Saved in "
-        "your browser, no login.</p>"
+        "difference 3 · right result 2. The model plays too — can you beat it? Your picks "
+        "are saved automatically — sign in with Google to claim your name on the leaderboard "
+        "and keep them across devices.</p>"
         "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
         f'<meta property="og:title" content="World Cup 2026 — ML prediction'
