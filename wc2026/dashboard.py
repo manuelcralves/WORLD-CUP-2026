@@ -41,6 +41,22 @@ def _fixtures(bundle) -> list:
     return out
 
 
+def _standings(bundle) -> dict:
+    """Current group points / goal-difference from the World Cup games played."""
+    st = {}
+    for g in bundle["wc_played"].itertuples(index=False):
+        hs, as_ = int(g.home_score), int(g.away_score)
+        for team, gf, ga in ((g.home_team, hs, as_), (g.away_team, as_, hs)):
+            s = st.setdefault(team, {"played": 0, "pts": 0, "gf": 0, "ga": 0})
+            s["played"] += 1
+            s["gf"] += gf
+            s["ga"] += ga
+            s["pts"] += 3 if gf > ga else (1 if gf == ga else 0)
+    for s in st.values():
+        s["gd"] = s["gf"] - s["ga"]
+    return st
+
+
 def collect(bundle, trained, table, val=None, backtests=None,
             gb_before=None, mode_label=None, evolution=None,
             odds_history=None, mega_backtest=None, played_review=None) -> dict:
@@ -57,6 +73,12 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "fifa_rank": FIFA.rank_of(r["team"]),
         "opponents": PR.opponents_for(table, r["team"]),
     } for _, r in table.iterrows()]
+
+    st = _standings(bundle)                      # live points from games played
+    for t in teams:
+        s = st.get(t["team"], {"played": 0, "pts": 0, "gd": 0, "gf": 0})
+        t["played"], t["pts"] = s["played"], s["pts"]
+        t["gd"], t["gf"] = s["gd"], s["gf"]
 
     matches = PR.match_predictions(bundle, trained, topn=3)
 
@@ -236,6 +258,9 @@ align-items:center;gap:7px}
 .g-row .pos{width:16px;color:#5d6a85;font-weight:700}
 .mini{flex:0 0 56px;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
 .mini>div{height:100%;background:var(--green);border-radius:4px;transition:width .6s}
+.g-row .grec{flex:0 0 auto;color:#8b95ab;font-size:12px;white-space:nowrap}
+.g-row .qbadge{flex:0 0 50px;text-align:right;font-weight:800;font-size:12px}
+.qbadge.q-in{color:#00e0a4}.qbadge.q-out{color:#ff6b6b}.qbadge.q-hunt{color:#cbd3e1}
 select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;
 padding:8px 12px;font-size:14px}
 .lab{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:center;
@@ -457,14 +482,18 @@ function renderDetail(){
 
 function renderGroups(){
   const groups={};T.forEach(t=>(groups[t.group]=groups[t.group]||[]).push(t));
+  const ord=(a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(b.exp_points-a.exp_points);
   let h="";Object.keys(groups).sort().forEach(L=>{
-    const g=groups[L].slice().sort((a,b)=>b.exp_points-a.exp_points);
+    const g=groups[L].slice().sort(ord);
     h+=`<div class="group"><h3>GROUP ${L}</h3>`;
     g.forEach((t,i)=>{const sel=t.team===selected?'style="color:#ffd34d;font-weight:700"':'';
+      const adv=Math.round(t.p_ko*100);
+      const cls=adv>=90?"q-in":adv<=10?"q-out":"q-hunt";
+      const rec=t.played?`P${t.played} · ${t.pts}pt${t.pts!==1?"s":""}`:"—";
       h+=`<div class="g-row"><span class="pos">${i+1}</span>
       <span class="nm" ${sel}>${flag(t.team,"sm")} ${t.team}</span>
-      <span style="color:#8b95ab;width:34px;text-align:right">${pc0(t.p_1st)}</span>
-      <div class="mini"><div style="width:${Math.min(t.p_ko*100,100)}%"></div></div></div>`;});
+      <span class="grec">${rec}</span>
+      <span class="qbadge ${cls}" title="model's chance to reach the knockouts">${adv}%</span></div>`;});
     h+=`</div>`;});
   document.getElementById("groups").innerHTML=h;
 }
@@ -1102,7 +1131,12 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div class='layout'><div><input class='search' id='search' "
         "placeholder='🔎 Search a team…'><div id='ranking'></div></div>"
         "<div class='panel sticky' id='detail'></div></div>"
-        "<h2 class='col mcol'>The 12 groups <span class='tag'>expected standings</span></h2>"
+        "<h2 class='col mcol'>The 12 groups <span class='tag'>live standings · who advances</span></h2>"
+        "<p style='color:#8b95ab;font-size:13px;margin:-2px 0 12px;max-width:760px'>"
+        "Sorted by points from games already played. The figure on the right is the model's "
+        "<b>chance each team reaches the knockouts</b> — it already accounts for the "
+        "8-best-third-placed-teams rule. <b style='color:#00e0a4'>Green</b> = very likely, "
+        "<b style='color:#ff6b6b'>red</b> = very unlikely.</p>"
         "<div class='grid' id='groups'></div>"
         "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in WEST (UTC+1)</span></h2>"
         f"<select id='mfilter'>{opts}</select><div id='matches' style='margin-top:10px'></div>"
