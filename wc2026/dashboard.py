@@ -358,6 +358,9 @@ width:20px;height:20px;line-height:18px;text-align:center;font-size:13px;font-we
 .wift .pos{width:14px;color:#5d6a85}
 .wift tr.q td:nth-child(2){color:#00e0a4;font-weight:700}
 .wift tr.q3 td:nth-child(2){color:#ffd34d;font-weight:700}
+.bywchamp{font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;margin:12px 0 8px}
+.tt[data-m]{cursor:pointer}
+.tt[data-m]:hover{background:rgba(0,224,164,.12);border-radius:5px}
 .homebtn{position:fixed;top:14px;left:14px;z-index:50;display:inline-flex;align-items:center;
 gap:6px;background:rgba(22,29,43,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
 border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:13px;font-weight:600;
@@ -559,9 +562,10 @@ const BORDER={
  "Round of 16":[89,90,93,94,91,92,95,96],
  "Quarter-finals":[97,98,99,100],"Semi-finals":[101,102],"Final":[104]};
 function tmatch(m){const wa=m.win&&m.win===m.a,wb=m.win&&m.win===m.b;
+  const da=m.byw?` data-m="${m.m}" data-team="${m.a||''}"`:"",db=m.byw?` data-m="${m.m}" data-team="${m.b||''}"`:"";
   return `<div class="tmatch">
-   <div class="tt ${wa?'win':''}">${flag(m.a,'sm')}<span class="tn">${m.a||'?'}</span><span class="tv">${m.va||''}</span></div>
-   <div class="tt ${wb?'win':''}">${flag(m.b,'sm')}<span class="tn">${m.b||'?'}</span><span class="tv">${m.vb||''}</span></div>
+   <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn">${m.a||'?'}</span><span class="tv">${m.va||''}</span></div>
+   <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn">${m.b||'?'}</span><span class="tv">${m.vb||''}</span></div>
    ${m.pe?'<div class="tpe">on penalties</div>':''}</div>`;}
 function bracketTree(rounds){
   const ord=l=>BORDER[l]||[];
@@ -673,7 +677,47 @@ function wifRender(){
     h+=`</tbody></table></div>`;}
   el.innerHTML=h+`</div>`;
   el.querySelectorAll(".wifsc .wifb").forEach(btn=>btn.onclick=()=>{const i=+btn.dataset.i,k=btn.dataset.s==='h'?'hs':'as';
-    wifScores[i][k]=Math.max(0,Math.min(19,wifScores[i][k]+ +btn.dataset.d));wifRender();});
+    wifScores[i][k]=Math.max(0,Math.min(19,wifScores[i][k]+ +btn.dataset.d));wifRender();bywRender();});
+}
+/* ---- "build your World Cup": the qualifiers feed a bracket; the model picks
+   each knockout winner, you tap the other team to override, up to the champion ---- */
+let bywState={};
+function assignThirds(qualSet){  // 8 best thirds -> their official R32 slots
+  const slots=Object.keys(D.structure.third_elig),el=D.structure.third_elig;
+  const qual=[...qualSet].sort(),used=new Set(),sm={};
+  (function asg(i){if(i===slots.length)return true;const s=slots[i];
+    for(const L of qual){if(used.has(L)||!el[s].includes(L))continue;
+      used.add(L);sm[s]=L;if(asg(i+1))return true;used.delete(L);delete sm[s];}
+    return false;})(0);
+  return sm;
+}
+function bywWinner(m,a,b){
+  if(!a||!b)return a||b||null;
+  const ov=bywState[m];if(ov===a||ov===b)return ov;        // your override
+  const r=h2h(a,b);return (r.ph+r.pd/2)>=0.5?a:b;          // else the model's pick
+}
+function bywBracket(){
+  const {gres,qual3}=wifGroups(),W={},RU={},TH={};
+  for(const L in gres){const o=gres[L].order;W[L]=o[0];RU[L]=o[1];TH[L]=o[2];}
+  const sm=assignThirds(qual3);
+  const teamOf=sp=>sp[0]==="W"?W[sp[1]]:sp[0]==="RU"?RU[sp[1]]:TH[sm[String(sp[1])]];
+  const win={},ties=[],R=D.structure.r32,LA=D.structure.later;
+  for(const m in R){const a=teamOf(R[m][0]),b=teamOf(R[m][1]),w=bywWinner(+m,a,b);
+    win[m]=w;ties.push({m:+m,rn:"Round of 32",a,b,w});}
+  Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>{
+    const a=win[LA[m][0]],b=win[LA[m][1]],w=bywWinner(m,a,b);win[m]=w;
+    ties.push({m,rn:roundName(m),a,b,w});});
+  return {ties,champ:win[104]};
+}
+function bywRender(){
+  const el=document.getElementById("byw");if(!el)return;if(!wifScores)wifInit();
+  const {ties,champ}=bywBracket();
+  const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
+  ties.forEach(t=>rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true}));
+  const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]}));
+  el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":"—"}</div>`+bracketTree(rounds);
+  el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{const t=tt.dataset.team;
+    if(t){bywState[+tt.dataset.m]=t;bywRender();}});
 }
 function renderToday(){
   const sec=document.getElementById("todaysec");if(!sec)return;
@@ -887,7 +931,9 @@ document.getElementById("mfilter").onchange=renderMatches;
 document.getElementById("search").oninput=e=>{query=e.target.value.toLowerCase();renderRanking();};
 document.getElementById("sim-btn").onclick=rollTournament;
 if(document.getElementById("whatif")){wifRender();
-  const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();};}
+  const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();bywRender();};}
+if(document.getElementById("byw")){bywRender();
+  const _br=document.getElementById("byw-reset");if(_br)_br.onclick=()=>{bywState={};bywRender();};}
 makeCollapsible();
 document.querySelectorAll(".tabnav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab,true));
 let _tab=new URLSearchParams(location.search).get("tab");
@@ -1063,11 +1109,15 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div class='tab' id='tab-play'>"
         "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
         "<div class='lab' id='lab'></div><div class='mlab-out' id='lab-out'></div>"
-        "<h2 class='col mcol'>🎮 What if…? <span class='tag'>you pick the results</span></h2>"
-        "<p class='note'>Set the score of every remaining group match (−/+ the goals, "
-        "starting from the model's prediction) and watch the tables — and who qualifies — "
-        "update live. <button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset to the model</button></p>"
+        "<h2 class='col mcol'>🏆 Build your World Cup <span class='tag'>you decide</span></h2>"
+        "<p class='note'><b>1.</b> Set the score of every remaining group match (−/+ the "
+        "goals, from the model's prediction); the tables and who qualifies update live. "
+        "<button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset scores</button></p>"
         "<div id='whatif'></div>"
+        "<p class='note' style='margin-top:20px'><b>2.</b> Now the knockouts — the model picks "
+        "each winner, but <b>tap the other team</b> to send your pick through, all the way to "
+        "your champion. <button class='btn' id='byw-reset' style='padding:6px 12px;font-size:13px'>↺ Model's bracket</button></p>"
+        "<div id='byw'></div>"
         "<h2 class='col mcol'>🎲 Roll a tournament <span class='tag'>one full simulation</span></h2>"
         "<p class='note'>One possible World Cup — group tables, every knockout result "
         "and the champion. Roll again for another timeline.</p>"
