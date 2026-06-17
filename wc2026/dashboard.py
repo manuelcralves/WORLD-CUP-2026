@@ -328,6 +328,21 @@ border-radius:14px;padding:12px 14px}
 .tdvs{color:var(--muted);font-weight:400;font-size:12px}
 .tdpred,.tdres{font-size:12.5px;color:var(--muted);margin-top:8px}
 .tdres b,.tdpred b{color:var(--text)}
+/* ---- "what if?" editor ---- */
+.wifgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.wifm{display:flex;align-items:center;gap:6px;font-size:12.5px;margin:5px 0}
+.wifm.wifp{color:var(--muted)}.wifm.wifp b{color:var(--text)}
+.wifteam{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wifteam.ar{text-align:right}
+.wif12{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:0 0 auto}
+.wif12 button{background:var(--panel);color:var(--muted);border:none;padding:3px 9px;font-size:12px;
+font-weight:700;cursor:pointer;transition:background .15s}
+.wif12 button.on{background:var(--green);color:#06231b}
+.wift{width:100%;margin-top:8px;border-top:1px solid var(--line)}
+.wift td{padding:3px 4px;font-size:12px;border:none}
+.wift .pos{width:14px;color:#5d6a85}
+.wift tr.q td:nth-child(2){color:#00e0a4;font-weight:700}
+.wift tr.q3 td:nth-child(2){color:#ffd34d;font-weight:700}
 .homebtn{position:fixed;top:14px;left:14px;z-index:50;display:inline-flex;align-items:center;
 gap:6px;background:rgba(22,29,43,.85);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
 border:1px solid var(--line);color:var(--text);text-decoration:none;font-size:13px;font-weight:600;
@@ -602,6 +617,52 @@ function renderFifa(){
     <td style="color:${c};font-weight:700">${r.edge>0?'+':''}${r.edge}</td></tr>`;});
   el.innerHTML=h+`</tbody></table>`;
 }
+/* ---- "what if?" editor: you set the remaining group results, tables update ---- */
+let wifState=null,wifRep=null;
+function wifInit(){
+  wifState={};wifRep={};
+  const predBy={};(D.matches||[]).forEach(m=>predBy[[m.home,m.away].sort().join("|")]=m);
+  (D.fixtures||[]).forEach((f,i)=>{if(f.played)return;
+    const p=predBy[[f.home,f.away].sort().join("|")],rep={h:[1,0],d:[1,1],a:[0,1]},seen={};
+    if(p)(p.top||[]).forEach(s=>{const a=+s.score.split("-")[0],b=+s.score.split("-")[1];
+      const o=a>b?"h":(a<b?"a":"d");if(!seen[o]){rep[o]=[a,b];seen[o]=1;}});
+    wifRep[i]=rep;
+    let o="d";if(p){const mx=Math.max(p.p_home,p.p_draw,p.p_away);
+      o=mx===p.p_home?"h":(mx===p.p_away?"a":"d");}
+    wifState[i]=o;});
+}
+function wifScore(i,f){return f.played?[f.hs,f["as"]]:wifRep[i][wifState[i]];}
+function wifGroups(){
+  const G=D.structure.groups,fx=D.fixtures,gres={};
+  for(const L in G){const ts=G[L],st={};ts.forEach(t=>st[t]={t,pts:0,gf:0,ga:0});
+    fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifScore(i,f);
+      const H=st[f.home],A=st[f.away];H.gf+=hs;H.ga+=as;A.gf+=as;A.ga+=hs;
+      if(hs>as)H.pts+=3;else if(as>hs)A.pts+=3;else{H.pts++;A.pts++;}});
+    gres[L]={order:ts.slice().sort((x,y)=>st[y].pts-st[x].pts||(st[y].gf-st[y].ga)-(st[x].gf-st[x].ga)||st[y].gf-st[x].gf||(x<y?-1:1)),st};}
+  const thirds=Object.keys(gres).map(L=>{const s=gres[L].st[gres[L].order[2]];
+    return{L,pts:s.pts,gd:s.gf-s.ga,gf:s.gf};});
+  thirds.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||(a.L<b.L?-1:1));
+  return{gres,qual3:new Set(thirds.slice(0,8).map(t=>t.L))};
+}
+function wifRender(){
+  const el=document.getElementById("whatif");if(!el)return;if(!wifState)wifInit();
+  const {gres,qual3}=wifGroups(),G=D.structure.groups,fx=D.fixtures;
+  const sn=t=>t.length>14?t.slice(0,13)+"…":t;
+  let h=`<div class="wifgrid">`;
+  for(const L in G){h+=`<div class="group"><h3>GROUP ${L}</h3>`;
+    fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifScore(i,f);
+      if(f.played)h+=`<div class="wifm wifp">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span> <b>${hs}-${as}</b> <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;
+      else{const o=wifState[i];
+        h+=`<div class="wifm">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span>
+        <span class="wif12"><button class="${o==='h'?'on':''}" data-i="${i}" data-o="h">1</button><button class="${o==='d'?'on':''}" data-i="${i}" data-o="d">X</button><button class="${o==='a'?'on':''}" data-i="${i}" data-o="a">2</button></span>
+        <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;}});
+    h+=`<table class="wift"><tbody>`;
+    gres[L].order.forEach((t,idx)=>{const s=gres[L].st[t],gd=s.gf-s.ga,c=idx<2?'q':(idx===2&&qual3.has(L)?'q3':'');
+      h+=`<tr class="${c}"><td class="pos">${idx+1}</td><td>${flag(t,'sm')} ${sn(t)}</td><td>${s.pts}</td><td>${gd>=0?'+':''}${gd}</td></tr>`;});
+    h+=`</tbody></table></div>`;}
+  el.innerHTML=h+`</div>`;
+  el.querySelectorAll(".wif12 button").forEach(b=>b.onclick=()=>{wifState[+b.dataset.i]=b.dataset.o;wifRender();});
+}
 function renderToday(){
   const sec=document.getElementById("todaysec");if(!sec)return;
   const ko=D.kickoffs||{},K=(a,b)=>ko[[a,b].sort().join("|")];
@@ -805,6 +866,8 @@ if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
 document.getElementById("mfilter").onchange=renderMatches;
 document.getElementById("search").oninput=e=>{query=e.target.value.toLowerCase();renderRanking();};
 document.getElementById("sim-btn").onclick=rollTournament;
+if(document.getElementById("whatif")){wifRender();
+  const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();};}
 makeCollapsible();
 if(qteam&&byName[qteam]){const r=document.querySelector("tr.sel");
   if(r)r.scrollIntoView({behavior:"smooth",block:"center"});}
@@ -963,6 +1026,11 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div id='fifa'></div>"
         "<h2 class='col mcol'>The 12 groups <span class='tag'>expected standings</span></h2>"
         "<div class='grid' id='groups'></div>"
+        "<h2 class='col mcol'>🎮 What if…? <span class='tag'>you pick the results</span></h2>"
+        "<p class='note'>Set the outcome of every remaining group match (1 = home win, "
+        "X = draw, 2 = away win) and watch the tables — and who qualifies — update live. "
+        "<button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset to the model</button></p>"
+        "<div id='whatif'></div>"
         "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in Portugal · WEST (UTC+1)</span></h2>"
         f"<select id='mfilter'>{opts}</select><div id='matches' style='margin-top:10px'></div>"
         "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
