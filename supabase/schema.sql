@@ -87,6 +87,7 @@ create or replace view public.leaderboard as
                                    home_score, away_score)), 0)::int,
            count(*) filter (where played)::int, true
     from public.matches
+    where kickoff >= '2026-06-18'::timestamptz   -- game starts today: everyone from zero
   ) t order by points desc;
 
 -- ------------------------------------------------------------------- RLS -----
