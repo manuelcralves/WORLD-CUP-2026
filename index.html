@@ -63,8 +63,9 @@ border:1px solid rgba(0,224,164,.4);font-weight:700}
 .xlink:hover{background:rgba(0,224,164,.22);color:var(--green);border-color:var(--green)}
 .xlink b{font-weight:800}
 .features{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:700px;margin:38px 0 0}
-.features span{background:var(--panel);border:1px solid var(--line);border-radius:999px;
-padding:7px 13px;font-size:13px;color:var(--muted)}
+.features a{background:var(--panel);border:1px solid var(--line);border-radius:999px;
+padding:7px 13px;font-size:13px;color:var(--muted);text-decoration:none;transition:all .15s}
+.features a:hover{color:var(--text);border-color:var(--green);transform:translateY(-1px)}
 .foot{margin-top:42px;color:#5d6a85;font-size:12px;max-width:520px}
 @media(max-width:620px){.picker{grid-template-columns:1fr}body{padding:34px 14px 48px}}
 </style></head><body>
@@ -98,9 +99,9 @@ match. Just for fun. Pick a version:</p>
 <a class="comparelink" href="compare.html">⚖️ Or see the two side by side →</a>
 <a class="comparelink xlink" href="https://x.com/WorldCupML2026" target="_blank" rel="noopener">𝕏 Follow <b>@WorldCupML2026</b> for daily predictions →</a>
 <div class="features">
-  <span>🆚 Match Lab</span><span>🏆 Full bracket</span><span>🏅 Model vs FIFA</span>
-  <span>✅ Predicted vs actual</span><span>👟 Golden Boot</span><span>🎲 Roll a tournament</span>
-  <span>📊 Odds over time</span>
+  <a href="outputs/dashboard.html?tab=play&sec=lab">🆚 Match Lab</a><a href="outputs/dashboard.html?tab=overview&sec=bracket">🏆 Full bracket</a><a href="outputs/dashboard.html?tab=insights&sec=fifa">🏅 Model vs FIFA</a>
+  <a href="outputs/dashboard.html?tab=insights&sec=review">✅ Predicted vs actual</a><a href="outputs/dashboard.html?tab=insights&sec=golden">👟 Golden Boot</a><a href="outputs/dashboard.html?tab=play&sec=sim-btn">🎲 Roll a tournament</a>
+  <a href="outputs/dashboard.html?tab=overview&sec=odds-chart">📊 Odds over time</a>
 </div>
 <p class="foot">Data-driven model, just for fun. ⚽ Data: 150 years of international results
 (martj42/international_results).</p>

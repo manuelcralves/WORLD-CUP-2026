@@ -968,6 +968,9 @@ document.querySelectorAll(".tabnav button").forEach(b=>b.onclick=()=>showTab(b.d
 let _tab=new URLSearchParams(location.search).get("tab");
 if(qteam&&byName[qteam]&&!_tab)_tab="teams";
 showTab(["overview","teams","play","insights"].includes(_tab)?_tab:"overview",false);
+const _sec=new URLSearchParams(location.search).get("sec");   // deep-link to a section
+if(_sec){const _se=document.getElementById(_sec);
+  if(_se)setTimeout(()=>_se.scrollIntoView({behavior:"smooth",block:"center"}),180);}
 if(qteam&&byName[qteam]){const r=document.querySelector("tr.sel");
   if(r)r.scrollIntoView({behavior:"smooth",block:"center"});}
 """
