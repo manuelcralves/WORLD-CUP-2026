@@ -89,6 +89,9 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     if cutoff is None and review:                # for the daily tweet (recap/upsets)
         pd.DataFrame(review).to_csv(
             out_dir / "played_review.csv", index=False, encoding="utf-8")
+    if cutoff is None:                           # push the match table for the leaderboard
+        from wc2026 import supa as SUPA
+        SUPA.push_matches(data)
 
     fav, sec = table.iloc[0], table.iloc[1]
     print(f"  Favourite: {fav['team']} {fav['p_champion']*100:.1f}% · "

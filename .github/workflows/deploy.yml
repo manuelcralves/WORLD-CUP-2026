@@ -30,6 +30,9 @@ jobs:
         run: python update_data.py
 
       - name: Run predictions (live + pre-tournament)
+        env:                                   # for the Supabase match-table push
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: python run_pipeline.py 40000 both
 
       # Always builds the copy-ready outputs/tweets.html. Also auto-posts the
