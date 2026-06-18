@@ -72,13 +72,13 @@ $$;
 
 -- ----------------------------------------- leaderboard (humans + Machine) ----
 create or replace view public.leaderboard as
-  select uid, name, avatar, points, played, picks, is_model from (
+  select uid, name, avatar, points, played, is_model, picks from (
     select pr.id::text as uid, coalesce(pr.name, 'Player') as name, pr.avatar,
            coalesce(sum(public.pts(pd.pred_home, pd.pred_away,
                                    m.home_score, m.away_score)), 0)::int as points,
            count(m.match_id) filter (where m.played)::int as played,
-           count(m.match_id)::int as picks,
-           false as is_model
+           false as is_model,
+           count(m.match_id)::int as picks
     from public.profiles pr
     left join public.predictions pd on pd.user_id = pr.id
     left join public.matches m       on m.match_id = pd.match_id
@@ -88,7 +88,7 @@ create or replace view public.leaderboard as
     select 'machine', '🤖 The Machine', null::text,
            coalesce(sum(public.pts(model_home, model_away,
                                    home_score, away_score)), 0)::int,
-           count(*) filter (where played)::int, count(*)::int, true
+           count(*) filter (where played)::int, true, count(*)::int
     from public.matches
     where kickoff >= '2026-06-18 16:00:00+00'::timestamptz   -- fresh start: from Czech Republic vs South Africa onward
   ) t order by points desc;

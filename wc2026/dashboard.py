@@ -943,7 +943,7 @@ async function supaInit(){
   }catch(e){console.warn("Supabase init:",e);}}
 async function supaSync(){
   if(!sb)return;
-  try{if(sbUser){const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away");
+  try{if(sbUser){const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",sbUser.id);
       if(data){predCache={};data.forEach(p=>predCache[p.match_id]=[p.pred_home,p.pred_away]);
         try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}}
       const{data:pf}=await sb.from("profiles").select("name").eq("id",sbUser.id).maybeSingle();
