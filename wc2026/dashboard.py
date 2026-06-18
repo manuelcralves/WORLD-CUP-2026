@@ -1286,11 +1286,12 @@ function renderRoll(gres,qual,ko,champ){
   document.getElementById("sim-out").innerHTML=h;
 }
 
+function dmd(d){const p=d.split("-");return p[2]+"/"+p[1];}   // 2026-06-10 -> 10/06 (day/month)
 function renderOdds(){
   const oh=D.odds_history;if(!oh||typeof Chart==="undefined")return;
   const cols=["#00e0a4","#ffd34d","#5b8def","#ff6b6b","#c08cff","#ff9f43","#4dd0e1","#9ccc65"];
   oddsChart=new Chart(document.getElementById("odds-chart"),{type:"line",
-    data:{labels:oh.dates.map(d=>d.slice(5)),datasets:oh.series.map((s,i)=>({label:s.team,
+    data:{labels:oh.dates.map(dmd),datasets:oh.series.map((s,i)=>({label:s.team,
       data:s.data.map(v=>+(v*100).toFixed(1)),borderColor:cols[i%8],backgroundColor:cols[i%8],
       tension:.3,borderWidth:i===0?3:2,pointRadius:3}))},
     options:{maintainAspectRatio:false,
@@ -1304,7 +1305,7 @@ function renderGoldenChart(){
   wrap.innerHTML=`<h3 class="psec" style="margin-top:22px">📈 Projection over time <span class="tag">re-run each match-day</span></h3><div style="position:relative;height:320px"><canvas id="golden-chart"></canvas></div>`;
   const cols=["#00e0a4","#ffd34d","#5b8def","#ff6b6b","#c08cff","#ff9f43","#4dd0e1","#9ccc65"];
   goldenChart=new Chart(document.getElementById("golden-chart"),{type:"line",
-    data:{labels:gh.dates.map(d=>d.slice(5)),datasets:gh.series.map((s,i)=>({label:s.scorer,
+    data:{labels:gh.dates.map(dmd),datasets:gh.series.map((s,i)=>({label:s.scorer,
       data:s.data,borderColor:cols[i%8],backgroundColor:cols[i%8],
       tension:.3,borderWidth:i===0?3:2,pointRadius:3,spanGaps:true}))},
     options:{maintainAspectRatio:false,
