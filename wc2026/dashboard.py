@@ -1113,12 +1113,17 @@ function predRender(){
     locked=ko&&now>=ko,kl=ko?D.kickoffs[[m.home,m.away].sort().join("|")].label:"";
     const dpart=kl.split(" · ")[0];   // date for the day header (the card keeps the full label)
     if(dpart&&dpart!==curDate){curDate=dpart;h+=`<div class="pdate">📅 ${dpart}</div>`;}
-    let sc;
-    if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
+    const res=liveRev[key];let sc;   // live Supabase result for a kicked-off match
+    if(res)sc=`<span class="psc"><b>${res.hs}</b><i>-</i><b>${res["as"]}</b></span>`;   // show the actual result
+    else if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
     else{const dh=mine?cur[0]:'—',da=mine?cur[1]:'—';   // — until the user actually picks (don't pre-fill the model's call)
       sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${dh}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${da}</b>${stp(key,'a',1,'+')}</span>`;}
     h+=`<div class="pcard${locked?' plk':''}${mine?' pmine':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
-    const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
+    let meta;
+    if(res){const a=[res.hs,res["as"]],mdl=res.ml_score.split("-").map(Number),mp=predScore(mdl,a),
+      pp=p=>`<b style="color:${p>=30?'#ffd34d':p>=10?'#00e0a4':p?'#9fb0c9':'#ff6b6b'}">+${p}</b>`;
+      meta=`✅ `+(mine?`you <b>${cur.join('-')}</b> ${pp(predScore(cur,a))}`:`<span class="note">you didn't predict this one</span>`)+` · 🤖 Machine <b>${mdl.join('-')}</b> ${pp(mp)}`;}
+    else meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
     if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
     const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
