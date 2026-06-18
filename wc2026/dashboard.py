@@ -631,8 +631,13 @@ function teamPage(name){
   const old=document.getElementById("tpbg");if(old)old.remove();
   document.body.insertAdjacentHTML("beforeend",`<div class="pmodbg" id="tpbg">${h}</div>`);
   const bg=document.getElementById("tpbg");
-  bg.onclick=e=>{if(e.target===bg)bg.remove();};
-  document.getElementById("tpx").onclick=()=>bg.remove();
+  const tpClose=()=>{bg.remove();document.removeEventListener("keydown",tpEsc);   // pure popup: drop ?team= on close, no reload
+    const u=new URLSearchParams(location.search);u.delete("team");u.set("tab","teams");
+    history.replaceState(null,"","?"+u);};
+  function tpEsc(e){if(e.key==="Escape")tpClose();}
+  document.addEventListener("keydown",tpEsc);
+  bg.onclick=e=>{if(e.target===bg)tpClose();};
+  document.getElementById("tpx").onclick=tpClose;
 }
 
 function renderGroups(){
@@ -1287,7 +1292,7 @@ if(document.getElementById("predict")){predRender();supaInit();}
 makeCollapsible();
 document.querySelectorAll(".tabnav button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab,true));
 let _tab=new URLSearchParams(location.search).get("tab");
-if(qteam&&byName[qteam]&&!_tab)_tab="teams";
+if(qteam&&byName[qteam])_tab="teams";   // a ?team= link always lands on the Teams tab
 showTab(["overview","teams","play","predict","insights"].includes(_tab)?_tab:"overview",false);
 const _sec=new URLSearchParams(location.search).get("sec");   // deep-link to a section
 if(_sec){const _se=document.getElementById(_sec);
