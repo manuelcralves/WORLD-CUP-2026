@@ -81,6 +81,7 @@ create or replace view public.leaderboard as
     from public.profiles pr
     left join public.predictions pd on pd.user_id = pr.id
     left join public.matches m       on m.match_id = pd.match_id
+                                    and m.kickoff >= '2026-06-18 16:00:00+00'::timestamptz
     group by pr.id, pr.name, pr.avatar
     union all
     select 'machine', '🤖 The Machine', null::text,
@@ -88,7 +89,7 @@ create or replace view public.leaderboard as
                                    home_score, away_score)), 0)::int,
            count(*) filter (where played)::int, true
     from public.matches
-    where kickoff >= '2026-06-18'::timestamptz   -- game starts today: everyone from zero
+    where kickoff >= '2026-06-18 16:00:00+00'::timestamptz   -- fresh start: from Czech Republic vs South Africa onward
   ) t order by points desc;
 
 -- ------------------------------------------------------------------- RLS -----

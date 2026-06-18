@@ -914,6 +914,7 @@ function bywRender(){
 /* ---- Beat the Machine: predict upcoming matches and score against the model.
    Phase 1 — saved in localStorage, no backend. Only on the live dashboard. ---- */
 const PKEY="wc2026_preds_v1";
+const LB_START=new Date("2026-06-18T16:00:00Z");   // fresh start: only games from here on count (Czech Republic vs South Africa onward)
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
 let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={};
@@ -971,7 +972,7 @@ async function showProfile(uid,name){
   try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
     (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
   let pts=0,n=0,exact=0,beat=0;const rows=[];
-  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;
+  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;const _kt=predKO(m.home,m.away);if(!_kt||_kt<LB_START)return;
     const a=[m.hs,m["as"]],yp=predScore(preds[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
     pts+=yp;n++;if(yp===5)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp,mp});});
   const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':p===1?'⚽ +1':'❌ +0';
@@ -1050,7 +1051,7 @@ function predRender(){
   const el=document.getElementById("predict");if(!el)return;
   const store=predLoad(),now=new Date();
   let you=0,mac=0,n=0,hits=0,exact=0,beat=0,run=0,streak=0;const scored=[];
-  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in store))return;
+  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in store))return;const _kt=predKO(m.home,m.away);if(!_kt||_kt<LB_START)return;
     const a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
     you+=yp;mac+=mp;n++;if(yp>=2){hits++;run++;}else run=0;streak=run;if(yp===5)exact++;if(yp>mp)beat++;
     scored.push({m,yp,mp,a});});
