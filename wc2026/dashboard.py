@@ -313,6 +313,12 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pbtn{background:#243049;color:#eef1f7;border:0;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer}
 .pbtn:hover{background:#2c3a57}.pbtn.pg{background:#00e0a4;color:#062018}.pbtn.pg:hover{filter:brightness(1.08)}
 .plink{background:none;border:0;color:#8b95ab;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px}
+.pauthb{display:flex;gap:8px;flex-wrap:wrap}
+.eauth{display:flex;flex-direction:column;gap:10px;padding:4px 2px 2px}
+.eauth input{background:#0f1521;border:1px solid #243049;border-radius:9px;padding:11px 13px;color:#eef1f7;font-size:14px;width:100%}
+.eauth input:focus{outline:none;border-color:#00e0a4}
+.erow{display:flex;gap:8px}.erow .pbtn{flex:1;padding:9px 14px}
+.emsg{font-size:12px;color:#9fb0c9;min-height:15px}
 .plink:hover{color:#00e0a4}
 .lbclick{cursor:pointer}.lbclick:hover{background:rgba(0,224,164,.06)}
 .pmodbg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:18px}
@@ -968,6 +974,35 @@ async function supaSync(){
 async function supaSignIn(){if(sb)try{await sb.auth.signInWithOAuth(
   {provider:"google",options:{redirectTo:location.href.split("#")[0]}});}
   catch(e){alert("Couldn't start Google sign-in. Try again.");}}
+function predEmailAuth(){
+  if(!sb)return;
+  const html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>📧 Email login</b>`
+    +`<button class="pbtn" id="pmodx">✕</button></div>`
+    +`<div class="eauth"><input id="e-email" type="email" placeholder="your@email.com" autocomplete="email">`
+    +`<input id="e-pass" type="password" placeholder="password (6+ characters)" autocomplete="current-password">`
+    +`<div id="e-msg" class="emsg"></div>`
+    +`<div class="erow"><button class="pbtn pg" id="e-in">Sign in</button><button class="pbtn" id="e-up">Create account</button></div>`
+    +`<div class="note" style="margin-top:6px;font-size:11px">First time here? Type an email + password and tap <b>Create account</b>.</div></div></div></div>`;
+  const old=document.getElementById("pmodbg");if(old)old.remove();
+  document.body.insertAdjacentHTML("beforeend",html);
+  const bg=document.getElementById("pmodbg");
+  bg.onclick=e=>{if(e.target===bg)bg.remove();};
+  document.getElementById("pmodx").onclick=()=>bg.remove();
+  const msg=m=>document.getElementById("e-msg").textContent=m;
+  const creds=()=>[document.getElementById("e-email").value.trim(),document.getElementById("e-pass").value];
+  document.getElementById("e-in").onclick=async()=>{const[em,pw]=creds();
+    if(!em||!pw)return msg("Enter your email and password.");
+    msg("Signing in…");const{error}=await sb.auth.signInWithPassword({email:em,password:pw});
+    if(error)msg("⚠️ "+error.message);else bg.remove();};
+  document.getElementById("e-up").onclick=async()=>{const[em,pw]=creds();
+    if(!em||pw.length<6)return msg("Enter an email and a password of 6+ characters.");
+    msg("Creating account…");const{data,error}=await sb.auth.signUp({email:em,password:pw});
+    if(error)msg("⚠️ "+error.message);
+    else if(data.session)bg.remove();                                 // email confirmation OFF -> straight in
+    else msg("✅ Account created — check your email to confirm, then tap Sign in.");};   // confirmation ON
+  document.getElementById("e-email").focus();
+  document.getElementById("e-pass").onkeydown=e=>{if(e.key==="Enter")document.getElementById("e-in").click();};
+}
 async function supaSignOut(){if(!sb)return;await sb.auth.signOut();
   sbUser=null;myName=null;predCache={};lbRows=[];predRender();supaSync();}
 async function supaEditName(){if(!sb||!sbUser)return;
@@ -1094,7 +1129,7 @@ function predRender(){
   const signedIn=!!sbUser;
   let h=signedIn
     ?`<div class="pauth"><span>👤 <b>${myName||'You'}</b> <button class="plink" id="p-editname">✎ username</button></span><button class="pbtn" id="p-signout">Sign out</button></div>`
-    :`<div class="pauth"><span>🔒 Sign in to predict &amp; climb the leaderboard</span><button class="pbtn pg" id="p-signin">Sign in with Google</button></div>`;
+    :`<div class="pauth"><span>🔒 Sign in to predict &amp; climb the leaderboard</span><span class="pauthb"><button class="pbtn pg" id="p-signin">Sign in with Google</button><button class="pbtn" id="p-emailauth">📧 Email</button></span></div>`;
   if(signedIn){if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
     h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
       +`<div class="pbvs">${lead}</div><div class="pb pbclick" id="p-machine" title="See the Machine's picks"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine ›</div></div></div>`
@@ -1168,6 +1203,7 @@ function predRender(){
   const _so=document.getElementById("p-signout");if(_so)_so.onclick=supaSignOut;
   const _en=document.getElementById("p-editname");if(_en)_en.onclick=supaEditName;
   const _pm=document.getElementById("p-machine");if(_pm)_pm.onclick=showMachine;
+  const _ea=document.getElementById("p-emailauth");if(_ea)_ea.onclick=predEmailAuth;
   el.querySelectorAll(".lbclick").forEach(r=>r.onclick=()=>showProfile(r.dataset.uid,r.dataset.name));
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||[0,0]).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
