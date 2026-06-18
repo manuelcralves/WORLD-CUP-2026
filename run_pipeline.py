@@ -30,6 +30,7 @@ from wc2026 import backtest as BT
 from wc2026 import backtest_all as BT_ALL
 from wc2026 import dashboard as DASH
 from wc2026 import tracker as TRK
+from wc2026 import goldenboot as GB
 from wc2026 import share as SH
 
 BASE = Path(__file__).resolve().parent
@@ -58,17 +59,23 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     val = V.evaluate(bundle)
     table = T.simulate(bundle, trained, n_sims=n_sims)
 
-    # Tracker (live version only): records the snapshot and the odds history.
-    evolution, odds_history = None, None
+    # Tracker (live version only): records the snapshot, the odds history and
+    # the Golden Boot projection history (both filled by the same per-day backfill).
+    evolution, odds_history, golden_history = None, None, None
     if cutoff is None:
         hist = out_dir / "history.csv"
-        h0 = TRK.load_history(hist)
-        if h0.empty or h0["date"].nunique() < 3:   # one-time backfill if sparse
-            TRK.backfill_history(hist, n_sims=12000)
-        TRK.record_snapshot(table, TRK.data_asof(bundle), hist)
+        ghist = out_dir / "golden_history.csv"
+        h0, gh0 = TRK.load_history(hist), TRK.load_history(ghist)
+        if (h0.empty or h0["date"].nunique() < 3
+                or gh0.empty or gh0["date"].nunique() < 3):   # one-time backfill if sparse
+            TRK.backfill_history(hist, golden_path=ghist, n_sims=12000)
+        asof = TRK.data_asof(bundle)
+        TRK.record_snapshot(table, asof, hist)
+        TRK.record_golden_snapshot(GB.predict(bundle, table, topn=30), asof, ghist)
         chart = TRK.evolution_chart(hist, out_dir / "odds_evolution.png")
         evolution = {"movers": TRK.movers(hist), "has_chart": chart is not None}
         odds_history = TRK.history_series(hist)
+        golden_history = TRK.golden_history_series(ghist)
 
     viz.save_charts(table, out_dir)
     SH.share_cards(table, out_dir)
@@ -79,7 +86,8 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
         out_dir / "expected_standings.csv", index=False, encoding="utf-8")
     data = DASH.collect(bundle, trained, table, val, backtests,
                         gb_before=cutoff, mode_label=label, evolution=evolution,
-                        odds_history=odds_history, mega_backtest=mega,
+                        odds_history=odds_history, golden_history=golden_history,
+                        mega_backtest=mega,
                         # "results so far" only makes sense for the live version
                         played_review=(review if cutoff is None else None))
     DASH.build_interactive(data, out_dir / "dashboard.html")

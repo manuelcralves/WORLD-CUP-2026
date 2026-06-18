@@ -75,7 +75,35 @@ def history_series(path, top: int = 8) -> dict:
                        for t in leaders]}
 
 
-def backfill_history(history_path, n_sims: int = 15000) -> Path:
+def record_golden_snapshot(gb: pd.DataFrame, asof: str, path) -> Path:
+    """Append (or replace) this date's Golden Boot projections to the history."""
+    path = Path(path)
+    snap = pd.DataFrame({"date": asof, "scorer": gb["scorer"].values,
+                         "proj": gb["proj_goals"].values})
+    if path.exists():
+        hist = pd.read_csv(path)
+        hist = hist[hist["date"] != asof]            # idempotent by date
+        snap = pd.concat([hist, snap], ignore_index=True)
+    snap.to_csv(path, index=False, encoding="utf-8")
+    return path
+
+
+def golden_history_series(path, top: int = 6) -> dict:
+    """Top scorers' projected-total series over time, for the interactive chart."""
+    hist = load_history(path)
+    if hist.empty or hist["date"].nunique() < 2:
+        return None
+    dates = sorted(hist["date"].unique())
+    piv = hist.pivot_table(index="date", columns="scorer", values="proj").reindex(dates)
+    leaders = piv.iloc[-1].sort_values(ascending=False).head(top).index
+    return {"dates": list(dates),
+            "series": [{"scorer": s,
+                        "data": [None if pd.isna(piv.loc[d, s])
+                                 else round(float(piv.loc[d, s]), 2) for d in dates]}
+                       for s in leaders]}
+
+
+def backfill_history(history_path, golden_path=None, n_sims: int = 15000) -> Path:
     """Rebuild history.csv with one snapshot per as-of date: the eve of the
     tournament plus each World Cup match-day we already have results for.
 
@@ -94,11 +122,18 @@ def backfill_history(history_path, n_sims: int = 15000) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
         path.unlink()
+    gpath = Path(golden_path) if golden_path else None
+    if gpath:
+        from . import goldenboot as GB
+        if gpath.exists():
+            gpath.unlink()
     for d in asof_dates:
         label = str(pd.Timestamp(d).date())
         b = D.load_all(asof=label)
         table = T.simulate(b, M.train_full(b), n_sims=n_sims)
         record_snapshot(table, label, path)
+        if gpath:
+            record_golden_snapshot(GB.predict(b, table, topn=30), label, gpath)
     return path
 
 

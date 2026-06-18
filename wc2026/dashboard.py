@@ -59,7 +59,8 @@ def _standings(bundle) -> dict:
 
 def collect(bundle, trained, table, val=None, backtests=None,
             gb_before=None, mode_label=None, evolution=None,
-            odds_history=None, mega_backtest=None, played_review=None) -> dict:
+            odds_history=None, golden_history=None, mega_backtest=None,
+            played_review=None) -> dict:
     """Gathers all the data (JSON-serialisable) that the dashboard shows."""
     teams = [{
         "team": r["team"], "group": r["group"], "elo": int(r["elo"]),
@@ -165,7 +166,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "model": model, "state": state, "h2h": h2h,
         "played_review": played_review,
         "shoot_b1": float(trained.get("shootout", {}).get("b1", 0.0)),
-        "odds_history": odds_history,
+        "odds_history": odds_history, "golden_history": golden_history,
         "elo_by_year": elo_by_year(bundle["matches"]),
         "kickoffs": SCH.all_lisbon(),
         "codes": dict(CODES),   # name -> ISO flag code for every nation (not just finalists)
@@ -1297,13 +1298,27 @@ function renderOdds(){
       scales:{y:{title:{display:true,text:"Title probability (%)",color:"#8b95ab"},
         ticks:{color:"#8b95ab"},grid:{color:"#243049"}},
         x:{ticks:{color:"#8b95ab"},grid:{color:"#243049"}}}}});}
-let eloChart=null,oddsChart=null;
+function renderGoldenChart(){
+  const gh=D.golden_history,wrap=document.getElementById("golden-chart-wrap");
+  if(!wrap||!gh||typeof Chart==="undefined")return;
+  wrap.innerHTML=`<h3 class="psec" style="margin-top:22px">📈 Projection over time <span class="tag">re-run each match-day</span></h3><div style="position:relative;height:320px"><canvas id="golden-chart"></canvas></div>`;
+  const cols=["#00e0a4","#ffd34d","#5b8def","#ff6b6b","#c08cff","#ff9f43","#4dd0e1","#9ccc65"];
+  goldenChart=new Chart(document.getElementById("golden-chart"),{type:"line",
+    data:{labels:gh.dates.map(d=>d.slice(5)),datasets:gh.series.map((s,i)=>({label:s.scorer,
+      data:s.data,borderColor:cols[i%8],backgroundColor:cols[i%8],
+      tension:.3,borderWidth:i===0?3:2,pointRadius:3,spanGaps:true}))},
+    options:{maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:"#8b95ab",boxWidth:12,font:{size:11}}}},
+      scales:{y:{title:{display:true,text:"Projected goals",color:"#8b95ab"},
+        ticks:{color:"#8b95ab"},grid:{color:"#243049"}},
+        x:{ticks:{color:"#8b95ab"},grid:{color:"#243049"}}}}});}
+let eloChart=null,oddsChart=null,goldenChart=null;
 function showTab(name,scroll){
   document.querySelectorAll(".tab").forEach(t=>t.style.display=t.id==="tab-"+name?"":"none");
   document.querySelectorAll(".tabnav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===name));
   const u=new URLSearchParams(location.search);u.set("tab",name);
   history.replaceState(null,"","?"+u.toString());
-  [oddsChart,eloChart].forEach(c=>{if(c)try{c.resize();}catch(e){}});
+  [oddsChart,eloChart,goldenChart].forEach(c=>{if(c)try{c.resize();}catch(e){}});
   if(scroll){const n=document.querySelector(".tabnav");if(n)n.scrollIntoView({block:"start"});}
 }
 function renderEloYear(){
@@ -1333,13 +1348,14 @@ function makeCollapsible(){
     while(n&&n.tagName!=="H2"&&!n.classList.contains("foot")){
       const nx=n.nextElementSibling;body.appendChild(n);n=nx;}
     h.after(body);
-    const set=o=>{h.classList.toggle("open",o);body.style.display=o?"":"none";};
+    const set=o=>{h.classList.toggle("open",o);body.style.display=o?"":"none";
+      if(o)setTimeout(()=>[oddsChart,eloChart,goldenChart].forEach(c=>{if(c)try{c.resize();}catch(e){}}),40);};
     h.addEventListener("click",()=>set(!h.classList.contains("open")));
     set(!(mob&&h.classList.contains("mcol")));
   });
 }
 renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
-renderBracket();renderAnalysis();renderBacktest();renderGolden();renderOdds();renderReview();renderFifa();renderGoals();
+renderBracket();renderAnalysis();renderBacktest();renderGolden();renderGoldenChart();renderOdds();renderReview();renderFifa();renderGoals();
 renderToday();renderSurprises();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
   document.getElementById("elo-year").oninput=renderEloYear;}
@@ -1574,6 +1590,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "model had never seen when it was trained:</p>"
         "<div id='backtest'></div>"
         "<h2 class='col mcol'>👟 Golden Boot <span class='tag'>top scorer</span></h2><div id='golden'></div>"
+        "<div id='golden-chart-wrap'></div>"
         "<h2 class='col mcol'>⚽ Anatomy of a goal <span class='tag'>every international goal</span></h2>"
         "<div id='goals-an'></div>"
         "<h2>📉 Elo through history <span class='tag'>drag the year</span></h2>"
