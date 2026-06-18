@@ -62,6 +62,13 @@ padding:9px 18px;background:rgba(0,224,164,.13);color:var(--green);
 border:1px solid rgba(0,224,164,.4);font-weight:700}
 .xlink:hover{background:rgba(0,224,164,.22);color:var(--green);border-color:var(--green)}
 .xlink b{font-weight:800}
+.playlink{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;max-width:780px;
+margin:18px auto 0;padding:15px 22px;border-radius:14px;text-decoration:none;font-weight:700;
+font-size:clamp(14px,2.3vw,16px);color:var(--green);
+background:linear-gradient(120deg,rgba(0,224,164,.16),rgba(91,141,239,.12));
+border:1px solid rgba(0,224,164,.45);transition:transform .2s,box-shadow .2s,border-color .2s}
+.playlink:hover{transform:translateY(-2px);border-color:var(--green);box-shadow:0 14px 36px rgba(0,224,164,.2)}
+.playlink b{color:var(--text);font-weight:800}
 .features{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:700px;margin:38px 0 0}
 .features a{background:var(--panel);border:1px solid var(--line);border-radius:999px;
 padding:7px 13px;font-size:13px;color:var(--muted);text-decoration:none;transition:all .15s}
@@ -96,6 +103,7 @@ match. Just for fun. Pick a version:</p>
     <span class="cta">Open the forecast →</span>
   </a>
 </div>
+<a class="playlink" href="outputs/dashboard.html?tab=predict">⚔️ <b>Beat the Machine</b> — make your picks &amp; top the leaderboard →</a>
 <a class="comparelink" href="compare.html">⚖️ Or see the two side by side →</a>
 <a class="comparelink xlink" href="https://x.com/WorldCupML2026" target="_blank" rel="noopener">𝕏 Follow <b>@WorldCupML2026</b> for daily predictions →</a>
 <div class="features">
