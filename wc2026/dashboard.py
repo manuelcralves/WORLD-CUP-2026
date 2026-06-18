@@ -285,6 +285,8 @@ align-items:center;gap:7px}
 .psc{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto}
 .psc b{min-width:16px;text-align:center;font-size:16px}.psc i{color:#8b95ab;font-style:normal}
 .pmeta{color:#8b95ab;font-size:12px;margin-top:7px}
+.pbreak{font-size:11px;color:#7e8aa3;margin:2px 0 0 2px;line-height:1.6}
+.pbreak b{color:#aab6cc;font-weight:700}
 .pdone{color:#00e0a4;font-weight:700}
 .psugg{margin-top:9px;font-size:12.5px;color:#ffd34d}
 .pchip{background:#1c2536;border:1px solid #243049;color:#cbd3e1;border-radius:999px;
@@ -993,7 +995,8 @@ async function showProfile(uid,name){
   if(_pb.length)html+=`<div class="pbadges">`+_pb.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   scored.slice().reverse().forEach(({m,pick,a,yp})=>{
     html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
-      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`;});
+      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`
+      +`<div class="pbreak" style="margin:-2px 0 8px 2px">↳ ${predBreak(pick,a)}</div>`;});
   pending.slice().reverse().forEach(({h,aw,pick})=>{
     html+=`<div class="presrow2"><span>${flag(h,'sm')} ${h} <span class="note">vs</span> ${aw} ${flag(aw,'sm')}</span>`
       +`<span>picked <b>${pick.join('-')}</b> <span class="note">🔒 awaiting result</span></span></div>`;});
@@ -1011,6 +1014,13 @@ function predScore(p,a){let s=0;const pd=p[0]-p[1],ad=a[0]-a[1];  // cumulative,
   if(pd===ad)s+=5;                                  // goal difference
   if(p[0]===a[0]&&p[1]===a[1])s+=5;                 // exact-score bonus
   return s;}
+function predBreak(p,a){const pd=p[0]-p[1],ad=a[0]-a[1],x=[];   // which criteria actually scored
+  if((pd>0)===(ad>0)&&(pd<0)===(ad<0))x.push("✅ result +10");
+  if(p[0]===a[0])x.push("⚽ home goals +5");
+  if(p[1]===a[1])x.push("⚽ away goals +5");
+  if(pd===ad)x.push("📏 goal diff +5");
+  if(p[0]===a[0]&&p[1]===a[1])x.push("🎯 exact +5");
+  return x.length?x.join(" · "):"❌ nothing this time";}
 function predKO(home,away){const k=D.kickoffs&&D.kickoffs[[home,away].sort().join("|")];
   return k?new Date(k.date+"T"+k.hm+":00+01:00"):null;}   // WEST = UTC+1
 function predModel(key){const m=(D.matches||[]).find(x=>x.home+"|"+x.away===key);
@@ -1125,6 +1135,9 @@ function predRender(){
       meta=`✅ `+(mine?`you <b>${cur.join('-')}</b> ${pp(predScore(cur,a))}`:`<span class="note">you didn't predict this one</span>`)+` · 🤖 Machine <b>${mdl.join('-')}</b> ${pp(mp)}`;}
     else meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
+    if(res){const ra=[res.hs,res["as"]],mdl=res.ml_score.split("-").map(Number);   // why each side scored what it did
+      if(mine)h+=`<div class="pbreak">↳ <b>your +${predScore(cur,ra)}</b> · ${predBreak(cur,ra)}</div>`;
+      h+=`<div class="pbreak">↳ <b>🤖 +${predScore(mdl,ra)}</b> · ${predBreak(mdl,ra)}</div>`;}
     if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
     const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
     h+=`</div>`;});
