@@ -167,6 +167,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "odds_history": odds_history,
         "elo_by_year": elo_by_year(bundle["matches"]),
         "kickoffs": SCH.all_lisbon(),
+        "codes": dict(CODES),   # name -> ISO flag code for every nation (not just finalists)
         "fifa": FIFA.compare(table),
         "goals": goals_an,
         "fixtures": _fixtures(bundle),
@@ -526,7 +527,7 @@ let sortKey="p_champion",sortDir=-1,selected=D.teams[0].team,query="";
 const qteam=new URLSearchParams(location.search).get("team");  // ?team= deep link
 if(qteam&&byName[qteam])selected=qteam;
 
-function flag(team,cls){const t=byName[team]||{};const c=t.code!==undefined?t.code:(D.favorite.team===team?D.favorite.code:"");
+function flag(team,cls){const t=byName[team]||{};const c=t.code||(D.codes&&D.codes[team])||(D.favorite.team===team?D.favorite.code:"");
   if(c) return `<img class="flag ${cls||''}" src="https://flagcdn.com/w40/${c}.png" alt="" loading="lazy">`;
   return `<span>${t.flag||"🏳️"}</span>`;}
 function bar(p,color,label){const w=Math.min(Math.max(p*100,0),100);
