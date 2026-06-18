@@ -17,30 +17,10 @@ def _ko_iso(kickoffs: dict, home: str, away: str):
     return f"{k['date']}T{k['hm']}:00+01:00" if k else None     # WEST = UTC+1
 
 
-def push_matches(data: dict) -> None:
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_SERVICE_KEY")
-    if not url or not key:
-        return
-    ko, rows = data.get("kickoffs", {}), {}
-    for m in data.get("matches") or []:              # upcoming: model pick = top[0]
-        h, a = m["home"], m["away"]
-        mh, ma = (m["top"][0]["score"].split("-") if m.get("top") else ("1", "1"))
-        rows[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
-                            "kickoff": _ko_iso(ko, h, a),
-                            "home_score": None, "away_score": None,   # uniform keys
-                            "model_home": int(mh), "model_away": int(ma),
-                            "stage": "group", "played": False}
-    for m in data.get("played_review") or []:        # played: model pick + result
-        h, a = m["home"], m["away"]
-        mh, ma = m["ml_score"].split("-")
-        rows[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
-                            "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
-                            "away_score": int(m["as"]), "model_home": int(mh),
-                            "model_away": int(ma), "stage": "group", "played": True}
-    body = list(rows.values())
+def _post(url: str, key: str, body: list) -> int:
+    """Upsert a batch of match rows into Supabase; returns how many were sent."""
     if not body:
-        return
+        return 0
     req = urllib.request.Request(
         url.rstrip("/") + "/rest/v1/matches",
         data=json.dumps(body).encode("utf-8"),
@@ -48,8 +28,39 @@ def push_matches(data: dict) -> None:
                  "Content-Type": "application/json",
                  "Prefer": "resolution=merge-duplicates,return=minimal"},
         method="POST")
+    urllib.request.urlopen(req, timeout=30)
+    return len(body)
+
+
+def push_matches(data: dict) -> None:
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    if not url or not key:
+        return
+    ko = data.get("kickoffs", {})
+    played, upcoming = {}, {}
+    for m in data.get("played_review") or []:        # played: model pick + result
+        h, a = m["home"], m["away"]
+        mh, ma = m["ml_score"].split("-")
+        played[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
+                              "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
+                              "away_score": int(m["as"]), "model_home": int(mh),
+                              "model_away": int(ma), "stage": "group", "played": True}
+    for m in data.get("matches") or []:              # upcoming: model pick = top[0]
+        h, a = m["home"], m["away"]
+        if f"{h}|{a}" in played:
+            continue
+        mh, ma = (m["top"][0]["score"].split("-") if m.get("top") else ("1", "1"))
+        # Deliberately NO home_score/away_score/played here: a result entered
+        # straight into Supabase (e.g. a same-day leaderboard hot-fix via SQL)
+        # must survive the build, so the merge-upsert must not touch those columns.
+        upcoming[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
+                                "kickoff": _ko_iso(ko, h, a),
+                                "model_home": int(mh), "model_away": int(ma),
+                                "stage": "group"}
     try:
-        urllib.request.urlopen(req, timeout=30)
-        print(f"Supabase: upserted {len(body)} matches.")
+        n_played = _post(url, key, list(played.values()))
+        n_up = _post(url, key, list(upcoming.values()))
+        print(f"Supabase: upserted {n_played} played + {n_up} upcoming matches.")
     except Exception as e:                            # never break the pipeline
         print("Supabase push failed (continuing):", type(e).__name__, e)
