@@ -262,7 +262,7 @@ button{{background:#243049;color:#eef1f7}}button:hover{{background:#2c3a57}}
 <a class="home" href="../index.html">← Home</a>
 <h1>📋 Today's tweets</h1>
 <p class="sub">Tap <b>Copy</b> and paste into X, or <b>Tweet ▸</b> to open X with it ready.
-To make a thread, post the first, then reply with the next. Refreshed daily.</p>
+Post each one with Tweet ▸ as its own tweet (shows better than a thread on a new account), or reply to chain them. Refreshed daily.</p>
 {cards}
 <script>function cp(i){{var el=document.getElementById('t'+i);
 navigator.clipboard.writeText(el.innerText);var b=el.parentNode.querySelector('button');
