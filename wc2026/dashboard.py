@@ -1067,11 +1067,11 @@ function predRender(){
     const _bd=predBadges(scored);
     if(_bd.length)h+=`<div class="pbadges">`+_bd.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
-  const _lb=lbRows.filter(r=>!r.is_model&&(r.played>0||(sbUser&&r.uid===sbUser.id)));
+  const _lb=lbRows.filter(r=>!r.is_model&&(r.picks>0||r.played>0||(sbUser&&r.uid===sbUser.id)));
   if(_lb.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
     h+=`<h3 class="psec">🏆 Global leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
     if(myIdx>0){const rv=_lb[myIdx-1],gap=rv.points-_lb[myIdx].points;
-      h+=`<div class="prival">⚔️ <b>${rv.name||'Player'}</b> is ${gap} pt${gap!==1?'s':''} ahead — catch them!</div>`;}
+      h+=`<div class="prival">⚔️ ${gap>0?`<b>${rv.name||'Player'}</b> is ${gap} pt${gap!==1?'s':''} ahead — catch them!`:`You're level with <b>${rv.name||'Player'}</b> — pull ahead!`}</div>`;}
     else if(myIdx===0&&_lb.length>1)h+=`<div class="prival">👑 You lead the leaderboard — defend your spot!</div>`;
     h+=`<div class="lbx">`;
     _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id,riv=i===myIdx-1;
