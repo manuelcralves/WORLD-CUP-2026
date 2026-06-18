@@ -295,6 +295,8 @@ padding:5px 11px;font-size:12.5px;cursor:pointer;font-weight:600;margin:0 5px 5p
 .pboard{display:flex;align-items:center;justify-content:center;gap:14px;background:#161d2b;
 border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
 .pb{text-align:center;min-width:64px}
+.pbclick{cursor:pointer;border-radius:9px;padding:4px 8px;transition:background .15s}
+.pbclick:hover{background:rgba(255,255,255,.06)}
 .pbn{font-size:30px;font-weight:800;font-family:'Outfit',sans-serif}
 .pbl{color:#8b95ab;font-size:12.5px}
 .pbvs{font-weight:700;font-size:13.5px;text-align:center;flex:1;max-width:170px}
@@ -974,11 +976,7 @@ async function supaEditName(){if(!sb||!sbUser)return;
   const{error}=await sb.from("profiles").update({name:n}).eq("id",sbUser.id);
   if(error){predToast("⚠️ Couldn't save name");return;}
   myName=n;predToast("✓ Username saved");supaSync();}
-async function showProfile(uid,name){
-  if(!sb)return;
-  let preds={};
-  try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
-    (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
+function predPicksModal(name,preds,isMachine){
   const rev={};(D.played_review||[]).forEach(m=>rev[m.home+"|"+m.away]=m);Object.assign(rev,liveRev);   // live Supabase results win over the baked ones
   const now=new Date();let pts=0,n=0,exact=0,beat=0;const scored=[],pending=[];
   Object.keys(preds).forEach(key=>{const i=key.split("|"),h=i[0],aw=i[1],kt=predKO(h,aw);
@@ -988,9 +986,9 @@ async function showProfile(uid,name){
       pts+=yp;n++;if(yp===30)exact++;if(yp>mp)beat++;scored.push({m,pick,a:sc,yp,mp});}
     else pending.push({h,aw,pick});});                           // kicked off, result not in the dataset yet
   const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
-  let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>👤 ${name}</b>`
+  let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>${isMachine?'🤖':'👤'} ${name}</b>`
     +`<button class="pbtn" id="pmodx">✕</button></div>`
-    +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact · 🏆 beat the model ${beat}×</div>`;
+    +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact${isMachine?'':` · 🏆 beat the model ${beat}×`}</div>`;
   const _pb=predBadges(scored);
   if(_pb.length)html+=`<div class="pbadges">`+_pb.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   scored.slice().reverse().forEach(({m,pick,a,yp})=>{
@@ -1007,6 +1005,18 @@ async function showProfile(uid,name){
   const bg=document.getElementById("pmodbg");
   bg.onclick=e=>{if(e.target===bg)bg.remove();};
   document.getElementById("pmodx").onclick=()=>bg.remove();}
+async function showProfile(uid,name){
+  if(!sb)return;
+  let preds={};
+  try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
+    (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
+  predPicksModal(name,preds,false);}
+function showMachine(){
+  const preds={};
+  (D.matches||[]).forEach(m=>{if(m.top&&m.top[0])preds[m.home+"|"+m.away]=m.top[0].score.split("-").map(Number);});   // upcoming: model's top call
+  const rv={};(D.played_review||[]).forEach(m=>rv[m.home+"|"+m.away]=m);Object.assign(rv,liveRev);
+  Object.values(rv).forEach(m=>{preds[m.home+"|"+m.away]=m.ml_score.split("-").map(Number);});                        // played: the model's actual pick
+  predPicksModal("The Machine",preds,true);}
 function predScore(p,a){let s=0;const pd=p[0]-p[1],ad=a[0]-a[1];  // cumulative, FIFA-style
   if((pd>0)===(ad>0)&&(pd<0)===(ad<0))s+=10;        // correct result
   if(p[0]===a[0])s+=5;                              // team A (home) exact goals
@@ -1087,7 +1097,7 @@ function predRender(){
     :`<div class="pauth"><span>🔒 Sign in to predict &amp; climb the leaderboard</span><button class="pbtn pg" id="p-signin">Sign in with Google</button></div>`;
   if(signedIn){if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
     h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
-      +`<div class="pbvs">${lead}</div><div class="pb"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine</div></div></div>`
+      +`<div class="pbvs">${lead}</div><div class="pb pbclick" id="p-machine" title="See the Machine's picks"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine ›</div></div></div>`
       +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
     const _bd=predBadges(scored);
     if(_bd.length)h+=`<div class="pbadges">`+_bd.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
@@ -1157,6 +1167,7 @@ function predRender(){
   const _si2=document.getElementById("p-signin2");if(_si2)_si2.onclick=supaSignIn;
   const _so=document.getElementById("p-signout");if(_so)_so.onclick=supaSignOut;
   const _en=document.getElementById("p-editname");if(_en)_en.onclick=supaEditName;
+  const _pm=document.getElementById("p-machine");if(_pm)_pm.onclick=showMachine;
   el.querySelectorAll(".lbclick").forEach(r=>r.onclick=()=>showProfile(r.dataset.uid,r.dataset.name));
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||[0,0]).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
