@@ -997,11 +997,29 @@ function predEmailAuth(){
   document.getElementById("e-up").onclick=async()=>{const[em,pw]=creds();
     if(!em||pw.length<6)return msg("Enter an email and a password of 6+ characters.");
     msg("Creating account…");const{data,error}=await sb.auth.signUp({email:em,password:pw});
-    if(error)msg("⚠️ "+error.message);
-    else if(data.session)bg.remove();                                 // email confirmation OFF -> straight in
-    else msg("✅ Account created — check your email to confirm, then tap Sign in.");};   // confirmation ON
+    if(error)return msg("⚠️ "+error.message);
+    if(!data.session)return msg("✅ Account created — check your email to confirm, then tap Sign in.");   // confirmation ON
+    predNameStep(data.user.id,em);};                                  // confirmation OFF -> pick a display name
   document.getElementById("e-email").focus();
   document.getElementById("e-pass").onkeydown=e=>{if(e.key==="Enter")document.getElementById("e-in").click();};
+}
+function predNameStep(uid,email){
+  const pm=document.querySelector(".pmod"),bg=document.getElementById("pmodbg");if(!pm)return;
+  const sugg=(email.split("@")[0]||"").slice(0,24).replace(/"/g,"");
+  pm.innerHTML=`<div class="pmodh"><b>🎉 You're in! Pick a name</b><button class="pbtn" id="pmodx">✕</button></div>`
+    +`<div class="eauth"><div class="note" style="margin:0 0 2px">Shown on the leaderboard — you can change it anytime.</div>`
+    +`<input id="n-name" type="text" placeholder="your name or nickname" maxlength="24" autocomplete="off" value="${sugg}">`
+    +`<div id="n-msg" class="emsg"></div>`
+    +`<button class="pbtn pg" id="n-save">Save &amp; start predicting</button></div>`;
+  if(bg)document.getElementById("pmodx").onclick=()=>bg.remove();
+  const save=async()=>{const nm=document.getElementById("n-name").value.trim().slice(0,24),nmsg=document.getElementById("n-msg");
+    if(!nm){nmsg.textContent="Type a name.";return;}
+    nmsg.textContent="Saving…";const{error}=await sb.from("profiles").update({name:nm}).eq("id",uid);
+    if(error){nmsg.textContent="⚠️ "+error.message;return;}
+    myName=nm;if(bg)bg.remove();predToast("✓ Welcome, "+nm+"!");supaSync();};
+  document.getElementById("n-save").onclick=save;
+  const ni=document.getElementById("n-name");ni.focus();ni.select();
+  ni.onkeydown=e=>{if(e.key==="Enter")save();};
 }
 async function supaSignOut(){if(!sb)return;await sb.auth.signOut();
   sbUser=null;myName=null;predCache={};lbRows=[];predRender();supaSync();}
