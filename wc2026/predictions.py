@@ -209,6 +209,19 @@ def recent_form(bundle, teams, n: int = 5) -> dict:
     return {t: "".join(v[-n:]) for t, v in res.items()}
 
 
+def recent_results(bundle, teams, n: int = 5) -> dict:
+    """Last-N actual results per team (most recent first): opponent + scoreline."""
+    res = {t: [] for t in teams}
+    for m in bundle["played"].itertuples(index=False):
+        for team, opp, gf, ga, home in (
+                (m.home_team, m.away_team, m.home_score, m.away_score, True),
+                (m.away_team, m.home_team, m.away_score, m.home_score, False)):
+            if team in res:
+                res[team].append({"date": str(m.date)[:10], "opp": opp,
+                                  "gf": int(gf), "ga": int(ga), "home": home})
+    return {t: v[-n:][::-1] for t, v in res.items()}
+
+
 def h2h_records(bundle, teams, recent: int = 5) -> dict:
     """All-time head-to-head record between every pair of these teams, plus the
     last `recent` meetings (date + scoreline) so the dashboard can show *how*

@@ -116,6 +116,19 @@ def collect(bundle, trained, table, val=None, backtests=None,
     form = PR.recent_form(bundle, list(names))
     for t in teams:
         t["form"] = form.get(t["team"], "")
+    # rich extras for the team page: last results, all-time top scorers, team card
+    recents = PR.recent_results(bundle, list(names))
+    df_elo = trained.get("df_elo")
+    gsa = GB.load_goalscorers()
+    gsa = gsa[~gsa["own_goal"]]
+    scorers = {tm: [{"scorer": s, "goals": int(c)} for s, c in
+                    gsa[gsa["team"] == tm]["scorer"].value_counts().head(5).items()]
+               for tm in names}
+    for t in teams:
+        t["recent"] = recents.get(t["team"], [])
+        t["scorers"] = scorers.get(t["team"], [])
+        if df_elo is not None:
+            t["card"] = FACTS.team_card(df_elo, t["team"])
     h2h = PR.h2h_records(bundle, list(names))
 
     # goal timelines for the played matches + the all-time "anatomy of a goal"
@@ -319,6 +332,7 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .tpmo{flex:1}.tpmr{text-align:right;white-space:nowrap}
 .tpgbr{display:flex;justify-content:space-between;padding:5px 8px;font-size:14px}
 .tpshare{margin-top:16px;text-align:center}
+.tpfacts{font-size:13.5px;line-height:1.9}.tpfacts b{color:#eef1f7}
 .pmodh{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin-bottom:2px}
 .presrow2{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:8px 0;border-bottom:1px solid #1c2536}
 .presrow2:last-child{border:none}
@@ -596,9 +610,23 @@ function teamPage(name){
       else{const pw=home?m.p_home:m.p_away,pl=home?m.p_away:m.p_home;
         right=`<span class="note">W ${pc0(pw)} · D ${pc0(m.p_draw)} · L ${pc0(pl)}</span>`;}
       h+=`<div class="tpm"><span class="tpmko">${koLabel(m.home,m.away,m.date)}</span><span class="tpmo">${home?'vs':'@'} ${flag(opp,'sm')} ${opp}</span><span class="tpmr">${right}</span></div>`;});}
+  if(t.recent&&t.recent.length){h+=`<h4 class="tpsec">📈 Recent form <span class="tag">last ${t.recent.length}</span></h4>`;
+    t.recent.forEach(r=>{const rs=r.gf>r.ga?'W':r.gf<r.ga?'L':'D';
+      h+=`<div class="tpm"><span class="tpmko">${r.date}</span><span class="tpmo">${r.home?'vs':'@'} ${flag(r.opp,'sm')} ${r.opp}</span><span class="tpmr"><b>${r.gf}-${r.ga}</b> <span class="fd ${rs}">${rs}</span></span></div>`;});}
   const gs=(D.golden_boot||[]).filter(g=>g.team===name).slice(0,5);
   if(gs.length){h+=`<h4 class="tpsec">👟 Golden Boot contenders</h4>`;
     gs.forEach(g=>{h+=`<div class="tpgbr"><span>${flag(g.team,'sm')} ${g.scorer}</span><span class="note">${g.proj.toFixed(1)} proj goals</span></div>`;});}
+  if(t.scorers&&t.scorers.length){h+=`<h4 class="tpsec">⚽ All-time top scorers</h4>`;
+    t.scorers.forEach((s,i)=>{h+=`<div class="tpgbr"><span>${i+1}. ${s.scorer}</span><span class="note">${s.goals} goals</span></div>`;});}
+  const c=t.card;
+  if(c&&c.games){h+=`<h4 class="tpsec">📊 All-time record</h4><div class="tpfacts">`
+    +`<div><b>${c.w}W · ${c.d}D · ${c.l}L</b> <span class="note">(${c.win_pct}% win over ${c.games} games)</span></div>`
+    +`<div>🏆 Biggest win — <b>${c.biggest_win}</b></div>`
+    +`<div>💀 Worst loss — <b>${c.worst_loss}</b></div>`
+    +`<div>🛡️ Longest unbeaten run — <b>${c.longest_unbeaten}</b> games</div>`
+    +(c.peak_elo?`<div>📈 Peak Elo — <b>${c.peak_elo[0]}</b> in ${c.peak_elo[1]}</div>`:'')
+    +(c.rival?`<div>😤 Most-played rival — <b>${c.rival}</b> (${c.rival_record})</div>`:'')
+    +`</div>`;}
   h+=`<div class="note tpshare">🔗 Shareable — this link opens straight to ${t.team}.</div></div>`;
   const old=document.getElementById("tpbg");if(old)old.remove();
   document.body.insertAdjacentHTML("beforeend",`<div class="pmodbg" id="tpbg">${h}</div>`);
