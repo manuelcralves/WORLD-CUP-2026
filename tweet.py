@@ -243,6 +243,7 @@ def write_kit(tweets: list):
             f'</div></div>')
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
 <title>Today's tweets · World Cup 2026</title>
 <style>
 *{{box-sizing:border-box}}
