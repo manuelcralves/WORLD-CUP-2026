@@ -57,12 +57,26 @@ def predict(bundle, table, since="2023-01-01", before=None, topn=20) -> pd.DataF
     player_team = g.groupby("scorer")["team"].agg(lambda s: s.mode().iloc[0])
     team_goals = g.groupby("team").size()
 
+    # goals actually scored in this World Cup so far (played matches only, live mode).
+    # Identify WC matches by joining on (date, home, away) against bundle["wc_played"]
+    # — a date cutoff alone would wrongly count June friendlies as World Cup goals.
+    wc_goals = {}
+    wcp = bundle.get("wc_played")
+    if before is None and wcp is not None and len(wcp):
+        mp = D.name_mapping(D.load_former_names(D.DATA_DIR))
+        wc_keys = {(d, mp.get(h, h), mp.get(a, a))
+                   for d, h, a in zip(wcp["date"], wcp["home_team"], wcp["away_team"])}
+        in_wc = [(d, h, a) in wc_keys
+                 for d, h, a in zip(g["date"], g["home_team"], g["away_team"])]
+        wc_goals = g[pd.Series(in_wc, index=g.index)].groupby("scorer").size().to_dict()
+
     rows = []
     for scorer, goals in player_goals.items():
         team = player_team[scorer]
         share = goals / team_goals[team]
         proj = share * exp_matches[team] * rate[team]
         rows.append({"scorer": scorer, "team": team, "recent_goals": int(goals),
+                     "wc_goals": int(wc_goals.get(scorer, 0)),
                      "exp_team_goals": round(exp_matches[team] * rate[team], 1),
                      "proj_goals": round(proj, 2)})
     return (pd.DataFrame(rows).sort_values("proj_goals", ascending=False)

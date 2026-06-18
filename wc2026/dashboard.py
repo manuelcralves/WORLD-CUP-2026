@@ -91,7 +91,8 @@ def collect(bundle, trained, table, val=None, backtests=None,
     gb = GB.predict(bundle, table, before=gb_before, topn=15)
     golden = [{"scorer": r["scorer"], "team": r["team"],
                "flag": FLAGS.get(r["team"], "🏳️"),
-               "goals": int(r["recent_goals"]), "proj": float(r["proj_goals"])}
+               "goals": int(r["recent_goals"]), "wc": int(r["wc_goals"]),
+               "proj": float(r["proj_goals"])}
               for _, r in gb.iterrows()]
 
     fav, second = table.iloc[0], table.iloc[1]
@@ -618,7 +619,7 @@ function teamPage(name){
       h+=`<div class="tpm"><span class="tpmko">${r.date}</span><span class="tpmo">${r.home?'vs':'@'} ${flag(r.opp,'sm')} ${r.opp}</span><span class="tpmr"><b>${r.gf}-${r.ga}</b> <span class="fd ${rs}">${rs}</span></span></div>`;});}
   const gs=(D.golden_boot||[]).filter(g=>g.team===name).slice(0,5);
   if(gs.length){h+=`<h4 class="tpsec">👟 Golden Boot contenders</h4>`;
-    gs.forEach(g=>{h+=`<div class="tpgbr"><span>${flag(g.team,'sm')} ${g.scorer}</span><span class="note">${g.proj.toFixed(1)} proj goals</span></div>`;});}
+    gs.forEach(g=>{h+=`<div class="tpgbr"><span>${flag(g.team,'sm')} ${g.scorer}</span><span class="note">${(g.wc||0)>0?'<b>'+g.wc+'</b> in WC · ':''}${g.proj.toFixed(1)} proj</span></div>`;});}
   if(t.scorers&&t.scorers.length){h+=`<h4 class="tpsec">⚽ All-time top scorers</h4>`;
     t.scorers.forEach((s,i)=>{h+=`<div class="tpgbr"><span>${i+1}. ${s.scorer}</span><span class="note">${s.goals} goals</span></div>`;});}
   const c=t.card;
@@ -1207,9 +1208,10 @@ function renderBacktest(){
 
 function renderGolden(){
   const g=D.golden_boot||[];if(!g.length)return;const mx=g[0].proj;
-  let h=`<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th>Recent</th><th>World Cup projection</th></tr></thead><tbody>`;
+  let h=`<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th title="International goals since Jan 2023 — recent scoring form, what drives the projection">Since 2023</th><th title="Goals actually scored in the 2026 World Cup so far (played matches only)">This WC</th><th>World Cup projection</th></tr></thead><tbody>`;
   g.forEach((p,i)=>{h+=`<tr><td>${i+1}</td><td>${p.scorer}</td>
   <td><span class="row-team">${flag(p.team,'sm')} ${p.team}</span></td><td>${p.goals}</td>
+  <td>${(p.wc||0)>0?'<b>'+p.wc+'</b>':'<span class="note">0</span>'}</td>
   <td style="min-width:150px">${bar(p.proj/mx,"#00e0a4",p.proj.toFixed(1)+" goals")}</td></tr>`;});
   h+=`</tbody></table>`;document.getElementById("golden").innerHTML=h;
 }
