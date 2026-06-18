@@ -974,8 +974,8 @@ async function showProfile(uid,name){
   let pts=0,n=0,exact=0,beat=0;const rows=[];
   (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;const _kt=predKO(m.home,m.away);if(!_kt||_kt<LB_START)return;
     const a=[m.hs,m["as"]],yp=predScore(preds[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
-    pts+=yp;n++;if(yp===5)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp,mp});});
-  const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':p===1?'⚽ +1':'❌ +0';
+    pts+=yp;n++;if(yp===30)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp,mp});});
+  const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
   let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>👤 ${name}</b>`
     +`<button class="pbtn" id="pmodx">✕</button></div>`
     +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact · 🏆 beat the model ${beat}×</div>`;
@@ -983,7 +983,7 @@ async function showProfile(uid,name){
   if(_pb.length)html+=`<div class="pbadges">`+_pb.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   if(rows.length)rows.reverse().forEach(({m,pick,a,yp})=>{
     html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
-      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=2?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`;});
+      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`;});
   else html+=`<div class="note" style="text-align:center;padding:14px 0">No scored picks yet — only matches that have kicked off appear here.</div>`;
   html+=`</div></div>`;
   const old=document.getElementById("pmodbg");if(old)old.remove();
@@ -991,11 +991,12 @@ async function showProfile(uid,name){
   const bg=document.getElementById("pmodbg");
   bg.onclick=e=>{if(e.target===bg)bg.remove();};
   document.getElementById("pmodx").onclick=()=>bg.remove();}
-function predScore(p,a){let s=0;const pd=p[0]-p[1],ad=a[0]-a[1];  // cumulative
-  if((pd>0)===(ad>0)&&(pd<0)===(ad<0))s+=2;         // right result
-  if(pd===ad)s+=1;                                  // exact goal difference
-  if(p[0]===a[0])s+=1;                              // home team's exact goals
-  if(p[1]===a[1])s+=1;                              // away team's exact goals
+function predScore(p,a){let s=0;const pd=p[0]-p[1],ad=a[0]-a[1];  // cumulative, FIFA-style
+  if((pd>0)===(ad>0)&&(pd<0)===(ad<0))s+=10;        // correct result
+  if(p[0]===a[0])s+=5;                              // team A (home) exact goals
+  if(p[1]===a[1])s+=5;                              // team B (away) exact goals
+  if(pd===ad)s+=5;                                  // goal difference
+  if(p[0]===a[0]&&p[1]===a[1])s+=5;                 // exact-score bonus
   return s;}
 function predKO(home,away){const k=D.kickoffs&&D.kickoffs[[home,away].sort().join("|")];
   return k?new Date(k.date+"T"+k.hm+":00+01:00"):null;}   // WEST = UTC+1
@@ -1038,14 +1039,14 @@ function pbSet(m,team){
       .then(({error})=>{predToast(error?"⚠️ Couldn't save bracket":"✓ Bracket saved");});},600);}
 }
 function predBadges(sc){const b=[];   // achievements earned from scored picks
-  if(sc.some(s=>s.yp===5))b.push(['🎯','Bullseye','nailed an exact score']);
-  let run=0,mx=0;sc.forEach(s=>{if(s.yp>=2){run++;if(run>mx)mx=run;}else run=0;});
+  if(sc.some(s=>s.yp===30))b.push(['🎯','Bullseye','nailed an exact score']);
+  let run=0,mx=0;sc.forEach(s=>{if(s.yp>=10){run++;if(run>mx)mx=run;}else run=0;});
   if(mx>=3)b.push(['🔥','On fire',mx+' correct results in a row']);
   const beat=sc.filter(s=>s.yp>s.mp).length;
   if(beat>=3)b.push(['🧠','Machine beater','beat the model '+beat+' times']);
   const byday={};sc.forEach(s=>{(byday[s.m.date]=byday[s.m.date]||[]).push(s);});
-  if(Object.values(byday).some(d=>d.length>=2&&d.every(s=>s.yp>=2)))b.push(['💯','Perfect matchday','every pick right on a matchday']);
-  if(sc.some(s=>s.yp>=2&&s.m.p_actual<0.30))b.push(['🦅','Giant-killer','called a result the model gave under 30%']);
+  if(Object.values(byday).some(d=>d.length>=2&&d.every(s=>s.yp>=10)))b.push(['💯','Perfect matchday','every pick right on a matchday']);
+  if(sc.some(s=>s.yp>=10&&s.m.p_actual<0.30))b.push(['🦅','Giant-killer','called a result the model gave under 30%']);
   return b;}
 function predRender(){
   const el=document.getElementById("predict");if(!el)return;
@@ -1053,7 +1054,7 @@ function predRender(){
   let you=0,mac=0,n=0,hits=0,exact=0,beat=0,run=0,streak=0;const scored=[];
   (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in store))return;const _kt=predKO(m.home,m.away);if(!_kt||_kt<LB_START)return;
     const a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
-    you+=yp;mac+=mp;n++;if(yp>=2){hits++;run++;}else run=0;streak=run;if(yp===5)exact++;if(yp>mp)beat++;
+    you+=yp;mac+=mp;n++;if(yp>=10){hits++;run++;}else run=0;streak=run;if(yp===30)exact++;if(yp>mp)beat++;
     scored.push({m,yp,mp,a});});
   const signedIn=!!sbUser;
   let h=signedIn
@@ -1098,11 +1099,11 @@ function predRender(){
     h+=`</div>`;});
   if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
   if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;
-    const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':p===1?'⚽ +1':'❌ +0';
+    const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
     scored.slice().reverse().forEach(({m,yp,mp,a})=>{const key=m.home+"|"+m.away;
       h+=`<div class="pcard pres"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
-        +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=2?'g':yp?'a':'r'}">${tag(yp)}</span></div>`
-        +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':mp?'a':'r'}">${tag(mp)}</span></div>`
+        +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></div>`
+        +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=10?'g':mp?'a':'r'}">${tag(mp)}</span></div>`
         +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
   }else h+=`<div class="pcard" style="text-align:center;padding:22px 16px"><div style="font-size:15px;font-weight:700;margin-bottom:6px">🔒 Sign in to make your predictions</div><div class="note" style="margin:0">Log in with Google to pick scores, challenge the model and climb the leaderboard.</div><button class="pbtn pg" id="p-signin2" style="margin-top:12px">Sign in with Google</button></div>`;
   h+=`<h3 class="psec">🏆 Knockout bracket <span class="tag">your path to the title · separate ranking</span></h3><div id="predbracket"></div>`;
@@ -1445,8 +1446,8 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div class='tab' id='tab-predict'>"
         "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
         "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
-        "or set your own with −/+. Locked at kickoff. Points stack up: ✅ right result +2 · 📏 goal "
-        "difference +1 · ⚽ each team's exact goals +1 (perfect = 🎯 5). The model plays too — can you beat it? Sign in with "
+        "or set your own with −/+. Locked at kickoff. Points stack up: ✅ right result +10 · ⚽ each team's exact goals +5 · 📏 goal "
+        "difference +5 · 🎯 exact score +5 (perfect = 30). The model plays too — can you beat it? Sign in with "
         "Google to make your picks, choose a username and climb the global leaderboard.</p>"
         "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
