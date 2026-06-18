@@ -296,6 +296,7 @@ border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
 .pbvs{font-weight:700;font-size:13.5px;text-align:center;flex:1;max-width:170px}
 .pstats{color:#8b95ab;font-size:13px;text-align:center;margin-bottom:18px}
 .psec{font-size:15px;margin:18px 0 10px}
+.pdate{font-weight:800;font-size:13px;color:#9fb0c9;margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid #243049;letter-spacing:.3px}
 .presrow{display:flex;justify-content:space-between;font-size:13.5px;margin-top:7px}
 .presrow.mac{color:#9fb0c9}
 .ppts{font-weight:800}.ppts.g{color:#00e0a4}.ppts.a{color:#ffd34d}.ppts.r{color:#8b95ab}
@@ -1087,19 +1088,25 @@ function predRender(){
         +`<span class="lbpts">${r.points}</span></div>`;});
     h+=`</div>`;}
   if(signedIn){
-  const up=(D.matches||[]).map(m=>({m,ko:predKO(m.home,m.away)}))
+  const up=(D.matches||[]).map(m=>({m,ko:predKO(m.home,m.away),
+      d:(D.kickoffs[[m.home,m.away].sort().join("|")]||{label:""}).label.split(" · ")[0]}))
     .sort((a,b)=>(a.ko?a.ko:9e15)-(b.ko?b.ko:9e15));
-  const more=Math.max(0,up.length-12),show=up.slice(0,12);
+  let _n=Math.min(12,up.length);                        // aim for ~12 cards…
+  while(_n<up.length&&up[_n].d===up[_n-1].d)_n++;        // …but never cut a day in half
+  const show=up.slice(0,_n),more=up.length-_n;
   h+=`<h3 class="psec">📥 Predict the upcoming matches</h3>`;
   const stp=(key,s,d,l)=>`<button class="wifb" data-k="${key}" data-s="${s}" data-d="${d}">${l}</button>`;
+  let curDate="";
   show.forEach(({m,ko})=>{const key=m.home+"|"+m.away,mine=key in store,cur=store[key]||predModel(key),
     locked=ko&&now>=ko,kl=ko?D.kickoffs[[m.home,m.away].sort().join("|")].label:"";
+    const dpart=kl.split(" · ")[0],tpart=kl.split(" · ")[1]||kl;   // group cards under a date header
+    if(dpart&&dpart!==curDate){curDate=dpart;h+=`<div class="pdate">📅 ${dpart}</div>`;}
     let sc;
     if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
     else{const dh=mine?cur[0]:'—',da=mine?cur[1]:'—';   // — until the user actually picks (don't pre-fill the model's call)
       sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${dh}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${da}</b>${stp(key,'a',1,'+')}</span>`;}
     h+=`<div class="pcard${locked?' plk':''}${mine?' pmine':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
-    const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
+    const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+tpart+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
     if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
     const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
