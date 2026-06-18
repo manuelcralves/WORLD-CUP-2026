@@ -330,6 +330,10 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .lbname{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lbpts{font-weight:800}
 .lbmac{color:#ffd34d}.lbmac .lbrank{color:#ffd34d}.lbme{color:#00e0a4}.lbme .lbpts{color:#00e0a4}
+.lbrow.lbrival{color:#ff9d6b}.lbrow.lbrival .lbpts{color:#ff9d6b}
+.pbadges{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:-6px 0 16px}
+.pbadge{background:rgba(255,211,77,.12);border:1px solid rgba(255,211,77,.35);color:#ffd34d;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;cursor:default}
+.prival{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:13.5px;text-align:center}
 .pcard.pmine{border-color:rgba(0,224,164,.5)}
 .ptoast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(18px);
 background:#00e0a4;color:#062018;font-weight:800;padding:10px 20px;border-radius:999px;
@@ -932,11 +936,13 @@ async function showProfile(uid,name){
   let pts=0,n=0,exact=0,beat=0;const rows=[];
   (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;
     const a=[m.hs,m["as"]],yp=predScore(preds[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
-    pts+=yp;n++;if(yp===5)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp});});
+    pts+=yp;n++;if(yp===5)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp,mp});});
   const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':p===1?'⚽ +1':'❌ +0';
   let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>👤 ${name}</b>`
     +`<button class="pbtn" id="pmodx">✕</button></div>`
     +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact · 🏆 beat the model ${beat}×</div>`;
+  const _pb=predBadges(rows);
+  if(_pb.length)html+=`<div class="pbadges">`+_pb.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   if(rows.length)rows.reverse().forEach(({m,pick,a,yp})=>{
     html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
       +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=2?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`;});
@@ -947,17 +953,26 @@ async function showProfile(uid,name){
   const bg=document.getElementById("pmodbg");
   bg.onclick=e=>{if(e.target===bg)bg.remove();};
   document.getElementById("pmodx").onclick=()=>bg.remove();}
-function predScore(p,a){
-  if(p[0]===a[0]&&p[1]===a[1])return 5;            // exact score
-  const pd=p[0]-p[1],ad=a[0]-a[1];
-  if(pd===ad)return 3;                              // right result + goal difference
-  if(Math.sign(pd)===Math.sign(ad))return 2;        // right result only
-  if(p[0]===a[0]||p[1]===a[1])return 1;             // one team's goals right
-  return 0;}
+function predScore(p,a){let s=0;const pd=p[0]-p[1],ad=a[0]-a[1];  // cumulative
+  if((pd>0)===(ad>0)&&(pd<0)===(ad<0))s+=2;         // right result
+  if(pd===ad)s+=1;                                  // exact goal difference
+  if(p[0]===a[0])s+=1;                              // home team's exact goals
+  if(p[1]===a[1])s+=1;                              // away team's exact goals
+  return s;}
 function predKO(home,away){const k=D.kickoffs&&D.kickoffs[[home,away].sort().join("|")];
   return k?new Date(k.date+"T"+k.hm+":00+01:00"):null;}   // WEST = UTC+1
 function predModel(key){const m=(D.matches||[]).find(x=>x.home+"|"+x.away===key);
   return m&&m.top&&m.top[0]?m.top[0].score.split("-").map(Number):[1,1];}
+function predBadges(sc){const b=[];   // achievements earned from scored picks
+  if(sc.some(s=>s.yp===5))b.push(['🎯','Bullseye','nailed an exact score']);
+  let run=0,mx=0;sc.forEach(s=>{if(s.yp>=2){run++;if(run>mx)mx=run;}else run=0;});
+  if(mx>=3)b.push(['🔥','On fire',mx+' correct results in a row']);
+  const beat=sc.filter(s=>s.yp>s.mp).length;
+  if(beat>=3)b.push(['🧠','Machine beater','beat the model '+beat+' times']);
+  const byday={};sc.forEach(s=>{(byday[s.m.date]=byday[s.m.date]||[]).push(s);});
+  if(Object.values(byday).some(d=>d.length>=2&&d.every(s=>s.yp>=2)))b.push(['💯','Perfect matchday','every pick right on a matchday']);
+  if(sc.some(s=>s.yp>=2&&s.m.p_actual<0.30))b.push(['🦅','Giant-killer','called a result the model gave under 30%']);
+  return b;}
 function predRender(){
   const el=document.getElementById("predict");if(!el)return;
   const store=predLoad(),now=new Date();
@@ -974,12 +989,19 @@ function predRender(){
     h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
       +`<div class="pbvs">${lead}</div><div class="pb"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine</div></div></div>`
       +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
+    const _bd=predBadges(scored);
+    if(_bd.length)h+=`<div class="pbadges">`+_bd.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
   const _lb=lbRows.filter(r=>!r.is_model&&(r.played>0||(sbUser&&r.uid===sbUser.id)));
-  if(_lb.length){h+=`<h3 class="psec">🏆 Global leaderboard <span class="tag">tap a player to see their picks</span></h3><div class="lbx">`;
-    _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id;
-      h+=`<div class="lbrow lbclick${me?' lbme':''}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}"><span class="lbrank">${i+1}</span>`
-        +`<span class="lbname">${me?'🟢':'🧑'} ${r.name||'Player'}${me?' · you':''}</span>`
+  if(_lb.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
+    h+=`<h3 class="psec">🏆 Global leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
+    if(myIdx>0){const rv=_lb[myIdx-1],gap=rv.points-_lb[myIdx].points;
+      h+=`<div class="prival">⚔️ <b>${rv.name||'Player'}</b> is ${gap} pt${gap!==1?'s':''} ahead — catch them!</div>`;}
+    else if(myIdx===0&&_lb.length>1)h+=`<div class="prival">👑 You lead the leaderboard — defend your spot!</div>`;
+    h+=`<div class="lbx">`;
+    _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id,riv=i===myIdx-1;
+      h+=`<div class="lbrow lbclick${me?' lbme':''}${riv?' lbrival':''}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}"><span class="lbrank">${i+1}</span>`
+        +`<span class="lbname">${me?'🟢':riv?'⚔️':'🧑'} ${r.name||'Player'}${me?' · you':''}</span>`
         +`<span class="lbpts">${r.points}</span></div>`;});
     h+=`</div>`;}
   if(signedIn){
@@ -1346,8 +1368,8 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div class='tab' id='tab-predict'>"
         "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
         "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
-        "or set your own with −/+. Locked at kickoff. Points: 🎯 exact 5 · result + goal "
-        "difference 3 · right result 2 · ⚽ a team's goals 1. The model plays too — can you beat it? Sign in with "
+        "or set your own with −/+. Locked at kickoff. Points stack up: ✅ right result +2 · 📏 goal "
+        "difference +1 · ⚽ each team's exact goals +1 (perfect = 🎯 5). The model plays too — can you beat it? Sign in with "
         "Google to make your picks, choose a username and climb the global leaderboard.</p>"
         "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen

@@ -57,17 +57,17 @@ create table if not exists public.predictions (
   primary key (user_id, match_id)
 );
 
--- -------------------------------------------- scoring: 5 / 3 / 2 / 1 / 0 -----
+-- --- scoring (cumulative): result +2, goal-difference +1, each team's goals +1 -
+-- A perfect score = 2+1+1+1 = 5. Reproduces the old 5/3/2/1/0 except a right
+-- result where you also nailed one team's exact goals now scores 3 (not 2).
 create or replace function public.pts(ph int, pa int, ah int, aa int)
 returns int language sql immutable as $$
-  select case
-    when ah is null or ph is null            then 0
-    when ph = ah and pa = aa                 then 5   -- exact score
-    when (ph - pa) = (ah - aa)               then 3   -- result + goal difference
-    when (ph > pa) = (ah > aa)
-     and (ph < pa) = (ah < aa)               then 2   -- result only
-    when ph = ah or pa = aa                  then 1   -- one team's goals right
-    else 0 end;
+  select case when ah is null or ph is null then 0 else
+      (case when (ph > pa) = (ah > aa) and (ph < pa) = (ah < aa) then 2 else 0 end)
+    + (case when (ph - pa) = (ah - aa) then 1 else 0 end)
+    + (case when ph = ah then 1 else 0 end)
+    + (case when pa = aa then 1 else 0 end)
+  end;
 $$;
 
 -- ----------------------------------------- leaderboard (humans + Machine) ----
