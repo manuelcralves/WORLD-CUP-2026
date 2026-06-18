@@ -348,6 +348,7 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pbadges{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:-6px 0 16px}
 .pbadge{background:rgba(255,211,77,.12);border:1px solid rgba(255,211,77,.35);color:#ffd34d;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;cursor:default}
 .prival{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:13.5px;text-align:center}
+.pbrlock{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:18px;text-align:center;font-size:14px;color:#9fb0c9}
 .pcard.pmine{border-color:rgba(0,224,164,.5)}
 .ptoast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(18px);
 background:#00e0a4;color:#062018;font-weight:800;padding:10px 20px;border-radius:999px;
@@ -944,7 +945,9 @@ async function supaSync(){
       if(data){predCache={};data.forEach(p=>predCache[p.match_id]=[p.pred_home,p.pred_away]);
         try{localStorage.setItem(PKEY,JSON.stringify(predCache));}catch(e){}}
       const{data:pf}=await sb.from("profiles").select("name").eq("id",sbUser.id).maybeSingle();
-      myName=pf&&pf.name?pf.name:((sbUser.user_metadata||{}).full_name||(sbUser.user_metadata||{}).name||null);}
+      myName=pf&&pf.name?pf.name:((sbUser.user_metadata||{}).full_name||(sbUser.user_metadata||{}).name||null);
+      const{data:bk}=await sb.from("brackets").select("picks").eq("user_id",sbUser.id).maybeSingle();
+      pbPicks=(bk&&bk.picks)?bk.picks:{};}
     const{data:lb}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
     lbRows=lb||[];
     const{data:cw}=await sb.from("match_crowd").select("*");
@@ -996,6 +999,42 @@ function predKO(home,away){const k=D.kickoffs&&D.kickoffs[[home,away].sort().joi
   return k?new Date(k.date+"T"+k.hm+":00+01:00"):null;}   // WEST = UTC+1
 function predModel(key){const m=(D.matches||[]).find(x=>x.home+"|"+x.away===key);
   return m&&m.top&&m.top[0]?m.top[0].score.split("-").map(Number):[1,1];}
+/* ---- Knockout-bracket prediction (separate game; opens once the groups finish) ---- */
+let pbPicks={},_pbT=null;
+function pbBracket(picks){
+  const {gres,qual3}=wifGroups(),W={},RU={},TH={};
+  for(const L in gres){const o=gres[L].order;W[L]=o[0];RU[L]=o[1];TH[L]=o[2];}
+  const sm=assignThirds(qual3);
+  const teamOf=sp=>sp[0]==="W"?W[sp[1]]:sp[0]==="RU"?RU[sp[1]]:TH[sm[String(sp[1])]];
+  const win={},ties=[],R=D.structure.r32,LA=D.structure.later;
+  const pk=(m,a,b)=>{const p=picks[m];return (p===a||p===b)?p:null;};   // your pick only — no model auto-fill
+  for(const m in R){const a=teamOf(R[m][0]),b=teamOf(R[m][1]),w=pk(+m,a,b);
+    win[m]=w;ties.push({m:+m,rn:"Round of 32",a,b,w});}
+  Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>{
+    const a=win[LA[m][0]],b=win[LA[m][1]],w=pk(m,a,b);win[m]=w;
+    ties.push({m,rn:roundName(m),a,b,w});});
+  return {ties,champ:win[104]};
+}
+function predBracketRender(){
+  const el=document.getElementById("predbracket");if(!el)return;
+  if((D.matches||[]).length){el.innerHTML=`<div class="pbrlock">🔒 Opens when the group stage finishes (~28 Jun). You'll fill the full knockout bracket — every tie from the Round of 32 to the title — on its own leaderboard.</div>`;return;}
+  if(!sbUser){el.innerHTML=`<div class="pbrlock">🔒 Sign in to fill your knockout bracket.</div>`;return;}
+  if(!wifScores)wifInit();
+  const {ties,champ}=pbBracket(pbPicks);
+  const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
+  ties.forEach(t=>rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true}));
+  const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})),n=ties.filter(t=>t.w).length;
+  el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":'<span class="note">tap your way through the bracket</span>'}</div>`
+    +`<div class="note" style="text-align:center;margin:0 0 8px">Tap a team to send them through · ${n}/${ties.length} ties picked</div>`
+    +bracketTree(rounds);
+  el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{if(tt.dataset.team)pbSet(+tt.dataset.m,tt.dataset.team);});
+}
+function pbSet(m,team){
+  pbPicks[m]=team;predBracketRender();
+  if(sb&&sbUser){clearTimeout(_pbT);_pbT=setTimeout(()=>{
+    sb.from("brackets").upsert({user_id:sbUser.id,picks:pbPicks},{onConflict:"user_id"})
+      .then(({error})=>{predToast(error?"⚠️ Couldn't save bracket":"✓ Bracket saved");});},600);}
+}
 function predBadges(sc){const b=[];   // achievements earned from scored picks
   if(sc.some(s=>s.yp===5))b.push(['🎯','Bullseye','nailed an exact score']);
   let run=0,mx=0;sc.forEach(s=>{if(s.yp>=2){run++;if(run>mx)mx=run;}else run=0;});
@@ -1064,7 +1103,9 @@ function predRender(){
         +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':mp?'a':'r'}">${tag(mp)}</span></div>`
         +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
   }else h+=`<div class="pcard" style="text-align:center;padding:22px 16px"><div style="font-size:15px;font-weight:700;margin-bottom:6px">🔒 Sign in to make your predictions</div><div class="note" style="margin:0">Log in with Google to pick scores, challenge the model and climb the leaderboard.</div><button class="pbtn pg" id="p-signin2" style="margin-top:12px">Sign in with Google</button></div>`;
+  h+=`<h3 class="psec">🏆 Knockout bracket <span class="tag">your path to the title · separate ranking</span></h3><div id="predbracket"></div>`;
   el.innerHTML=h;
+  predBracketRender();
   const _si=document.getElementById("p-signin");if(_si)_si.onclick=supaSignIn;
   const _si2=document.getElementById("p-signin2");if(_si2)_si2.onclick=supaSignIn;
   const _so=document.getElementById("p-signout");if(_so)_so.onclick=supaSignOut;
