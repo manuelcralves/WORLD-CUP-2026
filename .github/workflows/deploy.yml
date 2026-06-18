@@ -29,6 +29,12 @@ jobs:
       - name: Update dataset (latest results)
         run: python update_data.py
 
+      # Real results we sourced and submitted to martj42 (PR pending review).
+      # Idempotent: once the PR is merged and update_data.py pulls them, the
+      # script skips every row and this becomes a no-op (then we can drop it).
+      - name: Apply pending upstream results (not yet merged)
+        run: python martj42_contribute.py .
+
       - name: Run predictions (live + pre-tournament)
         env:                                   # for the Supabase match-table push
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
