@@ -32,7 +32,7 @@ Three pieces at the core of the model:
    each team scores given the Elo, recent form and home advantage. From that come
    the probabilities of every exact scoreline.
 3. **Monte Carlo simulation** — fixes the matches already played and runs the
-   tournament tens of thousands of times: the 12 groups with FIFA tiebreakers, the
+   tournament **a million times**: the 12 groups with FIFA tiebreakers, the
    8 best third-placed teams (official eligibility lists) and the **official 2026
    bracket**, with extra time and **penalties modelled from 677 real shootouts**.
 
@@ -101,9 +101,9 @@ scikit-learn are optional (only for the `ensemble` / `xgboost` model).
 ```bash
 pip install -r requirements.txt
 
-python run_pipeline.py                  # live version, 30,000 simulations
-python run_pipeline.py 50000 both       # BOTH versions (live + pre-tournament)
-python run_pipeline.py 30000 pretournament   # pre-tournament only (blind)
+python run_pipeline.py                  # live version, 1,000,000 simulations
+python run_pipeline.py 1000000 both     # BOTH versions (live + pre-tournament)
+python run_pipeline.py pretournament    # pre-tournament only (blind)
 ```
 
 Arguments can come in any order (number of simulations, `poisson`/`xgboost`/

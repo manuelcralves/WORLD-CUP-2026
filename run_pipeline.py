@@ -100,7 +100,7 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     return table
 
 
-def main(n_sims: int = 30000, model: str = "poisson", mode: str = "snapshot"):
+def main(n_sims: int = 1000000, model: str = "poisson", mode: str = "snapshot"):
     print("Preparing backtesting (champion-rank + walk-forward skill test)...")
     live_bundle = D.load_all()
     backtests = [BT.summary(live_bundle, y) for y in (2018, 2022)]
@@ -130,7 +130,7 @@ def main(n_sims: int = 30000, model: str = "poisson", mode: str = "snapshot"):
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    n = next((int(x) for x in a if x.isdigit()), 30000)
+    n = next((int(x) for x in a if x.isdigit()), 1000000)
     mdl = next((x for x in a if x in ("poisson", "xgboost", "ensemble")), "poisson")
     md = next((x for x in a if x in ("snapshot", "pretournament", "both")), "snapshot")
     main(n, mdl, md)
