@@ -91,7 +91,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
     gb = GB.predict(bundle, table, before=gb_before, topn=15)
     golden = [{"scorer": r["scorer"], "team": r["team"],
                "flag": FLAGS.get(r["team"], "🏳️"),
-               "goals": int(r["recent_goals"]), "wc": int(r["wc_goals"]),
+               "form10": int(r["form10"]), "wc": int(r["wc_goals"]),
                "proj": float(r["proj_goals"])}
               for _, r in gb.iterrows()]
 
@@ -1208,12 +1208,13 @@ function renderBacktest(){
 
 function renderGolden(){
   const g=D.golden_boot||[];if(!g.length)return;const mx=g[0].proj;
-  let h=`<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th title="International goals since Jan 2023 — recent scoring form, what drives the projection">Since 2023</th><th title="Goals actually scored in the 2026 World Cup so far (played matches only)">This WC</th><th>World Cup projection</th></tr></thead><tbody>`;
+  let h=`<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th title="Goals in the national team's last 10 matches — recent form">Last 10</th><th title="Goals actually scored in the 2026 World Cup so far (played matches only)">This WC</th><th title="Goals already banked in this World Cup + expected goals in the matches still to play">Projected total</th></tr></thead><tbody>`;
   g.forEach((p,i)=>{h+=`<tr><td>${i+1}</td><td>${p.scorer}</td>
-  <td><span class="row-team">${flag(p.team,'sm')} ${p.team}</span></td><td>${p.goals}</td>
+  <td><span class="row-team">${flag(p.team,'sm')} ${p.team}</span></td><td>${p.form10}</td>
   <td>${(p.wc||0)>0?'<b>'+p.wc+'</b>':'<span class="note">0</span>'}</td>
   <td style="min-width:150px">${bar(p.proj/mx,"#00e0a4",p.proj.toFixed(1)+" goals")}</td></tr>`;});
-  h+=`</tbody></table>`;document.getElementById("golden").innerHTML=h;
+  h+=`</tbody></table><p class="note" style="margin-top:8px"><b>Projected total</b> = goals already scored in this World Cup + expected goals in the matches still to play · <b>Last 10</b> = goals in the national team's last 10 matches.</p>`;
+  document.getElementById("golden").innerHTML=h;
 }
 
 function poisS(l){let L=Math.exp(-l),k=0,p=1;do{k++;p*=Math.random();}while(p>L);return k-1;}

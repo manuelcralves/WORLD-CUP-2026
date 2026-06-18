@@ -57,27 +57,43 @@ def predict(bundle, table, since="2023-01-01", before=None, topn=20) -> pd.DataF
     player_team = g.groupby("scorer")["team"].agg(lambda s: s.mode().iloc[0])
     team_goals = g.groupby("team").size()
 
-    # goals actually scored in this World Cup so far (played matches only, live mode).
-    # Identify WC matches by joining on (date, home, away) against bundle["wc_played"]
-    # — a date cutoff alone would wrongly count June friendlies as World Cup goals.
-    wc_goals = {}
+    # Goals already scored in this World Cup, and how many WC matches each team
+    # has played — identified by joining on (date, home, away) against
+    # bundle["wc_played"] (a date cutoff alone would count June friendlies too).
+    # load_all already normalised every name, so the keys line up directly.
+    wc_goals, played_wc = {}, {}
     wcp = bundle.get("wc_played")
     if before is None and wcp is not None and len(wcp):
-        mp = D.name_mapping(D.load_former_names(D.DATA_DIR))
-        wc_keys = {(d, mp.get(h, h), mp.get(a, a))
-                   for d, h, a in zip(wcp["date"], wcp["home_team"], wcp["away_team"])}
+        wc_keys = {(d, h, a) for d, h, a in
+                   zip(wcp["date"], wcp["home_team"], wcp["away_team"])}
         in_wc = [(d, h, a) in wc_keys
                  for d, h, a in zip(g["date"], g["home_team"], g["away_team"])]
         wc_goals = g[pd.Series(in_wc, index=g.index)].groupby("scorer").size().to_dict()
+        for h, a in zip(wcp["home_team"], wcp["away_team"]):
+            played_wc[h] = played_wc.get(h, 0) + 1
+            played_wc[a] = played_wc.get(a, 0) + 1
+
+    # Recent form: each player's goals in his national team's last 10 matches.
+    played = bundle["played"]
+    last10 = set()
+    for t in teams:
+        tm = played[(played["home_team"] == t) | (played["away_team"] == t)]
+        for d in tm.sort_values("date")["date"].tail(10):
+            last10.add((t, d))
+    in_l10 = [(t, d) in last10 for t, d in zip(g["team"], g["date"])]
+    form10 = g[pd.Series(in_l10, index=g.index)].groupby("scorer").size().to_dict()
 
     rows = []
     for scorer, goals in player_goals.items():
         team = player_team[scorer]
         share = goals / team_goals[team]
-        proj = share * exp_matches[team] * rate[team]
+        banked = int(wc_goals.get(scorer, 0))
+        # final-total forecast: goals already banked + expected in the games still to play
+        remaining = max(0.0, exp_matches[team] - played_wc.get(team, 0))
+        proj = banked + share * remaining * rate[team]
         rows.append({"scorer": scorer, "team": team, "recent_goals": int(goals),
-                     "wc_goals": int(wc_goals.get(scorer, 0)),
-                     "exp_team_goals": round(exp_matches[team] * rate[team], 1),
+                     "form10": int(form10.get(scorer, 0)), "wc_goals": banked,
+                     "exp_remaining": round(share * remaining * rate[team], 2),
                      "proj_goals": round(proj, 2)})
     return (pd.DataFrame(rows).sort_values("proj_goals", ascending=False)
             .head(topn).reset_index(drop=True))
