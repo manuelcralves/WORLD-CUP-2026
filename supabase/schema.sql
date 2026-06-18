@@ -137,3 +137,17 @@ create or replace view public.match_crowd as
   group by match_id;
 
 grant select on public.match_crowd to anon, authenticated;
+
+-- ----------------------------------------------------------------- brackets --
+-- Knockout-bracket predictions: one row per user, the whole bracket as JSON
+-- ({match_id: picked_team}). Opens once the group stage is complete and locks
+-- at the first Round-of-32 kickoff. Scored separately from the match game.
+-- (A "read others post-lock" policy is added with the bracket leaderboard.)
+create table if not exists public.brackets (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  picks      jsonb not null default '{}'::jsonb,
+  updated_at timestamptz default now()
+);
+alter table public.brackets enable row level security;
+create policy "brackets own" on public.brackets
+  for all to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
