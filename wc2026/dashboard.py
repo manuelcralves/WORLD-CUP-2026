@@ -296,6 +296,29 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .lbclick{cursor:pointer}.lbclick:hover{background:rgba(0,224,164,.06)}
 .pmodbg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:flex;align-items:center;justify-content:center;padding:18px}
 .pmod{background:#0f1726;border:1px solid #243049;border-radius:16px;max-width:520px;width:100%;max-height:82vh;overflow:auto;padding:16px 18px}
+.tpopen{display:block;width:100%;margin-top:12px;background:rgba(0,224,164,.13);color:#00e0a4;border:1px solid rgba(0,224,164,.4);border-radius:10px;padding:9px;font-weight:700;cursor:pointer;font-size:13px}
+.tpopen:hover{background:rgba(0,224,164,.22)}
+.g-row.gclick{cursor:pointer}.g-row.gclick:hover{background:rgba(255,255,255,.04)}
+.tpg{position:relative;background:#0f1726;border:1px solid #243049;border-radius:16px;max-width:660px;width:100%;max-height:88vh;overflow:auto;padding:22px 22px 18px}
+.tpg .tpx{position:absolute;top:12px;right:12px}
+.tphd{display:flex;align-items:center;gap:14px;margin:0 30px 2px 0}
+.tpnm{font-size:24px;font-weight:800;line-height:1.15}
+.tpform{margin-top:7px}
+.tpkpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0 4px}
+.tpk{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:12px 8px;text-align:center}
+.tpkv{font-size:23px;font-weight:800;color:#ffd34d}
+.tpkl{font-size:11px;color:#8b95ab;margin-top:3px}
+.tpsec{margin:20px 0 9px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#8b95ab}
+.tpgr{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:8px;font-size:14px}
+.tpgr.me{background:rgba(255,211,77,.13);font-weight:700}
+.tpgr .pos{width:16px;color:#8b95ab;text-align:center}.tpgr .nm{flex:1}
+.tpgr .grec{color:#8b95ab;font-size:12px}.tpgr .adv{color:#00e0a4;font-weight:700;font-size:13px}
+.tpfin{margin-top:8px}
+.tpm{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px solid #18202f;font-size:14px}
+.tpmko{color:#8b95ab;font-size:12px;white-space:nowrap;min-width:104px}
+.tpmo{flex:1}.tpmr{text-align:right;white-space:nowrap}
+.tpgbr{display:flex;justify-content:space-between;padding:5px 8px;font-size:14px}
+.tpshare{margin-top:16px;text-align:center}
 .pmodh{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin-bottom:2px}
 .presrow2{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:8px 0;border-bottom:1px solid #1c2536}
 .presrow2:last-child{border:none}
@@ -519,6 +542,7 @@ function renderDetail(){
   let h=`<div style="display:flex;align-items:center;gap:12px">${flag(t.team,"lg")}
   <div><div style="font-size:21px;font-weight:800">${t.team}</div>
   <div class="tag">Group ${t.group} · Elo ${t.elo}${t.fifa_rank?' · FIFA #'+t.fifa_rank:''} · ${t.exp_points.toFixed(1)} exp. pts</div></div></div>
+  <button class="tpopen" id="tpopen">🔍 Open ${t.team}'s full page ↗</button>
   <div style="margin-top:14px">`;
   STAGES.forEach(s=>{h+=`<div class="prow"><span class="lb">${s[1]}</span>${bar(t[s[0]],"#ffd34d")}</div>`;});
   h+=`</div>`;
@@ -529,6 +553,54 @@ function renderDetail(){
       h+=`<div class="note" style="margin-top:5px"><b>${rnd}</b> <span class="tag">reaches ${pc0(info.p_reach)}</span><br>${opps}</div>`;}
   }
   document.getElementById("detail").innerHTML=h;
+  document.getElementById("tpopen").onclick=()=>teamPage(selected);
+}
+
+function teamRank(name){return [...D.teams].sort((a,b)=>b.p_champion-a.p_champion).findIndex(t=>t.team===name)+1;}
+function teamPage(name){
+  const t=byName[name];if(!t)return;
+  history.replaceState(null,"","?team="+encodeURIComponent(name));
+  const pr={};(D.played_review||[]).forEach(m=>pr[m.home+"|"+m.away]=m);
+  let h=`<div class="tpg"><button class="pbtn tpx" id="tpx">✕</button>`
+    +`<div class="tphd">${flag(t.team,"lg")}<div><div class="tpnm">${t.team}</div>`
+    +`<div class="tag">Group ${t.group} · Elo ${t.elo}${t.fifa_rank?' · FIFA #'+t.fifa_rank:''} · #${teamRank(name)} favourite</div>`
+    +`<div class="tpform">${fdot(t.form)}</div></div></div>`
+    +`<div class="tpkpis">`
+    +`<div class="tpk"><div class="tpkv">${pc0(t.p_champion)}</div><div class="tpkl">🏆 Champion</div></div>`
+    +`<div class="tpk"><div class="tpkv">${pc0(t.p_final)}</div><div class="tpkl">🥈 Reach final</div></div>`
+    +`<div class="tpk"><div class="tpkv">${pc0(t.p_ko)}</div><div class="tpkl">🎟️ Advance group</div></div></div>`
+    +`<h4 class="tpsec">🏆 Path to the final</h4>`;
+  STAGES.forEach(s=>{h+=`<div class="prow"><span class="lb">${s[1]}</span>${bar(t[s[0]],"#ffd34d")}</div>`;});
+  if(t.opponents&&Object.keys(t.opponents).length)
+    for(const[rnd,info] of Object.entries(t.opponents)){
+      const opps=info.opponents.map(o=>`${flag(o.team,"sm")} ${o.team} <span class="note">${pc0(o.p_cond)}</span>`).join(" · ");
+      h+=`<div class="note" style="margin-top:6px"><b>${rnd}</b> <span class="tag">reaches ${pc0(info.p_reach)}</span><br>${opps}</div>`;}
+  const grp=[...D.teams].filter(x=>x.group===t.group).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(b.exp_points-a.exp_points));
+  h+=`<h4 class="tpsec">🎟️ Group ${t.group}</h4>`;
+  grp.forEach((x,i)=>{const me=x.team===name,rec=x.played?`P${x.played} · ${x.pts}pt${x.pts!==1?'s':''}`:'—';
+    h+=`<div class="tpgr${me?' me':''}"><span class="pos">${i+1}</span><span class="nm">${flag(x.team,'sm')} ${x.team}</span><span class="grec">${rec}</span><span class="adv">${pc0(x.p_ko)}</span></div>`;});
+  h+=`<div class="note tpfin">Expected finish — 1st ${pc0(t.p_1st)} · 2nd ${pc0(t.p_2nd)} · 3rd ${pc0(t.p_3rd)} · 4th ${pc0(t.p_4th)}</div>`;
+  const mkey=m=>m.home+"|"+m.away,seen={},list=[];   // played + upcoming, chronological
+  (D.played_review||[]).filter(m=>m.home===name||m.away===name).forEach(m=>{seen[mkey(m)]=1;list.push(m);});
+  (D.matches||[]).filter(m=>(m.home===name||m.away===name)&&!seen[mkey(m)]).forEach(m=>list.push(m));
+  list.sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+  if(list.length){h+=`<h4 class="tpsec">📅 Matches</h4>`;
+    list.forEach(m=>{const home=m.home===name,opp=home?m.away:m.home,res=pr[mkey(m)];let right;
+      if(res){const sc=res.hs+"-"+res["as"],ml=String(res.ml_score).split("-").map(Number),
+        aw=Math.sign(res.hs-res["as"]),mw=Math.sign(ml[0]-ml[1]);
+        right=`<b>${sc}</b> ${res.ml_score===sc?'🎯':aw===mw?'✅':'❌'}`;}
+      else{const pw=home?m.p_home:m.p_away,pl=home?m.p_away:m.p_home;
+        right=`<span class="note">W ${pc0(pw)} · D ${pc0(m.p_draw)} · L ${pc0(pl)}</span>`;}
+      h+=`<div class="tpm"><span class="tpmko">${koLabel(m.home,m.away,m.date)}</span><span class="tpmo">${home?'vs':'@'} ${flag(opp,'sm')} ${opp}</span><span class="tpmr">${right}</span></div>`;});}
+  const gs=(D.golden_boot||[]).filter(g=>g.team===name).slice(0,5);
+  if(gs.length){h+=`<h4 class="tpsec">👟 Golden Boot contenders</h4>`;
+    gs.forEach(g=>{h+=`<div class="tpgbr"><span>${flag(g.team,'sm')} ${g.scorer}</span><span class="note">${g.proj.toFixed(1)} proj goals</span></div>`;});}
+  h+=`<div class="note tpshare">🔗 Shareable — this link opens straight to ${t.team}.</div></div>`;
+  const old=document.getElementById("tpbg");if(old)old.remove();
+  document.body.insertAdjacentHTML("beforeend",`<div class="pmodbg" id="tpbg">${h}</div>`);
+  const bg=document.getElementById("tpbg");
+  bg.onclick=e=>{if(e.target===bg)bg.remove();};
+  document.getElementById("tpx").onclick=()=>bg.remove();
 }
 
 function renderGroups(){
@@ -541,12 +613,13 @@ function renderGroups(){
       const adv=Math.round(t.p_ko*100);
       const cls=adv>=90?"q-in":adv<=10?"q-out":"q-hunt";
       const rec=t.played?`P${t.played} · ${t.pts}pt${t.pts!==1?"s":""}`:"—";
-      h+=`<div class="g-row"><span class="pos">${i+1}</span>
+      h+=`<div class="g-row gclick" data-t="${t.team}"><span class="pos">${i+1}</span>
       <span class="nm" ${sel}>${flag(t.team,"sm")} ${t.team}</span>
       <span class="grec">${rec}</span>
       <span class="qbadge ${cls}" title="model's chance to reach the knockouts">${adv}%</span></div>`;});
     h+=`</div>`;});
-  document.getElementById("groups").innerHTML=h;
+  const gc=document.getElementById("groups");gc.innerHTML=h;
+  gc.querySelectorAll(".g-row").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
 }
 
 function koLabel(home,away,date){const k=D.kickoffs&&D.kickoffs[[home,away].sort().join("|")];
@@ -1170,7 +1243,8 @@ const _sec=new URLSearchParams(location.search).get("sec");   // deep-link to a 
 if(_sec){const _se=document.getElementById(_sec);
   if(_se)setTimeout(()=>_se.scrollIntoView({behavior:"smooth",block:"center"}),180);}
 if(qteam&&byName[qteam]){const r=document.querySelector("tr.sel");
-  if(r)r.scrollIntoView({behavior:"smooth",block:"center"});}
+  if(r)r.scrollIntoView({behavior:"smooth",block:"center"});
+  teamPage(qteam);}
 """
 
 
