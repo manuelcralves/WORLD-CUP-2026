@@ -920,7 +920,7 @@ const PKEY="wc2026_preds_v1";
 const LB_START=new Date("2026-06-18T16:00:00Z");   // fresh start: only games from here on count (Czech Republic vs South Africa onward)
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
-let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={};
+let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={};
 function predLoad(){if(predCache)return predCache;
   try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
@@ -956,7 +956,10 @@ async function supaSync(){
     const{data:lb}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
     lbRows=lb||[];
     const{data:cw}=await sb.from("match_crowd").select("*");
-    crowdMap={};(cw||[]).forEach(c=>crowdMap[c.match_id]=c);}catch(e){console.warn("Supabase sync:",e);}
+    crowdMap={};(cw||[]).forEach(c=>crowdMap[c.match_id]=c);
+    const{data:mm}=await sb.from("matches").select("match_id,home,away,home_score,away_score,model_home,model_away,kickoff");
+    liveRev={};(mm||[]).forEach(m=>{if(m.home_score!=null)liveRev[m.match_id]={home:m.home,away:m.away,hs:m.home_score,as:m.away_score,ml_score:(m.model_home!=null?m.model_home+"-"+m.model_away:"1-1"),date:(m.kickoff||"").slice(0,10)};});
+  }catch(e){console.warn("Supabase sync:",e);}
   predRender();}
 async function supaSignIn(){if(sb)try{await sb.auth.signInWithOAuth(
   {provider:"google",options:{redirectTo:location.href.split("#")[0]}});}
@@ -974,7 +977,7 @@ async function showProfile(uid,name){
   let preds={};
   try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
     (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
-  const rev={};(D.played_review||[]).forEach(m=>rev[m.home+"|"+m.away]=m);
+  const rev={};(D.played_review||[]).forEach(m=>rev[m.home+"|"+m.away]=m);Object.assign(rev,liveRev);   // live Supabase results win over the baked ones
   const now=new Date();let pts=0,n=0,exact=0,beat=0;const scored=[],pending=[];
   Object.keys(preds).forEach(key=>{const i=key.split("|"),h=i[0],aw=i[1],kt=predKO(h,aw);
     if(!kt||kt<LB_START||kt>now)return;                          // only games already kicked off (post-reset)
@@ -1062,8 +1065,10 @@ function predRender(){
   const el=document.getElementById("predict");if(!el)return;
   const store=predLoad(),now=new Date();
   let you=0,mac=0,n=0,hits=0,exact=0,beat=0,run=0,streak=0;const scored=[];
-  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in store))return;const _kt=predKO(m.home,m.away);if(!_kt||_kt<LB_START)return;
-    const a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
+  const _rev={};(D.played_review||[]).forEach(m=>_rev[m.home+"|"+m.away]=m);Object.assign(_rev,liveRev);   // merge live Supabase results
+  Object.values(_rev).filter(m=>{const k=m.home+"|"+m.away,kt=predKO(m.home,m.away);return (k in store)&&kt&&kt>=LB_START;})
+    .sort((x,y)=>predKO(x.home,x.away)-predKO(y.home,y.away)).forEach(m=>{const key=m.home+"|"+m.away,
+    a=[m.hs,m["as"]],yp=predScore(store[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
     you+=yp;mac+=mp;n++;if(yp>=10){hits++;run++;}else run=0;streak=run;if(yp===30)exact++;if(yp>mp)beat++;
     scored.push({m,yp,mp,a});});
   const signedIn=!!sbUser;
@@ -1080,11 +1085,16 @@ function predRender(){
   const _lb=lbRows.filter(r=>!r.is_model&&(r.picks>0||r.played>0||(sbUser&&r.uid===sbUser.id)));
   if(_lb.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
     h+=`<h3 class="psec">🏆 Global leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
-    if(myIdx>0){const rv=_lb[myIdx-1],gap=rv.points-_lb[myIdx].points;
-      h+=`<div class="prival">⚔️ ${gap>0?`<b>${rv.name||'Player'}</b> is ${gap} pt${gap!==1?'s':''} ahead — catch them!`:`You're level with <b>${rv.name||'Player'}</b> — pull ahead!`}</div>`;}
-    else if(myIdx===0&&_lb.length>1)h+=`<div class="prival">👑 You lead the leaderboard — defend your spot!</div>`;
+    let rivalUids=new Set();
+    if(myIdx>=0){const myPts=_lb[myIdx].points,ahead=_lb.filter(r=>r.points>myPts);
+      if(!ahead.length){const tied=_lb.filter((r,j)=>j!==myIdx&&r.points===myPts).length;
+        h+=`<div class="prival">${tied?`🤝 Tied for the lead on ${myPts} — pull clear!`:`👑 You lead on ${myPts} pt${myPts!==1?'s':''} — defend your spot!`}</div>`;}
+      else{const nt=Math.min(...ahead.map(r=>r.points)),gap=nt-myPts,rv=ahead.filter(r=>r.points===nt);
+        rivalUids=new Set(rv.map(r=>r.uid));const nm=rv.map(r=>`<b>${r.name||'Player'}</b>`);
+        const names=nm.length===1?nm[0]:nm.length===2?`${nm[0]} & ${nm[1]}`:`${nm[0]}, ${nm[1]} & ${nm.length-2} other${nm.length-2!==1?'s':''}`;
+        h+=`<div class="prival">⚔️ You're ${gap} pt${gap!==1?'s':''} behind ${names} — catch up!</div>`;}}
     h+=`<div class="lbx">`;
-    _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id,riv=i===myIdx-1;
+    _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id,riv=rivalUids.has(r.uid);
       h+=`<div class="lbrow lbclick${me?' lbme':''}${riv?' lbrival':''}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}"><span class="lbrank">${i+1}</span>`
         +`<span class="lbname">${me?'🟢':riv?'⚔️':'🧑'} ${r.name||'Player'}${me?' · you':''}</span>`
         +`<span class="lbpts">${r.points}</span></div>`;});
