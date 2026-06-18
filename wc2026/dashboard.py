@@ -971,20 +971,27 @@ async function showProfile(uid,name){
   let preds={};
   try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
     (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
-  let pts=0,n=0,exact=0,beat=0;const rows=[];
-  (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;const _kt=predKO(m.home,m.away);if(!_kt||_kt<LB_START)return;
-    const a=[m.hs,m["as"]],yp=predScore(preds[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
-    pts+=yp;n++;if(yp===30)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp,mp});});
+  const rev={};(D.played_review||[]).forEach(m=>rev[m.home+"|"+m.away]=m);
+  const now=new Date();let pts=0,n=0,exact=0,beat=0;const scored=[],pending=[];
+  Object.keys(preds).forEach(key=>{const i=key.split("|"),h=i[0],aw=i[1],kt=predKO(h,aw);
+    if(!kt||kt<LB_START||kt>now)return;                          // only games already kicked off (post-reset)
+    const pick=preds[key],m=rev[key];
+    if(m){const sc=[m.hs,m["as"]],yp=predScore(pick,sc),mp=predScore(m.ml_score.split("-").map(Number),sc);
+      pts+=yp;n++;if(yp===30)exact++;if(yp>mp)beat++;scored.push({m,pick,a:sc,yp,mp});}
+    else pending.push({h,aw,pick});});                           // kicked off, result not in the dataset yet
   const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
   let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>👤 ${name}</b>`
     +`<button class="pbtn" id="pmodx">✕</button></div>`
     +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact · 🏆 beat the model ${beat}×</div>`;
-  const _pb=predBadges(rows);
+  const _pb=predBadges(scored);
   if(_pb.length)html+=`<div class="pbadges">`+_pb.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
-  if(rows.length)rows.reverse().forEach(({m,pick,a,yp})=>{
+  scored.slice().reverse().forEach(({m,pick,a,yp})=>{
     html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
       +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`;});
-  else html+=`<div class="note" style="text-align:center;padding:14px 0">No scored picks yet — only matches that have kicked off appear here.</div>`;
+  pending.slice().reverse().forEach(({h,aw,pick})=>{
+    html+=`<div class="presrow2"><span>${flag(h,'sm')} ${h} <span class="note">vs</span> ${aw} ${flag(aw,'sm')}</span>`
+      +`<span>picked <b>${pick.join('-')}</b> <span class="note">🔒 awaiting result</span></span></div>`;});
+  if(!scored.length&&!pending.length)html+=`<div class="note" style="text-align:center;padding:14px 0">No picks for kicked-off matches yet.</div>`;
   html+=`</div></div>`;
   const old=document.getElementById("pmodbg");if(old)old.remove();
   document.body.insertAdjacentHTML("beforeend",html);
