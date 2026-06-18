@@ -299,6 +299,7 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pmodh{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin-bottom:2px}
 .presrow2{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:8px 0;border-bottom:1px solid #1c2536}
 .presrow2:last-child{border:none}
+.pcrowd{margin-top:8px;font-size:12.5px;color:#9fb0c9}
 .lbx{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:4px 14px;margin-bottom:6px}
 .lbrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #1c2536;font-size:14px}
 .lbrow:last-child{border:none}
@@ -803,7 +804,7 @@ function bywRender(){
 const PKEY="wc2026_preds_v1";
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
-let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null;
+let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={};
 function predLoad(){if(predCache)return predCache;
   try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
@@ -835,7 +836,9 @@ async function supaSync(){
       const{data:pf}=await sb.from("profiles").select("name").eq("id",sbUser.id).maybeSingle();
       myName=pf&&pf.name?pf.name:((sbUser.user_metadata||{}).full_name||(sbUser.user_metadata||{}).name||null);}
     const{data:lb}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
-    lbRows=lb||[];}catch(e){console.warn("Supabase sync:",e);}
+    lbRows=lb||[];
+    const{data:cw}=await sb.from("match_crowd").select("*");
+    crowdMap={};(cw||[]).forEach(c=>crowdMap[c.match_id]=c);}catch(e){console.warn("Supabase sync:",e);}
   predRender();}
 async function supaSignIn(){if(sb)try{await sb.auth.signInWithOAuth(
   {provider:"google",options:{redirectTo:location.href.split("#")[0]}});}
@@ -920,6 +923,7 @@ function predRender(){
     const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
     if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
+    const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
     h+=`</div>`;});
   if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
   if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;

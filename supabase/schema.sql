@@ -123,3 +123,16 @@ create policy "preds update before kickoff" on public.predictions
       'infinity'::timestamptz));
 
 grant select on public.leaderboard to anon, authenticated;
+
+-- ------------------------------------------ crowd W/D/L split per match ------
+-- Aggregate only (counts/percentages) — never exposes an individual pick, so
+-- it's safe to read for upcoming matches too.
+create or replace view public.match_crowd as
+  select match_id, count(*)::int as n,
+         round(100.0 * count(*) filter (where pred_home > pred_away) / count(*))::int as home_pct,
+         round(100.0 * count(*) filter (where pred_home = pred_away) / count(*))::int as draw_pct,
+         round(100.0 * count(*) filter (where pred_home < pred_away) / count(*))::int as away_pct
+  from public.predictions
+  group by match_id;
+
+grant select on public.match_crowd to anon, authenticated;
