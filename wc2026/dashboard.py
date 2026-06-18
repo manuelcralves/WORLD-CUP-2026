@@ -1047,7 +1047,8 @@ function predRender(){
     locked=ko&&now>=ko,kl=ko?D.kickoffs[[m.home,m.away].sort().join("|")].label:"";
     let sc;
     if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
-    else sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${cur[0]}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${cur[1]}</b>${stp(key,'a',1,'+')}</span>`;
+    else{const dh=mine?cur[0]:'—',da=mine?cur[1]:'—';   // — until the user actually picks (don't pre-fill the model's call)
+      sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${dh}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${da}</b>${stp(key,'a',1,'+')}</span>`;}
     h+=`<div class="pcard${locked?' plk':''}${mine?' pmine':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
     const meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
     h+=`<div class="pmeta">${meta}</div>`;
@@ -1070,7 +1071,7 @@ function predRender(){
   const _en=document.getElementById("p-editname");if(_en)_en.onclick=supaEditName;
   el.querySelectorAll(".lbclick").forEach(r=>r.onclick=()=>showProfile(r.dataset.uid,r.dataset.name));
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
-    const cur=(predLoad()[key]||predModel(key)).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
+    const cur=(predLoad()[key]||[0,0]).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
   el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=c.dataset.sc.split("-").map(Number);predSet(c.dataset.k,s[0],s[1]);});
 }
 function renderToday(){
