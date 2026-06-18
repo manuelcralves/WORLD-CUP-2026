@@ -585,20 +585,20 @@ function teamPage(name){
     +`<div class="tag">Group ${t.group} · Elo ${t.elo}${t.fifa_rank?' · FIFA #'+t.fifa_rank:''} · #${teamRank(name)} favourite</div>`
     +`<div class="tpform">${fdot(t.form)}</div></div></div>`
     +`<div class="tpkpis">`
-    +`<div class="tpk"><div class="tpkv">${pc0(t.p_champion)}</div><div class="tpkl">🏆 Champion</div></div>`
-    +`<div class="tpk"><div class="tpkv">${pc0(t.p_final)}</div><div class="tpkl">🥈 Reach final</div></div>`
-    +`<div class="tpk"><div class="tpkv">${pc0(t.p_ko)}</div><div class="tpkl">🎟️ Advance group</div></div></div>`
+    +`<div class="tpk"><div class="tpkv">${pct(t.p_champion)}</div><div class="tpkl">🏆 Champion</div></div>`
+    +`<div class="tpk"><div class="tpkv">${pct(t.p_final)}</div><div class="tpkl">🥈 Reach final</div></div>`
+    +`<div class="tpk"><div class="tpkv">${pct(t.p_ko)}</div><div class="tpkl">🎟️ Advance group</div></div></div>`
     +`<h4 class="tpsec">🏆 Path to the final</h4>`;
   STAGES.forEach(s=>{h+=`<div class="prow"><span class="lb">${s[1]}</span>${bar(t[s[0]],"#ffd34d")}</div>`;});
   if(t.opponents&&Object.keys(t.opponents).length)
     for(const[rnd,info] of Object.entries(t.opponents)){
-      const opps=info.opponents.map(o=>`${flag(o.team,"sm")} ${o.team} <span class="note">${pc0(o.p_cond)}</span>`).join(" · ");
-      h+=`<div class="note" style="margin-top:6px"><b>${rnd}</b> <span class="tag">reaches ${pc0(info.p_reach)}</span><br>${opps}</div>`;}
+      const opps=info.opponents.map(o=>`${flag(o.team,"sm")} ${o.team} <span class="note">${pct(o.p_cond)}</span>`).join(" · ");
+      h+=`<div class="note" style="margin-top:6px"><b>${rnd}</b> <span class="tag">reaches ${pct(info.p_reach)}</span><br>${opps}</div>`;}
   const grp=[...D.teams].filter(x=>x.group===t.group).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(b.exp_points-a.exp_points));
   h+=`<h4 class="tpsec">🎟️ Group ${t.group}</h4>`;
   grp.forEach((x,i)=>{const me=x.team===name,rec=x.played?`P${x.played} · ${x.pts}pt${x.pts!==1?'s':''}`:'—';
-    h+=`<div class="tpgr${me?' me':''}"><span class="pos">${i+1}</span><span class="nm">${flag(x.team,'sm')} ${x.team}</span><span class="grec">${rec}</span><span class="adv">${pc0(x.p_ko)}</span></div>`;});
-  h+=`<div class="note tpfin">Expected finish — 1st ${pc0(t.p_1st)} · 2nd ${pc0(t.p_2nd)} · 3rd ${pc0(t.p_3rd)} · 4th ${pc0(t.p_4th)}</div>`;
+    h+=`<div class="tpgr${me?' me':''}"><span class="pos">${i+1}</span><span class="nm">${flag(x.team,'sm')} ${x.team}</span><span class="grec">${rec}</span><span class="adv">${pct(x.p_ko)}</span></div>`;});
+  h+=`<div class="note tpfin">Expected finish — 1st ${pct(t.p_1st)} · 2nd ${pct(t.p_2nd)} · 3rd ${pct(t.p_3rd)} · 4th ${pct(t.p_4th)}</div>`;
   const mkey=m=>m.home+"|"+m.away,seen={},list=[];   // played + upcoming, chronological
   (D.played_review||[]).filter(m=>m.home===name||m.away===name).forEach(m=>{seen[mkey(m)]=1;list.push(m);});
   (D.matches||[]).filter(m=>(m.home===name||m.away===name)&&!seen[mkey(m)]).forEach(m=>list.push(m));
