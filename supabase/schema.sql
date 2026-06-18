@@ -57,7 +57,7 @@ create table if not exists public.predictions (
   primary key (user_id, match_id)
 );
 
--- ------------------------------------------------ scoring: 5 / 3 / 2 / 0 -----
+-- -------------------------------------------- scoring: 5 / 3 / 2 / 1 / 0 -----
 create or replace function public.pts(ph int, pa int, ah int, aa int)
 returns int language sql immutable as $$
   select case
@@ -66,6 +66,7 @@ returns int language sql immutable as $$
     when (ph - pa) = (ah - aa)               then 3   -- result + goal difference
     when (ph > pa) = (ah > aa)
      and (ph < pa) = (ah < aa)               then 2   -- result only
+    when ph = ah or pa = aa                  then 1   -- one team's goals right
     else 0 end;
 $$;
 

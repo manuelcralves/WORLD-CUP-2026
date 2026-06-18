@@ -284,7 +284,7 @@ border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
 .psec{font-size:15px;margin:18px 0 10px}
 .presrow{display:flex;justify-content:space-between;font-size:13.5px;margin-top:7px}
 .presrow.mac{color:#9fb0c9}
-.ppts{font-weight:800}.ppts.g{color:#00e0a4}.ppts.r{color:#8b95ab}
+.ppts{font-weight:800}.ppts.g{color:#00e0a4}.ppts.a{color:#ffd34d}.ppts.r{color:#8b95ab}
 .pbeat{color:#00e0a4;font-weight:700;font-size:12.5px;text-align:center;margin-top:6px}
 .pbeat.lose{color:#8b95ab}
 .pauth{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#161d2b;
@@ -860,13 +860,13 @@ async function showProfile(uid,name){
   (D.played_review||[]).forEach(m=>{const key=m.home+"|"+m.away;if(!(key in preds))return;
     const a=[m.hs,m["as"]],yp=predScore(preds[key],a),mp=predScore(m.ml_score.split("-").map(Number),a);
     pts+=yp;n++;if(yp===5)exact++;if(yp>mp)beat++;rows.push({m,pick:preds[key],a,yp});});
-  const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':'❌ +0';
+  const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':p===1?'⚽ +1':'❌ +0';
   let html=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>👤 ${name}</b>`
     +`<button class="pbtn" id="pmodx">✕</button></div>`
     +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact · 🏆 beat the model ${beat}×</div>`;
   if(rows.length)rows.reverse().forEach(({m,pick,a,yp})=>{
     html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
-      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=2?'g':'r'}">${tag(yp)}</span></span></div>`;});
+      +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=2?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`;});
   else html+=`<div class="note" style="text-align:center;padding:14px 0">No scored picks yet — only matches that have kicked off appear here.</div>`;
   html+=`</div></div>`;
   const old=document.getElementById("pmodbg");if(old)old.remove();
@@ -879,6 +879,7 @@ function predScore(p,a){
   const pd=p[0]-p[1],ad=a[0]-a[1];
   if(pd===ad)return 3;                              // right result + goal difference
   if(Math.sign(pd)===Math.sign(ad))return 2;        // right result only
+  if(p[0]===a[0]||p[1]===a[1])return 1;             // one team's goals right
   return 0;}
 function predKO(home,away){const k=D.kickoffs&&D.kickoffs[[home,away].sort().join("|")];
   return k?new Date(k.date+"T"+k.hm+":00+01:00"):null;}   // WEST = UTC+1
@@ -927,11 +928,11 @@ function predRender(){
     h+=`</div>`;});
   if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
   if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;
-    const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':'❌ +0';
+    const tag=p=>p===5?'🎯 +5':p===3?'✅ +3':p===2?'✅ +2':p===1?'⚽ +1':'❌ +0';
     scored.slice().reverse().forEach(({m,yp,mp,a})=>{const key=m.home+"|"+m.away;
       h+=`<div class="pcard pres"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
-        +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=2?'g':'r'}">${tag(yp)}</span></div>`
-        +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':'r'}">${tag(mp)}</span></div>`
+        +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=2?'g':yp?'a':'r'}">${tag(yp)}</span></div>`
+        +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=2?'g':mp?'a':'r'}">${tag(mp)}</span></div>`
         +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
   }else h+=`<div class="pcard" style="text-align:center;padding:22px 16px"><div style="font-size:15px;font-weight:700;margin-bottom:6px">🔒 Sign in to make your predictions</div><div class="note" style="margin:0">Log in with Google to pick scores, challenge the model and climb the leaderboard.</div><button class="pbtn pg" id="p-signin2" style="margin-top:12px">Sign in with Google</button></div>`;
   el.innerHTML=h;
@@ -1272,7 +1273,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
         "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
         "or set your own with −/+. Locked at kickoff. Points: 🎯 exact 5 · result + goal "
-        "difference 3 · right result 2. The model plays too — can you beat it? Sign in with "
+        "difference 3 · right result 2 · ⚽ a team's goals 1. The model plays too — can you beat it? Sign in with "
         "Google to make your picks, choose a username and climb the global leaderboard.</p>"
         "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
