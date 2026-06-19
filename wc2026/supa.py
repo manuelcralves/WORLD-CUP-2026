@@ -38,14 +38,27 @@ def push_matches(data: dict) -> None:
     if not url or not key:
         return
     ko = data.get("kickoffs", {})
+    import csv
+    from pathlib import Path
+    shoot = {}                                        # penalty-shootout winner per drawn knockout tie
+    sp = Path(__file__).resolve().parent.parent / "shootouts.csv"
+    if sp.exists():
+        try:
+            with open(sp, encoding="utf-8") as f:
+                for r in csv.DictReader(f):
+                    shoot[(r["date"], frozenset((r["home_team"], r["away_team"])))] = r["winner"]
+        except Exception:
+            pass
     played, upcoming = {}, {}
     for m in data.get("played_review") or []:        # played: model pick + result
         h, a = m["home"], m["away"]
         mh, ma = m["ml_score"].split("-")
+        adv = shoot.get((m["date"], frozenset((h, a))))   # advancer on penalties, if the tie ended level
         played[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
                               "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
                               "away_score": int(m["as"]), "model_home": int(mh),
-                              "model_away": int(ma), "stage": "group", "played": True}
+                              "model_away": int(ma), "stage": "group", "played": True,
+                              "advance": adv}
     for m in data.get("matches") or []:              # upcoming: model pick = top[0]
         h, a = m["home"], m["away"]
         if f"{h}|{a}" in played:

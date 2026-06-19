@@ -44,8 +44,10 @@ create table if not exists public.matches (
   model_away int,
   stage      text,
   played     boolean default false,
+  advance    text,        -- knockout: who advanced (penalty-shootout winner for a level tie)
   updated_at timestamptz default now()
 );
+alter table public.matches add column if not exists advance text;   -- for tables created before this column
 
 -- -------------------------------------------------------------- predictions --
 create table if not exists public.predictions (
