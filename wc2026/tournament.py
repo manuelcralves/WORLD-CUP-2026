@@ -6,11 +6,11 @@ Official structure (draw of 5 Dec 2025, matches 73-104):
  - Bracket R32 -> R16 -> Quarter-finals -> Semi-finals -> Final
 
 In each simulation:
- - the 12 matches already played enter with their real result (fixed)
- - the remaining 60 group-stage matches are sampled from the Poisson model
- - teams are ranked by the FIFA criteria (points, goal difference, goals scored;
-   any remaining ties broken by drawing of lots) and the knockout rounds are
-   simulated (with extra time and penalties).
+ - the matches already played enter with their real result (fixed)
+ - the remaining group-stage matches are sampled from the Poisson model
+ - teams are ranked by the FIFA criteria (points; head-to-head pts/GD/goals among
+   the tied teams; overall GD; overall goals; then the FIFA world ranking) and the
+   knockout rounds are simulated (with extra time and penalties).
 
 Everything is vectorised in numpy: the N simulations run in parallel round by round.
 """
@@ -21,6 +21,7 @@ import pandas as pd
 from scipy.optimize import linear_sum_assignment
 
 from . import data as D
+from . import fifa as FIFA
 
 HOSTS = D.HOSTS
 
@@ -175,6 +176,7 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
     ti = {t: i for i, t in enumerate(teams)}
     n = len(teams)
     elo_arr = np.array([state.get(t, default)["elo"] for t in teams])
+    fifa_rk_arr = np.array([FIFA.rank_of(t) or 999 for t in teams], dtype=float)   # FIFA world rank — final group tiebreaker
     LH, LA = _lambda_matrices(teams, model, state, default)
     team_letter = {t: L for L, ts in groups.items() for t in ts}
 
@@ -190,7 +192,7 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
 
     # ---- standings of each group ---------------------------------------- #
     winners, runners, thirds = {}, {}, {}
-    third_pts, third_gd, third_gf = {}, {}, {}
+    third_pts, third_gd, third_gf, third_fr = {}, {}, {}, {}
     pos = np.zeros((n, 4))   # count of 1st/2nd/3rd/4th per team
     exp_pts = np.zeros(n)    # accumulated points (for the expected average)
     col = np.arange(N)
@@ -204,15 +206,27 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
             pts[hi] += 3 * hw + dr; pts[ai] += 3 * aw + dr
             gd[hi] += gh - ga; gd[ai] += ga - gh
             gf[hi] += gh; gf[ai] += ga
-        # sort key: points > goal difference > goals scored > drawing of lots
-        key = pts * 1e6 + gd * 1e3 + gf + rng.random((4, N)) * 0.1
-        order = np.argsort(-key, axis=0)
+        # head-to-head (FIFA criterion 2): pts/GD/goals counting ONLY the matches
+        # between teams level on points (single pass over each tie set).
+        h2p = np.zeros((4, N)); h2d = np.zeros((4, N)); h2f = np.zeros((4, N))
+        for h, a, gh, ga in group_games[L]:
+            hi, ai = gidx[h], gidx[a]
+            tied = pts[hi] == pts[ai]
+            hw = gh > ga; dr = gh == ga; aw = gh < ga
+            h2p[hi] += (3 * hw + dr) * tied; h2p[ai] += (3 * aw + dr) * tied
+            h2d[hi] += (gh - ga) * tied;     h2d[ai] += (ga - gh) * tied
+            h2f[hi] += gh * tied;            h2f[ai] += ga * tied
+        # FIFA order: points > head-to-head (pts, GD, goals) > overall GD >
+        # overall goals > FIFA world ranking (replaces fair play + drawing of lots).
+        fr = np.broadcast_to(fifa_rk_arr[gti].reshape(4, 1), (4, N))
+        order = np.lexsort((fr, -gf, -gd, -h2f, -h2d, -h2p, -pts), axis=0)
         winners[L] = gti[order[0]]
         runners[L] = gti[order[1]]
         thirds[L] = gti[order[2]]
         third_pts[L] = pts[order[2], col]
         third_gd[L] = gd[order[2], col]
         third_gf[L] = gf[order[2], col]
+        third_fr[L] = fifa_rk_arr[gti[order[2]]]
         for p_ in range(4):
             np.add.at(pos[:, p_], gti[order[p_]], 1)
         for k in range(4):
@@ -223,8 +237,10 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
     TP = np.vstack([third_pts[L] for L in letters])
     TG = np.vstack([third_gd[L] for L in letters])
     TF = np.vstack([third_gf[L] for L in letters])
-    tkey = TP * 1e6 + TG * 1e3 + TF + rng.random((12, N)) * 0.1
-    torder = np.argsort(-tkey, axis=0)
+    TR = np.vstack([third_fr[L] for L in letters])
+    # best thirds: points > overall GD > overall goals > FIFA rank (no head-to-head
+    # — third-placed teams come from different groups and never met).
+    torder = np.lexsort((TR, -TF, -TG, -TP), axis=0)
     qual = np.zeros((12, N), dtype=bool)
     for r in range(8):
         qual[torder[r], col] = True
