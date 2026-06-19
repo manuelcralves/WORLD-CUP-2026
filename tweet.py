@@ -39,6 +39,17 @@ INTRO = ("🤖⚽ Hello! This account posts daily machine-learning predictions f
          "the 2026 World Cup — Elo + Poisson + Monte Carlo over 150 years of "
          f"football. Just for fun.\n\nLive dashboard 👇\n{SITE}")
 
+# Evergreen tweets — recruitment + trackers that live in the copy-ready kit but
+# are NEVER part of the auto-posted daily thread (so nothing floods on a schedule).
+COME_PLAY = ("The World Cup 2026 prediction league is live 🏆\n\n"
+             "Call the scores. Climb the table. Prove you know your football "
+             "better than everyone else.\n\n"
+             f"Come play 👉 {SITE}")
+BRACKET = ("🏆 The World Cup 2026 knockouts are here.\n\n"
+           "Fill in your full bracket — every tie from the Round of 32 to the "
+           "final — and see if you can out-pick your friends.\n\n"
+           f"Play your bracket 👉 {SITE}")
+
 try:
     from wc2026.viz import FLAGS
 except Exception:
@@ -47,6 +58,11 @@ except Exception:
 
 def _flag(team: str) -> str:
     return FLAGS.get(team, "")
+
+
+def _surname(name: str) -> str:
+    parts = str(name).split()
+    return parts[-1] if parts else str(name)
 
 
 def _eff_len(text: str) -> int:
@@ -202,6 +218,45 @@ def _title_text():
     return head + "\n".join(lines) + (f"\n\n{mover}" if mover else "")
 
 
+def _golden_text():
+    p = OUT / "golden_boot.csv"
+    if not p.exists():
+        return None
+    d = pd.read_csv(p)
+    if d.empty or "proj" not in d.columns:
+        return None
+    top = d.sort_values("proj", ascending=False).head(5)
+    medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
+    lines = [f"{medals[i]} {getattr(r, 'flag', '') or _flag(r.team)} "
+             f"{_surname(r.scorer)} {r.proj:.1f}"
+             for i, r in enumerate(top.itertuples(index=False))]
+    head = ("👟 Who wins the WC 2026 Golden Boot?\n\n"
+            "The model's projection (goals by the final):\n")
+    tail = f"\n\n👇 {SITE}"
+    note = ""
+    if "wc" in d.columns and d["wc"].max() and int(d["wc"].max()) >= 2:
+        mx = int(d["wc"].max())
+        names = [_surname(s) for s in d.loc[d["wc"] == mx, "scorer"].tolist()]
+        if len(names) == 1:
+            note = f"\n\n{names[0]} leads the scoring so far — {mx}."
+        elif len(names) <= 3:
+            note = f"\n\n{' & '.join(names)} lead the scoring so far — {mx} each."
+    out = head + "\n".join(lines) + note + tail
+    if _eff_len(out) > LIMIT:                 # too long → drop the scoring note
+        out = head + "\n".join(lines) + tail
+    return out
+
+
+def evergreen_tweets() -> list:
+    """(label, text) tweets for the kit — copy-paste only, never auto-posted."""
+    out = [("Recruitment · post anytime", COME_PLAY)]
+    g = _golden_text()
+    if g:
+        out.append(("Golden Boot · refreshed each build", g))
+    out.append(("Bracket · for ~28 Jun (when knockouts open)", BRACKET))
+    return out
+
+
 def build_thread() -> list:
     today = _today_utc()
     tweets = list(_today_previews(today))
@@ -226,21 +281,30 @@ def build_thread() -> list:
 # --------------------------------------------------------------------------- #
 # Manual posting kit: a copy-ready page (+ plain text)
 # --------------------------------------------------------------------------- #
-def write_kit(tweets: list):
+def write_kit(tweets: list, evergreen: list = ()):
     if not OUT.exists():
         return
     (OUT / "daily_tweets.txt").write_text(
-        ("\n\n" + "—" * 24 + "\n\n").join(tweets), encoding="utf-8")
-    cards = ""
-    for i, t in enumerate(tweets, 1):
+        ("\n\n" + "—" * 24 + "\n\n").join(list(tweets) + [t for _, t in evergreen]),
+        encoding="utf-8")
+
+    def _card(cid, meta, t):
         intent = "https://twitter.com/intent/tweet?text=" + urllib.parse.quote(t)
-        cards += (
-            f'<div class="card"><div class="meta">Tweet {i}/{len(tweets)}'
+        return (
+            f'<div class="card"><div class="meta"><span>{meta}</span>'
             f'<span class="cc">{_eff_len(t)}/280</span></div>'
-            f'<pre id="t{i}">{html.escape(t)}</pre>'
-            f'<div class="btns"><button onclick="cp({i})">📋 Copy</button>'
+            f'<pre id="{cid}">{html.escape(t)}</pre>'
+            f'<div class="btns"><button onclick="cp(\'{cid}\')">📋 Copy</button>'
             f'<a class="tw" href="{intent}" target="_blank" rel="noopener">Tweet ▸</a>'
             f'</div></div>')
+
+    cards = "".join(_card(f"t{i}", f"Tweet {i}/{len(tweets)}", t)
+                    for i, t in enumerate(tweets, 1))
+    ever = "".join(_card(f"e{j}", html.escape(lab), t)
+                   for j, (lab, t) in enumerate(evergreen, 1))
+    ever_html = (f'<h2 class="sec">♻️ Evergreen &amp; on-demand</h2>'
+                 f'<p class="sub">Post any of these whenever — not part of the daily '
+                 f'thread, never auto-posted.</p>{ever}') if evergreen else ""
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
@@ -250,9 +314,10 @@ def write_kit(tweets: list):
 body{{margin:0;background:#0c1018;color:#eef1f7;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 padding:34px 16px 60px;max-width:640px;margin:0 auto}}
 h1{{font-size:21px;margin:0 0 4px}}.sub{{color:#8b95ab;font-size:14px;margin:0 0 22px}}
+h2.sec{{font-size:15px;color:#cbd3e1;margin:30px 0 8px;border-top:1px solid #243049;padding-top:20px}}
 a.home{{color:#00e0a4;text-decoration:none;font-size:13px}}
 .card{{background:#161d2b;border:1px solid #243049;border-radius:14px;padding:14px 16px;margin:0 0 16px}}
-.meta{{display:flex;justify-content:space-between;color:#8b95ab;font-size:12px;font-weight:700;margin-bottom:8px}}
+.meta{{display:flex;justify-content:space-between;gap:10px;color:#8b95ab;font-size:12px;font-weight:700;margin-bottom:8px}}
 pre{{white-space:pre-wrap;word-wrap:break-word;font-family:inherit;font-size:15px;line-height:1.5;margin:0 0 12px}}
 .btns{{display:flex;gap:10px}}
 button,.tw{{border:0;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none}}
@@ -261,11 +326,13 @@ button{{background:#243049;color:#eef1f7}}button:hover{{background:#2c3a57}}
 .ok{{background:#00e0a4!important;color:#062018!important}}
 </style></head><body>
 <a class="home" href="../index.html">← Home</a>
-<h1>📋 Today's tweets</h1>
+<h1>📋 World Cup 2026 — tweet kit</h1>
 <p class="sub">Tap <b>Copy</b> and paste into X, or <b>Tweet ▸</b> to open X with it ready.
-Post each one with Tweet ▸ as its own tweet (shows better than a thread on a new account), or reply to chain them. Refreshed daily.</p>
+Post each one with Tweet ▸ as its own tweet (shows better than a thread on a new account), or reply to chain them.</p>
+<h2 class="sec">📅 Daily thread <span style="font-weight:400;color:#5d6a85">· refreshed each build</span></h2>
 {cards}
-<script>function cp(i){{var el=document.getElementById('t'+i);
+{ever_html}
+<script>function cp(id){{var el=document.getElementById(id);
 navigator.clipboard.writeText(el.innerText);var b=el.parentNode.querySelector('button');
 var o=b.innerText;b.innerText='✓ Copied';b.classList.add('ok');
 setTimeout(function(){{b.innerText=o;b.classList.remove('ok');}},1400);}}</script>
@@ -314,7 +381,7 @@ def main() -> int:
     if not tweets:
         print("Nothing to post (no data found).")
         return 0
-    write_kit(tweets)                             # always — the free manual path
+    write_kit(tweets, evergreen_tweets())         # always — the free manual path
     for i, t in enumerate(tweets, 1):
         print(f"---- tweet {i}/{len(tweets)} ({_eff_len(t)}/{LIMIT} chars) ----\n{t}")
     auto = os.environ.get("AUTO_TWEET", "").lower() in ("1", "true", "yes")
