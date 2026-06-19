@@ -886,16 +886,29 @@ function wifInit(){
     wifScores[i]={hs,as};});  // default = the model's most likely score
 }
 function wifSc(i,f){return f.played?[f.hs,f["as"]]:[wifScores[i].hs,wifScores[i].as];}
+function fifaOrder(teams,games){   // FIFA group order for a what-if scenario: pts > head-to-head (pts/GD/goals among level teams) > GD > GF > FIFA rank
+  const s={},h2={};teams.forEach(t=>{s[t]={pts:0,gd:0,gf:0};h2[t]={p:0,d:0,f:0};});
+  games.forEach(g=>{const gh=+g.hs,ga=+g["as"];
+    s[g.home].pts+=gh>ga?3:gh===ga?1:0;s[g.home].gd+=gh-ga;s[g.home].gf+=gh;
+    s[g.away].pts+=ga>gh?3:ga===gh?1:0;s[g.away].gd+=ga-gh;s[g.away].gf+=ga;});
+  games.forEach(g=>{const gh=+g.hs,ga=+g["as"];if(s[g.home].pts!==s[g.away].pts)return;   // head-to-head: only matches between teams level on points
+    h2[g.home].p+=gh>ga?3:gh===ga?1:0;h2[g.home].d+=gh-ga;h2[g.home].f+=gh;
+    h2[g.away].p+=ga>gh?3:ga===gh?1:0;h2[g.away].d+=ga-gh;h2[g.away].f+=ga;});
+  const fr=t=>((byName[t]||{}).fifa_rank)||999;
+  return teams.slice().sort((x,y)=>(s[y].pts-s[x].pts)||(h2[y].p-h2[x].p)||(h2[y].d-h2[x].d)||(h2[y].f-h2[x].f)||(s[y].gd-s[x].gd)||(s[y].gf-s[x].gf)||(fr(x)-fr(y)));
+}
+const fifaThird=(a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||((((byName[a.t]||{}).fifa_rank)||999)-(((byName[b.t]||{}).fifa_rank)||999));   // thirds: pts > GD > GF > FIFA rank (no head-to-head — different groups)
 function wifGroups(){
   const G=D.structure.groups,fx=D.fixtures,gres={};
-  for(const L in G){const ts=G[L],st={};ts.forEach(t=>st[t]={t,pts:0,gf:0,ga:0});
+  for(const L in G){const ts=G[L],st={},gm=[];ts.forEach(t=>st[t]={t,pts:0,gf:0,ga:0});
     fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifSc(i,f);
       const H=st[f.home],A=st[f.away];H.gf+=hs;H.ga+=as;A.gf+=as;A.ga+=hs;
-      if(hs>as)H.pts+=3;else if(as>hs)A.pts+=3;else{H.pts++;A.pts++;}});
-    gres[L]={order:ts.slice().sort((x,y)=>st[y].pts-st[x].pts||(st[y].gf-st[y].ga)-(st[x].gf-st[x].ga)||st[y].gf-st[x].gf||(x<y?-1:1)),st};}
+      if(hs>as)H.pts+=3;else if(as>hs)A.pts+=3;else{H.pts++;A.pts++;}
+      gm.push({home:f.home,away:f.away,hs,as});});
+    gres[L]={order:fifaOrder(ts,gm),st};}
   const thirds=Object.keys(gres).map(L=>{const s=gres[L].st[gres[L].order[2]];
-    return{L,pts:s.pts,gd:s.gf-s.ga,gf:s.gf};});
-  thirds.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||(a.L<b.L?-1:1));
+    return{L,t:s.t,pts:s.pts,gd:s.gf-s.ga,gf:s.gf};});
+  thirds.sort(fifaThird);
   return{gres,qual3:new Set(thirds.slice(0,8).map(t=>t.L))};
 }
 function wifRender(){
@@ -1420,12 +1433,12 @@ function rollTournament(){
       if(hs>as_)H.pts+=3;else if(as_>hs)A.pts+=3;else{H.pts++;A.pts++;}
       H.gd+=hs-as_;A.gd+=as_-hs;H.gf+=hs;A.gf+=as_;
       gm.push({home:f.home,away:f.away,hs,as:as_,played:!!f.played});});
-    const order=ts.slice().sort((x,y)=>st[y].pts-st[x].pts||st[y].gd-st[x].gd||st[y].gf-st[x].gf||Math.random()-.5);
+    const order=fifaOrder(ts,gm);
     gres[L]={order,st,matches:gm};}
   const win={},ru={},third={},ts3=[];
   for(const L in gres){const o=gres[L].order;win[L]=o[0];ru[L]=o[1];third[L]=o[2];
     ts3.push(Object.assign({L},gres[L].st[o[2]]));}
-  ts3.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||Math.random()-.5);
+  ts3.sort(fifaThird);
   const qual=ts3.slice(0,8).map(x=>x.L),slots=Object.keys(D.structure.third_elig),el=D.structure.third_elig;
   (function(){const used=new Set();window._sm={};
     (function asg(i){if(i===slots.length)return true;const s=slots[i];
