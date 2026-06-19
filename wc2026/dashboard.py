@@ -1202,12 +1202,12 @@ function predRender(){
     h+=`<div class="psharerow"><button class="pbtn pshare" id="p-share">📤 Share my run</button></div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
   const ST=predStandings();
-  const PHL=[["J2","Jornada 2"],["J3","Jornada 3"],["KO","Mata-mata"]].filter(p=>(ST.phases[p[0]]||[]).length);
-  const _ph=lbPhase||(PHL.length?PHL[PHL.length-1][0]:"all");   // default view: the current jornada
-  const _dk=Object.keys(ST.days).sort();   // 🌟 Craque do dia — latest football-day's top scorer
+  const PHL=[["J2","Matchday 2"],["J3","Matchday 3"],["KO","Knockouts"]].filter(p=>(ST.phases[p[0]]||[]).length);
+  const _ph=lbPhase||(PHL.length?PHL[PHL.length-1][0]:"all");   // default view: the current matchday
+  const _dk=Object.keys(ST.days).sort();   // 🌟 Player of the day — latest football-day's top scorer
   if(_dk.length){const _mb=ST.days[_dk[_dk.length-1]],_hum=_mb.filter(r=>r.uid!=="machine"),_mac=_mb.find(r=>r.uid==="machine"),
       _MO=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],_dp=_dk[_dk.length-1].split("-");
-    if(_hum.length)h+=`<div class="pmvp"><div class="pmvpt">🌟 Craque do dia <span class="tag">${_dp[2]} ${_MO[+_dp[1]-1]}</span></div>`
+    if(_hum.length)h+=`<div class="pmvp"><div class="pmvpt">🌟 Player of the day <span class="tag">${_dp[2]} ${_MO[+_dp[1]-1]}</span></div>`
       +`<div class="pmvpwin">👑 <b>${_hum[0].name}</b> · ${_hum[0].points} pts</div><div class="pmvprest">`
       +_hum.slice(1,3).map((r,i)=>`${i+2}. ${r.name} ${r.points}`).join(" · ")
       +(_mac?`${_hum.length>1?" · ":""}🤖 Machine ${_mac.points}`:"")+`</div></div>`;}
@@ -1217,7 +1217,7 @@ function predRender(){
     h+=`<h3 class="psec">🏆 Leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
     const won=PHL.filter(p=>ST.complete[p[0]]).map(p=>{const w=(ST.phases[p[0]]||[]).filter(r=>r.uid!=="machine")[0];return w?`🏆 ${p[1]}: <b>${w.name}</b>`:"";}).filter(Boolean);
     if(won.length)h+=`<div class="pwinners">${won.join(" · ")}</div>`;
-    if(PHL.length)h+=`<div class="pphtabs"><button class="pphtab${_ph==="all"?" on":""}" data-ph="all">Geral</button>`+PHL.map(p=>`<button class="pphtab${_ph===p[0]?" on":""}" data-ph="${p[0]}">${p[1]}</button>`).join("")+`</div>`;
+    if(PHL.length)h+=`<div class="pphtabs"><button class="pphtab${_ph==="all"?" on":""}" data-ph="all">Overall</button>`+PHL.map(p=>`<button class="pphtab${_ph===p[0]?" on":""}" data-ph="${p[0]}">${p[1]}</button>`).join("")+`</div>`;
     let rivalUids=new Set();
     if(myIdx>=0){const myPts=_lb[myIdx].points,ahead=_lb.filter(r=>r.points>myPts);
       if(!ahead.length){const tied=_lb.filter((r,j)=>j!==myIdx&&r.points===myPts).length;
