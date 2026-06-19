@@ -981,7 +981,7 @@ const PKEY="wc2026_preds_v1";
 const LB_START=new Date("2026-06-18T16:00:00Z");   // fresh start: only games from here on count (Czech Republic vs South Africa onward)
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
-let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={},_shareText="",allPreds=[],lbPhase=null;
+let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={},_shareText="",allPreds=[],lbPhase=null,allBrackets=[];
 function predLoad(){if(predCache)return predCache;
   try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
@@ -1018,6 +1018,8 @@ async function supaSync(){
     lbRows=lb||[];
     const{data:ap}=await sb.from("predictions").select("user_id,match_id,pred_home,pred_away");   // all post-kickoff picks (RLS) — powers the jornada + daily standings
     allPreds=ap||[];
+    const{data:abk}=await sb.from("brackets").select("user_id,picks");   // all brackets (own now; everyone's after the R32 lock per RLS) — bracket leaderboard
+    allBrackets=abk||[];
     const{data:cw}=await sb.from("match_crowd").select("*");
     crowdMap={};(cw||[]).forEach(c=>crowdMap[c.match_id]=c);
     const{data:mm}=await sb.from("matches").select("match_id,home,away,home_score,away_score,model_home,model_away,kickoff");
@@ -1157,6 +1159,33 @@ function pbBracket(picks){
     ties.push({m,rn:roundName(m),a,b,w});});
   return {ties,champ:win[104]};
 }
+function realBracket(){   // actual knockout winner per bracket slot, from the real results — empty until the knockouts are played
+  if((D.matches||[]).length)return {};   // group stage not finished -> the Round of 32 isn't seeded yet
+  const {gres,qual3}=wifGroups(),W={},RU={},TH={};
+  for(const L in gres){const o=gres[L].order;W[L]=o[0];RU[L]=o[1];TH[L]=o[2];}
+  const sm=assignThirds(qual3),teamOf=sp=>sp[0]==="W"?W[sp[1]]:sp[0]==="RU"?RU[sp[1]]:TH[sm[String(sp[1])]];
+  const won=(a,b)=>{if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];   // the real knockout match between these two
+    if(!r)return null;if(r.hs>r["as"])return r.home;if(r["as"]>r.hs)return r.away;return r.adv||null;};   // draw -> the advancer (penalties), once that gets recorded
+  const real={},R=D.structure.r32,LA=D.structure.later;
+  for(const m in R)real[m]=won(teamOf(R[m][0]),teamOf(R[m][1]));
+  Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>real[m]=won(real[LA[m][0]],real[LA[m][1]]));
+  return real;
+}
+function bracketScore(picks,real){   // R32 +1 · R16 +2 · QF +4 · SF +8 · Champion +16 (16 per round, max 80)
+  const pts=m=>m<=88?1:m<=96?2:m<=100?4:m<=102?8:16;
+  let s=0;for(const m in real){if(real[m]&&(picks||{})[m]===real[m])s+=pts(+m);}return s;
+}
+function bracketLB(){   // separate bracket leaderboard — dormant (all 0) until the knockouts start scoring
+  const real=realBracket(),scored=Object.values(real).filter(Boolean).length;
+  const nm={};lbRows.forEach(r=>{if(!r.is_model)nm[r.uid]=r.name||"Player";});if(sbUser&&myName)nm[sbUser.id]=myName;
+  const rows=(allBrackets||[]).map(b=>({uid:b.user_id,name:nm[b.user_id]||"Player",pts:bracketScore(b.picks,real),n:Object.keys(b.picks||{}).length}))
+    .filter(r=>r.n>0).sort((a,b)=>b.pts-a.pts||b.n-a.n);
+  if(!rows.length)return "";
+  let h=`<h3 class="psec">🏆 Bracket leaderboard <span class="tag">${scored?"scored live":"scores as the knockouts play"}</span></h3><div class="lbx">`;
+  rows.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id;
+    h+=`<div class="lbrow${me?" lbme":""}"><span class="lbrank">${i+1}</span><span class="lbname">${me?"🟢":"🧑"} ${r.name}${me?" · you":""}</span><span class="lbpts">${r.pts}</span></div>`;});
+  return h+`</div>`;
+}
 function predBracketRender(){
   const el=document.getElementById("predbracket");if(!el)return;
   if((D.matches||[]).length){el.innerHTML=`<div class="pbrlock">🔒 Opens when the group stage finishes (~28 Jun). You'll fill the full knockout bracket — every tie from the Round of 32 to the title — on its own leaderboard.</div>`;return;}
@@ -1168,7 +1197,7 @@ function predBracketRender(){
   const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})),n=ties.filter(t=>t.w).length;
   el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":'<span class="note">tap your way through the bracket</span>'}</div>`
     +`<div class="note" style="text-align:center;margin:0 0 8px">Tap a team to send them through · ${n}/${ties.length} ties picked</div>`
-    +bracketTree(rounds);
+    +bracketTree(rounds)+bracketLB();
   el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{if(tt.dataset.team)pbSet(+tt.dataset.m,tt.dataset.team);});
 }
 function pbSet(m,team){

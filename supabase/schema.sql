@@ -144,12 +144,21 @@ grant select on public.match_crowd to anon, authenticated;
 -- Knockout-bracket predictions: one row per user, the whole bracket as JSON
 -- ({match_id: picked_team}). Opens once the group stage is complete and locks
 -- at the first Round-of-32 kickoff. Scored separately from the match game.
--- (A "read others post-lock" policy is added with the bracket leaderboard.)
 create table if not exists public.brackets (
   user_id    uuid primary key references auth.users(id) on delete cascade,
   picks      jsonb not null default '{}'::jsonb,
   updated_at timestamptz default now()
 );
 alter table public.brackets enable row level security;
-create policy "brackets own" on public.brackets
-  for all to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+-- LOCK = the first Round-of-32 kickoff. Set the two timestamps below to that date.
+drop policy if exists "brackets own" on public.brackets;
+-- read your own bracket any time; everyone else's only AFTER the lock (anti-copy):
+create policy "brackets read" on public.brackets for select using (
+  auth.uid() = user_id
+  or now() >= '2026-06-29 00:00:00+00'::timestamptz);
+-- write your own, and only BEFORE the lock (no edits once the knockouts start):
+create policy "brackets insert" on public.brackets for insert to authenticated
+  with check (auth.uid() = user_id and now() < '2026-06-29 00:00:00+00'::timestamptz);
+create policy "brackets update" on public.brackets for update to authenticated
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id and now() < '2026-06-29 00:00:00+00'::timestamptz);
