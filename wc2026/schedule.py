@@ -45,12 +45,12 @@ _RAW = """
 2026-06-18 22:00 Canada vs Qatar
 2026-06-19 01:00 Mexico vs South Korea
 2026-06-19 22:00 Scotland vs Morocco
-2026-06-20 19:00 USA vs Australia
+2026-06-19 19:00 USA vs Australia
 2026-06-20 00:30 Brazil vs Haiti
 2026-06-20 03:00 Turkiye vs Paraguay
 2026-06-20 17:00 Netherlands vs Sweden
 2026-06-20 20:00 Germany vs Ivory Coast
-2026-06-21 03:00 Ecuador vs Curacao
+2026-06-21 00:00 Ecuador vs Curacao
 2026-06-21 04:00 Tunisia vs Japan
 2026-06-21 16:00 Spain vs Saudi Arabia
 2026-06-21 19:00 Belgium vs Iran
