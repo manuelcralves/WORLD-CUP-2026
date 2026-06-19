@@ -1022,7 +1022,7 @@ async function supaSync(){
     allBrackets=abk||[];
     const{data:cw}=await sb.from("match_crowd").select("*");
     crowdMap={};(cw||[]).forEach(c=>crowdMap[c.match_id]=c);
-    const{data:mm}=await sb.from("matches").select("match_id,home,away,home_score,away_score,model_home,model_away,kickoff,advance");
+    const{data:mm}=await sb.from("matches").select("*");   // "*" so a column added later (e.g. advance) never breaks the read
     liveRev={};(mm||[]).forEach(m=>{if(m.home_score!=null)liveRev[m.match_id]={home:m.home,away:m.away,hs:m.home_score,as:m.away_score,ml_score:(m.model_home!=null?m.model_home+"-"+m.model_away:"1-1"),date:(m.kickoff||"").slice(0,10),adv:m.advance};});
   }catch(e){console.warn("Supabase sync:",e);}
   predRender();}
