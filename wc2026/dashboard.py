@@ -618,7 +618,7 @@ function teamPage(name){
     for(const[rnd,info] of Object.entries(t.opponents)){
       const opps=info.opponents.map(o=>`${flag(o.team,"sm")} ${o.team} <span class="note">${pct(o.p_cond)}</span>`).join(" · ");
       h+=`<div class="note" style="margin-top:6px"><b>${rnd}</b> <span class="tag">reaches ${pct(info.p_reach)}</span><br>${opps}</div>`;}
-  const grp=[...D.teams].filter(x=>x.group===t.group).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(b.exp_points-a.exp_points));
+  const grp=groupSort([...D.teams].filter(x=>x.group===t.group));
   h+=`<h4 class="tpsec">🎟️ Group ${t.group}</h4>`;
   grp.forEach((x,i)=>{const me=x.team===name,rec=x.played?`P${x.played} · ${x.pts}pt${x.pts!==1?'s':''} · ${x.gf}-${x.gf-x.gd}`:'—';
     h+=`<div class="tpgr${me?' me':''}"><span class="pos">${i+1}</span><span class="nm">${flag(x.team,'sm')} ${x.team}</span><span class="grec">${rec}</span><span class="adv">${pct(x.p_ko)}</span></div>`;});
@@ -665,11 +665,23 @@ function teamPage(name){
   document.getElementById("tpx").onclick=tpClose;
 }
 
+function groupSort(teams){   // FIFA order: points > head-to-head (pts/GD/goals among level teams) > overall GD > overall goals > FIFA rank
+  const pr={};(D.played_review||[]).forEach(m=>pr[m.home+"|"+m.away]={hs:m.hs,as:m["as"]});
+  const h2={};
+  teams.forEach(t=>{let p=0,d=0,f=0;
+    teams.forEach(s=>{if(s.team===t.team||s.pts!==t.pts)return;   // count only matches between teams level on points
+      let r=pr[t.team+"|"+s.team],gh,ga;
+      if(r){gh=r.hs;ga=r["as"];}else if((r=pr[s.team+"|"+t.team])){gh=r["as"];ga=r.hs;}else return;
+      p+=gh>ga?3:gh===ga?1:0;d+=gh-ga;f+=gh;});
+    h2[t.team]={p,d,f};});
+  const fr=x=>(byName[x.team]&&byName[x.team].fifa_rank)||999;
+  return teams.slice().sort((a,b)=>(b.pts-a.pts)||(h2[b.team].p-h2[a.team].p)||(h2[b.team].d-h2[a.team].d)
+    ||(h2[b.team].f-h2[a.team].f)||(b.gd-a.gd)||(b.gf-a.gf)||(fr(a)-fr(b)));
+}
 function renderGroups(){
   const groups={};T.forEach(t=>(groups[t.group]=groups[t.group]||[]).push(t));
-  const ord=(a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(b.exp_points-a.exp_points);
   let h="";Object.keys(groups).sort().forEach(L=>{
-    const g=groups[L].slice().sort(ord);
+    const g=groupSort(groups[L]);
     h+=`<div class="group"><h3>GROUP ${L}</h3>`;
     g.forEach((t,i)=>{const sel=t.team===selected?'style="color:#ffd34d;font-weight:700"':'';
       const adv=t.p_ko*100;
