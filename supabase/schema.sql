@@ -150,15 +150,15 @@ create table if not exists public.brackets (
   updated_at timestamptz default now()
 );
 alter table public.brackets enable row level security;
--- LOCK = the first Round-of-32 kickoff. Set the two timestamps below to that date.
+-- LOCK = the first Round-of-32 kickoff: 2026-06-28 20:00 WEST (19:00 UTC).
 drop policy if exists "brackets own" on public.brackets;
 -- read your own bracket any time; everyone else's only AFTER the lock (anti-copy):
 create policy "brackets read" on public.brackets for select using (
   auth.uid() = user_id
-  or now() >= '2026-06-29 00:00:00+00'::timestamptz);
+  or now() >= '2026-06-28 20:00:00+01'::timestamptz);
 -- write your own, and only BEFORE the lock (no edits once the knockouts start):
 create policy "brackets insert" on public.brackets for insert to authenticated
-  with check (auth.uid() = user_id and now() < '2026-06-29 00:00:00+00'::timestamptz);
+  with check (auth.uid() = user_id and now() < '2026-06-28 20:00:00+01'::timestamptz);
 create policy "brackets update" on public.brackets for update to authenticated
   using (auth.uid() = user_id)
-  with check (auth.uid() = user_id and now() < '2026-06-29 00:00:00+00'::timestamptz);
+  with check (auth.uid() = user_id and now() < '2026-06-28 20:00:00+01'::timestamptz);
