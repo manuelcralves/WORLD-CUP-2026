@@ -27,6 +27,10 @@ RESULTS = [
     ("2026-06-17", "England",    "Croatia",  4, 2),
     ("2026-06-17", "Ghana",      "Panama",   1, 0),
     ("2026-06-17", "Uzbekistan", "Colombia", 1, 3),
+    ("2026-06-18", "Czech Republic", "South Africa",           1, 1),
+    ("2026-06-18", "Switzerland",    "Bosnia and Herzegovina", 4, 1),
+    ("2026-06-18", "Canada",         "Qatar",                  6, 0),
+    ("2026-06-18", "Mexico",         "South Korea",            1, 0),
 ]
 
 # (date, home_team, away_team, team, scorer, minute, own_goal, penalty)
@@ -44,6 +48,20 @@ GOALS = [
     ("2026-06-17", "Uzbekistan", "Colombia", "Uzbekistan", "Abbosbek Fayzullaev",  60, False, False),
     ("2026-06-17", "Uzbekistan", "Colombia", "Colombia",   "Luis Díaz",            65, False, False),
     ("2026-06-17", "Uzbekistan", "Colombia", "Colombia",   "Jaminton Campaz",      90, False, False),  # 90+9 -> 90
+    ("2026-06-18", "Czech Republic", "South Africa", "Czech Republic", "Michal Sadilek",  6,  False, False),
+    ("2026-06-18", "Czech Republic", "South Africa", "South Africa",   "Teboho Mokoena",  83, False, True),   # penalty
+    ("2026-06-18", "Switzerland", "Bosnia and Herzegovina", "Switzerland",            "Johan Manzambi", 74, False, False),
+    ("2026-06-18", "Switzerland", "Bosnia and Herzegovina", "Switzerland",            "Ruben Vargas",   84, False, False),
+    ("2026-06-18", "Switzerland", "Bosnia and Herzegovina", "Switzerland",            "Johan Manzambi", 90, False, False),  # 90+3 -> 90
+    ("2026-06-18", "Switzerland", "Bosnia and Herzegovina", "Bosnia and Herzegovina", "Ermin Mahmic",   90, False, False),  # 90+3 -> 90
+    ("2026-06-18", "Switzerland", "Bosnia and Herzegovina", "Switzerland",            "Granit Xhaka",   90, False, True),   # penalty, 90+7 -> 90
+    ("2026-06-18", "Canada", "Qatar", "Canada", "Cyle Larin",         16, False, False),
+    ("2026-06-18", "Canada", "Qatar", "Canada", "Jonathan David",     29, False, False),
+    ("2026-06-18", "Canada", "Qatar", "Canada", "Jonathan David",     45, False, False),  # 45+3 -> 45
+    ("2026-06-18", "Canada", "Qatar", "Canada", "Nathan Saliba",      64, False, False),
+    ("2026-06-18", "Canada", "Qatar", "Canada", "Mohammad Al Mannai", 75, True,  False),  # own goal: Qatar player, counts for Canada
+    ("2026-06-18", "Canada", "Qatar", "Canada", "Jonathan David",     90, False, False),  # 90+2 -> 90
+    ("2026-06-18", "Mexico", "South Korea", "Mexico", "Luis Romo",    50, False, False),
 ]
 
 
