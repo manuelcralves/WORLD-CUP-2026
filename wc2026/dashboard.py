@@ -313,6 +313,14 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pbtn{background:#243049;color:#eef1f7;border:0;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer}
 .psharerow{text-align:center;margin:12px 0 2px}
 .pshare{background:linear-gradient(120deg,#00e0a4,#00b083);color:#062018;font-weight:800;padding:9px 20px;font-size:14px}
+.pmvp{background:linear-gradient(135deg,rgba(255,211,77,.13),rgba(0,224,164,.08));border:1px solid rgba(255,211,77,.3);border-radius:14px;padding:13px 16px;margin:6px 0 16px;text-align:center}
+.pmvpt{font-size:13px;font-weight:800;color:#ffd34d;margin-bottom:5px}
+.pmvpwin{font-size:17px;font-weight:800;margin-bottom:3px}
+.pmvprest{font-size:12px;color:#8b95ab}
+.pwinners{font-size:12.5px;color:#cbd3e1;background:#161d2b;border:1px solid #243049;border-radius:10px;padding:8px 12px;margin:0 0 10px;text-align:center}
+.pphtabs{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 12px}
+.pphtab{background:#1c2536;color:#8b95ab;border:1px solid #243049;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:700;cursor:pointer}
+.pphtab.on{background:rgba(0,224,164,.16);color:#00e0a4;border-color:rgba(0,224,164,.45)}
 .pbtn:hover{background:#2c3a57}.pbtn.pg{background:#00e0a4;color:#062018}.pbtn.pg:hover{filter:brightness(1.08)}
 .plink{background:none;border:0;color:#8b95ab;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px}
 .pauthb{display:flex;gap:8px;flex-wrap:wrap}
@@ -933,7 +941,7 @@ const PKEY="wc2026_preds_v1";
 const LB_START=new Date("2026-06-18T16:00:00Z");   // fresh start: only games from here on count (Czech Republic vs South Africa onward)
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
-let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={},_shareText="";
+let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={},_shareText="",allPreds=[],lbPhase=null;
 function predLoad(){if(predCache)return predCache;
   try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
@@ -968,6 +976,8 @@ async function supaSync(){
       pbPicks=(bk&&bk.picks)?bk.picks:{};}
     const{data:lb}=await sb.from("leaderboard").select("*").order("points",{ascending:false}).limit(50);
     lbRows=lb||[];
+    const{data:ap}=await sb.from("predictions").select("user_id,match_id,pred_home,pred_away");   // all post-kickoff picks (RLS) — powers the jornada + daily standings
+    allPreds=ap||[];
     const{data:cw}=await sb.from("match_crowd").select("*");
     crowdMap={};(cw||[]).forEach(c=>crowdMap[c.match_id]=c);
     const{data:mm}=await sb.from("matches").select("match_id,home,away,home_score,away_score,model_home,model_away,kickoff");
@@ -1142,6 +1152,27 @@ function predShare(){   // share a Wordle-style card of your run (native share s
   if(navigator.share)navigator.share({text:t}).catch(()=>{});
   else navigator.clipboard.writeText(t).then(()=>predToast("📋 Copied — paste it anywhere!"),()=>predToast("⚠️ Couldn't copy"));
 }
+function predStandings(){   // per-user points by jornada + by football-day, from everyone's post-kickoff picks
+  const allM=[...(D.played_review||[]),...(D.matches||[])];
+  const byG={};allM.forEach(m=>{const g=(byName[m.home]||{}).group;if(g)(byG[g]=byG[g]||[]).push(m);});
+  const md={};Object.values(byG).forEach(ms=>{ms.sort((a,b)=>(predKO(a.home,a.away)||0)-(predKO(b.home,b.away)||0));
+    ms.forEach((m,i)=>md[m.home+"|"+m.away]=Math.floor(i/2)+1);});   // 2 games per matchday per group
+  const info={};
+  Object.values(liveRev).forEach(m=>{const key=m.home+"|"+m.away,kt=predKO(m.home,m.away);if(!kt||kt<LB_START)return;
+    const fd=new Date(kt.getTime()-6*36e5);   // football-day = kickoff − 6h (madrugada counts for the previous day)
+    info[key]={phase:md[key]?"J"+md[key]:"KO",day:fd.toISOString().slice(0,10),
+               res:[m.hs,m["as"]],ml:String(m.ml_score).split("-").map(Number)};});
+  const nm={};lbRows.forEach(r=>{if(!r.is_model)nm[r.uid]=r.name||"Player";});
+  const P={},DY={},add=(B,k,uid,name,pts)=>{const g=B[k]=B[k]||{},e=g[uid]=g[uid]||{uid,name,points:0,played:0};e.points+=pts;e.played++;};
+  allPreds.forEach(p=>{const i=info[p.match_id];if(!i)return;const pts=predScore([p.pred_home,p.pred_away],i.res);
+    add(P,i.phase,p.user_id,nm[p.user_id]||"Player",pts);add(DY,i.day,p.user_id,nm[p.user_id]||"Player",pts);});
+  Object.values(info).forEach(i=>{const pts=predScore(i.ml,i.res);   // The Machine plays every match
+    add(P,i.phase,"machine","🤖 The Machine",pts);add(DY,i.day,"machine","🤖 The Machine",pts);});
+  const upc=new Set();(D.matches||[]).forEach(m=>{const kt=predKO(m.home,m.away);if(kt&&kt>=LB_START)upc.add(md[m.home+"|"+m.away]?"J"+md[m.home+"|"+m.away]:"KO");});
+  const complete={};Object.keys(P).forEach(ph=>complete[ph]=!upc.has(ph));   // a jornada is done when none of its games are still upcoming
+  const srt=B=>{const o={};Object.keys(B).forEach(k=>o[k]=Object.values(B[k]).sort((a,b)=>b.points-a.points||b.played-a.played));return o;};
+  return {phases:srt(P),days:srt(DY),complete};
+}
 function predRender(){
   const el=document.getElementById("predict");if(!el)return;
   const store=predLoad(),now=new Date();
@@ -1170,9 +1201,23 @@ function predRender(){
       +`\n\n🎯 exact · ✅ result · ❌ miss\nCan you beat me? 👇\n${_site}`;
     h+=`<div class="psharerow"><button class="pbtn pshare" id="p-share">📤 Share my run</button></div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
-  const _lb=lbRows.filter(r=>!r.is_model&&(r.picks>0||r.played>0||(sbUser&&r.uid===sbUser.id)));
-  if(_lb.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
-    h+=`<h3 class="psec">🏆 Global leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
+  const ST=predStandings();
+  const PHL=[["J2","Jornada 2"],["J3","Jornada 3"],["KO","Mata-mata"]].filter(p=>(ST.phases[p[0]]||[]).length);
+  const _ph=lbPhase||(PHL.length?PHL[PHL.length-1][0]:"all");   // default view: the current jornada
+  const _dk=Object.keys(ST.days).sort();   // 🌟 Craque do dia — latest football-day's top scorer
+  if(_dk.length){const _mb=ST.days[_dk[_dk.length-1]],_hum=_mb.filter(r=>r.uid!=="machine"),_mac=_mb.find(r=>r.uid==="machine"),
+      _MO=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],_dp=_dk[_dk.length-1].split("-");
+    if(_hum.length)h+=`<div class="pmvp"><div class="pmvpt">🌟 Craque do dia <span class="tag">${_dp[2]} ${_MO[+_dp[1]-1]}</span></div>`
+      +`<div class="pmvpwin">👑 <b>${_hum[0].name}</b> · ${_hum[0].points} pts</div><div class="pmvprest">`
+      +_hum.slice(1,3).map((r,i)=>`${i+2}. ${r.name} ${r.points}`).join(" · ")
+      +(_mac?`${_hum.length>1?" · ":""}🤖 Machine ${_mac.points}`:"")+`</div></div>`;}
+  const _lb=_ph==="all"?lbRows.filter(r=>!r.is_model&&(r.picks>0||r.played>0||(sbUser&&r.uid===sbUser.id)))
+                       :(ST.phases[_ph]||[]).filter(r=>r.uid!=="machine");
+  if(_lb.length||PHL.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
+    h+=`<h3 class="psec">🏆 Leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
+    const won=PHL.filter(p=>ST.complete[p[0]]).map(p=>{const w=(ST.phases[p[0]]||[]).filter(r=>r.uid!=="machine")[0];return w?`🏆 ${p[1]}: <b>${w.name}</b>`:"";}).filter(Boolean);
+    if(won.length)h+=`<div class="pwinners">${won.join(" · ")}</div>`;
+    if(PHL.length)h+=`<div class="pphtabs"><button class="pphtab${_ph==="all"?" on":""}" data-ph="all">Geral</button>`+PHL.map(p=>`<button class="pphtab${_ph===p[0]?" on":""}" data-ph="${p[0]}">${p[1]}</button>`).join("")+`</div>`;
     let rivalUids=new Set();
     if(myIdx>=0){const myPts=_lb[myIdx].points,ahead=_lb.filter(r=>r.points>myPts);
       if(!ahead.length){const tied=_lb.filter((r,j)=>j!==myIdx&&r.points===myPts).length;
@@ -1239,6 +1284,7 @@ function predRender(){
   const _ea=document.getElementById("p-emailauth");if(_ea)_ea.onclick=predEmailAuth;
   const _sh=document.getElementById("p-share");if(_sh)_sh.onclick=predShare;
   el.querySelectorAll(".lbclick").forEach(r=>r.onclick=()=>showProfile(r.dataset.uid,r.dataset.name));
+  el.querySelectorAll(".pphtab").forEach(b=>b.onclick=()=>{lbPhase=b.dataset.ph;predRender();});
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||[0,0]).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
   el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=c.dataset.sc.split("-").map(Number);predSet(c.dataset.k,s[0],s[1]);});
