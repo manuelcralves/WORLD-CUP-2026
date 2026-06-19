@@ -277,6 +277,8 @@ align-items:center;gap:7px}
 .g-row .grec{flex:0 0 auto;color:#8b95ab;font-size:12px;white-space:nowrap}
 .g-row .qbadge{flex:0 0 50px;text-align:right;font-weight:800;font-size:12px}
 .qbadge.q-in{color:#00e0a4}.qbadge.q-out{color:#ff6b6b}.qbadge.q-hunt{color:#cbd3e1}
+.t3box{grid-column:1/-1}
+.g-row.t3cut{border-top:2px dashed rgba(255,107,107,.45);margin-top:4px;padding-top:6px}
 .pcard{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:12px 14px;margin:0 0 10px}
 .pcard.plk{opacity:.6}
 .prow{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700}
@@ -680,8 +682,9 @@ function groupSort(teams){   // FIFA order: points > head-to-head (pts/GD/goals 
 }
 function renderGroups(){
   const groups={};T.forEach(t=>(groups[t.group]=groups[t.group]||[]).push(t));
-  let h="";Object.keys(groups).sort().forEach(L=>{
+  let h="",thirds=[];Object.keys(groups).sort().forEach(L=>{
     const g=groupSort(groups[L]);
+    if(g[2])thirds.push(g[2]);   // current 3rd-placed team of this group
     h+=`<div class="group"><h3>GROUP ${L}</h3>`;
     g.forEach((t,i)=>{const sel=t.team===selected?'style="color:#ffd34d;font-weight:700"':'';
       const adv=t.p_ko*100;
@@ -692,6 +695,14 @@ function renderGroups(){
       <span class="grec">${rec}</span>
       <span class="qbadge ${cls}" title="model's chance to reach the knockouts">${pct(t.p_ko)}</span></div>`;});
     h+=`</div>`;});
+  // best 3rd-placed teams — 8 of the 12 advance, ranked points > GD > goals > FIFA rank
+  thirds.sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(((byName[a.team]||{}).fifa_rank||999)-((byName[b.team]||{}).fifa_rank||999)));
+  if(thirds.length){h+=`<div class="group t3box"><h3>🎟️ Best 3rd-placed teams <span class="tag">8 of 12 advance</span></h3>`;
+    thirds.forEach((t,i)=>{h+=`<div class="g-row gclick${i===8?" t3cut":""}" data-t="${t.team}"><span class="pos">${i+1}</span>`
+      +`<span class="nm">${flag(t.team,"sm")} ${t.team} <span class="note" style="font-weight:400">· ${t.group}</span></span>`
+      +`<span class="grec">${t.played?`P${t.played} · ${t.pts}pt${t.pts!==1?"s":""} · ${t.gf}-${t.gf-t.gd}`:"—"}</span>`
+      +`<span class="qbadge ${i<8?"q-in":"q-out"}">${i<8?"✓":"✗"}</span></div>`;});
+    h+=`</div>`;}
   const gc=document.getElementById("groups");gc.innerHTML=h;
   gc.querySelectorAll(".g-row").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
 }
