@@ -695,14 +695,7 @@ function renderGroups(){
       <span class="grec">${rec}</span>
       <span class="qbadge ${cls}" title="model's chance to reach the knockouts">${pct(t.p_ko)}</span></div>`;});
     h+=`</div>`;});
-  // best 3rd-placed teams — 8 of the 12 advance, ranked points > GD > goals > FIFA rank
-  thirds.sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(((byName[a.team]||{}).fifa_rank||999)-((byName[b.team]||{}).fifa_rank||999)));
-  if(thirds.length){h+=`<div class="group t3box"><h3>🎟️ Best 3rd-placed teams <span class="tag">8 of 12 advance</span></h3>`;
-    thirds.forEach((t,i)=>{h+=`<div class="g-row gclick${i===8?" t3cut":""}" data-t="${t.team}"><span class="pos">${i+1}</span>`
-      +`<span class="nm">${flag(t.team,"sm")} ${t.team} <span class="note" style="font-weight:400">· ${t.group}</span></span>`
-      +`<span class="grec">${t.played?`P${t.played} · ${t.pts}pt${t.pts!==1?"s":""} · ${t.gf}-${t.gf-t.gd}`:"—"}</span>`
-      +`<span class="qbadge ${i<8?"q-in":"q-out"}">${i<8?"✓":"✗"}</span></div>`;});
-    h+=`</div>`;}
+  if(thirds.length)h+=thirdsBox(thirds);   // best 3rd-placed teams (current standings)
   const gc=document.getElementById("groups");gc.innerHTML=h;
   gc.querySelectorAll(".g-row").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
 }
@@ -898,6 +891,16 @@ function fifaOrder(teams,games){   // FIFA group order for a what-if scenario: p
   return teams.slice().sort((x,y)=>(s[y].pts-s[x].pts)||(h2[y].p-h2[x].p)||(h2[y].d-h2[x].d)||(h2[y].f-h2[x].f)||(s[y].gd-s[x].gd)||(s[y].gf-s[x].gf)||(fr(x)-fr(y)));
 }
 const fifaThird=(a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||((((byName[a.t]||{}).fifa_rank)||999)-(((byName[b.t]||{}).fifa_rank)||999));   // thirds: pts > GD > GF > FIFA rank (no head-to-head — different groups)
+function thirdsBox(rows,sub){   // reusable best-3rd-placed-teams box (Teams · what-if · roll). rows: [{team,group,played,pts,gd,gf}]
+  const fr=t=>((byName[t.team]||{}).fifa_rank)||999;
+  rows=rows.slice().sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(fr(a)-fr(b)));
+  let h=`<div class="group t3box"><h3>🎟️ Best 3rd-placed teams <span class="tag">${sub||"8 of 12 advance"}</span></h3>`;
+  rows.forEach((t,i)=>{h+=`<div class="g-row gclick${i===8?" t3cut":""}" data-t="${t.team}"><span class="pos">${i+1}</span>`
+    +`<span class="nm">${flag(t.team,"sm")} ${t.team} <span class="note" style="font-weight:400">· ${t.group}</span></span>`
+    +`<span class="grec">${t.played?"P"+t.played+" · ":""}${t.pts}pt${t.pts!==1?"s":""} · ${t.gf}-${t.gf-t.gd}</span>`
+    +`<span class="qbadge ${i<8?"q-in":"q-out"}">${i<8?"✓":"✗"}</span></div>`;});
+  return h+`</div>`;
+}
 function wifGroups(){
   const G=D.structure.groups,fx=D.fixtures,gres={};
   for(const L in G){const ts=G[L],st={},gm=[];ts.forEach(t=>st[t]={t,pts:0,gf:0,ga:0});
@@ -909,11 +912,11 @@ function wifGroups(){
   const thirds=Object.keys(gres).map(L=>{const s=gres[L].st[gres[L].order[2]];
     return{L,t:s.t,pts:s.pts,gd:s.gf-s.ga,gf:s.gf};});
   thirds.sort(fifaThird);
-  return{gres,qual3:new Set(thirds.slice(0,8).map(t=>t.L))};
+  return{gres,qual3:new Set(thirds.slice(0,8).map(t=>t.L)),thirds};
 }
 function wifRender(){
   const el=document.getElementById("whatif");if(!el)return;if(!wifScores)wifInit();
-  const {gres,qual3}=wifGroups(),G=D.structure.groups,fx=D.fixtures;
+  const {gres,qual3,thirds}=wifGroups(),G=D.structure.groups,fx=D.fixtures;
   const sn=t=>t.length>14?t.slice(0,13)+"…":t;
   const sb=(i,s,d,l)=>`<button class="wifb" data-i="${i}" data-s="${s}" data-d="${d}">${l}</button>`;
   let h=`<div class="wifgrid">`;
@@ -927,7 +930,8 @@ function wifRender(){
     gres[L].order.forEach((t,idx)=>{const s=gres[L].st[t],gd=s.gf-s.ga,c=idx<2?'q':(idx===2&&qual3.has(L)?'q3':'');
       h+=`<tr class="${c}"><td class="pos">${idx+1}</td><td>${flag(t,'sm')} ${sn(t)}</td><td>${s.pts}</td><td>${gd>=0?'+':''}${gd}</td></tr>`;});
     h+=`</tbody></table></div>`;}
-  el.innerHTML=h+`</div>`;
+  el.innerHTML=h+`</div>`+thirdsBox(thirds.map(x=>({team:x.t,group:x.L,played:3,pts:x.pts,gd:x.gd,gf:x.gf})),"your scenario · 8 of 12 advance");
+  el.querySelectorAll(".t3box .gclick").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
   el.querySelectorAll(".wifsc .wifb").forEach(btn=>btn.onclick=()=>{const i=+btn.dataset.i,k=btn.dataset.s==='h'?'hs':'as';
     wifScores[i][k]=Math.max(0,Math.min(19,wifScores[i][k]+ +btn.dataset.d));wifRender();bywRender();});
 }
@@ -1454,9 +1458,9 @@ function rollTournament(){
   Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>{
     const a=wk[LA[m][0]],b=wk[LA[m][1]],r=koGame(a,b);
     wk[m]=r.w;ko.push({rn:roundName(m),m:+m,a,b,sx:r.sx,sy:r.sy,pe:r.pe,w:r.w});});
-  renderRoll(gres,qual,ko,wk[104]);
+  renderRoll(gres,qual,ko,wk[104],ts3);
 }
-function renderRoll(gres,qual,ko,champ){
+function renderRoll(gres,qual,ko,champ,ts3){
   const eloOf=t=>(byName[t]||{}).elo||0;
   const sf=ko.filter(g=>g.rn==="Semi-finals").flatMap(g=>[g.a,g.b]);
   const sup=sf.slice().sort((a,b)=>eloOf(a)-eloOf(b))[0];
@@ -1470,11 +1474,12 @@ function renderRoll(gres,qual,ko,champ){
       <span style="color:#8b95ab;font-size:11px">${s.pts}p ${s.gd>=0?'+':''}${s.gd}</span></div>`;});
     const mr=gres[L].matches.map(g=>`<div class="gr">${flag(g.home,'sm')} ${g.home} <b>${g.hs}-${g["as"]}</b> ${g.away} ${flag(g.away,'sm')}${g.played?' <span title="real result" style="color:#00e0a4">●</span>':''}</div>`).join("");
     h+=`<details class="gres"><summary>match results</summary>${mr}</details></div>`;}
-  h+=`</div><h3 style="margin:20px 0 8px">Knockout bracket</h3>`;
+  h+=`</div>`+thirdsBox((ts3||[]).map(x=>({team:x.t,group:x.L,played:3,pts:x.pts,gd:x.gd,gf:x.gf})),"this simulation · 8 of 12 advance")+`<h3 style="margin:20px 0 8px">Knockout bracket</h3>`;
   const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
   ko.forEach(g=>rmap[g.rn].push({a:g.a,b:g.b,win:g.w,m:g.m,va:""+g.sx,vb:""+g.sy,pe:g.pe}));
   h+=bracketTree(Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})));
-  document.getElementById("sim-out").innerHTML=h;
+  const so=document.getElementById("sim-out");so.innerHTML=h;
+  so.querySelectorAll(".t3box .gclick").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
 }
 
 function dmd(d){const p=d.split("-");return p[2]+"/"+p[1];}   // 2026-06-10 -> 10/06 (day/month)
