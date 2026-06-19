@@ -54,11 +54,13 @@ def push_matches(data: dict) -> None:
         h, a = m["home"], m["away"]
         mh, ma = m["ml_score"].split("-")
         adv = shoot.get((m["date"], frozenset((h, a))))   # advancer on penalties, if the tie ended level
-        played[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
-                              "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
-                              "away_score": int(m["as"]), "model_home": int(mh),
-                              "model_away": int(ma), "stage": "group", "played": True,
-                              "advance": adv}
+        row = {"match_id": f"{h}|{a}", "home": h, "away": a,
+               "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
+               "away_score": int(m["as"]), "model_home": int(mh),
+               "model_away": int(ma), "stage": "group", "played": True}
+        if adv:
+            row["advance"] = adv          # only when there was a shootout — keeps the push safe before the column exists
+        played[f"{h}|{a}"] = row
     for m in data.get("matches") or []:              # upcoming: model pick = top[0]
         h, a = m["home"], m["away"]
         if f"{h}|{a}" in played:
