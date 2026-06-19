@@ -311,6 +311,8 @@ border:1px solid #243049;border-radius:14px;padding:14px;margin-bottom:8px}
 .pauth{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#161d2b;
 border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;font-size:13.5px}
 .pbtn{background:#243049;color:#eef1f7;border:0;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.psharerow{text-align:center;margin:12px 0 2px}
+.pshare{background:linear-gradient(120deg,#00e0a4,#00b083);color:#062018;font-weight:800;padding:9px 20px;font-size:14px}
 .pbtn:hover{background:#2c3a57}.pbtn.pg{background:#00e0a4;color:#062018}.pbtn.pg:hover{filter:brightness(1.08)}
 .plink{background:none;border:0;color:#8b95ab;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px}
 .pauthb{display:flex;gap:8px;flex-wrap:wrap}
@@ -931,7 +933,7 @@ const PKEY="wc2026_preds_v1";
 const LB_START=new Date("2026-06-18T16:00:00Z");   // fresh start: only games from here on count (Czech Republic vs South Africa onward)
 const SUPA_URL="https://ddpulrjqfxwbvoktdzic.supabase.co";
 const SUPA_KEY="sb_publishable_dImupBnCWwySzdyVYFBgew_wfVYoLeP";
-let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={};
+let sb=null,sbUser=null,lbRows=[],predCache=null,myName=null,crowdMap={},liveRev={},_shareText="";
 function predLoad(){if(predCache)return predCache;
   try{predCache=JSON.parse(localStorage.getItem(PKEY))||{};}catch(e){predCache={};}return predCache;}
 function predSet(key,h,a){predLoad();predCache[key]=[h,a];
@@ -1135,6 +1137,11 @@ function predBadges(sc){const b=[];   // achievements earned from scored picks
   if(Object.values(byday).some(d=>d.length>=2&&d.every(s=>s.yp>=10)))b.push(['💯','Perfect matchday','every pick right on a matchday']);
   if(sc.some(s=>s.yp>=10&&s.m.p_actual<0.30))b.push(['🦅','Giant-killer','called a result the model gave under 30%']);
   return b;}
+function predShare(){   // share a Wordle-style card of your run (native share sheet, clipboard fallback)
+  const t=_shareText;if(!t)return;
+  if(navigator.share)navigator.share({text:t}).catch(()=>{});
+  else navigator.clipboard.writeText(t).then(()=>predToast("📋 Copied — paste it anywhere!"),()=>predToast("⚠️ Couldn't copy"));
+}
 function predRender(){
   const el=document.getElementById("predict");if(!el)return;
   const store=predLoad(),now=new Date();
@@ -1155,6 +1162,13 @@ function predRender(){
       +`<div class="pstats">over ${n} match${n>1?'es':''} · ${(hits/n*100).toFixed(1)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
     const _bd=predBadges(scored);
     if(_bd.length)h+=`<div class="pbadges">`+_bd.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
+    const _cells=scored.map(s=>s.yp===30?'🎯':s.yp>=10?'✅':'❌');               // Wordle-style result grid
+    const _grid=_cells.reduce((R,c,i)=>{if(i%10===0)R.push("");R[R.length-1]+=c;return R;},[]).join("\n");
+    const _site=location.origin+location.pathname.split("/outputs/")[0]+"/";    // landing page (OG card)
+    _shareText=`⚽ World Cup 2026 — Beat the Machine\n\n${_grid}\n${you} pts · ${hits}/${n} results · ${exact} exact\n`
+      +(you>mac?`🟢 ${you-mac} ahead of the model`:you<mac?`🔴 model leads by ${mac-you}`:`🤝 level with the model`)
+      +`\n\n🎯 exact · ✅ result · ❌ miss\nCan you beat me? 👇\n${_site}`;
+    h+=`<div class="psharerow"><button class="pbtn pshare" id="p-share">📤 Share my run</button></div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
   const _lb=lbRows.filter(r=>!r.is_model&&(r.picks>0||r.played>0||(sbUser&&r.uid===sbUser.id)));
   if(_lb.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
@@ -1223,6 +1237,7 @@ function predRender(){
   const _en=document.getElementById("p-editname");if(_en)_en.onclick=supaEditName;
   const _pm=document.getElementById("p-machine");if(_pm)_pm.onclick=showMachine;
   const _ea=document.getElementById("p-emailauth");if(_ea)_ea.onclick=predEmailAuth;
+  const _sh=document.getElementById("p-share");if(_sh)_sh.onclick=predShare;
   el.querySelectorAll(".lbclick").forEach(r=>r.onclick=()=>showProfile(r.dataset.uid,r.dataset.name));
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||[0,0]).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
