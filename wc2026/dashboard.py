@@ -678,7 +678,8 @@ function koLabel(home,away,date){const k=D.kickoffs&&D.kickoffs[[home,away].sort
   return k?k.label:(date?date.slice(5):"");}
 function renderMatches(){
   const sel=document.getElementById("mfilter").value;
-  const ms=D.matches.filter(m=>sel==="all"||m.group===sel);
+  const ms=D.matches.filter(m=>sel==="all"||m.group===sel)
+    .sort((a,b)=>(predKO(a.home,a.away)||0)-(predKO(b.home,b.away)||0));   // chronological by real kickoff
   let h=`<table class="mtable"><thead><tr><th>Kickoff (WEST)</th><th>Gr</th><th>Match</th>
   <th>Top scorelines</th><th>W/D/L</th></tr></thead><tbody>`;
   ms.forEach(m=>{const top=m.top.map((s,i)=>`<b>${s.score}</b> ${pc0(s.p)}`).join(" · ");
