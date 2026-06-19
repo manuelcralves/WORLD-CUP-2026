@@ -533,7 +533,7 @@ _JS = r"""
 const D=DATA, T=D.teams, byName=Object.fromEntries(T.map(t=>[t.team,t]));
 const STAGES=[["p_ko","Last 32"],["p_r16","Round of 16"],["p_qf","Quarter-finals"],
 ["p_sf","Semi-finals"],["p_final","Final"],["p_champion","Champion"]];
-const pct=x=>(x*100).toFixed(1)+"%", pc0=x=>(x*100).toFixed(0)+"%";
+const pct=x=>(x*100).toFixed(1)+"%", pc0=pct;   // pc0 aliases pct — 1 decimal everywhere (never round 99.9% to 100%)
 const pctv=x=>{const v=x*100;if(v<=0)return"0%";if(v<0.01)return"<0.01%";
   if(v<0.1)return v.toFixed(2)+"%";return v.toFixed(1)+"%";};
 let sortKey="p_champion",sortDir=-1,selected=D.teams[0].team,query="";
@@ -610,13 +610,13 @@ function teamPage(name){
       h+=`<div class="note" style="margin-top:6px"><b>${rnd}</b> <span class="tag">reaches ${pct(info.p_reach)}</span><br>${opps}</div>`;}
   const grp=[...D.teams].filter(x=>x.group===t.group).sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(b.exp_points-a.exp_points));
   h+=`<h4 class="tpsec">🎟️ Group ${t.group}</h4>`;
-  grp.forEach((x,i)=>{const me=x.team===name,rec=x.played?`P${x.played} · ${x.pts}pt${x.pts!==1?'s':''}`:'—';
+  grp.forEach((x,i)=>{const me=x.team===name,rec=x.played?`P${x.played} · ${x.pts}pt${x.pts!==1?'s':''} · ${x.gf}-${x.gf-x.gd}`:'—';
     h+=`<div class="tpgr${me?' me':''}"><span class="pos">${i+1}</span><span class="nm">${flag(x.team,'sm')} ${x.team}</span><span class="grec">${rec}</span><span class="adv">${pct(x.p_ko)}</span></div>`;});
   h+=`<div class="note tpfin">Expected finish — 1st ${pct(t.p_1st)} · 2nd ${pct(t.p_2nd)} · 3rd ${pct(t.p_3rd)} · 4th ${pct(t.p_4th)}</div>`;
   const mkey=m=>m.home+"|"+m.away,seen={},list=[];   // played + upcoming, chronological
   (D.played_review||[]).filter(m=>m.home===name||m.away===name).forEach(m=>{seen[mkey(m)]=1;list.push(m);});
   (D.matches||[]).filter(m=>(m.home===name||m.away===name)&&!seen[mkey(m)]).forEach(m=>list.push(m));
-  list.sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+  list.sort((a,b)=>(predKO(a.home,a.away)||0)-(predKO(b.home,b.away)||0));   // by real kickoff (chronological)
   if(list.length){h+=`<h4 class="tpsec">📅 Matches</h4>`;
     list.forEach(m=>{const home=m.home===name,opp=home?m.away:m.home,res=pr[mkey(m)];let right;
       if(res){const sc=res.hs+"-"+res["as"],ml=String(res.ml_score).split("-").map(Number),
@@ -662,13 +662,13 @@ function renderGroups(){
     const g=groups[L].slice().sort(ord);
     h+=`<div class="group"><h3>GROUP ${L}</h3>`;
     g.forEach((t,i)=>{const sel=t.team===selected?'style="color:#ffd34d;font-weight:700"':'';
-      const adv=Math.round(t.p_ko*100);
+      const adv=t.p_ko*100;
       const cls=adv>=90?"q-in":adv<=10?"q-out":"q-hunt";
-      const rec=t.played?`P${t.played} · ${t.pts}pt${t.pts!==1?"s":""}`:"—";
+      const rec=t.played?`P${t.played} · ${t.pts}pt${t.pts!==1?"s":""} · ${t.gf}-${t.gf-t.gd}`:"—";
       h+=`<div class="g-row gclick" data-t="${t.team}"><span class="pos">${i+1}</span>
       <span class="nm" ${sel}>${flag(t.team,"sm")} ${t.team}</span>
       <span class="grec">${rec}</span>
-      <span class="qbadge ${cls}" title="model's chance to reach the knockouts">${adv}%</span></div>`;});
+      <span class="qbadge ${cls}" title="model's chance to reach the knockouts">${pct(t.p_ko)}</span></div>`;});
     h+=`</div>`;});
   const gc=document.getElementById("groups");gc.innerHTML=h;
   gc.querySelectorAll(".g-row").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
@@ -738,9 +738,9 @@ function renderLab(){
     ${mk("Both teams score",r.btts)}${mk(flag(a,'sm')+" clean sheet",r.csa)}${mk(flag(b,'sm')+" clean sheet",r.csb)}
     ${mk(flag(a,'sm')+" win or draw",r.ph+r.pd)}${mk(flag(b,'sm')+" win or draw",r.pa+r.pd)}${mk("Anyone but a draw",r.ph+r.pa)}</div>`;
   document.getElementById("lab-out").innerHTML=`
-  <div class="wdl"><div style="width:${W}%;background:#00e0a4">${W.toFixed(0)}%</div>
-  <div style="width:${Dr}%;background:#8b95ab">${Dr.toFixed(0)}%</div>
-  <div style="width:${L}%;background:#ffd34d">${L.toFixed(0)}%</div></div>
+  <div class="wdl"><div style="width:${W}%;background:#00e0a4">${W.toFixed(1)}%</div>
+  <div style="width:${Dr}%;background:#8b95ab">${Dr.toFixed(1)}%</div>
+  <div style="width:${L}%;background:#ffd34d">${L.toFixed(1)}%</div></div>
   <div class="note" style="text-align:center">${flag(a,'sm')} win · draw · ${flag(b,'sm')} win
    &nbsp;|&nbsp; xG <b>${r.la.toFixed(2)} – ${r.lb.toFixed(2)}</b></div>
   ${koLine}
@@ -1151,7 +1151,7 @@ function predRender(){
   if(signedIn){if(n>0){const lead=you>mac?`You're ${you-mac} ahead 🟢`:you<mac?`The model's ${mac-you} ahead 🔴`:`Dead level 🤝`;
     h+=`<div class="pboard"><div class="pb"><div class="pbn">${you}</div><div class="pbl">You</div></div>`
       +`<div class="pbvs">${lead}</div><div class="pb pbclick" id="p-machine" title="See the Machine's picks"><div class="pbn">${mac}</div><div class="pbl">🤖 Machine ›</div></div></div>`
-      +`<div class="pstats">over ${n} match${n>1?'es':''} · ${Math.round(hits/n*100)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
+      +`<div class="pstats">over ${n} match${n>1?'es':''} · ${(hits/n*100).toFixed(1)}% result hit-rate · 🎯 ${exact} exact · 🔥 streak ${streak}${beat?` · 🏆 beat the model ${beat}×`:''}</div>`;
     const _bd=predBadges(scored);
     if(_bd.length)h+=`<div class="pbadges">`+_bd.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
@@ -1201,7 +1201,7 @@ function predRender(){
     if(res){const ra=[res.hs,res["as"]],mdl=res.ml_score.split("-").map(Number);   // why each side scored what it did
       if(mine)h+=`<div class="pbreak">↳ <b>your +${predScore(cur,ra)}</b> · ${predBreak(cur,ra)}</div>`;
       h+=`<div class="pbreak">↳ <b>🤖 +${predScore(mdl,ra)}</b> · ${predBreak(mdl,ra)}</div>`;}
-    if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${Math.round(s.p*100)}%</button>`).join("")+`</div>`;
+    if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${pc0(s.p)}</button>`).join("")+`</div>`;
     const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
     h+=`</div>`;});
   if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
