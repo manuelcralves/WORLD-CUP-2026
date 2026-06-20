@@ -361,6 +361,13 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .tpfacts{font-size:13.5px;line-height:1.9}.tpfacts b{color:#eef1f7}
 .pmodh{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin-bottom:2px}
 .presrow2{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:8px 0;border-bottom:1px solid #1c2536}
+.pmore{margin:4px 0 10px}
+.pmore>summary{cursor:pointer;color:#9fb0c9;font-size:12.5px;font-weight:600;text-align:center;padding:7px;list-style:none;border:1px solid #243049;border-radius:8px;background:#131c2e}
+.pmore>summary::-webkit-details-marker{display:none}
+.pmore>summary::before{content:"\\25B8  "}
+.pmore[open]>summary::before{content:"\\25BE  "}
+.pmore>summary:hover{color:#dfe7f5;border-color:#33415e}
+.pmore[open]>summary{margin-bottom:8px}
 .presrow2:last-child{border:none}
 .pcrowd{margin-top:8px;font-size:12.5px;color:#9fb0c9}
 .lbx{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:4px 14px;margin-bottom:6px}
@@ -1084,6 +1091,10 @@ async function supaEditName(){if(!sb||!sbUser)return;
   const{error}=await sb.from("profiles").update({name:n}).eq("id",sbUser.id);
   if(error){predToast("⚠️ Couldn't save name");return;}
   myName=n;predToast("✓ Username saved");supaSync();}
+function last5more(cards){   // cards: HTML strings (newest-first) — show the 5 most recent, fold the rest into a native expander
+  if(cards.length<=5)return cards.join("");
+  return cards.slice(0,5).join("")+`<details class="pmore"><summary>Show ${cards.length-5} more</summary>${cards.slice(5).join("")}</details>`;
+}
 function predPicksModal(name,preds,isMachine){
   const rev={};(D.played_review||[]).forEach(m=>rev[m.home+"|"+m.away]=m);Object.assign(rev,liveRev);   // live Supabase results win over the baked ones
   const now=new Date();let pts=0,n=0,exact=0,beat=0;const scored=[],pending=[];
@@ -1099,10 +1110,13 @@ function predPicksModal(name,preds,isMachine){
     +`<div class="pstats" style="margin:4px 0 12px">${n} scored pick${n!==1?'s':''} · ${pts} pts · 🎯 ${exact} exact${isMachine?'':` · 🏆 beat the model ${beat}×`}</div>`;
   const _pb=predBadges(scored);
   if(_pb.length)html+=`<div class="pbadges">`+_pb.map(x=>`<span class="pbadge" title="${x[2]}">${x[0]} ${x[1]}</span>`).join("")+`</div>`;
-  scored.slice().reverse().forEach(({m,pick,a,yp})=>{
-    html+=`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
+  const _scm=scored.slice().sort((x,y)=>predKO(y.m.home,y.m.away)-predKO(x.m.home,x.m.away));   // newest first
+  const _pcards=[];
+  _scm.forEach(({m,pick,a,yp})=>{
+    _pcards.push(`<div class="presrow2"><span>${flag(m.home,'sm')} ${m.home} <b>${a[0]}-${a[1]}</b> ${m.away} ${flag(m.away,'sm')}</span>`
       +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`
-      +`<div class="pbreak" style="margin:-2px 0 8px 2px">↳ ${predBreak(pick,a)}</div>`;});
+      +`<div class="pbreak" style="margin:-2px 0 8px 2px">↳ ${predBreak(pick,a)}</div>`);});
+  html+=last5more(_pcards);
   pending.slice().reverse().forEach(({h,aw,pick})=>{
     html+=`<div class="presrow2"><span>${flag(h,'sm')} ${h} <span class="note">vs</span> ${aw} ${flag(aw,'sm')}</span>`
       +`<span>picked <b>${pick.join('-')}</b> <span class="note">🔒 awaiting result</span></span></div>`;});
@@ -1336,11 +1350,13 @@ function predRender(){
   if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
   if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;
     const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
+    const _rescards=[];
     scored.slice().reverse().forEach(({m,yp,mp,a})=>{const key=m.home+"|"+m.away;
-      h+=`<div class="pcard pres"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
+      _rescards.push(`<div class="pcard pres"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
         +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></div>`
         +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=10?'g':mp?'a':'r'}">${tag(mp)}</span></div>`
-        +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`;});}
+        +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`);});
+    h+=last5more(_rescards);}
   }else h+=`<div class="pcard" style="text-align:center;padding:22px 16px"><div style="font-size:15px;font-weight:700;margin-bottom:6px">🔒 Sign in to make your predictions</div><div class="note" style="margin:0">Log in with Google to pick scores, challenge the model and climb the leaderboard.</div><button class="pbtn pg" id="p-signin2" style="margin-top:12px">Sign in with Google</button></div>`;
   h+=`<h3 class="psec">🏆 Knockout bracket <span class="tag">your path to the title · separate ranking</span></h3><div id="predbracket"></div>`;
   el.innerHTML=h;
