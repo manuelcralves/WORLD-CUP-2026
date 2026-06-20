@@ -2,7 +2,7 @@ name: Update & Deploy
 
 on:
   schedule:
-    - cron: "0 9 * * *"     # every day at 09:00 UTC
+    - cron: "0 11 * * *"    # every day at 11:00 UTC = 12:00 WEST (Portugal) — later so martj42 has published the day's results
   workflow_dispatch:          # allow manual runs
   push:
     branches: [main]
