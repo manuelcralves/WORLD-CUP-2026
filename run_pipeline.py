@@ -71,7 +71,7 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
             TRK.backfill_history(hist, golden_path=ghist, n_sims=12000)
         asof = TRK.data_asof(bundle)
         TRK.record_snapshot(table, asof, hist)
-        TRK.record_golden_snapshot(GB.predict(bundle, table, topn=30), asof, ghist)
+        TRK.record_golden_snapshot(GB.predict(bundle, table, topn=100), asof, ghist)  # deep enough that a later top-6 riser still has back-history
         chart = TRK.evolution_chart(hist, out_dir / "odds_evolution.png")
         evolution = {"movers": TRK.movers(hist), "has_chart": chart is not None}
         odds_history = TRK.history_series(hist)

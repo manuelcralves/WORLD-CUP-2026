@@ -133,7 +133,7 @@ def backfill_history(history_path, golden_path=None, n_sims: int = 15000) -> Pat
         table = T.simulate(b, M.train_full(b), n_sims=n_sims)
         record_snapshot(table, label, path)
         if gpath:
-            record_golden_snapshot(GB.predict(b, table, topn=30), label, gpath)
+            record_golden_snapshot(GB.predict(b, table, topn=100), label, gpath)  # keep back-history for players who later climb into the top 6
     return path
 
 
