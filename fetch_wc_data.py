@@ -153,6 +153,18 @@ def main() -> None:
         print("matches fetch returned nothing (quota/Cloudflare) -> keeping the existing cache")
     print(f"matches: {len(rows)} saved ({sum(1 for r in rows if r['score'])} played)")
 
+    # deployed status -- so "did the fetcher reach the API, and from where?" is checkable at /outputs/fetch_status.txt
+    where = "GitHub Actions (datacenter)" if os.environ.get("GITHUB_ACTIONS") else "local"
+    line = (f"OK -- reached the Highlightly API from {where}: {len(rows)} matches, "
+            f"{sum(1 for r in rows if r['score'])} played"
+            if rows else
+            f"UNREACHABLE from {where} -- API blocked (Cloudflare?) or no key; using the committed cache")
+    try:
+        (CACHE.parent / "outputs" / "fetch_status.txt").write_text(
+            f"{_today} - {line} - {_prior + _used}/{DAILY_CAP} requests today\n", encoding="utf-8")
+    except OSError:
+        pass
+
     # 2) line-ups + events for FINISHED matches, one request each, cached
     finished = [r for r in rows if r["status"] == "Finished" and r["score"]]   # only FINISHED games -- never cache mid-game data
     # one-time: drop a pre-out_pid events cache so every game re-fetches with the sub-on id.

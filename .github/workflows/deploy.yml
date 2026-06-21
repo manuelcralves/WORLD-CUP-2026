@@ -85,7 +85,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results.csv shootouts.csv goalscorers.csv former_names.csv outputs/history.csv outputs/golden_history.csv api_cache
+          git add results.csv shootouts.csv goalscorers.csv former_names.csv outputs/history.csv outputs/golden_history.csv outputs/fetch_status.txt api_cache
           git diff --staged --quiet || git commit -m "chore: daily data + odds + golden-boot history update"
           git push || true
 
