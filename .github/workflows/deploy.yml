@@ -49,6 +49,12 @@ jobs:
       - name: Feed Highlightly results into the dataset
         run: python feed_highlightly.py . || true
 
+      # Daily sanity check: does results.csv agree with Highlightly? Read-only.
+      # Prints any score mismatches / missing games in the build log AND writes
+      # outputs/data_check.txt (deployed) so the sync is confirmable at a glance.
+      - name: Reconcile dataset vs Highlightly
+        run: python reconcile_highlightly.py . | tee outputs/data_check.txt || true
+
       - name: Run predictions (live + pre-tournament)
         env:                                   # for the Supabase match-table push
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
