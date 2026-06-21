@@ -79,6 +79,17 @@ def _append(path: Path, rows: list, header: list) -> None:
         w.writerows(rows)
 
 
+EV_HEADER = ["match_id", "minute", "team", "type", "player", "player_id", "assist", "out", "out_pid"]
+
+
+def _ev_rows(mid, evs) -> list:
+    """Event rows for one match. out_pid (assistingPlayerId) = the player going off on a sub."""
+    return [{"match_id": mid, "minute": e.get("time"), "team": (e.get("team") or {}).get("name"),
+             "type": e.get("type"), "player": e.get("player"), "player_id": e.get("playerId"),
+             "assist": e.get("assist"), "out": e.get("substituted"),
+             "out_pid": e.get("assistingPlayerId")} for e in (evs or [])]
+
+
 def fetch_matches() -> list:
     """All World Cup matches, following the limit/offset pagination."""
     out, offset = [], 0
@@ -108,10 +119,13 @@ def main() -> None:
                      "status": (m.get("state") or {}).get("description"),
                      "home": m["homeTeam"]["name"], "home_id": m["homeTeam"]["id"],
                      "away": m["awayTeam"]["name"], "away_id": m["awayTeam"]["id"], "score": score})
-    if m_csv.exists():
-        m_csv.unlink()
-    _append(m_csv, rows, ["match_id", "date", "round", "status",
-                          "home", "home_id", "away", "away_id", "score"])
+    if rows:                              # only overwrite the cache when the fetch returned matches --
+        if m_csv.exists():                # never wipe it on a quota/Cloudflare miss (that blanks the whole site)
+            m_csv.unlink()
+        _append(m_csv, rows, ["match_id", "date", "round", "status",
+                              "home", "home_id", "away", "away_id", "score"])
+    else:
+        print("matches fetch returned nothing (quota/Cloudflare) -> keeping the existing cache")
     print(f"matches: {len(rows)} saved ({sum(1 for r in rows if r['score'])} played)")
 
     # 2) line-ups + events for FINISHED matches, one request each, cached
@@ -119,11 +133,27 @@ def main() -> None:
     # one-time: drop a pre-out_pid events cache so every game re-fetches with the sub-on id.
     # Gated on `rows` (the matches fetch worked) so we never wipe events when the API is
     # unreachable (Cloudflare) and couldn't refill them.
+    # one-time backfill: if the cached events predate out_pid, re-fetch them all WITH the new
+    # field -- atomically: build the full set in memory and only swap the file in if EVERY game
+    # succeeded, so a low-quota / Cloudflare-blocked run never leaves a half-empty events cache.
     if rows and ev_csv.exists():
         with ev_csv.open(encoding="utf-8") as f:
-            if "out_pid" not in f.readline():
+            stale = "out_pid" not in f.readline()
+        if stale:
+            print("events cache predates out_pid -> re-fetching all events (atomic)")
+            fresh, ok = [], True
+            for r in finished:
+                evs = _get(f"events/{r['match_id']}")
+                if evs is None:                  # API error / quota -> abort, keep the old cache intact
+                    ok = False
+                    break
+                fresh += _ev_rows(r["match_id"], evs)
+            if ok:
                 ev_csv.unlink()
-                print("events cache predates out_pid -> re-fetching all events")
+                _append(ev_csv, fresh, EV_HEADER)
+                print(f"  re-fetched events for {len(finished)} games")
+            else:
+                print("  re-fetch incomplete (quota/API) -> kept the existing events cache")
     ln_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ln_csv, "match_id")]
     ev_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ev_csv, "match_id")]
     print(f"line-ups: fetching {len(ln_todo)} new | events: fetching {len(ev_todo)} new")
@@ -143,14 +173,7 @@ def main() -> None:
                               "player_id", "player", "number", "position"])
 
     for r in ev_todo:
-        mid = r["match_id"]
-        evs = _get(f"events/{mid}")
-        _append(ev_csv, [{"match_id": mid, "minute": e.get("time"), "team": (e.get("team") or {}).get("name"),
-                          "type": e.get("type"), "player": e.get("player"), "player_id": e.get("playerId"),
-                          "assist": e.get("assist"), "out": e.get("substituted"),
-                          "out_pid": e.get("assistingPlayerId")}     # on a sub, the player going off
-                         for e in (evs or [])],
-                ["match_id", "minute", "team", "type", "player", "player_id", "assist", "out", "out_pid"])
+        _append(ev_csv, _ev_rows(r["match_id"], _get(f"events/{r['match_id']}")), EV_HEADER)
 
     # 3) match statistics (possession, shots, ...) for finished matches, cached one each
     st_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(st_csv, "match_id")]
