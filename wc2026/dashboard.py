@@ -389,6 +389,8 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .todaycard.mdclick{cursor:pointer}
 tr.mdclick{cursor:pointer}
 tr.mdclick:hover{background:#152033}
+.tpm.mdclick,.pcard.pres.mdclick,.wifm.mdclick{cursor:pointer}
+.tpm.mdclick:hover{background:#152033}
 .tdmore{font-size:11px;color:#00e0a4;margin-top:5px;font-weight:600}
 .crwrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .crh{font-size:12px;font-weight:700;color:#9fb0c9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -674,7 +676,8 @@ function teamPage(name){
         right=`<b>${sc}</b> ${res.ml_score===sc?'🎯':aw===mw?'✅':'❌'}`;}
       else{const pw=home?m.p_home:m.p_away,pl=home?m.p_away:m.p_home;
         right=`<span class="note">W ${pc0(pw)} · D ${pc0(m.p_draw)} · L ${pc0(pl)}</span>`;}
-      h+=`<div class="tpm"><span class="tpmko">${koLabel(m.home,m.away,m.date)}</span><span class="tpmo">${home?'vs':'@'} ${flag(opp,'sm')} ${opp}</span><span class="tpmr">${right}</span></div>`;});}
+      const md=res&&hasMd(m.home,m.away);
+      h+=`<div class="tpm${md?' mdclick':''}"${md?` data-h="${m.home}" data-a="${m.away}"`:''}><span class="tpmko">${koLabel(m.home,m.away,m.date)}</span><span class="tpmo">${home?'vs':'@'} ${flag(opp,'sm')} ${opp}</span><span class="tpmr">${right}</span></div>`;});}
   const sq=((D.rich||{}).squads||{})[name]||[];
   if(sq.length){h+=`<h4 class="tpsec">📋 Squad <span class="tag">${sq.length} players · this World Cup</span></h4><div class="tpsquad">`
     +sq.map(p=>`<div class="tpsqp"><span class="tpsqn">${p.number||''}</span> ${p.player}<span class="note"> ${(p.position||'')[0]||''}</span></div>`).join("")+`</div>`;}
@@ -699,6 +702,7 @@ function teamPage(name){
   const old=document.getElementById("tpbg");if(old)old.remove();
   document.body.insertAdjacentHTML("beforeend",`<div class="pmodbg" id="tpbg">${h}</div>`);
   const bg=document.getElementById("tpbg");
+  bg.querySelectorAll(".mdclick").forEach(r=>r.onclick=e=>{e.stopPropagation();matchModal(r.dataset.h,r.dataset.a);});
   const tpClose=()=>{bg.remove();document.removeEventListener("keydown",tpEsc);   // pure popup: drop ?team= on close, no reload
     const u=new URLSearchParams(location.search);u.delete("team");u.set("tab","teams");
     history.replaceState(null,"","?"+u);};
@@ -966,7 +970,7 @@ function wifRender(){
   let h=`<div class="wifgrid">`;
   for(const L in G){h+=`<div class="group"><h3>GROUP ${L}</h3>`;
     fx.forEach((f,i)=>{if(f.group!==L)return;const[hs,as]=wifSc(i,f);
-      if(f.played)h+=`<div class="wifm wifp">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span> <b>${hs}-${as}</b> <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;
+      if(f.played){const md=hasMd(f.home,f.away);h+=`<div class="wifm wifp${md?' mdclick':''}"${md?` data-h="${f.home}" data-a="${f.away}"`:''}>${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span> <b>${hs}-${as}</b> <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;}
       else h+=`<div class="wifm">${flag(f.home,'sm')} <span class="wifteam">${sn(f.home)}</span>
         <span class="wifsc">${sb(i,'h',-1,'−')}<b>${hs}</b>${sb(i,'h',1,'+')}<i>-</i>${sb(i,'a',-1,'−')}<b>${as}</b>${sb(i,'a',1,'+')}</span>
         <span class="wifteam ar">${sn(f.away)}</span> ${flag(f.away,'sm')}</div>`;});
@@ -976,6 +980,7 @@ function wifRender(){
     h+=`</tbody></table></div>`;}
   el.innerHTML=h+`</div>`+thirdsBox(thirds.map(x=>({team:x.t,group:x.L,played:3,pts:x.pts,gd:x.gd,gf:x.gf})),"your scenario · 8 of 12 advance");
   el.querySelectorAll(".t3box .gclick").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
+  el.querySelectorAll(".wifm.mdclick").forEach(r=>r.onclick=()=>matchModal(r.dataset.h,r.dataset.a));
   el.querySelectorAll(".wifsc .wifb").forEach(btn=>btn.onclick=()=>{const i=+btn.dataset.i,k=btn.dataset.s==='h'?'hs':'as';
     wifScores[i][k]=Math.max(0,Math.min(19,wifScores[i][k]+ +btn.dataset.d));wifRender();bywRender();});
 }
@@ -1413,7 +1418,7 @@ function predRender(){
     const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
     const _rescards=[];
     scored.slice().reverse().forEach(({m,yp,mp,a})=>{const key=m.home+"|"+m.away;
-      _rescards.push(`<div class="pcard pres"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
+      _rescards.push(`<div class="pcard pres${hasMd(m.home,m.away)?' mdclick':''}" data-h="${m.home}" data-a="${m.away}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span> <b>${a[0]} – ${a[1]}</b> <span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`
         +`<div class="presrow"><span>You said <b>${store[key].join('-')}</b></span><span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></div>`
         +`<div class="presrow mac"><span>🤖 Machine said <b>${m.ml_score}</b></span><span class="ppts ${mp>=10?'g':mp?'a':'r'}">${tag(mp)}</span></div>`
         +(yp>mp?'<div class="pbeat">You beat the model! 🎉</div>':mp>yp?'<div class="pbeat lose">Model won this one</div>':'')+`</div>`);});
@@ -1434,6 +1439,7 @@ function predRender(){
   el.querySelectorAll(".psc .wifb").forEach(b=>b.onclick=()=>{const key=b.dataset.k,fld=b.dataset.s==='h'?0:1;
     const cur=(predLoad()[key]||[0,0]).slice();cur[fld]=Math.max(0,Math.min(19,cur[fld]+ +b.dataset.d));predSet(key,cur[0],cur[1]);});
   el.querySelectorAll(".pchip").forEach(c=>c.onclick=()=>{const s=c.dataset.sc.split("-").map(Number);predSet(c.dataset.k,s[0],s[1]);});
+  el.querySelectorAll(".pcard.pres.mdclick").forEach(c=>c.onclick=()=>matchModal(c.dataset.h,c.dataset.a));
 }
 function renderToday(){
   const sec=document.getElementById("todaysec");if(!sec)return;
