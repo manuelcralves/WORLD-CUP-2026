@@ -374,11 +374,12 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pmore[open]>summary{margin-bottom:8px}
 .mdsc{background:#00e0a4;color:#08131f;padding:1px 9px;border-radius:6px;font-weight:800}
 .mdsec{font-size:13px;font-weight:700;color:#cbd3e1;margin:14px 0 6px;border-top:1px solid #243049;padding-top:10px}
-.mdev{display:flex;gap:7px;align-items:baseline;font-size:13px;padding:3px 6px;border-radius:6px}
-.mdev.mda{background:#101a2b}
-.mdmin{color:#7d8aa3;min-width:38px;font-variant-numeric:tabular-nums}
-.mdic{min-width:18px;text-align:center}
-.mdteam{margin-left:auto;font-size:11px;color:#5d6a85;white-space:nowrap}
+.mdtl{margin-top:4px}
+.mdrow{display:grid;grid-template-columns:1fr 44px 1fr;align-items:baseline;gap:8px;padding:4px 0;font-size:13px;border-bottom:1px solid #131c2e}
+.mdh{text-align:right}
+.mda{text-align:left}
+.mdmin{color:#7d8aa3;text-align:center;font-variant-numeric:tabular-nums;font-size:12px}
+.mdic{margin:0 2px}
 .mdlu{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .mdtt{font-weight:700;font-size:13px;margin-bottom:6px}
 .mdp{font-size:12.5px;padding:2px 0}
@@ -386,6 +387,8 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .mdnum{display:inline-block;min-width:22px;color:#7d8aa3;font-variant-numeric:tabular-nums}
 .mdbh{font-size:11px;color:#5d6a85;margin:9px 0 3px;text-transform:uppercase;letter-spacing:.5px}
 .todaycard.mdclick{cursor:pointer}
+tr.mdclick{cursor:pointer}
+tr.mdclick:hover{background:#152033}
 .tdmore{font-size:11px;color:#00e0a4;margin-top:5px;font-weight:600}
 .crwrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .crh{font-size:12px;font-weight:700;color:#9fb0c9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
@@ -866,20 +869,22 @@ function renderReview(){
   h+=`<table class="rev"><thead><tr><th>Date</th><th>Match</th><th>Actual result</th>
   <th title="Home win / Draw / Away win — the bold one is the model's pick">Model W / D / L</th>
   <th title="Single most probable exact score">Most likely score</th><th>Verdict</th></tr></thead><tbody>`;
-  rv.forEach(m=>{
+  [...rv].sort((a,b)=>(predKO(b.home,b.away)||0)-(predKO(a.home,a.away)||0)).forEach(m=>{   // chronological, newest first
     const probs=[["home",m.p_home],["draw",m.p_draw],["away",m.p_away]];
     const wdl=probs.map(([k,v])=>{const pick=k===m.pred;
       const c=pick?(m.hit?"#00e0a4":"#ff6b6b"):"#8b95ab";
       return `<span style="color:${c};font-weight:${pick?700:400}">${pc0(v)}</span>`;}).join(" / ");
     const gl=(m.goals||[]).map(x=>`${x.minute!=null?x.minute+"'":""} ${x.scorer}${x.pen?" (p)":""}${x.og?" (og)":""}`).join(" · ");
-    h+=`<tr><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td>
+    const md=hasMd(m.home,m.away);
+    h+=`<tr${md?` class="mdclick" data-h="${m.home}" data-a="${m.away}"`:""}><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td>
     <td><span class="row-team">${flag(m.home,'sm')} ${m.home} <b>${m.hs}-${m["as"]}</b> ${m.away} ${flag(m.away,'sm')}</span>${gl?`<div class="goalsline">⚽ ${gl}</div>`:""}</td>
     <td>${oc(m.actual)}</td><td>${wdl}</td>
     <td>${m.ml_score===(m.hs+"-"+m["as"])
       ?`<span class="badge2 y" title="nailed the exact score!">🎯 ${m.ml_score} <span style="font-weight:400">${pc0(m.p_ml)}</span></span>`
       :`<span style="color:#8b95ab">${m.ml_score} <span style="font-size:11px">${pc0(m.p_ml)}</span></span>`}</td>
     <td>${m.hit?'<span class="badge2 y">✓ right result</span>':'<span class="badge2 n">✗ (gave it '+pc0(m.p_actual)+')</span>'}</td></tr>`;});
-  document.getElementById("review").innerHTML=h+`</tbody></table>`;
+  el.innerHTML=h+`</tbody></table>`;
+  el.querySelectorAll(".mdclick").forEach(r=>r.onclick=()=>matchModal(r.dataset.h,r.dataset.a));
 }
 
 function renderFifa(){
@@ -1178,11 +1183,13 @@ function matchModal(home,away){   // rich detail (timeline + line-ups) for a pla
   const H=md.home,A=md.away;
   const ICON={"Goal":"⚽","Own Goal":"🥅","Penalty":"⚽","Yellow Card":"🟨","Red Card":"🟥","Substitution":"🔄"};
   let h=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>${flag(H.team,'sm')} ${H.team}${md.score?` <span class="mdsc">${md.score}</span> `:' v '}${A.team} ${flag(A.team,'sm')}</b><button class="pbtn" id="pmodx">✕</button></div>`;
-  if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div>`;
-    md.timeline.forEach(e=>{const ic=ICON[e.type]||"•",isA=e.team===A.team;
+  if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div><div class="mdtl">`;
+    md.timeline.forEach(e=>{const ic=ICON[e.type]||"•",isH=e.team===H.team;
       const body=e.type==="Substitution"?`<b>${e.player}</b> <span class="note">↔ ${e.out}</span>`
-        :`<b>${e.player}</b>${e.assist?` <span class="note">assist ${e.assist}</span>`:''}`;
-      h+=`<div class="mdev${isA?' mda':''}"><span class="mdmin">${e.minute}'</span><span class="mdic">${ic}</span>${body}<span class="mdteam">${e.team}</span></div>`;});}
+        :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}`;
+      const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
+      h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${e.minute}'</div><div class="mda">${isH?'':cellA}</div></div>`;});
+    h+=`</div>`;}
   const lu=t=>t.xi.map(p=>`<div class="mdp"><span class="mdnum">${p.number||''}</span>${p.player}<span class="note"> ${(p.position||'')[0]||''}</span></div>`).join("")
     +(t.bench.length?`<div class="mdbh">Bench</div>`+t.bench.map(p=>`<div class="mdp dim"><span class="mdnum">${p.number||''}</span>${p.player}</div>`).join(""):"");
   if(H.xi.length||A.xi.length){h+=`<div class="mdsec">📋 Line-ups</div><div class="mdlu">`
