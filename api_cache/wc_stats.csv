@@ -1,80 +1,4 @@
 match_id,side,team,stat,value
-1267475078,home,Tunisia,Expected Goals,0.01
-1267475078,home,Tunisia,Big Chances Created,0
-1267475078,home,Tunisia,Attacks,14
-1267475078,home,Tunisia,Free Kicks,3
-1267475078,home,Tunisia,Expected Assists,0.01
-1267475078,home,Tunisia,Successful Crosses,1
-1267475078,home,Tunisia,Crosses,3
-1267475078,home,Tunisia,Passes Own Half,35
-1267475078,home,Tunisia,Passes Opposition Half,23
-1267475078,home,Tunisia,Successful Long Passes,2
-1267475078,home,Tunisia,Long Passes,9
-1267475078,home,Tunisia,Throw-Ins,5
-1267475078,home,Tunisia,Key Passes,0
-1267475078,home,Tunisia,Passes Into Final Third,3
-1267475078,home,Tunisia,Backward Passes,11
-1267475078,home,Tunisia,Goal Kicks,1
-1267475078,home,Tunisia,Interceptions,3
-1267475078,home,Tunisia,Successful Tackles,4
-1267475078,home,Tunisia,Tackles,4
-1267475078,home,Tunisia,Clearances,7
-1267475078,home,Tunisia,Successful Dribbles,1
-1267475078,home,Tunisia,Dribbles,2
-1267475078,home,Tunisia,Shots accuracy,0
-1267475078,home,Tunisia,Failed passes,11
-1267475078,home,Tunisia,Possession,0.35
-1267475078,home,Tunisia,Shots on target,0
-1267475078,home,Tunisia,Corners,1
-1267475078,home,Tunisia,Offsides,0
-1267475078,home,Tunisia,Successful passes,44
-1267475078,home,Tunisia,Red cards,0
-1267475078,home,Tunisia,Shots off target,1
-1267475078,home,Tunisia,Blocked shots,0
-1267475078,home,Tunisia,Shots within penalty area,0
-1267475078,home,Tunisia,Total passes,55
-1267475078,home,Tunisia,Goalkeeper saves,1
-1267475078,home,Tunisia,Fouls,2
-1267475078,home,Tunisia,Yellow cards,0
-1267475078,home,Tunisia,Shots outside penalty area,1
-1267475078,away,Japan,Expected Goals,1.26
-1267475078,away,Japan,Big Chances Created,2
-1267475078,away,Japan,Attacks,21
-1267475078,away,Japan,Free Kicks,2
-1267475078,away,Japan,Expected Assists,0.39
-1267475078,away,Japan,Successful Crosses,0
-1267475078,away,Japan,Crosses,4
-1267475078,away,Japan,Passes Own Half,41
-1267475078,away,Japan,Passes Opposition Half,67
-1267475078,away,Japan,Successful Long Passes,4
-1267475078,away,Japan,Long Passes,6
-1267475078,away,Japan,Throw-Ins,8
-1267475078,away,Japan,Key Passes,2
-1267475078,away,Japan,Passes Into Final Third,22
-1267475078,away,Japan,Backward Passes,16
-1267475078,away,Japan,Goal Kicks,2
-1267475078,away,Japan,Interceptions,2
-1267475078,away,Japan,Successful Tackles,3
-1267475078,away,Japan,Tackles,5
-1267475078,away,Japan,Clearances,5
-1267475078,away,Japan,Successful Dribbles,1
-1267475078,away,Japan,Dribbles,4
-1267475078,away,Japan,Shots accuracy,0.25
-1267475078,away,Japan,Failed passes,8
-1267475078,away,Japan,Possession,0.65
-1267475078,away,Japan,Shots on target,1
-1267475078,away,Japan,Corners,2
-1267475078,away,Japan,Offsides,0
-1267475078,away,Japan,Successful passes,96
-1267475078,away,Japan,Red cards,0
-1267475078,away,Japan,Shots off target,2
-1267475078,away,Japan,Blocked shots,1
-1267475078,away,Japan,Shots within penalty area,4
-1267475078,away,Japan,Total passes,104
-1267475078,away,Japan,Goalkeeper saves,0
-1267475078,away,Japan,Fouls,3
-1267475078,away,Japan,Yellow cards,0
-1267475078,away,Japan,Shots outside penalty area,0
 1267473376,home,Ecuador,Expected Goals,3.05
 1267473376,home,Ecuador,Big Chances Created,5
 1267473376,home,Ecuador,Attacks,146
@@ -2875,3 +2799,83 @@ match_id,side,team,stat,value
 1267453803,away,South Africa,Fouls,11
 1267453803,away,South Africa,Yellow cards,2
 1267453803,away,South Africa,Shots outside penalty area,2
+1267475078,home,Tunisia,Expected Goals,0.05
+1267475078,home,Tunisia,Big Chances Created,0
+1267475078,home,Tunisia,Attacks,65
+1267475078,home,Tunisia,Free Kicks,15
+1267475078,home,Tunisia,Expected Assists,0.15
+1267475078,home,Tunisia,Successful Crosses,2
+1267475078,home,Tunisia,Crosses,10
+1267475078,home,Tunisia,Passes Own Half,191
+1267475078,home,Tunisia,Passes Opposition Half,173
+1267475078,home,Tunisia,Successful Long Passes,16
+1267475078,home,Tunisia,Long Passes,56
+1267475078,home,Tunisia,Throw-Ins,29
+1267475078,home,Tunisia,Key Passes,1
+1267475078,home,Tunisia,Passes Into Final Third,42
+1267475078,home,Tunisia,Backward Passes,57
+1267475078,home,Tunisia,Goal Kicks,4
+1267475078,home,Tunisia,Interceptions,14
+1267475078,home,Tunisia,Successful Tackles,16
+1267475078,home,Tunisia,Tackles,18
+1267475078,home,Tunisia,Clearances,23
+1267475078,home,Tunisia,Successful Aerial Duels,4
+1267475078,home,Tunisia,Aerial Duels,18
+1267475078,home,Tunisia,Successful Dribbles,2
+1267475078,home,Tunisia,Dribbles,7
+1267475078,home,Tunisia,Shots accuracy,0
+1267475078,home,Tunisia,Failed passes,70
+1267475078,home,Tunisia,Possession,0.38
+1267475078,home,Tunisia,Shots on target,0
+1267475078,home,Tunisia,Corners,3
+1267475078,home,Tunisia,Offsides,1
+1267475078,home,Tunisia,Successful passes,284
+1267475078,home,Tunisia,Red cards,0
+1267475078,home,Tunisia,Shots off target,1
+1267475078,home,Tunisia,Blocked shots,1
+1267475078,home,Tunisia,Shots within penalty area,1
+1267475078,home,Tunisia,Total passes,354
+1267475078,home,Tunisia,Goalkeeper saves,1
+1267475078,home,Tunisia,Fouls,8
+1267475078,home,Tunisia,Yellow cards,0
+1267475078,home,Tunisia,Shots outside penalty area,1
+1267475078,away,Japan,Expected Goals,2.13
+1267475078,away,Japan,Big Chances Created,4
+1267475078,away,Japan,Attacks,117
+1267475078,away,Japan,Free Kicks,8
+1267475078,away,Japan,Expected Assists,1.42
+1267475078,away,Japan,Successful Crosses,2
+1267475078,away,Japan,Crosses,11
+1267475078,away,Japan,Passes Own Half,253
+1267475078,away,Japan,Passes Opposition Half,341
+1267475078,away,Japan,Successful Long Passes,18
+1267475078,away,Japan,Long Passes,32
+1267475078,away,Japan,Throw-Ins,23
+1267475078,away,Japan,Key Passes,9
+1267475078,away,Japan,Passes Into Final Third,95
+1267475078,away,Japan,Backward Passes,79
+1267475078,away,Japan,Goal Kicks,5
+1267475078,away,Japan,Interceptions,7
+1267475078,away,Japan,Successful Tackles,12
+1267475078,away,Japan,Tackles,18
+1267475078,away,Japan,Clearances,25
+1267475078,away,Japan,Successful Aerial Duels,14
+1267475078,away,Japan,Aerial Duels,18
+1267475078,away,Japan,Successful Dribbles,4
+1267475078,away,Japan,Dribbles,15
+1267475078,away,Japan,Shots accuracy,0.45
+1267475078,away,Japan,Failed passes,62
+1267475078,away,Japan,Possession,0.62
+1267475078,away,Japan,Shots on target,5
+1267475078,away,Japan,Corners,5
+1267475078,away,Japan,Offsides,1
+1267475078,away,Japan,Successful passes,521
+1267475078,away,Japan,Red cards,0
+1267475078,away,Japan,Shots off target,3
+1267475078,away,Japan,Blocked shots,3
+1267475078,away,Japan,Shots within penalty area,8
+1267475078,away,Japan,Total passes,583
+1267475078,away,Japan,Goalkeeper saves,0
+1267475078,away,Japan,Fouls,15
+1267475078,away,Japan,Yellow cards,0
+1267475078,away,Japan,Shots outside penalty area,3

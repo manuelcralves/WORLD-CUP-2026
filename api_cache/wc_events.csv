@@ -1,6 +1,4 @@
 match_id,minute,team,type,player,player_id,assist,out,out_pid
-1267475078,4,Japan,Goal,D. Kamada,418915,K. Nakamura,,5364835
-1267475078,31,Japan,Goal,A. Ueda,11617109,K. Itakura,,6136508
 1267473376,38,Ecuador,Yellow Card,J. Alcivar,2651824,,,
 1267473376,39,Curaçao,Yellow Card,L. Bacuna,3058671,,,
 1267473376,46,Ecuador,Substitution,J. Alcivar,2651824,,K. Rodriguez,58276680
@@ -535,3 +533,17 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1267453803,79,Mexico,Substitution,J. Quinones,5720806,,A. Vega,465283
 1267453803,84,South Africa,Red Card,T. Zwane,529683,,,
 1267453803,90+2,Mexico,Red Card,C. Montes,462707,,,
+1267475078,4,Japan,Goal,D. Kamada,418915,K. Nakamura,,5364835
+1267475078,31,Japan,Goal,A. Ueda,11617109,K. Itakura,,6136508
+1267475078,46,Tunisia,Substitution,E. Saad,52159968,,I. Gharbi,49941710
+1267475078,46,Tunisia,Substitution,D. Bronn,474299,,M. Ben Hamida,21744653
+1267475078,65,Tunisia,Substitution,S. Tounekti,9260552,,F. Chaouat,477036
+1267475078,69,Japan,Goal,J. Ito,312816,A. Ueda,,11617109
+1267475078,73,Japan,Substitution,D. Kamada,418915,,J. Suzuki,56513408
+1267475078,74,Japan,Substitution,R. Doan,418432,,Y. Sugawara,5294961
+1267475078,79,Japan,Substitution,K. Nakamura,5364835,,Y. Suzuki,32062177
+1267475078,79,Japan,Substitution,T. Tomiyasu,418271,,A. Seko,5339719
+1267475078,83,Japan,Goal,A. Ueda,11617109,K. Sano,,5456283
+1267475078,84,Japan,Substitution,A. Ueda,11617109,,K. Goto,60524884
+1267475078,90+1,Tunisia,Substitution,A. Abdi,7983017,,E. Achouri,6764086
+1267475078,90+1,Tunisia,Substitution,E. Skhiri,3475661,,R. Khedira,4073454
