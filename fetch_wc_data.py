@@ -98,6 +98,7 @@ def main() -> None:
         sys.exit('[x] Set HIGHLIGHTLY_KEY first ($env:HIGHLIGHTLY_KEY = "...").')
     CACHE.mkdir(exist_ok=True)
     m_csv, ln_csv, ev_csv = CACHE / "wc_matches.csv", CACHE / "wc_lineups.csv", CACHE / "wc_events.csv"
+    st_csv = CACHE / "wc_stats.csv"
 
     # 1) matches -- rewritten every run (cheap, keeps scores fresh)
     rows = []
@@ -142,6 +143,23 @@ def main() -> None:
                           "out_pid": e.get("assistingPlayerId")}     # on a sub, the player going off
                          for e in (evs or [])],
                 ["match_id", "minute", "team", "type", "player", "player_id", "assist", "out", "out_pid"])
+
+    # 3) match statistics (possession, shots, ...) for finished matches, cached one each
+    st_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(st_csv, "match_id")]
+    print(f"stats: fetching {len(st_todo)} new")
+    for r in st_todo:
+        mid = r["match_id"]
+        stt = _get(f"statistics/{mid}")
+        out = []
+        for t in (stt or []):
+            tname = (t.get("team") or {}).get("name")
+            side = "home" if tname == r["home"] else "away" if tname == r["away"] else None
+            if side is None:
+                continue
+            out += [{"match_id": mid, "side": side, "team": r[side],
+                     "stat": s.get("displayName"), "value": s.get("value")}
+                    for s in (t.get("statistics") or [])]
+        _append(st_csv, out, ["match_id", "side", "team", "stat", "value"])
 
     print(f"\n[ok] Done. {_used} requests used this run. Cached under {CACHE.name}/.")
 

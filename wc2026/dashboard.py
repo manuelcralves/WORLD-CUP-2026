@@ -385,6 +385,14 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .mdp{font-size:12.5px;padding:2px 0}
 .mdp.dim{color:#8b97ad}
 .lupe{font-size:11px;margin-left:4px;white-space:nowrap}
+.mdst{margin-top:4px}
+.mdstr{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;font-size:12.5px;margin-top:9px}
+.mdsv{font-weight:700;font-variant-numeric:tabular-nums}
+.mdsv.ar{text-align:right}
+.mdsn{text-align:center;color:#9aa7bd;font-size:11.5px}
+.mdsbar{display:flex;height:5px;border-radius:3px;overflow:hidden;margin-top:3px;background:#1a2436}
+.mdsbar span:first-child{background:#00e0a4}
+.mdsbar span:last-child{background:#4a90d9}
 .luon{color:#00e0a4;font-variant-numeric:tabular-nums}
 .luoff{color:#ff6b6b;font-variant-numeric:tabular-nums}
 .mdnum{display:inline-block;min-width:22px;color:#7d8aa3;font-variant-numeric:tabular-nums}
@@ -1197,6 +1205,10 @@ function matchModal(home,away){   // rich detail (timeline + line-ups) for a pla
         :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}`;
       const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
       h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${e.minute}'</div><div class="mda">${isH?'':cellA}</div></div>`;});
+    h+=`</div>`;}
+  if(md.stats&&md.stats.length){h+=`<div class="mdsec">📊 Match stats</div><div class="mdst">`;
+    md.stats.forEach(s=>{const hv=parseFloat(s.home)||0,av=parseFloat(s.away)||0,tot=hv+av,hp=tot?Math.round(hv/tot*100):50;
+      h+=`<div class="mdstr"><span class="mdsv">${s.home}</span><span class="mdsn">${s.stat}</span><span class="mdsv ar">${s.away}</span></div><div class="mdsbar"><span style="width:${hp}%"></span><span style="width:${100-hp}%"></span></div>`;});
     h+=`</div>`;}
   const ann={};                                   // player_id -> badges (cards + sub on/off) from the timeline
   md.timeline.forEach(e=>{const m=e.minute?`${e.minute}'`:'';

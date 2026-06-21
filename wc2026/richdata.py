@@ -70,14 +70,28 @@ def load_rich(cache_dir) -> dict:
                     "player": r["player"], "assist": r["assist"], "out": r["out"],
                     "pid": r.get("player_id", ""), "out_pid": r.get("out_pid", "")})
 
+    # match statistics: match_id -> {home: {stat: value}, away: {stat: value}}
+    stats: dict = {}
+    sf = cache / "wc_stats.csv"
+    if sf.exists():
+        with sf.open(encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                d = stats.setdefault(r["match_id"], {"home": {}, "away": {}})
+                side = d.get(r["side"])
+                if side is not None:
+                    side[r["stat"]] = r["value"]
+
     # per-match detail, keyed by the site's "home|away" (martj42 names)
     detail = {}
     blank = {"formation": None, "xi": [], "bench": []}
     for mid, (home, away) in mid_teams.items():
         ln = lineups.get(mid, {})
+        st = stats.get(mid, {"home": {}, "away": {}})
+        order = list(st["home"].keys()) + [k for k in st["away"] if k not in st["home"]]
         detail[f"{home}|{away}"] = {
             "score": scores.get(mid),
             "timeline": events.get(mid, []),
+            "stats": [{"stat": k, "home": st["home"].get(k, ""), "away": st["away"].get(k, "")} for k in order],
             "home": {"team": home, **ln.get("home", dict(blank))},
             "away": {"team": away, **ln.get("away", dict(blank))}}
 
