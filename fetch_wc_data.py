@@ -193,21 +193,33 @@ def main() -> None:
                 return sum(int(x) for x in s.replace(" ", "").split("-"))
             except ValueError:
                 return -1
-        stale = {str(r["match_id"]) for r in finished
-                 if str(r["match_id"]) in _gc and _gc[str(r["match_id"])] < _sg(r["score"])}
-        if stale:
-            print(f"healing {len(stale)} mid-game-cached game(s) -> dropping their rows to re-fetch")
-            for path in (ev_csv, st_csv):
-                if not path.exists():
-                    continue
-                with path.open(encoding="utf-8") as f:
-                    rd = csv.DictReader(f)
-                    hdr = rd.fieldnames
-                    keep = [x for x in rd if x["match_id"] not in stale]
+        for r in finished:
+            mid = str(r["match_id"])
+            if mid not in _gc or _gc[mid] >= _sg(r["score"]):
+                continue
+            new_ev, new_st = _get(f"events/{mid}"), _get(f"statistics/{mid}")
+            if new_ev is None or new_st is None:        # re-fetch failed (quota) -> keep old rows, retry later
+                print(f"  heal {r['home']} v {r['away']}: re-fetch failed, kept existing rows")
+                continue
+            st_rows = []
+            for t in (new_st or []):
+                tn = (t.get("team") or {}).get("name")
+                sd = "home" if tn == r["home"] else "away" if tn == r["away"] else None
+                if sd:
+                    st_rows += [{"match_id": mid, "side": sd, "team": r[sd],
+                                 "stat": s.get("displayName"), "value": s.get("value")}
+                                for s in (t.get("statistics") or [])]
+            for path, repl in ((ev_csv, _ev_rows(mid, new_ev)), (st_csv, st_rows)):
+                keep, hdr = [], (EV_HEADER if path is ev_csv else ["match_id", "side", "team", "stat", "value"])
+                if path.exists():
+                    with path.open(encoding="utf-8") as f:
+                        rd = csv.DictReader(f)
+                        hdr, keep = rd.fieldnames, [x for x in rd if x["match_id"] != mid]
                 with path.open("w", newline="", encoding="utf-8") as f:
                     w = csv.DictWriter(f, fieldnames=hdr)
                     w.writeheader()
-                    w.writerows(keep)
+                    w.writerows(keep + repl)
+            print(f"  healed {r['home']} v {r['away']} ({r['score']}): events + stats refreshed")
     ln_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ln_csv, "match_id")]
     ev_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ev_csv, "match_id")]
     print(f"line-ups: fetching {len(ln_todo)} new | events: fetching {len(ev_todo)} new")
