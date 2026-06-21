@@ -35,6 +35,14 @@ jobs:
       - name: Apply pending upstream results (not yet merged)
         run: python martj42_contribute.py .
 
+      # Squads, line-ups and match events (goals/cards/subs) from the Highlightly
+      # API. Cached under api_cache/; tolerant — a missing key or API hiccup just
+      # falls back to the committed CSVs, so the build never breaks on it.
+      - name: Fetch World Cup rich data (Highlightly)
+        env:
+          HIGHLIGHTLY_KEY: ${{ secrets.HIGHLIGHTLY_KEY }}
+        run: python fetch_wc_data.py || echo "rich-data fetch skipped — using cached CSVs"
+
       - name: Run predictions (live + pre-tournament)
         env:                                   # for the Supabase match-table push
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -59,7 +67,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results.csv shootouts.csv goalscorers.csv former_names.csv outputs/history.csv outputs/golden_history.csv
+          git add results.csv shootouts.csv goalscorers.csv former_names.csv outputs/history.csv outputs/golden_history.csv api_cache
           git diff --staged --quiet || git commit -m "chore: daily data + odds + golden-boot history update"
           git push || true
 

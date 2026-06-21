@@ -17,9 +17,12 @@ from . import fifa as FIFA
 from . import goals as GOALS
 from . import goldenboot as GB
 from . import predictions as PR
+from . import richdata as RICH
 from . import schedule as SCH
 from .tournament import HOSTS, LATER, OFFICIAL_GROUPS, R32, THIRD_ELIGIBLE
 from .viz import CODES, FAVICON, FLAGS, SITE, elo_by_year
+
+_CACHE = Path(__file__).resolve().parent.parent / "api_cache"   # Highlightly rich-data CSVs
 
 
 def _num(x, default=1.3):
@@ -173,6 +176,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "fifa": FIFA.compare(table),
         "goals": goals_an,
         "fixtures": _fixtures(bundle),
+        "rich": RICH.load_rich(_CACHE),
         "structure": {
             "groups": OFFICIAL_GROUPS,
             "r32": {str(k): [list(s) for s in v] for k, v in R32.items()},
@@ -368,6 +372,30 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .pmore[open]>summary::before{content:"\\25BE  "}
 .pmore>summary:hover{color:#dfe7f5;border-color:#33415e}
 .pmore[open]>summary{margin-bottom:8px}
+.mdsc{background:#00e0a4;color:#08131f;padding:1px 9px;border-radius:6px;font-weight:800}
+.mdsec{font-size:13px;font-weight:700;color:#cbd3e1;margin:14px 0 6px;border-top:1px solid #243049;padding-top:10px}
+.mdev{display:flex;gap:7px;align-items:baseline;font-size:13px;padding:3px 6px;border-radius:6px}
+.mdev.mda{background:#101a2b}
+.mdmin{color:#7d8aa3;min-width:38px;font-variant-numeric:tabular-nums}
+.mdic{min-width:18px;text-align:center}
+.mdteam{margin-left:auto;font-size:11px;color:#5d6a85;white-space:nowrap}
+.mdlu{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mdtt{font-weight:700;font-size:13px;margin-bottom:6px}
+.mdp{font-size:12.5px;padding:2px 0}
+.mdp.dim{color:#8b97ad}
+.mdnum{display:inline-block;min-width:22px;color:#7d8aa3;font-variant-numeric:tabular-nums}
+.mdbh{font-size:11px;color:#5d6a85;margin:9px 0 3px;text-transform:uppercase;letter-spacing:.5px}
+.todaycard.mdclick{cursor:pointer}
+.tdmore{font-size:11px;color:#00e0a4;margin-top:5px;font-weight:600}
+.crwrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.crh{font-size:12px;font-weight:700;color:#9fb0c9;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.crrow{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;border-bottom:1px solid #1c2536}
+.crrk{color:#5d6a85;min-width:20px;font-variant-numeric:tabular-nums}
+.crname{flex:1}
+.crcards{font-size:12px;letter-spacing:1px;white-space:nowrap}
+.tpsquad{display:grid;grid-template-columns:1fr 1fr;gap:1px 14px;margin-top:4px}
+.tpsqp{font-size:12.5px;padding:2px 0}
+.tpsqn{display:inline-block;min-width:22px;color:#7d8aa3;font-variant-numeric:tabular-nums}
 .presrow2:last-child{border:none}
 .pcrowd{margin-top:8px;font-size:12.5px;color:#9fb0c9}
 .lbx{background:#161d2b;border:1px solid #243049;border-radius:12px;padding:4px 14px;margin-bottom:6px}
@@ -644,6 +672,9 @@ function teamPage(name){
       else{const pw=home?m.p_home:m.p_away,pl=home?m.p_away:m.p_home;
         right=`<span class="note">W ${pc0(pw)} · D ${pc0(m.p_draw)} · L ${pc0(pl)}</span>`;}
       h+=`<div class="tpm"><span class="tpmko">${koLabel(m.home,m.away,m.date)}</span><span class="tpmo">${home?'vs':'@'} ${flag(opp,'sm')} ${opp}</span><span class="tpmr">${right}</span></div>`;});}
+  const sq=((D.rich||{}).squads||{})[name]||[];
+  if(sq.length){h+=`<h4 class="tpsec">📋 Squad <span class="tag">${sq.length} players · this World Cup</span></h4><div class="tpsquad">`
+    +sq.map(p=>`<div class="tpsqp"><span class="tpsqn">${p.number||''}</span> ${p.player}<span class="note"> ${(p.position||'')[0]||''}</span></div>`).join("")+`</div>`;}
   if(t.recent&&t.recent.length){h+=`<h4 class="tpsec">📈 Recent form <span class="tag">last ${t.recent.length}</span></h4>`;
     t.recent.forEach(r=>{const rs=r.gf>r.ga?'W':r.gf<r.ga?'L':'D';
       h+=`<div class="tpm"><span class="tpmko">${r.date}</span><span class="tpmo">${r.home?'vs':'@'} ${flag(r.opp,'sm')} ${r.opp}</span><span class="tpmr"><b>${r.gf}-${r.ga}</b> <span class="fd ${rs}">${rs}</span></span></div>`;});}
@@ -674,7 +705,8 @@ function teamPage(name){
   document.getElementById("tpx").onclick=tpClose;
 }
 
-function groupSort(teams){   // FIFA order: points > head-to-head (pts/GD/goals among level teams) > overall GD > overall goals > FIFA rank
+const _fp=t=>((D.rich||{}).fairplay||{})[t]||0;   // FIFA fair-play points from cards (yellow -1, red -4); fewer cards = higher
+function groupSort(teams){   // FIFA order: points > head-to-head > overall GD > overall goals > FAIR PLAY (cards) > FIFA rank
   const pr={};(D.played_review||[]).forEach(m=>pr[m.home+"|"+m.away]={hs:m.hs,as:m["as"]});
   const h2={};
   teams.forEach(t=>{let p=0,d=0,f=0;
@@ -685,7 +717,7 @@ function groupSort(teams){   // FIFA order: points > head-to-head (pts/GD/goals 
     h2[t.team]={p,d,f};});
   const fr=x=>(byName[x.team]&&byName[x.team].fifa_rank)||999;
   return teams.slice().sort((a,b)=>(b.pts-a.pts)||(h2[b.team].p-h2[a.team].p)||(h2[b.team].d-h2[a.team].d)
-    ||(h2[b.team].f-h2[a.team].f)||(b.gd-a.gd)||(b.gf-a.gf)||(fr(a)-fr(b)));
+    ||(h2[b.team].f-h2[a.team].f)||(b.gd-a.gd)||(b.gf-a.gf)||(_fp(b.team)-_fp(a.team))||(fr(a)-fr(b)));
 }
 function renderGroups(){
   const groups={};T.forEach(t=>(groups[t.group]=groups[t.group]||[]).push(t));
@@ -895,9 +927,9 @@ function fifaOrder(teams,games){   // FIFA group order for a what-if scenario: p
     h2[g.home].p+=gh>ga?3:gh===ga?1:0;h2[g.home].d+=gh-ga;h2[g.home].f+=gh;
     h2[g.away].p+=ga>gh?3:ga===gh?1:0;h2[g.away].d+=ga-gh;h2[g.away].f+=ga;});
   const fr=t=>((byName[t]||{}).fifa_rank)||999;
-  return teams.slice().sort((x,y)=>(s[y].pts-s[x].pts)||(h2[y].p-h2[x].p)||(h2[y].d-h2[x].d)||(h2[y].f-h2[x].f)||(s[y].gd-s[x].gd)||(s[y].gf-s[x].gf)||(fr(x)-fr(y)));
+  return teams.slice().sort((x,y)=>(s[y].pts-s[x].pts)||(h2[y].p-h2[x].p)||(h2[y].d-h2[x].d)||(h2[y].f-h2[x].f)||(s[y].gd-s[x].gd)||(s[y].gf-s[x].gf)||(_fp(y)-_fp(x))||(fr(x)-fr(y)));
 }
-const fifaThird=(a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||((((byName[a.t]||{}).fifa_rank)||999)-(((byName[b.t]||{}).fifa_rank)||999));   // thirds: pts > GD > GF > FIFA rank (no head-to-head — different groups)
+const fifaThird=(a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(_fp(b.t)-_fp(a.t))||((((byName[a.t]||{}).fifa_rank)||999)-(((byName[b.t]||{}).fifa_rank)||999));   // thirds: pts > GD > GF > fair-play (cards) > FIFA rank
 function thirdsBox(rows,sub){   // reusable best-3rd-placed-teams box (Teams · what-if · roll). rows: [{team,group,played,pts,gd,gf}]
   const fr=t=>((byName[t.team]||{}).fifa_rank)||999;
   rows=rows.slice().sort((a,b)=>(b.pts-a.pts)||(b.gd-a.gd)||(b.gf-a.gf)||(fr(a)-fr(b)));
@@ -1139,6 +1171,28 @@ function showMachine(){
   const rv={};(D.played_review||[]).forEach(m=>rv[m.home+"|"+m.away]=m);Object.assign(rv,liveRev);
   Object.values(rv).forEach(m=>{preds[m.home+"|"+m.away]=m.ml_score.split("-").map(Number);});                        // played: the model's actual pick
   predPicksModal("The Machine",preds,true);}
+function hasMd(h,a){const R=(D.rich||{}).matchDetail||{},md=R[h+"|"+a]||R[a+"|"+h];return!!(md&&(md.timeline.length||md.home.xi.length));}
+function matchModal(home,away){   // rich detail (timeline + line-ups) for a played match, from Highlightly
+  const R=(D.rich||{}).matchDetail||{},md=R[home+"|"+away]||R[away+"|"+home];
+  if(!md||(!md.timeline.length&&!md.home.xi.length))return;   // nothing rich for this game
+  const H=md.home,A=md.away;
+  const ICON={"Goal":"⚽","Own Goal":"🥅","Penalty":"⚽","Yellow Card":"🟨","Red Card":"🟥","Substitution":"🔄"};
+  let h=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>${flag(H.team,'sm')} ${H.team}${md.score?` <span class="mdsc">${md.score}</span> `:' v '}${A.team} ${flag(A.team,'sm')}</b><button class="pbtn" id="pmodx">✕</button></div>`;
+  if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div>`;
+    md.timeline.forEach(e=>{const ic=ICON[e.type]||"•",isA=e.team===A.team;
+      const body=e.type==="Substitution"?`<b>${e.player}</b> <span class="note">↔ ${e.out}</span>`
+        :`<b>${e.player}</b>${e.assist?` <span class="note">assist ${e.assist}</span>`:''}`;
+      h+=`<div class="mdev${isA?' mda':''}"><span class="mdmin">${e.minute}'</span><span class="mdic">${ic}</span>${body}<span class="mdteam">${e.team}</span></div>`;});}
+  const lu=t=>t.xi.map(p=>`<div class="mdp"><span class="mdnum">${p.number||''}</span>${p.player}<span class="note"> ${(p.position||'')[0]||''}</span></div>`).join("")
+    +(t.bench.length?`<div class="mdbh">Bench</div>`+t.bench.map(p=>`<div class="mdp dim"><span class="mdnum">${p.number||''}</span>${p.player}</div>`).join(""):"");
+  if(H.xi.length||A.xi.length){h+=`<div class="mdsec">📋 Line-ups</div><div class="mdlu">`
+    +`<div><div class="mdtt">${flag(H.team,'sm')} ${H.team} <span class="note">${H.formation||''}</span></div>${lu(H)}</div>`
+    +`<div><div class="mdtt">${flag(A.team,'sm')} ${A.team} <span class="note">${A.formation||''}</span></div>${lu(A)}</div></div>`;}
+  h+=`</div></div>`;
+  const old=document.getElementById("pmodbg");if(old)old.remove();
+  document.body.insertAdjacentHTML("beforeend",h);
+  const bg=document.getElementById("pmodbg");bg.onclick=e=>{if(e.target===bg)bg.remove();};
+  document.getElementById("pmodx").onclick=()=>bg.remove();}
 function predScore(p,a){let s=0;const pd=p[0]-p[1],ad=a[0]-a[1];  // cumulative, FIFA-style
   if((pd>0)===(ad>0)&&(pd<0)===(ad<0))s+=10;        // correct result
   if(p[0]===a[0])s+=5;                              // team A (home) exact goals
@@ -1394,9 +1448,11 @@ function renderToday(){
     if(rev)info=`<div class="tdres">Full time <b>${rev.hs}-${rev["as"]}</b> ${rev.hit?'<span class="badge2 y">model ✓</span>':'<span class="badge2 n">model ✗</span>'}</div>`;
     else if(f.played)info=`<div class="tdres">Full time <b>${f.hs}-${f["as"]}</b></div>`;
     else if(pred)info=`<div class="tdpred">Model ${pc0(pred.p_home)} / ${pc0(pred.p_draw)} / ${pc0(pred.p_away)} · likely <b>${pred.top[0].score}</b></div>`;
-    h+=`<div class="todaycard"><div class="tdtime">🕒 ${f.ko.hm} · Group ${f.group}</div>
-    <div class="tdteams">${flag(f.home,'sm')} ${f.home} <span class="tdvs">v</span> ${f.away} ${flag(f.away,'sm')}</div>${info}</div>`;});
-  document.getElementById("today").innerHTML=h+`</div>`;
+    const md=hasMd(f.home,f.away);
+    h+=`<div class="todaycard${md?' mdclick':''}"${md?` data-h="${f.home}" data-a="${f.away}"`:''}><div class="tdtime">🕒 ${f.ko.hm} · Group ${f.group}</div>
+    <div class="tdteams">${flag(f.home,'sm')} ${f.home} <span class="tdvs">v</span> ${f.away} ${flag(f.away,'sm')}</div>${info}${md?'<div class="tdmore">📋 match details</div>':''}</div>`;});
+  const tEl=document.getElementById("today");tEl.innerHTML=h+`</div>`;
+  tEl.querySelectorAll(".mdclick").forEach(c=>c.onclick=()=>matchModal(c.dataset.h,c.dataset.a));
 }
 function renderSurprises(){
   const rv=D.played_review,el=document.getElementById("surprises");if(!el)return;
@@ -1405,6 +1461,15 @@ function renderSurprises(){
   let h=`<p class="note">The results the model least saw coming — it gave the actual outcome only a slim chance:</p><div class="chips">`;
   h+=shocks.map(m=>`<div class="chip">${flag(m.home,'sm')} ${m.home} <b>${m.hs}-${m["as"]}</b> ${m.away} ${flag(m.away,'sm')} <span style="color:#ff6b6b;font-weight:700">${pc0(m.p_actual)}</span></div>`).join("");
   el.innerHTML=h+`</div>`;
+}
+function renderCards(){   // disciplinary ranking from the Highlightly events
+  const c=(D.rich||{}).cards,el=document.getElementById("cards-rank");if(!el)return;
+  if(!c||!c.players||!c.players.length){el.style.display="none";return;}
+  const ic=(y,r)=>'🟨'.repeat(y)+'🟥'.repeat(r);
+  const prow=(p,i)=>`<div class="crrow"><span class="crrk">${i+1}</span><span class="crname">${flag(p.team,'sm')} ${p.player}</span><span class="crcards">${ic(p.Y,p.R)}</span></div>`;
+  const trow=(t,i)=>`<div class="crrow"><span class="crrk">${i+1}</span><span class="crname">${flag(t.team,'sm')} ${t.team}</span><span class="crcards">${t.Y}🟨 ${t.R}🟥</span></div>`;
+  el.innerHTML=`<div class="crwrap"><div><div class="crh">🧑 Players</div>${c.players.slice(0,15).map(prow).join("")}</div>`
+    +`<div><div class="crh">🏳️ Teams</div>${c.teams.slice(0,12).map(trow).join("")}</div></div>`;
 }
 function renderGoals(){
   const g=D.goals,el=document.getElementById("goals-an");if(!el)return;
@@ -1597,7 +1662,7 @@ function makeCollapsible(){
   });
 }
 renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
-renderBracket();renderAnalysis();renderBacktest();renderGolden();renderGoldenChart();renderOdds();renderReview();renderFifa();renderGoals();
+renderBracket();renderAnalysis();renderBacktest();renderGolden();renderGoldenChart();renderOdds();renderReview();renderFifa();renderGoals();renderCards();
 renderToday();renderSurprises();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
   document.getElementById("elo-year").oninput=renderEloYear;}
@@ -1835,6 +1900,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div id='golden-chart-wrap'></div>"
         "<h2 class='col mcol'>⚽ Anatomy of a goal <span class='tag'>every international goal</span></h2>"
         "<div id='goals-an'></div>"
+        "<h2 class='col mcol'>🟨 Discipline <span class='tag'>cards so far</span></h2><div id='cards-rank'></div>"
         "<h2>📉 Elo through history <span class='tag'>drag the year</span></h2>"
         "<div style='display:flex;align-items:center;gap:12px;margin-bottom:10px'>"
         "<span class='note'>Year</span>"

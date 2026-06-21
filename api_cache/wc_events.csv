@@ -1,0 +1,488 @@
+match_id,minute,team,type,player,player_id,assist,out
+1309694890,2,Paraguay,Goal,M. Galarza,49239106,J. Enciso,
+1309694890,4,Paraguay,Yellow Card,M. Galarza,49239106,,
+1309694890,45+3,Paraguay,Red Card,M. Almiron,403781,,
+1309694890,46,Paraguay,Substitution,I. Pitta,11378024,,D. Bobadilla
+1309694890,46,Turkey,Substitution,K. Akturkoglu,23016553,,B. Yilmaz
+1309694890,60,Turkey,Substitution,I. Yuksek,34528697,,C. Uzun
+1309694890,60,Turkey,Substitution,Y. Akgun,73248,,D. Gul
+1309694890,63,Turkey,Yellow Card,V. Montella,,,
+1309694890,67,Paraguay,Substitution,D. Gomez,44817724,,G. Velazquez
+1309694890,70,Turkey,Substitution,F. Kadioglu,219275,,E. Elmali
+1309694890,71,Turkey,Yellow Card,E. Elmali,8059331,,
+1309694890,81,Paraguay,Substitution,J. Caceres,31554866,,A. Maidana
+1309694890,86,Turkey,Substitution,A. Bardakci,9955911,,O. Kokcu
+1309694890,90+2,Paraguay,Substitution,J. Enciso,11390421,,G. Avalos
+1309694890,90+2,Paraguay,Substitution,M. Galarza,49239106,,J. Canale
+1267470823,4,Haiti,Yellow Card,C. Arcus,3357004,,
+1267470823,23,Brazil,Goal,M. Cunha,187719,,
+1267470823,36,Brazil,Goal,M. Cunha,187719,Vinicius Junior,
+1267470823,40,Brazil,Substitution,Raphinha,241010,,Rayan
+1267470823,45+3,Brazil,Goal,Vinicius Junior,122836,Lucas Paqueta,
+1267470823,45+4,Haiti,Yellow Card,F. Pierrot,1384915,,
+1267470823,46,Haiti,Substitution,C. Arcus,3357004,,D. Simon
+1267470823,46,Haiti,Substitution,F. Pierrot,1384915,,W. Isidor
+1267470823,62,Haiti,Substitution,J. Casimir,28161469,,L. Deedson
+1267470823,64,Brazil,Substitution,Lucas Paqueta,265160,,G. Martinelli
+1267470823,64,Brazil,Substitution,M. Cunha,187719,,Endrick
+1267470823,65,Brazil,Yellow Card,Douglas Santos,4003580,,
+1267470823,71,Haiti,Substitution,R. Providence,26200167,,L. Joseph
+1267470823,72,Haiti,Yellow Card,D. Jean Jacques,54477241,,
+1267470823,81,Brazil,Substitution,Vinicius Junior,122836,,Danilo Santos
+1267470823,81,Brazil,Substitution,Bruno Guimaraes,1631889,,Ederson
+1267470823,81,Haiti,Substitution,J. Bellegarde,3327219,,D. Etienne
+1267471674,2,Morocco,Goal,I. Saibari,26065571,B. Diaz,
+1267471674,23,Morocco,Yellow Card,I. Diop,3029208,,
+1267471674,60,Scotland,Substitution,K. Tierney,179991,,B. Gannon-Doak
+1267471674,65,Scotland,Yellow Card,A. Robertson,46683,,
+1267471674,71,Scotland,Substitution,C. Adams,3143518,,L. Dykes
+1267471674,71,Scotland,Substitution,R. Christie,181279,,K. McLean
+1267471674,84,Morocco,Substitution,I. Saibari,26065571,,S. Rahimi
+1267471674,84,Morocco,Substitution,B. El Khannouss,54832407,,C. Talbi
+1267471674,84,Morocco,Substitution,B. Diaz,119938,,A. Amaimouni
+1267471674,89,Scotland,Substitution,N. Patterson,22285291,,A. Ralston
+1267471674,89,Scotland,Substitution,J. McGinn,3089905,,R. Stewart
+1267471674,90,Morocco,Substitution,A. Ounahi,20878312,,S. El Mourabet
+1267472525,11,USA,Own Goal,C. Burgess,3293731,,
+1267472525,16,Australia,Yellow Card,J. Bos,54351661,,
+1267472525,32,Australia,Yellow Card,A. Circati,56119602,,
+1267472525,43,USA,Goal,A. Freeman,57315188,,
+1267472525,46,Australia,Substitution,C. Burgess,3293731,,J. Geria
+1267472525,46,Australia,Substitution,N. Velupillay,50306053,,C. Metcalfe
+1267472525,46,Australia,Substitution,M. Toure,31934826,,N. Irankunda
+1267472525,56,USA,Yellow Card,A. Robinson,3147543,,
+1267472525,61,Australia,Substitution,M. Leckie,443065,,C. Volpato
+1267472525,74,USA,Substitution,R. Pepi,11892902,,S. Berhalter
+1267472525,78,Australia,Substitution,P. Okon-Engstler,71044463,,J. Irvine
+1267472525,80,USA,Substitution,S. Dest,6236489,,J. Scally
+1267472525,80,USA,Substitution,A. Robinson,3147543,,A. Trusty
+1267472525,88,Australia,Yellow Card,H. Souttar,3232873,,
+1267472525,89,USA,Yellow Card,F. Balogun,22352589,,
+1267472525,89,Australia,Yellow Card,J. Italiano,1096242,,
+1267472525,90+3,USA,Yellow Card,C. Richards,20438943,,
+1267472525,90+6,USA,Substitution,F. Balogun,22352589,,H. Wright
+1267472525,90+6,USA,Substitution,W. McKennie,66969,,G. Reyna
+1267469972,4,South Korea,Yellow Card,Lee Kang-In,149401,,
+1267469972,50,Mexico,Goal,L. Romo,5791324,,
+1267469972,57,South Korea,Substitution,Lee Jae-Sung,468020,,Hwang Hee-Chan
+1267469972,57,South Korea,Substitution,Son Heung-Min,30100,,Oh Hyeon-Gyu
+1267469972,58,South Korea,Yellow Card,Paik Seung-Ho,468503,,
+1267469972,71,Mexico,Substitution,B. Gutierrez,34169667,,O. Pineda
+1267469972,71,Mexico,Substitution,L. Romo,5791324,,O. Vargas
+1267469972,71,South Korea,Substitution,Seol Young-Woo,31875739,,Yang Hyun-Jun
+1267469972,71,South Korea,Substitution,Kim Moon-Hwan,468986,,Eom Ji-Sung
+1267469972,77,South Korea,Substitution,Paik Seung-Ho,468503,,Cho Gue-Sung
+1267469972,80,Mexico,Substitution,R. Jimenez,464961,,S. Gimenez
+1267469972,80,Mexico,Substitution,R. Alvarado,463673,,I. Reyes
+1267469972,84,Mexico,Substitution,J. Quinones,5720806,,C. S. Huerta Valera
+1267469121,9,Canada,Yellow Card,D. Cornelius,8258649,,
+1267469121,16,Canada,Goal,C. Larin,322315,,
+1267469121,29,Canada,Goal,J. David,1366883,,
+1267469121,33,Qatar,Red Card,H. Al Amin,28245833,,
+1267469121,40,Qatar,Substitution,Y. Abdurisag,87349255,,S. Al Brake
+1267469121,45+3,Canada,Goal,J. David,1366883,,
+1267469121,46,Qatar,Substitution,Edmilson Junior,6774229,,A. Fathi
+1267469121,46,Qatar,Substitution,J. Gaber,32358095,,M. Al Mannai
+1267469121,46,Canada,Substitution,D. Cornelius,8258649,,M. Bombito
+1267469121,53,Qatar,Red Card,A. O. Madibo,408289,,
+1267469121,57,Canada,Substitution,I. Kone,52815560,,N. Saliba
+1267469121,59,Qatar,Substitution,A. Afif,409738,,A. Al Hussain
+1267469121,62,Qatar,Yellow Card,A. Fathi,408933,,
+1267469121,64,Canada,Goal,N. Saliba,47466818,,
+1267469121,71,Canada,Substitution,L. De Fougerolles,52765972,,J. Shaffelburg
+1267469121,71,Canada,Substitution,A. Ahmed,58305499,,T. Oluwaseyi
+1267469121,75,Canada,Own Goal,M. Al Mannai,45591168,,
+1267469121,83,Canada,Substitution,T. Buchanan,8213730,,N. Sigur
+1267469121,87,Qatar,Substitution,A. Fathi,408933,,Lucas Mendes
+1267469121,90+2,Canada,Goal,J. David,1366883,N. Saliba,
+1309694039,59,Bosnia & Herzegovina,Yellow Card,A. Dedic,1178352,,
+1309694039,61,Bosnia & Herzegovina,Yellow Card,E. Dzeko,127344,,
+1309694039,63,Bosnia & Herzegovina,Substitution,B. Tahirovic,42519288,,I. Basic
+1309694039,64,Bosnia & Herzegovina,Substitution,E. Dzeko,127344,,E. Bajraktarevic
+1309694039,65,Switzerland,Yellow Card,N. Elvedi,451437,,
+1309694039,71,Switzerland,Substitution,D. Ndoye,7832482,,J. Manzambi
+1309694039,71,Switzerland,Substitution,F. Rieder,26248306,,R. Vargas
+1309694039,71,Switzerland,Substitution,M. Aebischer,153265,,D. Sow
+1309694039,74,Switzerland,Goal,J. Manzambi,65405438,,
+1309694039,80,Bosnia & Herzegovina,Red Card,T. Muharemovic,43687504,,
+1309694039,84,Switzerland,Goal,R. Vargas,7803985,B. Embolo,
+1309694039,86,Bosnia & Herzegovina,Substitution,E. Demirovic,7555884,,J. Lukic
+1309694039,86,Bosnia & Herzegovina,Substitution,I. Sunjic,213318,,A. Hadziahmetovic
+1309694039,86,Switzerland,Substitution,S. Widmer,7789012,,L. Jaquez
+1309694039,89,Switzerland,Substitution,B. Embolo,67935,,C. Itten
+1309694039,90,Switzerland,Goal,J. Manzambi,65405438,R. Vargas,
+1309694039,90+1,Bosnia & Herzegovina,Substitution,K. Alajbegovic,63685153,,E. Mahmic
+1309694039,90+3,Bosnia & Herzegovina,Goal,E. Mahmic,54768007,,
+1309694039,90+6,Switzerland,Penalty,G. Xhaka,235858,,
+1309693188,6,Czech Republic,Goal,M. Sadilek,38955,A. Sojka,
+1309693188,33,South Africa,Yellow Card,T. Mokoena,529361,,
+1309693188,40,South Africa,Yellow Card,T. Mbatha,31303384,,
+1309693188,46,South Africa,Substitution,J. Adams,43262464,,R. Mofokeng
+1309693188,55,Czech Republic,Substitution,V. Darida,4081182,,P. Sulc
+1309693188,55,Czech Republic,Substitution,A. Sojka,62280911,,J. Zeleny
+1309693188,66,South Africa,Substitution,I. Rayners,20516223,,E. Makgopa
+1309693188,67,Czech Republic,Substitution,A. Hlozek,10629213,,L. Provod
+1309693188,67,Czech Republic,Substitution,M. Sadilek,38955,,T. Soucek
+1309693188,75,Czech Republic,Yellow Card,L. Krejci,10691681,,
+1309693188,78,Czech Republic,Substitution,L. Cerv,26113388,,D. Zima
+1309693188,83,South Africa,Penalty,T. Mokoena,529361,,
+1309693188,84,South Africa,Substitution,T. Maseko,57127945,,K. Sebelebele
+1267468270,7,Colombia,Yellow Card,J. Mojica,10347302,,
+1267468270,34,Uzbekistan,Yellow Card,A. Khusanov,57978508,,
+1267468270,40,Colombia,Goal,D. Munoz,2211650,L. Diaz,
+1267468270,46,Uzbekistan,Substitution,O. Urunov,11612601,,D. Khamdamov
+1267468270,46,Uzbekistan,Substitution,S. Nasrullaev,11835908,,F. Sayfiev
+1267468270,60,Uzbekistan,Goal,A. Fayzullaev,42451990,,
+1267468270,65,Colombia,Goal,L. Diaz,400883,G. Puerta,
+1267468270,72,Colombia,Substitution,J. Rodriguez,83391,,J. Campaz
+1267468270,77,Uzbekistan,Substitution,A. Fayzullaev,42451990,,A. Amonov
+1267468270,77,Uzbekistan,Substitution,R. Ashurmatov,5493635,,J. Urozov
+1267468270,80,Colombia,Substitution,L. Suarez,7605311,,C. Hernandez
+1267468270,80,Colombia,Substitution,G. Puerta,52169628,,R. Rios
+1267468270,90+3,Colombia,Substitution,L. Diaz,400883,,A. Gomez
+1267468270,90+3,Colombia,Substitution,J. Arias,2207142,,K. Castano
+1267468270,90+3,Uzbekistan,Substitution,E. Shomurodov,8619289,,I. Sergeev
+1267468270,90+9,Colombia,Goal,J. Campaz,2153690,C. Hernandez,
+1267467419,16,Ghana,Yellow Card,C. Yirenkyi,76567729,,
+1267467419,46,Ghana,Substitution,L. Ati Zigi,549486,,B. Asare
+1267467419,58,Ghana,Substitution,E. Nuamah,56487970,,I. Fatawu
+1267467419,58,Ghana,Substitution,K. Sulemana,32173911,,B. Thomas-Asante
+1267467419,63,Panama,Substitution,C. Waterman,8315482,,J. Fajardo
+1267467419,63,Panama,Substitution,C. Martinez,89227642,,A. Londono
+1267467419,73,Panama,Yellow Card,C. Blackman,479129,,
+1267467419,74,Panama,Substitution,J. Rodriguez,479773,,I. Diaz
+1267467419,78,Ghana,Substitution,E. Owusu,3382764,,K. Sibo
+1267467419,87,Ghana,Substitution,J. Ayew,552062,,P. Adu
+1267467419,90,Panama,Substitution,C. Blackman,479129,,A. Godoy
+1267467419,90+5,Ghana,Goal,C. Yirenkyi,76567729,B. Thomas-Asante,
+1267467419,90+10,Panama,Yellow Card,C. Harvey,11468184,,
+1267466568,12,England,Penalty,H. Kane,29778,,
+1267466568,36,Croatia,Goal,M. Baturina,47499340,P. Sucic,
+1267466568,42,England,Goal,H. Kane,29778,D. Rice,
+1267466568,45+5,Croatia,Goal,P. Musa,10635009,I. Perisic,
+1267466568,47,England,Goal,J. Bellingham,20884752,E. Anderson,
+1267466568,58,Croatia,Substitution,L. Modric,121548,,M. Kovacic
+1267466568,66,Croatia,Substitution,L. Vuskovic,62391035,,M. Pasalic
+1267466568,66,Croatia,Substitution,P. Musa,10635009,,I. Matanovic
+1267466568,72,England,Substitution,A. Gordon,22344861,,M. Rashford
+1267466568,72,England,Substitution,N. Madueke,22012557,,B. Saka
+1267466568,72,England,Substitution,D. Rice,473011,,M. Rogers
+1267466568,78,Croatia,Substitution,M. Baturina,47499340,,N. Vlasic
+1267466568,79,Croatia,Substitution,M. Pasalic,444997,,A. Kramaric
+1267466568,80,England,Substitution,J. Bellingham,20884752,,D. Spence
+1267466568,85,England,Goal,M. Rashford,146503,B. Saka,
+1267466568,87,England,Substitution,J. Stones,100940,,M. Guehi
+1309692337,6,Portugal,Goal,J. Neves,53943365,P. Neto,
+1309692337,13,Portugal,Yellow Card,B. Silva,102550,,
+1309692337,32,Congo DR,Yellow Card,C. Mbemba,60529,,
+1309692337,45+5,Congo DR,Goal,Y. Wissa,3324643,A. Masuaku,
+1309692337,46,Portugal,Substitution,B. Silva,102550,,F. Conceicao
+1309692337,57,Congo DR,Substitution,N. Mukau,60471432,,N. Sadiki
+1309692337,71,Portugal,Substitution,P. Neto,300258,,R. Leao
+1309692337,72,Portugal,Substitution,N. Mendes,42420756,,N. Semedo
+1309692337,74,Congo DR,Substitution,E. Kayembe,229418,,C. Pickel
+1309692337,74,Congo DR,Substitution,A. Masuaku,3029530,,J. Kayembe
+1309692337,83,Portugal,Substitution,Vitinha,20669978,,G. Ramos
+1309692337,85,Congo DR,Substitution,C. Bakambu,488467,,S. Banza
+1309692337,85,Congo DR,Substitution,A. Wan-Bissaka,3034360,,G. Kalulu
+1309692337,88,Portugal,Yellow Card,N. Semedo,21084,,
+1309692337,90+2,Portugal,Yellow Card,T. Araujo,26072333,,
+1267464866,21,Austria,Goal,R. Schmid,1217636,X. Schlager,
+1267464866,46,Austria,Substitution,S. Kalajdzic,1243396,,M. Arnautovic
+1267464866,50,Jordan,Goal,A. Olwan,26408340,N. Al Rawabdeh,
+1267464866,59,Austria,Substitution,X. Schlager,176449,,C. Chukwuemeka
+1267464866,59,Austria,Substitution,D. Alaba,81459,,K. Danso
+1267464866,59,Austria,Substitution,P. Mwene,4172469,,P. Wanner
+1267464866,67,Austria,VAR Goal Cancelled,M. Arnautovic,3031784,,
+1267464866,72,Jordan,Substitution,M. Abualnadi,16508772,,S. Obaid
+1267464866,76,Austria,Own Goal,Y. Al Arab,8678054,,
+1267464866,77,Austria,Yellow Card,M. Sabitzer,186753,,
+1267464866,81,Jordan,Substitution,A. Nasib,50044589,,S. Al Rosan
+1267464866,81,Jordan,Substitution,E. Haddad,8678376,,M. Al Mardi
+1267464866,83,Austria,Substitution,R. Schmid,1217636,,P. Wimmer
+1267464866,88,Jordan,Substitution,M. Tamari,2461200,,M. Al Daoud
+1267464866,89,Jordan,Substitution,O. Al Fakhouri,91537670,,A. Azaizeh
+1267464866,90+12,Austria,Penalty,M. Arnautovic,3031784,,
+1267464015,8,Algeria,VAR Goal Cancelled - Offside,F. Chaibi,44544024,,
+1267464015,17,Argentina,Goal,L. Messi,24948,R. de Paul,
+1267464015,46,Argentina,Substitution,G. Montiel,397502,,N. Molina
+1267464015,55,Argentina,Substitution,L. Martinez,35091,,J. Alvarez
+1267464015,55,Argentina,Substitution,T. Almada,976941,,N. Gonzalez
+1267464015,60,Argentina,Goal,L. Messi,24948,,
+1267464015,64,Algeria,Substitution,H. Boudaoui,708393,,H. Aouar
+1267464015,64,Algeria,Substitution,A. Gouiri,13691755,,M. Amoura
+1267464015,64,Algeria,Substitution,A. Hadj Moussa,52496941,,R. Mahrez
+1267464015,76,Argentina,Goal,L. Messi,24948,N. Gonzalez,
+1267464015,80,Argentina,Substitution,L. Messi,24948,,N. Paz
+1267464015,80,Argentina,Substitution,C. Romero,4955090,,N. Otamendi
+1267464015,81,Algeria,Substitution,I. Maza,61274661,,A. Boulbina
+1267464015,82,Algeria,Substitution,N. Bentaleb,66003,,R. Zerrouki
+1309703400,29,Norway,Goal,E. Haaland,177254,D. Wolfe,
+1309703400,39,Iraq,Goal,A. Hussein,7961765,A. Al Ammari,
+1309703400,43,Norway,Goal,E. Haaland,177254,,
+1309703400,59,Iraq,Substitution,Z. Ismaeel,100863273,,Z. Iqbal
+1309703400,59,Iraq,Substitution,A. Al Hamadi,48270047,,M. Farji
+1309703400,73,Norway,Substitution,A. Nusa,50636425,,A. Schjelderup
+1309703400,73,Norway,Substitution,F. Aursnes,6286077,,K. Thorstvedt
+1309703400,73,Norway,Substitution,D. Wolfe,42791056,,L. Ostigard
+1309703400,73,Norway,Substitution,A. Sorloth,1367366,,O. Bobb
+1309703400,73,Iraq,Substitution,H. Ali,23420019,,M. Saadoon
+1309703400,73,Iraq,Substitution,A. Jasim,87365838,,A. Qasem
+1309703400,76,Norway,Goal,L. Ostigard,3053841,M. Odegaard,
+1309703400,78,Iraq,Substitution,I. Bayesh,22660421,,Meme
+1309703400,81,Norway,Substitution,M. Odegaard,5977601,,P. Berg
+1309703400,86,Iraq,Yellow Card,Z. Tahseen,47716207,,
+1309703400,90+6,Norway,Own Goal,A. Hussein,7961765,,
+1267465717,66,France,Goal,K. Mbappe,44912,M. Olise,
+1267465717,75,Senegal,Substitution,I. Sarr,357252,,I. Mbaye
+1267465717,76,Senegal,Substitution,L. Camara,60223492,,H. Diarra
+1267465717,80,France,Substitution,O. Dembele,24787,,B. Barcola
+1267465717,82,France,Goal,B. Barcola,26066698,A. Rabiot,
+1267465717,83,Senegal,Substitution,P. Gueye,3332210,,I. Ndiaye
+1267465717,83,Senegal,Substitution,N. Jackson,45572492,,B. Dieng
+1267465717,87,France,Substitution,D. Doue,55227501,,R. Cherki
+1267465717,88,Senegal,Substitution,I. Gueye,481544,,P. Ciss
+1267465717,90+5,Senegal,Goal,I. Mbaye,71846243,I. Ndiaye,
+1267465717,90+6,France,Goal,K. Mbappe,44912,,
+1267461462,7,New Zealand,Goal,E. Just,15187767,C. Wood,
+1267461462,32,Iran,Goal,R. Rezaeian,433405,,
+1267461462,46,Iran,Substitution,A. Yousefi,55288359,,M. Ghaedi
+1267461462,53,Iran,Substitution,S. Moghanlou,14487256,,A. Alipour
+1267461462,54,New Zealand,Goal,E. Just,15187767,C. Wood,
+1267461462,64,Iran,Goal,M. Mohebi,21609091,R. Rezaeian,
+1267461462,65,Iran,Substitution,S. Ghoddos,434693,,E. Hajsafi
+1267461462,68,New Zealand,Substitution,L. Cacace,1116045,,B. Old
+1267461462,68,New Zealand,Substitution,C. McCowatt,15185996,,R. Thomas
+1267461462,78,New Zealand,Substitution,T. Payne,15189860,,C. Elliot
+1267461462,80,Iran,Substitution,M. Taremi,6812869,,A. Hosseinzadeh
+1267461462,89,Iran,Yellow Card,E. Hajsafi,432439,,
+1267461462,90+2,New Zealand,Substitution,S. Singh,1116689,,J. Randall
+1267461462,90+2,New Zealand,Substitution,M. Stamenic,28957936,,T. Bindon
+1267462313,41,Saudi Arabia,Goal,A. Al Amri,7160629,,
+1267462313,44,Saudi Arabia,Yellow Card,A. Al Amri,7160629,,
+1267462313,46,Uruguay,Substitution,M. Vina,8303246,,J. Sanabria
+1267462313,46,Uruguay,Substitution,D. Nunez,8310491,,A. Canobbio
+1267462313,63,Saudi Arabia,Substitution,M. Al Juwayr,49327334,,N. Al Dawsari
+1267462313,72,Uruguay,Substitution,M. Ugarte,8290688,,N. de la Cruz
+1267462313,80,Uruguay,Goal,M. Araujo,8336090,,
+1267462313,81,Uruguay,Substitution,M. Araujo,8336090,,B. Rodriguez
+1267462313,81,Saudi Arabia,Substitution,M. Abu Al Shamat,64897161,,N. Boushal
+1267462313,90,Uruguay,Substitution,F. Vinas,8296484,,R. Aguirre
+1267462313,90+2,Saudi Arabia,Substitution,S. Abdulhamid,7179788,,A. Lajami
+1267462313,90+3,Saudi Arabia,Substitution,M. Al Harbi,32583495,,A. Al Hamdan
+1267462313,90+3,Saudi Arabia,Substitution,F. Al Buraikan,7136318,,A. Hejji
+1267460611,13,Egypt,Yellow Card,M. Attia,30682729,,
+1267460611,14,Belgium,Yellow Card,T. Castagne,470274,,
+1267460611,19,Egypt,Goal,E. Ashour,2780463,M. Salah,
+1267460611,34,Egypt,Yellow Card,A. Fatouh,426643,,
+1267460611,56,Belgium,Substitution,T. Castagne,470274,,N. Raskin
+1267460611,56,Belgium,Substitution,A. Onana,26197108,,M. De Cuyper
+1267460611,66,Belgium,Substitution,C. De Ketelaere,23805453,,R. Lukaku
+1267460611,66,Belgium,Own Goal,M. Hany,427448,,
+1267460611,71,Egypt,Substitution,E. Ashour,2780463,,R. Rabia
+1267460611,75,Belgium,Yellow Card,M. De Cuyper,26083281,,
+1267460611,76,Egypt,Substitution,M. Ziko,63607229,,Zizo
+1267460611,76,Egypt,Substitution,M. Salah,49420,,H. Abdelkarim
+1267460611,86,Belgium,Substitution,J. Doku,229096,,M. Fernandez-Pardo
+1267460611,86,Belgium,Substitution,K. De Bruyne,101423,,H. Vanaken
+1267460611,89,Egypt,Substitution,H. Fathy,2707047,,I. Adel
+1267460611,89,Egypt,Substitution,A. Fatouh,426643,,K. Hafez
+1267463164,16,Cape Verde,Yellow Card,S. Lopes Cabral,49699083,,
+1267463164,61,Cape Verde,Substitution,J. Cabral,240688,,W. Semedo
+1267463164,61,Cape Verde,Substitution,D. Livramento,55269361,,N. Da Costa
+1267463164,61,Cape Verde,Substitution,L. Duarte,6027350,,D. Duarte
+1267463164,71,Spain,Substitution,F. Ruiz,52962,,M. Merino
+1267463164,71,Spain,Substitution,Gavi,47763541,,Lamine Yamal
+1267463164,76,Cape Verde,Substitution,S. Lopes Cabral,49699083,,Joao Paulo
+1267463164,79,Cape Verde,Substitution,J. Monteiro,8170099,,T. Arcanjo
+1267463164,81,Spain,Substitution,F. Torres,150045,,D. Olmo
+1267463164,87,Spain,Substitution,Rodri,7238,,N. Williams
+1267463164,90+3,Spain,Yellow Card,Pedri,21511203,,
+1309691486,7,Sweden,Goal,Y. Ayari,42797174,,
+1309691486,30,Sweden,Goal,A. Isak,461258,V. Gyokeres,
+1309691486,43,Tunisia,Goal,O. Rekik,26254102,H. Mejbri,
+1309691486,54,Tunisia,Yellow Card,R. Khedira,4073454,,
+1309691486,59,Sweden,Goal,V. Gyokeres,3055773,A. Isak,
+1309691486,65,Sweden,Substitution,G. Gudmundsson,7723163,,E. Stroud
+1309691486,65,Sweden,Substitution,B. Nygren,7728476,,L. Bergvall
+1309691486,72,Tunisia,Substitution,E. Saad,52159968,,S. Tounekti
+1309691486,72,Tunisia,Substitution,Y. Valery,3049816,,M. Belhadj
+1309691486,72,Tunisia,Substitution,E. Skhiri,3475661,,E. Achouri
+1309691486,83,Tunisia,Substitution,R. Khedira,4073454,,I. Gharbi
+1309691486,84,Tunisia,Substitution,A. Slimane,32089064,,F. Chaouat
+1309691486,84,Sweden,Substitution,J. Karlstrom,7735721,,M. Svanberg
+1309691486,84,Sweden,Goal,M. Svanberg,4908078,A. Isak,
+1309691486,90+1,Sweden,Substitution,A. Isak,461258,,A. Elanga
+1309691486,90+1,Sweden,Substitution,A. Bernhardsson,7679210,,D. Svensson
+1309691486,90+6,Sweden,Goal,Y. Ayari,42797174,L. Bergvall,
+1267458909,28,Ivory Coast,Yellow Card,S. Fofana,4960081,,
+1267458909,38,Ivory Coast,Yellow Card,F. Kessie,264516,,
+1267458909,40,Ivory Coast,Yellow Card,G. Doue,26041421,,
+1267458909,56,Ecuador,Substitution,A. Minda,45192049,,N. Angulo
+1267458909,56,Ivory Coast,Substitution,E. Wahi,26195981,,A. Bonny
+1267458909,56,Ivory Coast,Substitution,B. Toure,62410677,,A. Diallo
+1267458909,62,Ecuador,Substitution,J. Yeboah,4091808,,A. Preciado
+1267458909,62,Ecuador,Substitution,A. Franco,2634114,,J. Porozo
+1267458909,73,Ecuador,Yellow Card,J. Porozo,414729,,
+1267458909,77,Ivory Coast,Substitution,N. Pepe,522760,,C. Inao Oulai
+1267458909,77,Ivory Coast,Substitution,S. Fofana,4960081,,I. Sangare
+1267458909,77,Ecuador,Substitution,E. Valencia,5720967,,K. Rodriguez
+1267458909,89,Ivory Coast,Substitution,G. Doue,26041421,,O. Kossounou
+1267458909,90,Ivory Coast,Goal,A. Diallo,25437671,W. Singo,
+1267459760,51,Netherlands,Goal,V. van Dijk,46844,R. Gravenberch,
+1267459760,57,Japan,Goal,K. Nakamura,5364835,T. Kubo,
+1267459760,61,Netherlands,Yellow Card,C. Summerville,6073718,,
+1267459760,64,Netherlands,Goal,C. Summerville,6073718,R. Gravenberch,
+1267459760,66,Japan,Substitution,D. Maeda,5349218,,J. Ito
+1267459760,70,Netherlands,Substitution,D. Malen,40243,,M. Depay
+1267459760,70,Netherlands,Substitution,C. Summerville,6073718,,T. Koopmeiners
+1267459760,70,Netherlands,Substitution,T. Reijnders,5941376,,Q. Timber
+1267459760,75,Japan,Substitution,T. Watanabe,5290292,,T. Tomiyasu
+1267459760,75,Japan,Substitution,T. Kubo,5290936,,K. Ogawa
+1267459760,75,Japan,Substitution,R. Doan,418432,,Y. Sugawara
+1267459760,81,Netherlands,Substitution,R. Gravenberch,87416,,N. Ake
+1267459760,83,Netherlands,Yellow Card,M. Depay,107541,,
+1267459760,84,Japan,Substitution,A. Ueda,11617109,,K. Shiogai
+1267459760,85,Netherlands,Substitution,C. Gakpo,39921,,B. Brobbey
+1267459760,88,Japan,Goal,D. Kamada,418915,K. Ogawa,
+1267459760,90+1,Netherlands,Yellow Card,M. van de Ven,24608843,,
+1267458058,6,Germany,Goal,F. Nmecha,102711,F. Wirtz,
+1267458058,21,Curaçao,Goal,L. Comenencia,49871997,,
+1267458058,38,Germany,Goal,N. Schlotterbeck,4225277,N. Brown,
+1267458058,45+5,Germany,Penalty,K. Havertz,157612,,
+1267458058,46,Curaçao,Substitution,S. Hansen,26063478,,J. Antonisse
+1267458058,47,Germany,Goal,J. Musiala,29271886,J. Kimmich,
+1267458058,64,Germany,Substitution,J. Musiala,29271886,,D. Undav
+1267458058,65,Curaçao,Substitution,J. Locadia,3056095,,J. Margaritha
+1267458058,68,Germany,Goal,N. Brown,45092068,D. Undav,
+1267458058,73,Germany,Substitution,J. Tah,156646,,A. Rudiger
+1267458058,73,Germany,Substitution,F. Nmecha,102711,,L. Goretzka
+1267458058,73,Germany,Substitution,N. Brown,45092068,,D. Raum
+1267458058,78,Germany,Goal,D. Undav,4262629,J. Kimmich,
+1267458058,83,Curaçao,Substitution,T. Chong,146020,,G. Kastaneer
+1267458058,83,Germany,Substitution,J. Kimmich,80976,,W. Anton
+1267458058,88,Germany,Goal,K. Havertz,157612,D. Undav,
+1309690635,27,Australia,Goal,N. Irankunda,54420408,P. Okon-Engstler,
+1309690635,46,Turkey,Substitution,B. Yilmaz,10187268,,K. Yildiz
+1309690635,61,Australia,Substitution,N. Irankunda,54420408,,N. Velupillay
+1309690635,62,Turkey,Substitution,O. Kokcu,5982109,,Y. Akgun
+1309690635,74,Australia,Substitution,M. Toure,31934826,,T. Yengi
+1309690635,74,Australia,Substitution,J. Italiano,1096242,,J. Geria
+1309690635,75,Australia,Goal,C. Metcalfe,1111698,,
+1309690635,81,Turkey,Substitution,I. Yuksek,34528697,,S. Ozcan
+1309690635,81,Turkey,Substitution,Z. Celik,3577896,,M. Muldur
+1309690635,84,Australia,Substitution,J. Bos,54351661,,A. Behich
+1309690635,84,Australia,Substitution,P. Okon-Engstler,71044463,,J. Irvine
+1309690635,85,Turkey,Substitution,K. Akturkoglu,23016553,,D. Gul
+1309690635,86,Turkey,Yellow Card,Y. Akgun,73248,,
+1267456356,28,Scotland,Goal,J. McGinn,3089905,,
+1267456356,39,Haiti,Yellow Card,J. Bellegarde,3327219,,
+1267456356,46,Scotland,Yellow Card,A. Hickey,7224385,,
+1267456356,61,Haiti,Substitution,L. Deedson,20731480,,J. Casimir
+1267456356,75,Scotland,Substitution,B. Gannon-Doak,55315890,,R. Christie
+1267456356,75,Scotland,Substitution,A. Hickey,7224385,,N. Patterson
+1267456356,75,Scotland,Substitution,C. Adams,3143518,,L. Dykes
+1267456356,76,Haiti,Substitution,W. Isidor,13538161,,L. Joseph
+1267456356,83,Scotland,Substitution,J. McGinn,3089905,,F. Curtis
+1267456356,83,Scotland,Substitution,L. Shankland,7273329,,K. McLean
+1267456356,85,Haiti,Substitution,R. Providence,26200167,,Y. Fortune
+1267456356,90+1,Scotland,Yellow Card,F. Curtis,69756946,,
+1267456356,90+5,Scotland,Yellow Card,K. McLean,3071551,,
+1267455505,21,Morocco,Goal,I. Saibari,26065571,B. Diaz,
+1267455505,32,Brazil,Goal,Vinicius Junior,122836,Bruno Guimaraes,
+1267455505,37,Brazil,Yellow Card,Casemiro,120421,,
+1267455505,43,Brazil,Yellow Card,Ibanez,4898418,,
+1267455505,46,Brazil,Substitution,Ibanez,4898418,,Danilo
+1267455505,46,Brazil,Substitution,Casemiro,120421,,Fabinho
+1267455505,61,Brazil,Substitution,Lucas Paqueta,265160,,M. Cunha
+1267455505,62,Brazil,Substitution,I. Thiago,31581270,,Luiz Henrique
+1267455505,65,Morocco,Substitution,B. Diaz,119938,,C. Talbi
+1267455505,65,Morocco,Substitution,A. Ounahi,20878312,,S. El Mourabet
+1267455505,80,Morocco,Substitution,N. Mazraoui,87899,,A. Salah-Eddine
+1267455505,80,Morocco,Substitution,B. El Khannouss,54832407,,A. Amaimouni
+1267455505,80,Brazil,Substitution,Bruno Guimaraes,1631889,,Danilo Santos
+1267455505,89,Morocco,Substitution,I. Saibari,26065571,,S. Rahimi
+1267457207,16,Qatar,Yellow Card,M. Abunada,6795481,,
+1267457207,17,Switzerland,Penalty,B. Embolo,67935,,
+1267457207,23,Qatar,Yellow Card,J. Gaber,32358095,,
+1267457207,42,Switzerland,Yellow Card,D. Zakaria,452564,,
+1267457207,60,Qatar,Substitution,A. Al Oui,87350382,,A. Fathi
+1267457207,60,Qatar,Substitution,J. Gaber,32358095,,K. Boudiaf
+1267457207,60,Qatar,Substitution,Y. Abdurisag,87349255,,A. Alaaeldin
+1267457207,65,Switzerland,Substitution,D. Ndoye,7832482,,J. Manzambi
+1267457207,65,Switzerland,Substitution,M. Aebischer,153265,,F. Rieder
+1267457207,79,Qatar,Substitution,A. O. Madibo,408289,,M. Al Mannai
+1267457207,79,Switzerland,Substitution,R. Vargas,7803985,,Z. Amdouni
+1267457207,89,Qatar,Substitution,Edmilson Junior,6774229,,H. Al Haydos
+1267457207,89,Switzerland,Substitution,R. Rodriguez,262745,,M. Muheim
+1267457207,89,Switzerland,Substitution,R. Freuler,452081,,A. Jashari
+1267457207,90+4,Qatar,Goal,B. Khoukhi,407806,H. Al Amin,
+1267454654,7,USA,Own Goal,D. Bobadilla,31412381,,
+1267454654,10,Paraguay,Yellow Card,J. Caceres,31554866,,
+1267454654,28,USA,VAR Goal Cancelled - Offside,F. Balogun,22352589,,
+1267454654,31,USA,Goal,F. Balogun,22352589,C. Pulisic,
+1267454654,45+5,USA,Goal,F. Balogun,22352589,M. Tillman,
+1267454654,46,Paraguay,Substitution,D. Bobadilla,31412381,,Mauricio
+1267454654,46,USA,Substitution,C. Pulisic,2891,,S. Berhalter
+1267454654,53,Paraguay,Yellow Card,M. Almiron,403781,,
+1267454654,59,USA,Yellow Card,T. Adams,185304,,
+1267454654,62,Paraguay,Substitution,A. Sanabria,406196,,A. Arce
+1267454654,72,USA,Substitution,S. Dest,6236489,,T. Weah
+1267454654,72,USA,Substitution,F. Balogun,22352589,,R. Pepi
+1267454654,73,Paraguay,Goal,Mauricio,17144239,J. Enciso,
+1267454654,79,Paraguay,Yellow Card,D. Gomez,44817724,,
+1267454654,79,Paraguay,Substitution,M. Almiron,403781,,R. Sosa
+1267454654,79,Paraguay,Substitution,J. Caceres,31554866,,G. Velazquez
+1267454654,80,Paraguay,Substitution,D. Gomez,44817724,,Kaku
+1267454654,82,USA,Substitution,M. Tillman,26088111,,G. Reyna
+1267454654,88,Paraguay,Yellow Card,A. Arce,15369214,,
+1267454654,90+3,Paraguay,Yellow Card,J. Alonso,402493,,
+1267454654,90+8,USA,Goal,G. Reyna,26069435,A. Freeman,
+1309689784,11,Canada,Yellow Card,A. Johnston,12646221,,
+1309689784,21,Bosnia & Herzegovina,Goal,J. Lukic,12403111,S. Kolasinac,
+1309689784,45,Bosnia & Herzegovina,Yellow Card,E. Demirovic,7555884,,
+1309689784,45+1,Bosnia & Herzegovina,Yellow Card,J. Lukic,12403111,,
+1309689784,53,Canada,Yellow Card,L. De Fougerolles,52765972,,
+1309689784,61,Canada,Substitution,L. Millar,7212632,,J. Shaffelburg
+1309689784,61,Canada,Substitution,J. David,1366883,,P. David
+1309689784,61,Canada,Substitution,T. Buchanan,8213730,,A. Ahmed
+1309689784,62,Bosnia & Herzegovina,Substitution,J. Lukic,12403111,,S. Bazdar
+1309689784,62,Bosnia & Herzegovina,Substitution,I. Basic,26117896,,A. Gigovic
+1309689784,74,Bosnia & Herzegovina,Substitution,E. Bajraktarevic,53035003,,I. Sunjic
+1309689784,74,Bosnia & Herzegovina,Substitution,A. Memic,51858415,,K. Alajbegovic
+1309689784,76,Canada,Substitution,T. Oluwaseyi,56605661,,C. Larin
+1309689784,78,Canada,Goal,C. Larin,322315,P. David,
+1309689784,84,Bosnia & Herzegovina,Substitution,S. Kolasinac,232316,,D. Burnic
+1309689784,90+1,Canada,Substitution,S. Eustaquio,5726924,,J. Osorio
+1309689784,90+3,Bosnia & Herzegovina,Yellow Card,N. Katic,280455,,
+1309688933,59,Czech Republic,Goal,L. Krejci,10691681,V. Coufal,
+1309688933,62,South Korea,Substitution,Lee Jae-Sung,468020,,Hwang Hee-Chan
+1309688933,64,Czech Republic,Substitution,P. Sulc,10688461,,A. Hlozek
+1309688933,64,Czech Republic,Substitution,P. Schick,127988,,T. Chory
+1309688933,64,Czech Republic,Substitution,L. Provod,10682987,,M. Sadilek
+1309688933,67,South Korea,Goal,Hwang In-Beom,467215,Lee Kang-In,
+1309688933,69,South Korea,Substitution,Lee Tae-Seok,38192574,,Eom Ji-Sung
+1309688933,69,South Korea,Substitution,Son Heung-Min,30100,,Oh Hyeon-Gyu
+1309688933,77,Czech Republic,VAR Goal Cancelled - Offside,T. Soucek,200277,,
+1309688933,80,South Korea,Goal,Oh Hyeon-Gyu,5588464,Hwang In-Beom,
+1309688933,84,South Korea,Substitution,Hwang In-Beom,467215,,Kim Jin-Gyu
+1309688933,84,South Korea,Substitution,Paik Seung-Ho,468503,,Park Jin-Seob
+1309688933,84,Czech Republic,Substitution,A. Sojka,62280911,,M. Chytil
+1309688933,90+6,South Korea,Yellow Card,Lee Gi-Hyuk,49097265,,
+1267453803,9,Mexico,Goal,J. Quinones,5720806,E. Lira,
+1267453803,17,South Africa,Yellow Card,T. Mokoena,529361,,
+1267453803,23,Mexico,Yellow Card,B. Gutierrez,34169667,,
+1267453803,49,South Africa,Red Card,Y. Sithole,25507867,,
+1267453803,56,South Africa,Substitution,L. Foster,15928850,,T. Mbatha
+1267453803,61,South Africa,Substitution,J. Adams,43262464,,T. Zwane
+1267453803,66,Mexico,Substitution,B. Gutierrez,34169667,,L. Chavez
+1267453803,66,Mexico,Substitution,A. Fidalgo,120904,,G. Mora
+1267453803,67,Mexico,Goal,R. Jimenez,464961,R. Alvarado,
+1267453803,74,South Africa,Yellow Card,N. Sibisi,7479892,,
+1267453803,76,Mexico,Substitution,E. Lira,42881699,,E. Alvarez
+1267453803,76,Mexico,Substitution,R. Jimenez,464961,,A. Gonzalez
+1267453803,77,South Africa,Substitution,I. Rayners,20516223,,E. Makgopa
+1267453803,77,South Africa,Substitution,A. Modiba,7459928,,O. Appollis
+1267453803,79,Mexico,Substitution,J. Quinones,5720806,,A. Vega
+1267453803,84,South Africa,Red Card,T. Zwane,529683,,
+1267453803,90+2,Mexico,Red Card,C. Montes,462707,,

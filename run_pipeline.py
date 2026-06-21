@@ -30,6 +30,7 @@ from wc2026 import backtest as BT
 from wc2026 import backtest_all as BT_ALL
 from wc2026 import dashboard as DASH
 from wc2026 import tracker as TRK
+from wc2026 import richdata as RICH
 from wc2026 import goldenboot as GB
 from wc2026 import share as SH
 
@@ -57,7 +58,8 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
 
     trained = _train(bundle, model)
     val = V.evaluate(bundle)
-    table = T.simulate(bundle, trained, n_sims=n_sims)
+    fp = RICH.load_rich(BASE / "api_cache").get("fairplay", {}) if cutoff is None else {}
+    table = T.simulate(bundle, trained, n_sims=n_sims, fairplay=fp)
 
     # Tracker (live version only): records the snapshot, the odds history and
     # the Golden Boot projection history (both filled by the same per-day backfill).

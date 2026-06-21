@@ -1,0 +1,73 @@
+match_id,date,round,status,home,home_id,away,away_id,score
+1267498055,2026-06-28,Group Stage - 3,Not started,Jordan,1318132,Argentina,22910,
+1267495502,2026-06-28,Group Stage - 3,Not started,Algeria,1304516,Austria,660309,
+1309700847,2026-06-27,Group Stage - 3,Not started,Congo DR,1284092,Uzbekistan,1335152,
+1267496353,2026-06-27,Group Stage - 3,Not started,Colombia,7592,Portugal,23761,
+1267497204,2026-06-27,Group Stage - 3,Not started,Croatia,3337,Ghana,1280688,
+1267498906,2026-06-27,Group Stage - 3,Not started,Panama,10145,England,9294,
+1267492098,2026-06-27,Group Stage - 3,Not started,Egypt,28016,Iran,19506,
+1267492949,2026-06-27,Group Stage - 3,Not started,New Zealand,3977507,Belgium,1635,
+1267491247,2026-06-27,Group Stage - 3,Not started,Cape Verde,1305367,Saudi Arabia,20357,
+1267494651,2026-06-27,Group Stage - 3,Not started,Uruguay,6741,Spain,8443,
+1267493800,2026-06-26,Group Stage - 3,Not started,Norway,928374,France,2486,
+1309752758,2026-06-26,Group Stage - 3,Not started,Senegal,11847,Iraq,1334301,
+1267489545,2026-06-26,Group Stage - 3,Not started,Paraguay,2026164,Australia,17804,
+1309699996,2026-06-26,Group Stage - 3,Not started,Turkey,662011,USA,2029568,
+1309699145,2026-06-25,Group Stage - 3,Not started,Japan,10996,Sweden,5039,
+1267490396,2026-06-25,Group Stage - 3,Not started,Tunisia,24612,Netherlands,952202,
+1267488694,2026-06-25,Group Stage - 3,Not started,Ecuador,2027866,Germany,22059,
+1267487843,2026-06-25,Group Stage - 3,Not started,Curaçao,4706814,Ivory Coast,1278135,
+1267486141,2026-06-25,Group Stage - 3,Not started,South Africa,1303665,South Korea,15251,
+1309698294,2026-06-25,Group Stage - 3,Not started,Czech Republic,656054,Mexico,14400,
+1267485290,2026-06-24,Group Stage - 3,Not started,Scotland,943692,Brazil,5890,
+1267484439,2026-06-24,Group Stage - 3,Not started,Morocco,27165,Haiti,2031270,
+1309697443,2026-06-24,Group Stage - 3,Not started,Bosnia & Herzegovina,947947,Qatar,1336003,
+1267486992,2026-06-24,Group Stage - 3,Not started,Switzerland,13549,Canada,4705963,
+1309696592,2026-06-24,Group Stage - 2,Not started,Colombia,7592,Congo DR,1284092,
+1267482737,2026-06-23,Group Stage - 2,Not started,Panama,10145,Croatia,3337,
+1267481886,2026-06-23,Group Stage - 2,Not started,England,9294,Ghana,1280688,
+1267483588,2026-06-23,Group Stage - 2,Not started,Portugal,23761,Uzbekistan,1335152,
+1267480184,2026-06-23,Group Stage - 2,Not started,Jordan,1318132,Algeria,1304516,
+1267481035,2026-06-23,Group Stage - 2,Not started,Norway,928374,Senegal,11847,
+1309704251,2026-06-22,Group Stage - 2,Not started,France,2486,Iraq,1334301,
+1267479333,2026-06-22,Group Stage - 2,Not started,Argentina,22910,Austria,660309,
+1267476780,2026-06-22,Group Stage - 2,Not started,New Zealand,3977507,Egypt,28016,
+1267478482,2026-06-21,Group Stage - 2,Not started,Uruguay,6741,Cape Verde,1305367,
+1267475929,2026-06-21,Group Stage - 2,Not started,Belgium,1635,Iran,19506,
+1267477631,2026-06-21,Group Stage - 2,Not started,Spain,8443,Saudi Arabia,20357,
+1267475078,2026-06-21,Group Stage - 2,Not started,Tunisia,24612,Japan,10996,
+1267473376,2026-06-21,Group Stage - 2,Not started,Ecuador,2027866,Curaçao,4706814,
+1267474227,2026-06-20,Group Stage - 2,Not started,Germany,22059,Ivory Coast,1278135,
+1309695741,2026-06-20,Group Stage - 2,Not started,Netherlands,952202,Sweden,5039,
+1309694890,2026-06-20,Group Stage - 2,Finished,Turkey,662011,Paraguay,2026164,0 - 1
+1267470823,2026-06-20,Group Stage - 2,Finished,Brazil,5890,Haiti,2031270,3 - 0
+1267471674,2026-06-19,Group Stage - 2,Finished,Scotland,943692,Morocco,27165,0 - 1
+1267472525,2026-06-19,Group Stage - 2,Finished,USA,2029568,Australia,17804,2 - 0
+1267469972,2026-06-19,Group Stage - 2,Finished,Mexico,14400,South Korea,15251,1 - 0
+1267469121,2026-06-18,Group Stage - 2,Finished,Canada,4705963,Qatar,1336003,6 - 0
+1309694039,2026-06-18,Group Stage - 2,Finished,Switzerland,13549,Bosnia & Herzegovina,947947,4 - 1
+1309693188,2026-06-18,Group Stage - 2,Finished,Czech Republic,656054,South Africa,1303665,1 - 1
+1267468270,2026-06-18,Group Stage - 1,Finished,Uzbekistan,1335152,Colombia,7592,1 - 3
+1267467419,2026-06-17,Group Stage - 1,Finished,Ghana,1280688,Panama,10145,1 - 0
+1267466568,2026-06-17,Group Stage - 1,Finished,England,9294,Croatia,3337,4 - 2
+1309692337,2026-06-17,Group Stage - 1,Finished,Portugal,23761,Congo DR,1284092,1 - 1
+1267464866,2026-06-17,Group Stage - 1,Finished,Austria,660309,Jordan,1318132,3 - 1
+1267464015,2026-06-17,Group Stage - 1,Finished,Argentina,22910,Algeria,1304516,3 - 0
+1309703400,2026-06-16,Group Stage - 1,Finished,Iraq,1334301,Norway,928374,1 - 4
+1267465717,2026-06-16,Group Stage - 1,Finished,France,2486,Senegal,11847,3 - 1
+1267461462,2026-06-16,Group Stage - 1,Finished,Iran,19506,New Zealand,3977507,2 - 2
+1267462313,2026-06-15,Group Stage - 1,Finished,Saudi Arabia,20357,Uruguay,6741,1 - 1
+1267460611,2026-06-15,Group Stage - 1,Finished,Belgium,1635,Egypt,28016,1 - 1
+1267463164,2026-06-15,Group Stage - 1,Finished,Spain,8443,Cape Verde,1305367,0 - 0
+1309691486,2026-06-15,Group Stage - 1,Finished,Sweden,5039,Tunisia,24612,5 - 1
+1267458909,2026-06-14,Group Stage - 1,Finished,Ivory Coast,1278135,Ecuador,2027866,1 - 0
+1267459760,2026-06-14,Group Stage - 1,Finished,Netherlands,952202,Japan,10996,2 - 2
+1267458058,2026-06-14,Group Stage - 1,Finished,Germany,22059,Curaçao,4706814,7 - 1
+1309690635,2026-06-14,Group Stage - 1,Finished,Australia,17804,Turkey,662011,2 - 0
+1267456356,2026-06-14,Group Stage - 1,Finished,Haiti,2031270,Scotland,943692,0 - 1
+1267455505,2026-06-13,Group Stage - 1,Finished,Brazil,5890,Morocco,27165,1 - 1
+1267457207,2026-06-13,Group Stage - 1,Finished,Qatar,1336003,Switzerland,13549,1 - 1
+1267454654,2026-06-13,Group Stage - 1,Finished,USA,2029568,Paraguay,2026164,4 - 1
+1309689784,2026-06-12,Group Stage - 1,Finished,Canada,4705963,Bosnia & Herzegovina,947947,1 - 1
+1309688933,2026-06-12,Group Stage - 1,Finished,South Korea,15251,Czech Republic,656054,2 - 1
+1267453803,2026-06-11,Group Stage - 1,Finished,Mexico,14400,South Africa,1303665,2 - 0

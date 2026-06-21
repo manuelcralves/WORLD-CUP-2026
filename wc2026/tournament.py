@@ -154,7 +154,7 @@ def _assign_thirds(qual, thirds, letters, N):
 
 
 def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
-             ):
+             fairplay: dict = None):
     """Runs N simulations and returns the probability table per team.
 
     Also records, for every team, the distribution of its knockout opponents
@@ -177,6 +177,7 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
     n = len(teams)
     elo_arr = np.array([state.get(t, default)["elo"] for t in teams])
     fifa_rk_arr = np.array([FIFA.rank_of(t) or 999 for t in teams], dtype=float)   # FIFA world rank — final group tiebreaker
+    fp_arr = np.array([(fairplay or {}).get(t, 0) for t in teams], dtype=float)   # FIFA fair-play points (cards), static from real results
     LH, LA = _lambda_matrices(teams, model, state, default)
     team_letter = {t: L for L, ts in groups.items() for t in ts}
 
@@ -192,7 +193,7 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
 
     # ---- standings of each group ---------------------------------------- #
     winners, runners, thirds = {}, {}, {}
-    third_pts, third_gd, third_gf, third_fr = {}, {}, {}, {}
+    third_pts, third_gd, third_gf, third_fr, third_fp = {}, {}, {}, {}, {}
     pos = np.zeros((n, 4))   # count of 1st/2nd/3rd/4th per team
     exp_pts = np.zeros(n)    # accumulated points (for the expected average)
     col = np.arange(N)
@@ -219,7 +220,8 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
         # FIFA order: points > head-to-head (pts, GD, goals) > overall GD >
         # overall goals > FIFA world ranking (replaces fair play + drawing of lots).
         fr = np.broadcast_to(fifa_rk_arr[gti].reshape(4, 1), (4, N))
-        order = np.lexsort((fr, -gf, -gd, -h2f, -h2d, -h2p, -pts), axis=0)
+        fp = np.broadcast_to(fp_arr[gti].reshape(4, 1), (4, N))   # fair-play (cards): fewer = higher
+        order = np.lexsort((fr, -fp, -gf, -gd, -h2f, -h2d, -h2p, -pts), axis=0)
         winners[L] = gti[order[0]]
         runners[L] = gti[order[1]]
         thirds[L] = gti[order[2]]
@@ -227,6 +229,7 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
         third_gd[L] = gd[order[2], col]
         third_gf[L] = gf[order[2], col]
         third_fr[L] = fifa_rk_arr[gti[order[2]]]
+        third_fp[L] = fp_arr[gti[order[2]]]
         for p_ in range(4):
             np.add.at(pos[:, p_], gti[order[p_]], 1)
         for k in range(4):
@@ -238,9 +241,10 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
     TG = np.vstack([third_gd[L] for L in letters])
     TF = np.vstack([third_gf[L] for L in letters])
     TR = np.vstack([third_fr[L] for L in letters])
-    # best thirds: points > overall GD > overall goals > FIFA rank (no head-to-head
-    # — third-placed teams come from different groups and never met).
-    torder = np.lexsort((TR, -TF, -TG, -TP), axis=0)
+    TFP = np.vstack([third_fp[L] for L in letters])
+    # best thirds: points > overall GD > overall goals > fair-play (cards) > FIFA rank
+    # (no head-to-head — third-placed teams come from different groups and never met).
+    torder = np.lexsort((TR, -TFP, -TF, -TG, -TP), axis=0)
     qual = np.zeros((12, N), dtype=bool)
     for r in range(8):
         qual[torder[r], col] = True
