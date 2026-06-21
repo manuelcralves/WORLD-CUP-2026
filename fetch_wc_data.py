@@ -36,7 +36,7 @@ if RAPID:
 
 LEAGUE, SEASON = 1635, 2026          # 1635 = FIFA World Cup
 CACHE = Path(__file__).resolve().parent / "api_cache"
-DAILY_CAP = 90                       # TRUE cumulative cap across ALL of today's runs (under the 100/day free limit)
+DAILY_CAP = int(os.environ.get("HL_DAILY_CAP", "90"))   # cumulative cap across ALL of today's runs (<100/day); override with HL_DAILY_CAP
 QUOTA_FILE = CACHE / ".quota"        # "<UTC-date> <count>", persisted in the committed cache so it survives across builds
 
 _used = 0                            # requests made this run
@@ -154,7 +154,7 @@ def main() -> None:
     print(f"matches: {len(rows)} saved ({sum(1 for r in rows if r['score'])} played)")
 
     # 2) line-ups + events for FINISHED matches, one request each, cached
-    finished = [r for r in rows if r["score"]]
+    finished = [r for r in rows if r["status"] == "Finished" and r["score"]]   # only FINISHED games -- never cache mid-game data
     # one-time: drop a pre-out_pid events cache so every game re-fetches with the sub-on id.
     # Gated on `rows` (the matches fetch worked) so we never wipe events when the API is
     # unreachable (Cloudflare) and couldn't refill them.
@@ -179,6 +179,35 @@ def main() -> None:
                 print(f"  re-fetched events for {len(finished)} games")
             else:
                 print("  re-fetch incomplete (quota/API) -> kept the existing events cache")
+
+    # self-heal games cached mid-game: if the cached events have fewer goals than the final
+    # score, the game was grabbed before it ended -> drop its rows so it re-fetches the final data.
+    if ev_csv.exists():
+        _gc = {}
+        with ev_csv.open(encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r["type"] in ("Goal", "Penalty", "Own Goal"):
+                    _gc[r["match_id"]] = _gc.get(r["match_id"], 0) + 1
+        def _sg(s):
+            try:
+                return sum(int(x) for x in s.replace(" ", "").split("-"))
+            except ValueError:
+                return -1
+        stale = {str(r["match_id"]) for r in finished
+                 if str(r["match_id"]) in _gc and _gc[str(r["match_id"])] < _sg(r["score"])}
+        if stale:
+            print(f"healing {len(stale)} mid-game-cached game(s) -> dropping their rows to re-fetch")
+            for path in (ev_csv, st_csv):
+                if not path.exists():
+                    continue
+                with path.open(encoding="utf-8") as f:
+                    rd = csv.DictReader(f)
+                    hdr = rd.fieldnames
+                    keep = [x for x in rd if x["match_id"] not in stale]
+                with path.open("w", newline="", encoding="utf-8") as f:
+                    w = csv.DictWriter(f, fieldnames=hdr)
+                    w.writeheader()
+                    w.writerows(keep)
     ln_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ln_csv, "match_id")]
     ev_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ev_csv, "match_id")]
     print(f"line-ups: fetching {len(ln_todo)} new | events: fetching {len(ev_todo)} new")
