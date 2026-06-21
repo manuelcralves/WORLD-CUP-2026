@@ -2,7 +2,7 @@ name: Update & Deploy
 
 on:
   schedule:
-    - cron: "0 11 * * *"    # every day at 11:00 UTC = 12:00 WEST (Portugal) — later so martj42 has published the day's results
+    - cron: "0 */2 * * *"   # every 2 hours — refresh projections/standings shortly after each game (Highlightly auto-feeds the results)
   workflow_dispatch:          # allow manual runs
   push:
     branches: [main]
@@ -42,6 +42,12 @@ jobs:
         env:
           HIGHLIGHTLY_KEY: ${{ secrets.HIGHLIGHTLY_KEY }}
         run: python fetch_wc_data.py || echo "rich-data fetch skipped — using cached CSVs"
+
+      # Fill WC scores into results.csv straight from the Highlightly cache, so the
+      # model has fresh results within ~2h of a game ending (no waiting for the
+      # daily martj42 pull). Goal scorers stay manual/martj42 (name spelling).
+      - name: Feed Highlightly results into the dataset
+        run: python feed_highlightly.py . || true
 
       - name: Run predictions (live + pre-tournament)
         env:                                   # for the Supabase match-table push
