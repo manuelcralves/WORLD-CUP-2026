@@ -1853,3 +1853,55 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267475078,away,Japan,3-4-2-1,no,60524884,Keisuke Goto,9,Forward
 1267475078,away,Japan,3-4-2-1,no,68034246,Kento Shiogai,26,Forward
 1267475078,away,Japan,3-4-2-1,no,5359683,Koki Ogawa,19,Forward
+1267477631,home,Spain,4-2-3-1,yes,7610624,Unai Simón,23,Goalkeeper
+1267477631,home,Spain,4-2-3-1,yes,7628334,Marc Cucurella,24,Defender
+1267477631,home,Spain,4-2-3-1,yes,100296,Aymeric Laporte,14,Defender
+1267477631,home,Spain,4-2-3-1,yes,63856457,Pau Cubarsí,22,Defender
+1267477631,home,Spain,4-2-3-1,yes,7650713,Pedro Porro,12,Defender
+1267477631,home,Spain,4-2-3-1,yes,7238,Rodri,16,Midfielder
+1267477631,home,Spain,4-2-3-1,yes,21511203,Pedri,20,Midfielder
+1267477631,home,Spain,4-2-3-1,yes,29337413,Alex Baena,15,Midfielder
+1267477631,home,Spain,4-2-3-1,yes,213157,Dani Olmo,10,Midfielder
+1267477631,home,Spain,4-2-3-1,yes,62279462,Lamine Yamal,19,Midfielder
+1267477631,home,Spain,4-2-3-1,yes,7619157,Mikel Oyarzabal,21,Forward
+1267477631,home,Spain,4-2-3-1,no,3134019,David Raya,1,Goalkeeper
+1267477631,home,Spain,4-2-3-1,no,29417752,Joan García,13,Goalkeeper
+1267477631,home,Spain,4-2-3-1,no,47622827,Marc Pubill,2,Defender
+1267477631,home,Spain,4-2-3-1,no,99813,Eric García,4,Defender
+1267477631,home,Spain,4-2-3-1,no,121387,Marcos Llorente,5,Midfielder
+1267477631,home,Spain,4-2-3-1,no,90797,Alejandro Grimaldo,3,Defender
+1267477631,home,Spain,4-2-3-1,no,7617225,Mikel Merino,6,Midfielder
+1267477631,home,Spain,4-2-3-1,no,52962,Fabián Ruiz,8,Midfielder
+1267477631,home,Spain,4-2-3-1,no,47763541,Pablo Gavi,9,Midfielder
+1267477631,home,Spain,4-2-3-1,no,7617869,Martín Zubimendi,18,Midfielder
+1267477631,home,Spain,4-2-3-1,no,29591793,Nico Williams,17,Forward
+1267477631,home,Spain,4-2-3-1,no,150045,Ferran Torres,7,Forward
+1267477631,home,Spain,4-2-3-1,no,29660540,Yéremy Pino,11,Midfielder
+1267477631,home,Spain,4-2-3-1,no,54539065,Víctor Muñoz,25,Forward
+1267477631,home,Spain,4-2-3-1,no,7623182,Borja Iglesias,26,Forward
+1267477631,away,Saudi Arabia,5-3-2,yes,7150325,Mohammed Al-Owais,21,Goalkeeper
+1267477631,away,Saudi Arabia,5-3-2,yes,32583495,Moteb Al-Harbi,24,Defender
+1267477631,away,Saudi Arabia,5-3-2,yes,7160629,Abdulelah Al-Amri,4,Defender
+1267477631,away,Saudi Arabia,5-3-2,yes,7165781,Ali Lajami,3,Defender
+1267477631,away,Saudi Arabia,5-3-2,yes,7142436,Hassan Altambakti,5,Defender
+1267477631,away,Saudi Arabia,5-3-2,yes,7179788,Saud Abdulhamid,12,Defender
+1267477631,away,Saudi Arabia,5-3-2,yes,49327334,Musab Al Juwayr,7,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,yes,7134869,Abdullah Al-Khaibari,15,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,yes,7138733,Nasser Al-Dawsari,6,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,yes,7138894,Salem Al-Dawsari,10,Forward
+1267477631,away,Saudi Arabia,5-3-2,yes,7136318,Firas Al-Buraikan,9,Forward
+1267477631,away,Saudi Arabia,5-3-2,no,31119522,Nawaf Al-Aqidi,1,Goalkeeper
+1267477631,away,Saudi Arabia,5-3-2,no,7156443,Ahmed Al-Kassar,22,Goalkeeper
+1267477631,away,Saudi Arabia,5-3-2,no,7143241,Ali Majrashi,2,Defender
+1267477631,away,Saudi Arabia,5-3-2,no,21734349,Nawaf Boushal,13,Defender
+1267477631,away,Saudi Arabia,5-3-2,no,7138089,Hassan Kadesh,14,Defender
+1267477631,away,Saudi Arabia,5-3-2,no,49019341,Jehad Thakri,25,Defender
+1267477631,away,Saudi Arabia,5-3-2,no,64897161,Mohammed Abu Al-Shamat,26,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,no,43336846,Ziyad Aljohani,16,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,no,7076587,Ala'a Al-Hejji,18,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,no,7140343,Mohamed Kanno,23,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,no,23797886,Ayman Yahya,8,Midfielder
+1267477631,away,Saudi Arabia,5-3-2,no,7172865,Saleh Al-Shehri,11,Forward
+1267477631,away,Saudi Arabia,5-3-2,no,7197015,Khalid Al-Ghannam,17,Forward
+1267477631,away,Saudi Arabia,5-3-2,no,7145656,Abdullah Al-Hamdan,19,Forward
+1267477631,away,Saudi Arabia,5-3-2,no,425033,Sultan Mandash,20,Forward

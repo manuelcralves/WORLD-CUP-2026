@@ -547,3 +547,20 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1267475078,84,Japan,Substitution,A. Ueda,11617109,,K. Goto,60524884
 1267475078,90+1,Tunisia,Substitution,A. Abdi,7983017,,E. Achouri,6764086
 1267475078,90+1,Tunisia,Substitution,E. Skhiri,3475661,,R. Khedira,4073454
+1267477631,10,Spain,Goal,Lamine Yamal,62279462,M. Oyarzabal,,7619157
+1267477631,21,Spain,Goal,M. Oyarzabal,7619157,A. Laporte,,100296
+1267477631,24,Spain,Goal,M. Oyarzabal,7619157,D. Olmo,,213157
+1267477631,30,Saudi Arabia,Yellow Card,S. Al Dawsari,7138894,,,
+1267477631,46,Spain,Substitution,Lamine Yamal,62279462,,Y. Pino,29660540
+1267477631,46,Spain,Substitution,M. Oyarzabal,7619157,,F. Torres,150045
+1267477631,46,Saudi Arabia,Substitution,A. Al Khaibari,7134869,,M. Kanno,7140343
+1267477631,46,Saudi Arabia,Substitution,M. Al Juwayr,49327334,,A. Al Hamdan,7145656
+1267477631,49,Spain,Own Goal,H. Tambakti,7142436,,,
+1267477631,60,Saudi Arabia,Yellow Card,M. Kanno,7140343,,,
+1267477631,60,Saudi Arabia,Substitution,A. Al Amri,7160629,,A. Hejji,95595353
+1267477631,60,Saudi Arabia,Substitution,F. Al Buraikan,7136318,,M. Abu Al Shamat,64897161
+1267477631,61,Spain,Substitution,D. Olmo,213157,,M. Merino,7617225
+1267477631,61,Spain,Substitution,A. Baena,29337413,,N. Williams,29591793
+1267477631,70,Spain,Substitution,Pedri,21511203,,F. Ruiz,52962
+1267477631,90,Saudi Arabia,Substitution,N. Al Dawsari,7138733,,K. Al Ghannam,7197015
+1267477631,90+2,Spain,VAR Goal Cancelled - Offside,F. Torres,150045,,,
