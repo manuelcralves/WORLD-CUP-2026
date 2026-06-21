@@ -486,3 +486,50 @@ match_id,minute,team,type,player,player_id,assist,out
 1267453803,79,Mexico,Substitution,J. Quinones,5720806,,A. Vega
 1267453803,84,South Africa,Red Card,T. Zwane,529683,,
 1267453803,90+2,Mexico,Red Card,C. Montes,462707,,
+1267473376,38,Ecuador,Yellow Card,J. Alcivar,2651824,,
+1267473376,39,Curaçao,Yellow Card,L. Bacuna,3058671,,
+1267473376,46,Ecuador,Substitution,J. Alcivar,2651824,,K. Rodriguez
+1267473376,53,Curaçao,Yellow Card,J. Bacuna,3066721,,
+1267473376,56,Curaçao,Yellow Card,L. Comenencia,49871997,,
+1267473376,70,Ecuador,Substitution,P. Estupinan,7523845,,N. Angulo
+1267473376,75,Curaçao,Yellow Card,J. Gaari,5934131,,
+1267473376,75,Curaçao,Substitution,J. Bacuna,3066721,,K. Gorre
+1267473376,76,Curaçao,Substitution,D. Fonville,56963242,,R. van Eijma
+1267473376,76,Curaçao,Substitution,T. Chong,146020,,J. Margaritha
+1267473376,83,Ecuador,Substitution,A. Franco,2634114,,A. Preciado
+1267473376,83,Curaçao,Substitution,J. Locadia,3056095,,G. Kastaneer
+1267473376,84,Curaçao,Substitution,L. Comenencia,49871997,,G. Roemeratoe
+1267473376,89,Ecuador,Substitution,J. Yeboah,4091808,,J. Caicedo
+1267473376,90+1,Curaçao,Yellow Card,G. Kastaneer,6232142,,
+1267474227,30,Ivory Coast,Goal,F. Kessie,264516,,
+1267474227,46,Germany,Substitution,N. Schlotterbeck,4225277,,A. Rudiger
+1267474227,60,Germany,Substitution,L. Sane,103838,,J. Leweling
+1267474227,60,Germany,Substitution,J. Musiala,29271886,,D. Undav
+1267474227,60,Germany,Substitution,A. Pavlovic,52813467,,N. Amiri
+1267474227,68,Germany,Goal,D. Undav,4262629,N. Amiri,
+1267474227,75,Ivory Coast,Substitution,A. Bonny,44379965,,E. Guessand
+1267474227,75,Ivory Coast,Substitution,I. Sangare,3566143,,S. Fofana
+1267474227,75,Ivory Coast,Substitution,A. Diallo,25437671,,S. Adingra
+1267474227,82,Ivory Coast,Substitution,W. Singo,4911298,,G. Doue
+1267474227,85,Ivory Coast,Substitution,Y. Diomande,82718090,,N. Pepe
+1267474227,85,Germany,Substitution,K. Havertz,157612,,L. Goretzka
+1267474227,90+4,Germany,Goal,D. Undav,4262629,F. Nmecha,
+1309695741,5,Netherlands,Goal,B. Brobbey,6238904,C. Gakpo,
+1309695741,17,Netherlands,Goal,B. Brobbey,6238904,D. Dumfries,
+1309695741,46,Netherlands,Substitution,D. Malen,40243,,C. Summerville
+1309695741,47,Netherlands,Goal,C. Gakpo,39921,D. Dumfries,
+1309695741,53,Sweden,Yellow Card,G. Gudmundsson,7723163,,
+1309695741,54,Netherlands,Goal,C. Gakpo,39921,C. Summerville,
+1309695741,55,Sweden,Substitution,A. Bernhardsson,7679210,,A. Elanga
+1309695741,56,Sweden,Substitution,J. Karlstrom,7735721,,B. Zeneli
+1309695741,56,Sweden,Substitution,B. Nygren,7728476,,L. Bergvall
+1309695741,59,Sweden,Goal,A. Elanga,24702384,A. Isak,
+1309695741,59,Netherlands,Substitution,F. de Jong,86772,,T. Koopmeiners
+1309695741,59,Netherlands,Substitution,T. Reijnders,5941376,,G. Til
+1309695741,72,Netherlands,Substitution,B. Brobbey,6238904,,M. Depay
+1309695741,75,Sweden,Yellow Card,Y. Ayari,42797174,,
+1309695741,79,Sweden,Substitution,Y. Ayari,42797174,,T. Ali
+1309695741,80,Sweden,Yellow Card,L. Bergvall,55918030,,
+1309695741,89,Netherlands,Goal,C. Summerville,6073718,M. Depay,
+1309695741,90,Netherlands,Substitution,C. Gakpo,39921,,N. Lang
+1309695741,90+3,Sweden,Substitution,G. Gudmundsson,7723163,,E. Stroud
