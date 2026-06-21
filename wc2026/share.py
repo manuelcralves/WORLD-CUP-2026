@@ -193,7 +193,7 @@ def hero_card(table, out):
             _hero_pill(d, x + w / 2, 448, s, fp, _WHITE, (22, 29, 43), (36, 48, 73), h=54)
         x += w + gap
 
-    d.text((600, 556), "manuelcralves.github.io/WORLD-CUP-2026",
+    d.text((600, 556), "worldcup2026ml.pt",
            font=_ttf(24), fill=_GREEN, anchor="mm")
     img.save(out, "PNG")
     return out

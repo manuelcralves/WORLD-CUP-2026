@@ -92,6 +92,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site
+          echo "worldcup2026ml.pt" > _site/CNAME   # custom domain -- keeps GitHub Pages serving it on every Actions deploy
           cp index.html _site/
           cp -r outputs _site/outputs
           cp -r outputs_pretournament _site/outputs_pretournament

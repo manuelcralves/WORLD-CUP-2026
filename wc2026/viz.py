@@ -22,7 +22,7 @@ TEXT = "#e6e9ef"
 MUTED = "#8a93a8"
 
 # Deployed GitHub Pages base URL (for absolute Open Graph / share links).
-SITE = "https://manuelcralves.github.io/WORLD-CUP-2026"
+SITE = "https://worldcup2026ml.pt"
 
 # Flags (emoji) of the 48 teams, with names exactly as in the dataset.
 FLAGS = {

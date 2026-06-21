@@ -2,9 +2,9 @@
 
 # 🏆 Who Wins the World Cup 2026?
 
-[![▶ Live demo](https://img.shields.io/badge/▶_live_demo-online-00e0a4?style=for-the-badge)](https://manuelcralves.github.io/WORLD-CUP-2026/)
+[![▶ Live demo](https://img.shields.io/badge/▶_live_demo-online-00e0a4?style=for-the-badge)](https://worldcup2026ml.pt/)
 
-![banner](https://manuelcralves.github.io/WORLD-CUP-2026/outputs/share_card.png)
+![banner](https://worldcup2026ml.pt/outputs/share_card.png)
 
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -15,9 +15,9 @@
 **A machine-learning model — Elo + Dixon-Coles Poisson + Monte Carlo — trained on
 150 years of international football, with a rich interactive dashboard. Just for fun.**
 
-[**🔴 Live dashboard**](https://manuelcralves.github.io/WORLD-CUP-2026/outputs/dashboard.html) ·
-[**🔮 Pre-tournament forecast**](https://manuelcralves.github.io/WORLD-CUP-2026/outputs_pretournament/dashboard.html) ·
-[**⚖️ Compare the two**](https://manuelcralves.github.io/WORLD-CUP-2026/compare.html)
+[**🔴 Live dashboard**](https://worldcup2026ml.pt/outputs/dashboard.html) ·
+[**🔮 Pre-tournament forecast**](https://worldcup2026ml.pt/outputs_pretournament/dashboard.html) ·
+[**⚖️ Compare the two**](https://worldcup2026ml.pt/compare.html)
 
 </div>
 
@@ -45,7 +45,7 @@ It runs in **two versions** that tell different stories:
 
 ## ✨ What's inside the dashboard
 
-A single, self-contained dark dashboard (no backend), organised into four tabs:
+A single, self-contained dark dashboard (no backend), organised into five tabs:
 
 | Tab | Highlights |
 |-----|-----------|
@@ -66,8 +66,8 @@ team **deep-links** (`?team=Portugal`) and a mobile-friendly responsive layout.
 
 *Elo through 150 years of football&nbsp;·&nbsp;and how the title odds move as results come in*
 
-<img src="https://manuelcralves.github.io/WORLD-CUP-2026/outputs/elo_race.gif" width="49%" alt="Elo bar-chart race through history">
-<img src="https://manuelcralves.github.io/WORLD-CUP-2026/outputs/odds_evolution.png" width="49%" alt="Title odds over time">
+<img src="https://worldcup2026ml.pt/outputs/elo_race.gif" width="49%" alt="Elo bar-chart race through history">
+<img src="https://worldcup2026ml.pt/outputs/odds_evolution.png" width="49%" alt="Title odds over time">
 
 </div>
 
@@ -192,6 +192,6 @@ charts (`champions.png`, `elo_race.gif`, `odds_evolution.png`) and the data CSVs
 *Data-driven, just for fun.* ⚽ · Data: [martj42/international_results](https://github.com/martj42/international_results)
 (150 years of international football)
 
-**[▶ Open the live dashboard](https://manuelcralves.github.io/WORLD-CUP-2026/)**
+**[▶ Open the live dashboard](https://worldcup2026ml.pt/)**
 
 </div>

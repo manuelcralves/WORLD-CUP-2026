@@ -27,7 +27,7 @@ from pathlib import Path
 
 import pandas as pd
 
-SITE = "https://manuelcralves.github.io/WORLD-CUP-2026/"
+SITE = "https://worldcup2026ml.pt/"
 OUT = Path(__file__).resolve().parent / "outputs"
 KEYS = ("X_API_KEY", "X_API_SECRET", "X_ACCESS_TOKEN", "X_ACCESS_SECRET")
 LIMIT = 280
