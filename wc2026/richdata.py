@@ -29,6 +29,22 @@ def _num(v) -> int:
         return 99
 
 
+# Highlightly returns ~40 stats per match; show only these classics, in this order.
+STAT_ORDER = ["Possession", "Expected Goals", "Shots on target", "Shots off target",
+              "Corners", "Offsides", "Fouls", "Yellow cards", "Red cards", "Successful passes"]
+
+
+def _pct(v):
+    try:
+        return f"{round(float(v) * 100)}%"      # possession 0.51 -> "51%"
+    except (TypeError, ValueError):
+        return v
+
+
+def _zero(v) -> bool:
+    return v in ("", "0", "0.0", None)
+
+
 def load_rich(cache_dir) -> dict:
     """Returns {matchDetail, squads, cards, fairplay} or {} if the cache is absent."""
     cache = Path(cache_dir)
@@ -87,11 +103,17 @@ def load_rich(cache_dir) -> dict:
     for mid, (home, away) in mid_teams.items():
         ln = lineups.get(mid, {})
         st = stats.get(mid, {"home": {}, "away": {}})
-        order = list(st["home"].keys()) + [k for k in st["away"] if k not in st["home"]]
+        srows = []
+        for k in STAT_ORDER:
+            hv, av = st["home"].get(k, ""), st["away"].get(k, "")
+            if k == "Possession":
+                hv, av = _pct(hv), _pct(av)          # 0.51 -> 51%
+            if not _zero(hv) or not _zero(av):       # skip stats both teams have at 0
+                srows.append({"stat": k, "home": hv, "away": av})
         detail[f"{home}|{away}"] = {
             "score": scores.get(mid),
             "timeline": events.get(mid, []),
-            "stats": [{"stat": k, "home": st["home"].get(k, ""), "away": st["away"].get(k, "")} for k in order],
+            "stats": srows,
             "home": {"team": home, **ln.get("home", dict(blank))},
             "away": {"team": away, **ln.get("away", dict(blank))}}
 
