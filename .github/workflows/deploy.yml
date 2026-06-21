@@ -49,6 +49,11 @@ jobs:
       - name: Feed Highlightly results into the dataset
         run: python feed_highlightly.py . || true
 
+      # Goal scorers from the same Highlightly cache -> goalscorers.csv (full names via
+      # player_id), filling only games not already there; manual/martj42 games untouched.
+      - name: Feed Highlightly goals into goalscorers.csv
+        run: python feed_goals_highlightly.py . || true
+
       # Daily sanity check: does results.csv agree with Highlightly? Read-only.
       # Prints any score mismatches / missing games in the build log AND writes
       # outputs/data_check.txt (deployed) so the sync is confirmable at a glance.

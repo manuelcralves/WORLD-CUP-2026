@@ -116,6 +116,14 @@ def main() -> None:
 
     # 2) line-ups + events for FINISHED matches, one request each, cached
     finished = [r for r in rows if r["score"]]
+    # one-time: drop a pre-out_pid events cache so every game re-fetches with the sub-on id.
+    # Gated on `rows` (the matches fetch worked) so we never wipe events when the API is
+    # unreachable (Cloudflare) and couldn't refill them.
+    if rows and ev_csv.exists():
+        with ev_csv.open(encoding="utf-8") as f:
+            if "out_pid" not in f.readline():
+                ev_csv.unlink()
+                print("events cache predates out_pid -> re-fetching all events")
     ln_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ln_csv, "match_id")]
     ev_todo = [r for r in finished if str(r["match_id"]) not in _load_ids(ev_csv, "match_id")]
     print(f"line-ups: fetching {len(ln_todo)} new | events: fetching {len(ev_todo)} new")
