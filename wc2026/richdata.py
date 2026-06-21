@@ -56,7 +56,8 @@ def load_rich(cache_dir) -> dict:
                     continue
                 side["formation"] = r["formation"]
                 (side["xi"] if r["starter"] == "yes" else side["bench"]).append(
-                    {"player": r["player"], "number": r["number"], "position": r["position"]})
+                    {"player": r["player"], "number": r["number"], "position": r["position"],
+                     "id": r.get("player_id", "")})
 
     # events: match_id -> [ {minute, team, type, player, assist, out} ]
     events: dict = defaultdict(list)
@@ -66,7 +67,8 @@ def load_rich(cache_dir) -> dict:
             for r in csv.DictReader(f):
                 events[r["match_id"]].append({
                     "minute": r["minute"], "team": _norm(r["team"]), "type": r["type"],
-                    "player": r["player"], "assist": r["assist"], "out": r["out"]})
+                    "player": r["player"], "assist": r["assist"], "out": r["out"],
+                    "pid": r.get("player_id", ""), "out_pid": r.get("out_pid", "")})
 
     # per-match detail, keyed by the site's "home|away" (martj42 names)
     detail = {}

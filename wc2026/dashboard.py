@@ -384,6 +384,9 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .mdtt{font-weight:700;font-size:13px;margin-bottom:6px}
 .mdp{font-size:12.5px;padding:2px 0}
 .mdp.dim{color:#8b97ad}
+.lupe{font-size:11px;margin-left:4px;white-space:nowrap}
+.luon{color:#00e0a4;font-variant-numeric:tabular-nums}
+.luoff{color:#ff6b6b;font-variant-numeric:tabular-nums}
 .mdnum{display:inline-block;min-width:22px;color:#7d8aa3;font-variant-numeric:tabular-nums}
 .mdbh{font-size:11px;color:#5d6a85;margin:9px 0 3px;text-transform:uppercase;letter-spacing:.5px}
 .todaycard.mdclick{cursor:pointer}
@@ -1190,13 +1193,21 @@ function matchModal(home,away){   // rich detail (timeline + line-ups) for a pla
   let h=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>${flag(H.team,'sm')} ${H.team}${md.score?` <span class="mdsc">${md.score}</span> `:' v '}${A.team} ${flag(A.team,'sm')}</b><button class="pbtn" id="pmodx">✕</button></div>`;
   if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div><div class="mdtl">`;
     md.timeline.forEach(e=>{const ic=ICON[e.type]||"•",isH=e.team===H.team;
-      const body=e.type==="Substitution"?`<b>${e.player}</b> <span class="note">↔ ${e.out}</span>`
+      const body=e.type==="Substitution"?`<b>${e.out||e.player}</b>${e.out?` <span class="note">for ${e.player}</span>`:''}`
         :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}`;
       const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
       h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${e.minute}'</div><div class="mda">${isH?'':cellA}</div></div>`;});
     h+=`</div>`;}
-  const lu=t=>t.xi.map(p=>`<div class="mdp"><span class="mdnum">${p.number||''}</span>${p.player}<span class="note"> ${(p.position||'')[0]||''}</span></div>`).join("")
-    +(t.bench.length?`<div class="mdbh">Bench</div>`+t.bench.map(p=>`<div class="mdp dim"><span class="mdnum">${p.number||''}</span>${p.player}</div>`).join(""):"");
+  const ann={};                                   // player_id -> badges (cards + sub on/off) from the timeline
+  md.timeline.forEach(e=>{const m=e.minute?`${e.minute}'`:'';
+    if(e.type==="Yellow Card"&&e.pid)ann[e.pid]=(ann[e.pid]||'')+'🟨';
+    else if(e.type==="Red Card"&&e.pid)ann[e.pid]=(ann[e.pid]||'')+'🟥';
+    else if(e.type==="Substitution"){               // Highlightly: e.player goes OFF, e.out comes ON
+      if(e.pid)ann[e.pid]=(ann[e.pid]||'')+`<span class="luoff">▼${m}</span>`;
+      if(e.out_pid)ann[e.out_pid]=(ann[e.out_pid]||'')+`<span class="luon">▲${m}</span>`;}});
+  const tag=p=>p.id&&ann[p.id]?` <span class="lupe">${ann[p.id]}</span>`:'';
+  const lu=t=>t.xi.map(p=>`<div class="mdp"><span class="mdnum">${p.number||''}</span>${p.player}<span class="note"> ${(p.position||'')[0]||''}</span>${tag(p)}</div>`).join("")
+    +(t.bench.length?`<div class="mdbh">Bench</div>`+t.bench.map(p=>`<div class="mdp dim"><span class="mdnum">${p.number||''}</span>${p.player}${tag(p)}</div>`).join(""):"");
   if(H.xi.length||A.xi.length){h+=`<div class="mdsec">📋 Line-ups</div><div class="mdlu">`
     +`<div><div class="mdtt">${flag(H.team,'sm')} ${H.team} <span class="note">${H.formation||''}</span></div>${lu(H)}</div>`
     +`<div><div class="mdtt">${flag(A.team,'sm')} ${A.team} <span class="note">${A.formation||''}</span></div>${lu(A)}</div></div>`;}

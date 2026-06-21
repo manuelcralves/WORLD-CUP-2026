@@ -138,9 +138,10 @@ def main() -> None:
         evs = _get(f"events/{mid}")
         _append(ev_csv, [{"match_id": mid, "minute": e.get("time"), "team": (e.get("team") or {}).get("name"),
                           "type": e.get("type"), "player": e.get("player"), "player_id": e.get("playerId"),
-                          "assist": e.get("assist"), "out": e.get("substituted")}
+                          "assist": e.get("assist"), "out": e.get("substituted"),
+                          "out_pid": e.get("assistingPlayerId")}     # on a sub, the player going off
                          for e in (evs or [])],
-                ["match_id", "minute", "team", "type", "player", "player_id", "assist", "out"])
+                ["match_id", "minute", "team", "type", "player", "player_id", "assist", "out", "out_pid"])
 
     print(f"\n[ok] Done. {_used} requests used this run. Cached under {CACHE.name}/.")
 
