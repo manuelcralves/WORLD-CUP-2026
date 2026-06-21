@@ -10,7 +10,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Model](https://img.shields.io/badge/RPS-0.17%20(bookmaker%20level)-orange)
 ![Data](https://img.shields.io/badge/data-49k%20matches%20since%201872-lightgrey)
-![Deploy](https://img.shields.io/badge/deploy-daily%20·%20GitHub%20Actions-9cf)
+![Deploy](https://img.shields.io/badge/deploy-every%202h%20·%20GitHub%20Actions-9cf)
 
 **A machine-learning model — Elo + Dixon-Coles Poisson + Monte Carlo — trained on
 150 years of international football, with a rich interactive dashboard. Just for fun.**
@@ -39,7 +39,7 @@ Three pieces at the core of the model:
 It runs in **two versions** that tell different stories:
 
 - **🔴 Live** → uses the World Cup results already known as fixed and predicts the
-  rest. The "as it stands" picture, **rebuilt automatically every day**.
+  rest. The "as it stands" picture, **rebuilt automatically every 2 hours**.
 - **🔮 Pre-tournament** → trained **only on data before 11 Jun 2026**, simulating all
   72 group matches from scratch with zero knowledge of any 2026 result. The "blind" call.
 
@@ -49,10 +49,15 @@ A single, self-contained dark dashboard (no backend), organised into four tabs:
 
 | Tab | Highlights |
 |-----|-----------|
-| **Overview** | Title odds + **odds-over-time** chart · today's matches with the model's pick · biggest surprises so far · the full **connected bracket** |
-| **Teams** | Sortable ranking — **click any team** for its path to the final and most-likely opponents round by round · all 12 groups · every match with **kickoff times (WEST)** |
+| **Overview** | Title odds + **odds-over-time** chart · today's matches with the model's pick (**click a played game** for its full match detail) · biggest surprises so far · the full **connected bracket** |
+| **Teams** | Sortable ranking — **click any team** for its path to the final, round-by-round opponents, **squad** and history · all 12 groups (cards break ties via FIFA fair-play) · every match with **kickoff times (WEST)** |
 | **Play** | 🆚 **Match Lab** (any head-to-head: win odds, top scorelines, betting-style markets, recent meetings) · 🏆 **Build your World Cup** (an interactive knockout bracket you control — the model seeds every tie, you override any result) · a **what-if group editor** (set real scorelines, watch qualification change) · 🎲 roll a full tournament |
-| **Insights** | ✅ **Predicted vs actual** (how the model is doing) · 🏅 **Model vs FIFA ranking** (Spearman 0.93) · 👟 **Golden Boot** race · goal-timeline analysis · **Elo through history** (bar-chart race) · historical facts |
+| **Predict** | 🎯 **Beat the Machine** — predict every scoreline, climb a **live leaderboard** against other players and the model, and fill your own **knockout bracket** (Supabase-backed) |
+| **Insights** | ✅ **Predicted vs actual** (how the model is doing) · 🏅 **Model vs FIFA ranking** (Spearman 0.93) · 👟 **Golden Boot** race · ⚠️ **discipline** (cards) ranking · goal-timeline analysis · **Elo through history** (bar-chart race) · historical facts |
+
+Every played game opens a **live match-detail modal** (Highlightly API): a two-sided
+**timeline** (goals · cards · subs), **line-ups** annotated with cards & substitutions,
+and **match stats** (possession, shots, xG…).
 
 Plus: rich **link previews** (Open Graph / Twitter cards), **add-to-home-screen** (PWA),
 team **deep-links** (`?team=Portugal`) and a mobile-friendly responsive layout.
@@ -123,10 +128,10 @@ python run_pipeline.py both      # refresh the predictions with the new results
 ### Publishing it online (auto-deploy)
 
 The repo ships with a **GitHub Actions** workflow (`.github/workflows/deploy.yml`)
-that **every day** fetches the latest results, re-runs both versions and publishes
-the site to GitHub Pages — no manual step, and your PC doesn't need to be on. It also
-commits the refreshed data and `history.csv` back, so the odds-over-time chart keeps
-accumulating. To enable: push to GitHub, then **Settings → Pages → Source: GitHub
+that **every 2 hours** fetches the latest results (martj42 + the **Highlightly API** for
+live match detail, scores and goals), re-runs both versions and publishes the site to
+GitHub Pages — no manual step, and your PC doesn't need to be on. It also commits the
+refreshed data and `history.csv` back, so the odds-over-time chart keeps accumulating. To enable: push to GitHub, then **Settings → Pages → Source: GitHub
 Actions**. The site goes live at `https://<user>.github.io/<repo>/`.
 
 ## Project structure
@@ -147,6 +152,8 @@ wc2026/
   schedule.py     official 2026 kickoff times (shown in WEST)
   goldenboot.py   top-scorer (Golden Boot) forecast
   goals.py        goal-timeline analysis (from goalscorers.csv)
+  richdata.py     Highlightly rich data (match modal, squads, cards) → D.rich
+  supa.py         Supabase match-table push (live "Beat the Machine" leaderboard)
   tracker.py      prediction history + odds over time during the tournament
   facts.py        historical facts (team cards, upsets, penalties)
   analysis.py     group of death, dark horses, likely finals, confidence
@@ -155,6 +162,9 @@ wc2026/
   dashboard.py    the interactive HTML dashboard (all four tabs)
 run_pipeline.py    end-to-end pipeline (live + pre-tournament)
 update_data.py     updates the CSVs from the live source (martj42)
+fetch_wc_data.py   Highlightly rich-data fetcher (cached · quota-safe · self-healing)
+feed_highlightly.py / feed_goals_highlightly.py   auto-feed WC results & goal scorers
+reconcile_highlightly.py   daily dataset ↔ Highlightly sanity check (→ data_check.txt)
 index.html         landing page (links to both dashboards) — for GitHub Pages
 make_icons.py      generates the PWA app icons · manifest.json
 .github/workflows/deploy.yml   daily auto-deploy to GitHub Pages
