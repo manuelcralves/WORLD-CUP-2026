@@ -36,17 +36,21 @@ if RAPID:
 
 LEAGUE, SEASON = 1635, 2026          # 1635 = FIFA World Cup
 CACHE = Path(__file__).resolve().parent / "api_cache"
-DAILY_BUDGET = 90                    # stop here, leaving headroom under the 100/day free cap
+DAILY_CAP = 90                       # TRUE cumulative cap across ALL of today's runs (under the 100/day free limit)
+QUOTA_FILE = CACHE / ".quota"        # "<UTC-date> <count>", persisted in the committed cache so it survives across builds
 
-_used = 0
+_used = 0                            # requests made this run
+_prior = 0                           # requests already spent today by earlier runs (loaded from .quota)
+_today = ""
 
 
 def _get(path: str, **params):
-    """One API call. Counts against the daily budget; returns None on an HTTP error."""
+    """One API call. Counts against the cumulative daily cap; returns None on an HTTP error."""
     global _used
-    if _used >= DAILY_BUDGET:
-        print(f"\n[!] Reached the safe daily budget ({DAILY_BUDGET}). Re-run tomorrow -- "
-              f"the cache resumes exactly where it left off.")
+    if _prior + _used >= DAILY_CAP:
+        print(f"\n[!] Reached today's cap ({DAILY_CAP} requests across all runs). Stops here; "
+              f"resumes tomorrow -- the cache picks up exactly where it left off.")
+        _save_quota()
         raise SystemExit(0)
     url = f"{BASE}/{path}" + (("?" + urllib.parse.urlencode(params)) if params else "")
     req = urllib.request.Request(url, headers=HEADERS)
@@ -59,6 +63,25 @@ def _get(path: str, **params):
         return None
     _used += 1
     return payload
+
+
+def _load_quota() -> None:
+    """Load today's request count from .quota (resets when the UTC date rolls over)."""
+    global _prior, _today
+    from datetime import datetime, timezone
+    _today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    try:
+        d, n = QUOTA_FILE.read_text().split()
+        _prior = int(n) if d == _today else 0
+    except (FileNotFoundError, ValueError):
+        _prior = 0
+
+
+def _save_quota() -> None:
+    try:
+        QUOTA_FILE.write_text(f"{_today} {_prior + _used}")
+    except OSError:
+        pass
 
 
 def _load_ids(path: Path, col: str) -> set:
@@ -108,6 +131,8 @@ def main() -> None:
     if not KEY:
         sys.exit('[x] Set HIGHLIGHTLY_KEY first ($env:HIGHLIGHTLY_KEY = "...").')
     CACHE.mkdir(exist_ok=True)
+    _load_quota()
+    print(f"quota: {_prior}/{DAILY_CAP} requests already used today (UTC)")
     m_csv, ln_csv, ev_csv = CACHE / "wc_matches.csv", CACHE / "wc_lineups.csv", CACHE / "wc_events.csv"
     st_csv = CACHE / "wc_stats.csv"
 
@@ -192,7 +217,8 @@ def main() -> None:
                     for s in (t.get("statistics") or [])]
         _append(st_csv, out, ["match_id", "side", "team", "stat", "value"])
 
-    print(f"\n[ok] Done. {_used} requests used this run. Cached under {CACHE.name}/.")
+    _save_quota()
+    print(f"\n[ok] Done. {_used} requests this run, {_prior + _used}/{DAILY_CAP} today. Cached under {CACHE.name}/.")
 
 
 if __name__ == "__main__":
