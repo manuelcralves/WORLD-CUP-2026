@@ -564,3 +564,52 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1267477631,70,Spain,Substitution,Pedri,21511203,,F. Ruiz,52962
 1267477631,90,Saudi Arabia,Substitution,N. Al Dawsari,7138733,,K. Al Ghannam,7197015
 1267477631,90+2,Spain,VAR Goal Cancelled - Offside,F. Torres,150045,,,
+1267476780,15,New Zealand,Goal,F. Surman,33836719,T. Payne,,15189860
+1267476780,17,Egypt,Yellow Card,M. Lasheen,2711555,,,
+1267476780,20,New Zealand,Yellow Card,S. Singh,1116689,,,
+1267476780,34,New Zealand,Yellow Card,C. McCowatt,15185996,,,
+1267476780,41,Egypt,Substitution,H. Fathy,2707047,,R. Rabia,2705759
+1267476780,58,Egypt,Goal,M. Ziko,63607229,M. Hany,,427448
+1267476780,66,New Zealand,Substitution,C. McCowatt,15185996,,B. Old,28956970
+1267476780,67,Egypt,Goal,M. Salah,49420,M. Ziko,,63607229
+1267476780,76,New Zealand,Substitution,S. Singh,1116689,,R. Thomas,39116
+1267476780,76,New Zealand,Substitution,L. Cacace,1116045,,J. Randall,25548922
+1267476780,76,Egypt,Substitution,O. Marmoush,13133407,,Trezeguet,429058
+1267476780,76,Egypt,Substitution,M. Ziko,63607229,,H. Abdelkarim,88638221
+1267476780,82,Egypt,Goal,Trezeguet,429058,M. Salah,,49420
+1267476780,85,Egypt,Substitution,E. Ashour,2780463,,Zizo,2716385
+1267476780,85,Egypt,Substitution,M. Salah,49420,,H. Abdelmaguid,43409135
+1267476780,85,New Zealand,Substitution,T. Payne,15189860,,T. Bindon,69364589
+1267476780,85,New Zealand,Substitution,E. Just,15187767,,F. De Vries,15199359
+1267476780,90+9,Egypt,Substitution,H. Abdelmaguid,43409135,,M. Abdelmonem,31611377
+1267478482,5,Cape Verde,Yellow Card,S. Lopes Cabral,49699083,,,
+1267478482,20,Uruguay,Yellow Card,R. Bentancur,139097,,,
+1267478482,21,Cape Verde,Goal,K. Lenini,15538586,,,
+1267478482,44,Uruguay,Goal,M. Araujo,8336090,,,
+1267478482,45+6,Uruguay,Goal,A. Canobbio,8308237,M. Araujo,,8336090
+1267478482,46,Cape Verde,Substitution,T. Arcanjo,42754670,,D. Duarte,6027189
+1267478482,58,Uruguay,Yellow Card,M. Olivera,7608048,,,
+1267478482,58,Cape Verde,Substitution,Benchimol,49778456,,N. Da Costa,3584819
+1267478482,58,Cape Verde,Substitution,G. Rodrigues,7182686,,H. Varela,46855018
+1267478482,61,Cape Verde,Goal,H. Varela,46855018,,,
+1267478482,68,Uruguay,VAR Goal Cancelled - Offside,M. Araujo,8336090,,,
+1267478482,70,Uruguay,Substitution,M. Ugarte,8290688,,N. de la Cruz,965349
+1267478482,70,Uruguay,Substitution,F. Vinas,8296484,,D. Nunez,8310491
+1267478482,71,Cape Verde,Substitution,K. Lenini,15538586,,L. Duarte,6027350
+1267478482,80,Cape Verde,Substitution,J. Monteiro,8170099,,Y. Semedo,20609281
+1267478482,81,Uruguay,Substitution,M. Araujo,8336090,,B. Rodriguez,8310652
+1267478482,90+3,Cape Verde,Yellow Card,D. Borges,6699042,,,
+1267475929,3,Belgium,Yellow Card,R. Lukaku,146181,,,
+1267475929,25,Iran,VAR Goal Cancelled - Offside,M. Taremi,6812869,,,
+1267475929,33,Iran,Yellow Card,S. Ezatolahi,3158008,,,
+1267475929,46,Iran,Substitution,S. Hardani,22037834,,A. Jahanbakhsh,434854
+1267475929,58,Belgium,Substitution,T. Meunier,42658,,T. Castagne,470274
+1267475929,58,Belgium,Substitution,N. Raskin,341474,,H. Vanaken,12712
+1267475929,58,Belgium,Substitution,A. Saelemaekers,228291,,D. Lukebakio,4098892
+1267475929,66,Iran,Substitution,E. Hajsafi,432439,,M. Mohammadi,432922
+1267475929,66,Iran,Substitution,M. Mohebi,21609091,,M. Torabi,434371
+1267475929,66,Belgium,Red Card,N. Ngoy,50387358,,,
+1267475929,73,Belgium,Substitution,R. Lukaku,146181,,A. Theate,32851077
+1267475929,79,Iran,Substitution,S. Ghoddos,434693,,S. Moghanlou,14487256
+1267475929,85,Iran,Substitution,S. Ezatolahi,3158008,,A. Hosseinzadeh,4820011
+1267475929,87,Belgium,Substitution,K. De Bruyne,101423,,M. Fernandez-Pardo,54752551
