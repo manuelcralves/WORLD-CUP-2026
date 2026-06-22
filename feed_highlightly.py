@@ -1,7 +1,7 @@
 """Auto-feed the Highlightly World Cup results into results.csv (the model's dataset).
 
 Reads api_cache/wc_matches.csv (fetched by fetch_wc_data.py) and fills the score of
-any 2026 World Cup match still listed as `NA,NA` in results.csv — so the model has
+any FINISHED 2026 World Cup match still listed as `NA,NA` in results.csv — so the model has
 the latest results within ~2h of a game ending, without waiting for the daily
 martj42 pull or manual entry.
 
@@ -34,6 +34,8 @@ def feed(results_csv: Path, matches_csv: Path) -> int:
     played = []                                   # (date, home, away, home_score, away_score)
     with matches_csv.open(encoding="utf-8") as f:
         for r in csv.DictReader(f):
+            if (r.get("status") or "") != "Finished":   # only FINISHED games — never feed a live/mid-game score (mirrors fetch_wc_data.py)
+                continue
             sc = (r.get("score") or "").replace(" ", "")
             if "-" not in sc:
                 continue
