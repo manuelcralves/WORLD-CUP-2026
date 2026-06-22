@@ -2057,3 +2057,55 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267475929,away,Iran,5-4-1,no,4820011,Amirhossein Hosseinzadeh,18,Forward
 1267475929,away,Iran,5-4-1,no,14487256,Shahriar Moghanlou,20,Forward
 1267475929,away,Iran,5-4-1,no,6100766,Dennis Eckert Ayensa,24,Forward
+1267479333,home,Argentina,4-4-2,yes,3155593,Emiliano Martínez,23,Goalkeeper
+1267479333,home,Argentina,4-4-2,yes,1003345,Facundo Medina,25,Defender
+1267479333,home,Argentina,4-4-2,yes,397341,Lisandro Martínez,6,Defender
+1267479333,home,Argentina,4-4-2,yes,4955090,Cristian Romero,13,Defender
+1267479333,home,Argentina,4-4-2,yes,1047137,Nahuel Molina,26,Defender
+1267479333,home,Argentina,4-4-2,yes,976941,Thiago Almada,16,Midfielder
+1267479333,home,Argentina,4-4-2,yes,965510,Enzo Fernández,24,Midfielder
+1267479333,home,Argentina,4-4-2,yes,1081430,Alexis Mac Allister,20,Midfielder
+1267479333,home,Argentina,4-4-2,yes,398146,Rodrigo De Paul,7,Midfielder
+1267479333,home,Argentina,4-4-2,yes,35091,Lautaro Martínez,22,Forward
+1267479333,home,Argentina,4-4-2,yes,24948,Lionel Messi,10,Forward
+1267479333,home,Argentina,4-4-2,no,397019,Juan Musso,1,Goalkeeper
+1267479333,home,Argentina,4-4-2,no,7614810,Gerónimo Rulli,12,Goalkeeper
+1267479333,home,Argentina,4-4-2,no,85323,Nicolás Tagliafico,3,Defender
+1267479333,home,Argentina,4-4-2,no,100618,Nicolás Otamendi,19,Defender
+1267479333,home,Argentina,4-4-2,no,1064364,Marcos Senesi,2,Defender
+1267479333,home,Argentina,4-4-2,no,397502,Gonzalo Montiel,4,Defender
+1267479333,home,Argentina,4-4-2,no,51451246,Valentín Barco,8,Midfielder
+1267479333,home,Argentina,4-4-2,no,56356111,Nico Paz,18,Forward
+1267479333,home,Argentina,4-4-2,no,43785,Leandro Paredes,5,Midfielder
+1267479333,home,Argentina,4-4-2,no,52153689,Giuliano Simeone,17,Forward
+1267479333,home,Argentina,4-4-2,no,254212,Giovani Lo Celso,11,Midfielder
+1267479333,home,Argentina,4-4-2,no,966476,Exequiel Palacios,14,Midfielder
+1267479333,home,Argentina,4-4-2,no,4236869,Nicolás González,15,Forward
+1267479333,home,Argentina,4-4-2,no,47577747,José Manuel López,21,Forward
+1267479333,home,Argentina,4-4-2,no,967603,Julián Alvarez,9,Forward
+1267479333,away,Austria,4-2-3-1,yes,1211679,Alexander Schlager,1,Goalkeeper
+1267479333,away,Austria,4-2-3-1,yes,186431,Konrad Laimer,20,Defender
+1267479333,away,Austria,4-2-3-1,yes,81459,David Alaba,8,Defender
+1267479333,away,Austria,4-2-3-1,yes,4071361,Kevin Danso,3,Defender
+1267479333,away,Austria,4-2-3-1,yes,114625,Stefan Posch,5,Defender
+1267479333,away,Austria,4-2-3-1,yes,176449,Xaver Schlager,4,Midfielder
+1267479333,away,Austria,4-2-3-1,yes,1179962,Nicolas Seiwald,6,Midfielder
+1267479333,away,Austria,4-2-3-1,yes,186753,Marcel Sabitzer,9,Midfielder
+1267479333,away,Austria,4-2-3-1,yes,52791249,Paul Wanner,24,Midfielder
+1267479333,away,Austria,4-2-3-1,yes,1217636,Romano Schmid,18,Midfielder
+1267479333,away,Austria,4-2-3-1,yes,4072971,Michael Gregoritsch,11,Forward
+1267479333,away,Austria,4-2-3-1,no,1223432,Patrick Pentz,13,Goalkeeper
+1267479333,away,Austria,4-2-3-1,no,35678559,Florian Wiegele,12,Goalkeeper
+1267479333,away,Austria,4-2-3-1,no,20389194,David Affengruber,2,Defender
+1267479333,away,Austria,4-2-3-1,no,4075708,Marco Friedl,23,Defender
+1267479333,away,Austria,4-2-3-1,no,1141644,Michael Svoboda,25,Defender
+1267479333,away,Austria,4-2-3-1,no,4224794,Philipp Lienhart,15,Defender
+1267479333,away,Austria,4-2-3-1,no,1179801,Alexander Prass,22,Defender
+1267479333,away,Austria,4-2-3-1,no,277879,Dejan Ljubičić,19,Midfielder
+1267479333,away,Austria,4-2-3-1,no,20389516,Patrick Wimmer,21,Midfielder
+1267479333,away,Austria,4-2-3-1,no,115913,Florian Grillitsch,10,Midfielder
+1267479333,away,Austria,4-2-3-1,no,22368689,Carney Chukwuemeka,17,Midfielder
+1267479333,away,Austria,4-2-3-1,no,67291,Alessandro Schöpf,26,Midfielder
+1267479333,away,Austria,4-2-3-1,no,4172469,Phillipp Mwene,16,Defender
+1267479333,away,Austria,4-2-3-1,no,1243396,Saša Kalajdžić,14,Forward
+1267479333,away,Austria,4-2-3-1,no,3031784,Marko Arnautović,7,Forward
