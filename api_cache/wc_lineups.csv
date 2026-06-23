@@ -2161,3 +2161,55 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1309704251,away,Iraq,4-2-3-1,no,26380648,Ali Yousif,13,Forward
 1309704251,away,Iraq,4-2-3-1,no,48270047,Ali Al-Hamadi,9,Forward
 1309704251,away,Iraq,4-2-3-1,no,24917641,Mohanad Ali,10,Forward
+1267481035,home,Norway,4-3-3,yes,3086846,Ørjan Nyland,1,Goalkeeper
+1267481035,home,Norway,4-3-3,yes,42791056,David Møller Wolfe,5,Defender
+1267481035,home,Norway,4-3-3,yes,6320048,Torbjørn Heggem,17,Defender
+1267481035,home,Norway,4-3-3,yes,180313,Kristoffer Ajer,3,Defender
+1267481035,home,Norway,4-3-3,yes,4000199,Julian Ryerson,26,Defender
+1267481035,home,Norway,4-3-3,yes,6286077,Fredrik Aursnes,14,Midfielder
+1267481035,home,Norway,4-3-3,yes,311528,Sander Berge,8,Midfielder
+1267481035,home,Norway,4-3-3,yes,5977601,Martin Ødegaard,10,Midfielder
+1267481035,home,Norway,4-3-3,yes,50636425,Antonio Nusa,20,Forward
+1267481035,home,Norway,4-3-3,yes,177254,Erling Haaland,9,Forward
+1267481035,home,Norway,4-3-3,yes,1367366,Alexander Sørloth,7,Forward
+1267481035,home,Norway,4-3-3,no,42565012,Sander Tangvik,12,Goalkeeper
+1267481035,home,Norway,4-3-3,no,6292356,Egil Selvik,13,Goalkeeper
+1267481035,home,Norway,4-3-3,no,3053841,Leo Østigård,4,Defender
+1267481035,home,Norway,4-3-3,no,6288492,Fredrik André Bjørkan,15,Defender
+1267481035,home,Norway,4-3-3,no,42736638,Sondre Langås,24,Defender
+1267481035,home,Norway,4-3-3,no,29131011,Henrik Sælebakke Falchener,25,Defender
+1267481035,home,Norway,4-3-3,no,44746884,Thelo Aasgaard,19,Midfielder
+1267481035,home,Norway,4-3-3,no,44779567,Oscar Bobb,22,Midfielder
+1267481035,home,Norway,4-3-3,no,48546162,Andreas Schjelderup,21,Forward
+1267481035,home,Norway,4-3-3,no,6302177,Kristian Thorstvedt,18,Midfielder
+1267481035,home,Norway,4-3-3,no,5953934,Morten Thorsby,2,Midfielder
+1267481035,home,Norway,4-3-3,no,6289458,Patrick Berg,6,Midfielder
+1267481035,home,Norway,4-3-3,no,6337436,Marcus Pedersen,16,Defender
+1267481035,home,Norway,4-3-3,no,327306,Jørgen Strand Larsen,11,Forward
+1267481035,home,Norway,4-3-3,no,6290907,Jens Petter Hauge,23,Midfielder
+1267481035,away,Senegal,4-2-3-1,yes,480900,Edouard Mendy,16,Goalkeeper
+1267481035,away,Senegal,4-2-3-1,yes,65897937,El Hadji Malick Diouf,25,Defender
+1267481035,away,Senegal,4-2-3-1,yes,4172630,Moussa Niakhaté,19,Defender
+1267481035,away,Senegal,4-2-3-1,yes,51352,Kalidou Koulibaly,3,Defender
+1267481035,away,Senegal,4-2-3-1,yes,13195,Krépin Diatta,15,Defender
+1267481035,away,Senegal,4-2-3-1,yes,3332210,Pape Gueye,26,Midfielder
+1267481035,away,Senegal,4-2-3-1,yes,481544,Idrissa Gana Gueye,5,Midfielder
+1267481035,away,Senegal,4-2-3-1,yes,49098,Sadio Mané,10,Midfielder
+1267481035,away,Senegal,4-2-3-1,yes,60223492,Lamine Camara,8,Midfielder
+1267481035,away,Senegal,4-2-3-1,yes,357252,Ismaïla Sarr,18,Midfielder
+1267481035,away,Senegal,4-2-3-1,yes,45572492,Nicolas Jackson,11,Forward
+1267481035,away,Senegal,4-2-3-1,no,19296487,Mory Diaw,23,Goalkeeper
+1267481035,away,Senegal,4-2-3-1,no,3311280,Yehvann Diouf,1,Goalkeeper
+1267481035,away,Senegal,4-2-3-1,no,44465778,Mamadou Sarr,2,Defender
+1267481035,away,Senegal,4-2-3-1,no,25457635,Ismail Jakobs,14,Defender
+1267481035,away,Senegal,4-2-3-1,no,1360604,Abdoulaye Seck,4,Defender
+1267481035,away,Senegal,4-2-3-1,no,50544011,Antoine Mendy,24,Defender
+1267481035,away,Senegal,4-2-3-1,no,6690026,Pathé Ismaël Ciss,6,Midfielder
+1267481035,away,Senegal,4-2-3-1,no,101574249,Bara Sapoko Ndiaye,22,Midfielder
+1267481035,away,Senegal,4-2-3-1,no,2993466,Iliman Ndiaye,13,Forward
+1267481035,away,Senegal,4-2-3-1,no,38177923,Pape Matar Sarr,17,Midfielder
+1267481035,away,Senegal,4-2-3-1,no,52748745,Habib Diarra,21,Midfielder
+1267481035,away,Senegal,4-2-3-1,no,71846243,Ibrahim Mbaye,20,Forward
+1267481035,away,Senegal,4-2-3-1,no,64552782,Assane Diao,7,Forward
+1267481035,away,Senegal,4-2-3-1,no,45735746,Ahmadou Bamba Dieng,9,Forward
+1267481035,away,Senegal,4-2-3-1,no,2315173,Cherif Ndiaye,12,Forward
