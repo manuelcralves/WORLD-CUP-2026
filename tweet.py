@@ -247,12 +247,49 @@ def _golden_text():
     return out
 
 
+def _group_overviews() -> list:
+    """One card per group still in play: points · win-group% / reach-last-32%.
+
+    Generic (same shape for every group), copy-paste only. Self-gates to the
+    group stage via group_matches.csv — a group with no remaining match drops
+    out, and once the knockouts start the whole section disappears.
+    """
+    gm, pr = OUT / "group_matches.csv", OUT / "predictions.csv"
+    if not gm.exists() or not pr.exists():
+        return []
+    rem = pd.read_csv(gm)
+    if "group" not in rem.columns or rem.empty:
+        return []
+    groups = sorted(str(g) for g in rem["group"].dropna().unique()
+                    if str(g) in list("ABCDEFGHIJKL"))
+    d = pd.read_csv(pr)
+    if not groups or not {"group", "p_1st", "p_ko"} <= set(d.columns):
+        return []
+    pts = _standings_from_review()
+    out = []
+    for L in groups:
+        g = d[d["group"] == L].sort_values(["p_ko", "p_1st"], ascending=False)
+        if g.empty:
+            continue
+        lines = []
+        for r in g.itertuples(index=False):
+            p = pts.get(r.team, {}).get("pts", 0)
+            rec = f"{p} pt{'' if p == 1 else 's'}"
+            lines.append(f"{_flag(r.team) or '⚽'} {r.team} — {rec} · "
+                         f"{r.p_1st * 100:.0f}% / {r.p_ko * 100:.0f}%")
+        head = f"📊 Group {L} — before the final round\nwin group / reach last 32\n\n"
+        text = head + "\n".join(lines) + f"\n\n🔮 {SITE}"
+        out.append((f"Group {L} overview · post any", text))
+    return out
+
+
 def evergreen_tweets() -> list:
     """(label, text) tweets for the kit — copy-paste only, never auto-posted."""
     out = [("Recruitment · post anytime", COME_PLAY)]
     g = _golden_text()
     if g:
         out.append(("Golden Boot · refreshed each build", g))
+    out += _group_overviews()                 # one card per group still in play (group stage only)
     out.append(("Bracket · for ~28 Jun (when knockouts open)", BRACKET))
     return out
 
