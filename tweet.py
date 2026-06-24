@@ -65,6 +65,16 @@ def _surname(name: str) -> str:
     return parts[-1] if parts else str(name)
 
 
+def _pct(p) -> str:
+    """Percent with no misleading bare '0%': a tiny but non-zero value shows '<1%'
+    (a 0-count from the sim means 'below resolution', not truly impossible). An
+    exact 0 (e.g. a team eliminated from its group) still shows '0%'."""
+    v = round(float(p) * 100)
+    if v == 0 and float(p) > 0:
+        return "<1%"
+    return f"{v}%"
+
+
 def _eff_len(text: str) -> int:
     return len(text) - len(SITE) + URL_LEN if SITE in text else len(text)
 
@@ -180,7 +190,7 @@ def _qualif_today(today: str) -> list:
             s = pts.get(r.team, {"played": 0, "pts": 0})
             rec = f"{s['pts']}pt{'s' if s['pts'] != 1 else ''}" if s["played"] else "—"
             lines.append(f"{_flag(r.team) or '⚽'} {r.team} · {rec} · "
-                         f"{r.p_ko * 100:.0f}% to advance")
+                         f"{_pct(r.p_ko)} to advance")
         head = f"🎟️ Group {L} today — standings & chance to reach the last 32:\n\n"
         out.append(head + _fit(lines, head, ""))
     return out
@@ -276,7 +286,7 @@ def _group_overviews() -> list:
             p = pts.get(r.team, {}).get("pts", 0)
             rec = f"{p} pt{'' if p == 1 else 's'}"
             lines.append(f"{_flag(r.team) or '⚽'} {r.team} — {rec} · "
-                         f"{r.p_1st * 100:.0f}% / {r.p_ko * 100:.0f}%")
+                         f"{_pct(r.p_1st)} / {_pct(r.p_ko)}")
         head = f"📊 Group {L} — before the final round\nwin group / reach last 32\n\n"
         text = head + "\n".join(lines) + f"\n\n🔮 {SITE}"
         out.append((f"Group {L} overview · post any", text))
@@ -307,7 +317,7 @@ def _likely_opponents(rnd="Round of 32", n_teams=6) -> list:
         g = o[o["team"] == tm].sort_values("p_cond", ascending=False).head(4)
         if g.empty:
             continue
-        lines = [f"{_flag(r.opponent) or '⚽'} {r.opponent} {r.p_cond * 100:.0f}%"
+        lines = [f"{_flag(r.opponent) or '⚽'} {r.opponent} {_pct(r.p_cond)}"
                  for r in g.itertuples(index=False)]
         head = (f"🔮 Who will {_flag(tm) or '⚽'} {tm} face in the {rnd}?\n\n"
                 f"The model's likeliest opponents:\n")
