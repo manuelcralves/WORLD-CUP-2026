@@ -2420,3 +2420,54 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267482737,away,Croatia,4-2-3-1,no,117040,Andrej Kramarić,9,Forward
 1267482737,away,Croatia,4-2-3-1,no,7526260,Ante Budimir,11,Forward
 1267482737,away,Croatia,4-2-3-1,no,32634210,Igor Matanović,20,Forward
+1309696592,home,Colombia,4-2-3-1,yes,399756,Camilo Vargas,12,Goalkeeper
+1309696592,home,Colombia,4-2-3-1,yes,10347302,Johan Mojica,17,Defender
+1309696592,home,Colombia,4-2-3-1,yes,310723,Jhon Lucumí,3,Defender
+1309696592,home,Colombia,4-2-3-1,yes,27202,Davinson Sánchez,23,Defender
+1309696592,home,Colombia,4-2-3-1,yes,2211650,Daniel Muñoz,2,Defender
+1309696592,home,Colombia,4-2-3-1,yes,52169628,Gustavo Puerta,14,Midfielder
+1309696592,home,Colombia,4-2-3-1,yes,401044,Jefferson Lerma,16,Midfielder
+1309696592,home,Colombia,4-2-3-1,yes,400883,Luis Díaz,7,Forward
+1309696592,home,Colombia,4-2-3-1,yes,83391,James Rodríguez,10,Forward
+1309696592,home,Colombia,4-2-3-1,yes,2207142,Jhon Arias,11,Midfielder
+1309696592,home,Colombia,4-2-3-1,yes,7605311,Luis Javier Suárez,25,Forward
+1309696592,home,Colombia,4-2-3-1,no,399595,Álvaro Montero,24,Goalkeeper
+1309696592,home,Colombia,4-2-3-1,no,50547,David Ospina,1,Goalkeeper
+1309696592,home,Colombia,4-2-3-1,no,400078,Yerry Mina,13,Defender
+1309696592,home,Colombia,4-2-3-1,no,2185085,Willer Ditta,18,Defender
+1309696592,home,Colombia,4-2-3-1,no,399917,Deiver Machado,22,Defender
+1309696592,home,Colombia,4-2-3-1,no,4984,Santiago Arias,4,Defender
+1309696592,home,Colombia,4-2-3-1,no,2153690,Jaminton Campaz,21,Midfielder
+1309696592,home,Colombia,4-2-3-1,no,31411898,Richard Ríos,6,Midfielder
+1309696592,home,Colombia,4-2-3-1,no,965188,Jorge Carrascal,8,Midfielder
+1309696592,home,Colombia,4-2-3-1,no,55665582,Andrés Gómez,26,Forward
+1309696592,home,Colombia,4-2-3-1,no,2117465,Juan Portilla,15,Midfielder
+1309696592,home,Colombia,4-2-3-1,no,966959,Juan Fernando Quintero,20,Midfielder
+1309696592,home,Colombia,4-2-3-1,no,46624466,Kevin Castaño,5,Midfielder
+1309696592,home,Colombia,4-2-3-1,no,7660856,Cucho Hernández,19,Forward
+1309696592,home,Colombia,4-2-3-1,no,3994564,Jhon Córdoba,9,Forward
+1309696592,away,Congo DR,5-3-2,yes,3866086,Lionel Mpasi Nzau,1,Goalkeeper
+1309696592,away,Congo DR,5-3-2,yes,3029530,Arthur Masuaku,26,Defender
+1309696592,away,Congo DR,5-3-2,yes,32162641,Steve Kapuadi,3,Defender
+1309696592,away,Congo DR,5-3-2,yes,3088456,Axel Tuanzebe,4,Defender
+1309696592,away,Congo DR,5-3-2,yes,60529,Chancel Mbemba,22,Defender
+1309696592,away,Congo DR,5-3-2,yes,3034360,Aaron Wan-Bissaka,2,Defender
+1309696592,away,Congo DR,5-3-2,yes,229418,Edo Kayembe,25,Midfielder
+1309696592,away,Congo DR,5-3-2,yes,3397415,Samuel Moutoussamy,8,Midfielder
+1309696592,away,Congo DR,5-3-2,yes,60471432,Ngal'ayel Mukau,6,Midfielder
+1309696592,away,Congo DR,5-3-2,yes,3324643,Yoane Wissa,20,Forward
+1309696592,away,Congo DR,5-3-2,yes,488467,Cédric Bakambu,17,Forward
+1309696592,away,Congo DR,5-3-2,no,50636103,Matthieu Epolo,21,Goalkeeper
+1309696592,away,Congo DR,5-3-2,no,7808815,Timothy Fayulu,16,Goalkeeper
+1309696592,away,Congo DR,5-3-2,no,3903599,Gedeon Kalulu,24,Defender
+1309696592,away,Congo DR,5-3-2,no,3396932,Joris Kayembe,12,Defender
+1309696592,away,Congo DR,5-3-2,no,1359799,Dylan Batubinsika,5,Defender
+1309696592,away,Congo DR,5-3-2,no,7211505,Aaron Tshibola,15,Midfielder
+1309696592,away,Congo DR,5-3-2,no,7654899,Gaël Kakuta,11,Midfielder
+1309696592,away,Congo DR,5-3-2,no,7817509,Charles Pickel,18,Midfielder
+1309696592,away,Congo DR,5-3-2,no,44996756,Brian Cipenga,9,Forward
+1309696592,away,Congo DR,5-3-2,no,58818445,Noah Sadiki,14,Midfielder
+1309696592,away,Congo DR,5-3-2,no,20877024,Nathanaël Mbuku,7,Forward
+1309696592,away,Congo DR,5-3-2,no,3328668,Simon Banza,23,Forward
+1309696592,away,Congo DR,5-3-2,no,488628,Meschak Elia,13,Forward
+1309696592,away,Congo DR,5-3-2,no,28931693,Fiston Mayele,19,Forward
