@@ -283,6 +283,39 @@ def _group_overviews() -> list:
     return out
 
 
+def _likely_opponents(rnd="Round of 32", n_teams=6) -> list:
+    """One card per marquee team: its most likely opponents in the next KO round.
+
+    Reads opponents.csv (exported by run_pipeline from the sim). Projected during
+    the group stage; sharpens once the bracket is set. Copy-paste only.
+    """
+    op, pr = OUT / "opponents.csv", OUT / "predictions.csv"
+    if not op.exists() or not pr.exists():
+        return []
+    o = pd.read_csv(op)
+    if "round" not in o.columns:
+        return []
+    o = o[o["round"] == rnd]
+    if o.empty:
+        return []
+    d = pd.read_csv(pr)
+    picks = d.sort_values("p_champion", ascending=False)["team"].head(n_teams).tolist()
+    if "Portugal" in set(d["team"]) and "Portugal" not in picks:
+        picks.append("Portugal")
+    out = []
+    for tm in picks:
+        g = o[o["team"] == tm].sort_values("p_cond", ascending=False).head(4)
+        if g.empty:
+            continue
+        lines = [f"{_flag(r.opponent) or '⚽'} {r.opponent} {r.p_cond * 100:.0f}%"
+                 for r in g.itertuples(index=False)]
+        head = (f"🔮 Who will {_flag(tm) or '⚽'} {tm} face in the {rnd}?\n\n"
+                f"The model's likeliest opponents:\n")
+        text = head + "\n".join(lines) + f"\n\n👇 {SITE}"
+        out.append((f"{tm} · likely {rnd} opponent", text))
+    return out
+
+
 def evergreen_tweets() -> list:
     """(label, text) tweets for the kit — copy-paste only, never auto-posted."""
     out = [("Recruitment · post anytime", COME_PLAY)]
@@ -290,6 +323,7 @@ def evergreen_tweets() -> list:
     if g:
         out.append(("Golden Boot · refreshed each build", g))
     out += _group_overviews()                 # one card per group still in play (group stage only)
+    out += _likely_opponents()                # most-likely next-round opponents (per marquee team)
     out.append(("Bracket · for ~28 Jun (when knockouts open)", BRACKET))
     return out
 

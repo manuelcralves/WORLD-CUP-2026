@@ -96,6 +96,16 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     pd.DataFrame(data["golden_boot"]).to_csv(
         out_dir / "golden_boot.csv", index=False, encoding="utf-8")
     table.to_csv(out_dir / "predictions.csv", index=False, encoding="utf-8")
+    # Most likely knockout opponents per team -> opponents.csv (for the tweet kit).
+    # Cheap: reads the precomputed sim matrices in table.attrs, no re-simulation.
+    opp_rows = [{"team": tm, "round": rnd, "p_reach": info["p_reach"],
+                 "opponent": o["team"], "p_cond": o["p_cond"]}
+                for tm in table["team"]
+                for rnd, info in PR.opponents_for(table, tm).items()
+                for o in info["opponents"]]
+    if opp_rows:
+        pd.DataFrame(opp_rows).to_csv(
+            out_dir / "opponents.csv", index=False, encoding="utf-8")
     if cutoff is None and review:                # for the daily tweet (recap/upsets)
         pd.DataFrame(review).to_csv(
             out_dir / "played_review.csv", index=False, encoding="utf-8")
