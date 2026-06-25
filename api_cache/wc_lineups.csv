@@ -2672,3 +2672,104 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267485290,away,Brazil,4-3-3,no,60716796,Endrick,19,Forward
 1267485290,away,Brazil,4-3-3,no,20570963,Gabriel Martinelli,22,Forward
 1267485290,away,Brazil,4-3-3,no,31581270,Igor Thiago,25,Forward
+1267486141,home,South Africa,4-2-3-1,yes,527429,Ronwen Williams,1,Goalkeeper
+1267486141,home,South Africa,4-2-3-1,yes,7459928,Aubrey Modiba,6,Defender
+1267486141,home,South Africa,4-2-3-1,yes,82238793,Mbekezeli Mbokazi,14,Defender
+1267486141,home,South Africa,4-2-3-1,yes,65487226,Ime Okon,21,Defender
+1267486141,home,South Africa,4-2-3-1,yes,7502915,Khuliso Mudau,20,Defender
+1267486141,home,South Africa,4-2-3-1,yes,25507867,Sphephelo Sithole,13,Midfielder
+1267486141,home,South Africa,4-2-3-1,yes,31303384,Thalente Mbatha,5,Midfielder
+1267486141,home,South Africa,4-2-3-1,yes,28962927,Oswin Appollis,7,Midfielder
+1267486141,home,South Africa,4-2-3-1,yes,66678143,Relebohile Mofokeng,10,Midfielder
+1267486141,home,South Africa,4-2-3-1,yes,57127945,Thapelo Maseko,12,Midfielder
+1267486141,home,South Africa,4-2-3-1,yes,32418148,Evidence Makgopa,17,Forward
+1267486141,home,South Africa,4-2-3-1,no,7445599,Ricardo Goss,22,Goalkeeper
+1267486141,home,South Africa,4-2-3-1,no,7473291,Sipho Chaine,16,Goalkeeper
+1267486141,home,South Africa,4-2-3-1,no,26249755,Bradley Cross,26,Defender
+1267486141,home,South Africa,4-2-3-1,no,76415584,Khulumani Ndamane,3,Defender
+1267486141,home,South Africa,4-2-3-1,no,7479892,Nkosinathi Sibisi,19,Defender
+1267486141,home,South Africa,4-2-3-1,no,63174461,Olwethu Makhanya,24,Defender
+1267486141,home,South Africa,4-2-3-1,no,69242712,Samukelo Kabini,18,Defender
+1267486141,home,South Africa,4-2-3-1,no,53158168,Tholo Thabang Matuludi,2,Defender
+1267486141,home,South Africa,4-2-3-1,no,43262464,Jayden Adams,23,Midfielder
+1267486141,home,South Africa,4-2-3-1,no,57889475,Kamogelo Sebelebele,25,Midfielder
+1267486141,home,South Africa,4-2-3-1,no,47652451,Tshepang Moremi,8,Forward
+1267486141,home,South Africa,4-2-3-1,no,20516223,Iqraam Rayners,15,Forward
+1267486141,home,South Africa,4-2-3-1,no,15928850,Lyle Foster,9,Forward
+1267486141,away,South Korea,3-4-2-1,yes,465766,Kim Seung-gyu,1,Goalkeeper
+1267486141,away,South Korea,3-4-2-1,yes,49097265,Gi-Hyuk Lee,3,Defender
+1267486141,away,South Korea,3-4-2-1,yes,466571,Kim Min-jae,4,Defender
+1267486141,away,South Korea,3-4-2-1,yes,38192252,Han-Beom Lee,2,Defender
+1267486141,away,South Korea,3-4-2-1,yes,38192574,Lee Tae-seok,13,Midfielder
+1267486141,away,South Korea,3-4-2-1,yes,467215,Hwang In-beom,6,Midfielder
+1267486141,away,South Korea,3-4-2-1,yes,468503,Seung Ho Paik,8,Midfielder
+1267486141,away,South Korea,3-4-2-1,yes,31875739,Young-woo Seol,22,Midfielder
+1267486141,away,South Korea,3-4-2-1,yes,4007122,Hwang Hee-chan,11,Forward
+1267486141,away,South Korea,3-4-2-1,yes,149401,Kang-in Lee,19,Forward
+1267486141,away,South Korea,3-4-2-1,yes,5588464,Hyeon-gyu Oh,18,Forward
+1267486141,away,South Korea,3-4-2-1,no,465444,Jo Hyeonwoo,21,Goalkeeper
+1267486141,away,South Korea,3-4-2-1,no,5534368,Song Bum-keun,12,Goalkeeper
+1267486141,away,South Korea,3-4-2-1,no,468986,Kim Moon-hwan,15,Defender
+1267486141,away,South Korea,3-4-2-1,no,5541452,Kim Tae-hyeon,5,Defender
+1267486141,away,South Korea,3-4-2-1,no,57510803,Wi-je Cho,14,Defender
+1267486141,away,South Korea,3-4-2-1,no,5543545,Dong-gyeong Lee,26,Midfielder
+1267486141,away,South Korea,3-4-2-1,no,468020,Jae-sung Lee,10,Midfielder
+1267486141,away,South Korea,3-4-2-1,no,45137792,Jens Castrop,23,Midfielder
+1267486141,away,South Korea,3-4-2-1,no,38165204,Ji-sung Eom,25,Forward
+1267486141,away,South Korea,3-4-2-1,no,5501202,Jin-gyu Kim,24,Midfielder
+1267486141,away,South Korea,3-4-2-1,no,15973125,Jin-seob Park,16,Midfielder
+1267486141,away,South Korea,3-4-2-1,no,57523200,Jun-Ho Bae,17,Midfielder
+1267486141,away,South Korea,3-4-2-1,no,5508125,Gue-sung Cho,9,Forward
+1267486141,away,South Korea,3-4-2-1,no,49098392,Yang Hyun-Jun,20,Forward
+1267486141,away,South Korea,3-4-2-1,no,30100,Son Heung-min,7,Forward
+1309698294,home,Czech Republic,3-4-2-1,yes,22347598,Matěj Kovář,1,Goalkeeper
+1309698294,home,Czech Republic,3-4-2-1,yes,10691681,Ladislav Krejčí,7,Defender
+1309698294,home,Czech Republic,3-4-2-1,yes,26237358,Robin Hranáč,4,Defender
+1309698294,home,Czech Republic,3-4-2-1,yes,362726,Tomáš Holeš,3,Defender
+1309698294,home,Czech Republic,3-4-2-1,yes,10660608,David Douděra,21,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,yes,26113388,Lukáš Červ,12,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,yes,38955,Michal Sadílek,18,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,yes,198345,Vladimír Coufal,5,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,yes,46724286,Denis Višinský,26,Forward
+1309698294,home,Czech Republic,3-4-2-1,yes,10688461,Pavel Šulc,15,Forward
+1309698294,home,Czech Republic,3-4-2-1,yes,10629213,Adam Hložek,9,Forward
+1309698294,home,Czech Republic,3-4-2-1,no,10682021,Jindřich Staněk,16,Goalkeeper
+1309698294,home,Czech Republic,3-4-2-1,no,43365343,Lukáš Horníček,23,Goalkeeper
+1309698294,home,Czech Republic,3-4-2-1,no,54376294,Štěpán Chaloupek,6,Defender
+1309698294,home,Czech Republic,3-4-2-1,no,20732446,David Zima,2,Defender
+1309698294,home,Czech Republic,3-4-2-1,no,199311,Jaroslav Zelený,20,Defender
+1309698294,home,Czech Republic,3-4-2-1,no,62280911,Alexandr Sojka,24,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,no,89425511,Hugo Sochurek,25,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,no,200277,Tomáš Souček,22,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,no,4081182,Vladimír Darida,8,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,no,127988,Patrik Schick,10,Forward
+1309698294,home,Czech Republic,3-4-2-1,no,10680894,Jan Kuchta,11,Forward
+1309698294,home,Czech Republic,3-4-2-1,no,10682987,Lukáš Provod,17,Midfielder
+1309698294,home,Czech Republic,3-4-2-1,no,131852,Tomáš Chorý,19,Forward
+1309698294,home,Czech Republic,3-4-2-1,no,10670429,Mojmír Chytil,13,Forward
+1309698294,away,Mexico,4-3-3,yes,43594768,Raúl Rangel,1,Goalkeeper
+1309698294,away,Mexico,4-3-3,yes,62790476,Mateo Chávez,20,Defender
+1309698294,away,Mexico,4-3-3,yes,462707,César Montes,3,Defender
+1309698294,away,Mexico,4-3-3,yes,20483701,Israel Reyes,15,Defender
+1309698294,away,Mexico,4-3-3,yes,463512,Jorge Sánchez,2,Defender
+1309698294,away,Mexico,4-3-3,yes,5791324,Luis Romo,7,Midfielder
+1309698294,away,Mexico,4-3-3,yes,462063,Edson Álvarez,4,Midfielder
+1309698294,away,Mexico,4-3-3,yes,77699559,Gilberto Mora,19,Midfielder
+1309698294,away,Mexico,4-3-3,yes,5720806,Julián Quiñones,16,Forward
+1309698294,away,Mexico,4-3-3,yes,5810322,Guillermo Martínez,22,Forward
+1309698294,away,Mexico,4-3-3,yes,463673,Roberto Alvarado,25,Forward
+1309698294,away,Mexico,4-3-3,no,5758963,Carlos Acevedo,12,Goalkeeper
+1309698294,away,Mexico,4-3-3,no,337932,Guillermo Ochoa,13,Goalkeeper
+1309698294,away,Mexico,4-3-3,no,5722738,Johan Vásquez,5,Defender
+1309698294,away,Mexico,4-3-3,no,463995,Jesús Gallardo,23,Defender
+1309698294,away,Mexico,4-3-3,no,42881699,Erik Lira,6,Midfielder
+1309698294,away,Mexico,4-3-3,no,120904,Álvaro Fidalgo,8,Midfielder
+1309698294,away,Mexico,4-3-3,no,5727890,Orbelín Pineda,17,Midfielder
+1309698294,away,Mexico,4-3-3,no,50454817,Obed Vargas,18,Midfielder
+1309698294,away,Mexico,4-3-3,no,5746244,Luis Chávez,24,Midfielder
+1309698294,away,Mexico,4-3-3,no,34169667,Brian Gutiérrez,26,Midfielder
+1309698294,away,Mexico,4-3-3,no,465283,Alexis Vega,10,Forward
+1309698294,away,Mexico,4-3-3,no,5814025,César Huerta,21,Midfielder
+1309698294,away,Mexico,4-3-3,no,464961,Raúl Jiménez,9,Forward
+1309698294,away,Mexico,4-3-3,no,15224636,Santiago Giménez,11,Forward
+1309698294,away,Mexico,4-3-3,no,46965947,Armando González,14,Forward

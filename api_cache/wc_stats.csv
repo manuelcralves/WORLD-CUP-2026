@@ -4155,3 +4155,113 @@ match_id,side,team,stat,value
 1267485290,away,Brazil,Fouls,11
 1267485290,away,Brazil,Yellow cards,2
 1267485290,away,Brazil,Shots outside penalty area,7
+1267486141,home,South Africa,Shots accuracy,0.31
+1267486141,home,South Africa,Shots on target,4
+1267486141,home,South Africa,Shots off target,5
+1267486141,home,South Africa,Blocked shots,4
+1267486141,home,South Africa,Shots within penalty area,5
+1267486141,home,South Africa,Shots outside penalty area,8
+1267486141,home,South Africa,Fouls,7
+1267486141,home,South Africa,Corners,4
+1267486141,home,South Africa,Offsides,3
+1267486141,home,South Africa,Possession,0.32
+1267486141,home,South Africa,Yellow cards,1
+1267486141,home,South Africa,Goalkeeper saves,2
+1267486141,home,South Africa,Total passes,339
+1267486141,home,South Africa,Successful passes,277
+1267486141,home,South Africa,Failed passes,62
+1267486141,away,South Korea,Shots accuracy,0.38
+1267486141,away,South Korea,Shots on target,3
+1267486141,away,South Korea,Shots off target,4
+1267486141,away,South Korea,Blocked shots,1
+1267486141,away,South Korea,Shots within penalty area,5
+1267486141,away,South Korea,Shots outside penalty area,3
+1267486141,away,South Korea,Fouls,9
+1267486141,away,South Korea,Corners,6
+1267486141,away,South Korea,Offsides,0
+1267486141,away,South Korea,Possession,0.68
+1267486141,away,South Korea,Yellow cards,1
+1267486141,away,South Korea,Goalkeeper saves,3
+1267486141,away,South Korea,Total passes,720
+1267486141,away,South Korea,Successful passes,643
+1267486141,away,South Korea,Failed passes,77
+1309698294,home,Czech Republic,Expected Goals,0.47
+1309698294,home,Czech Republic,Big Chances Created,0
+1309698294,home,Czech Republic,Attacks,93
+1309698294,home,Czech Republic,Free Kicks,12
+1309698294,home,Czech Republic,Expected Assists,0.18
+1309698294,home,Czech Republic,Successful Crosses,5
+1309698294,home,Czech Republic,Crosses,26
+1309698294,home,Czech Republic,Passes Own Half,235
+1309698294,home,Czech Republic,Passes Opposition Half,189
+1309698294,home,Czech Republic,Successful Long Passes,20
+1309698294,home,Czech Republic,Long Passes,52
+1309698294,home,Czech Republic,Throw-Ins,20
+1309698294,home,Czech Republic,Key Passes,5
+1309698294,home,Czech Republic,Passes Into Final Third,45
+1309698294,home,Czech Republic,Backward Passes,55
+1309698294,home,Czech Republic,Goal Kicks,11
+1309698294,home,Czech Republic,Interceptions,3
+1309698294,home,Czech Republic,Successful Tackles,8
+1309698294,home,Czech Republic,Tackles,12
+1309698294,home,Czech Republic,Clearances,19
+1309698294,home,Czech Republic,Successful Aerial Duels,12
+1309698294,home,Czech Republic,Aerial Duels,21
+1309698294,home,Czech Republic,Successful Dribbles,4
+1309698294,home,Czech Republic,Dribbles,11
+1309698294,home,Czech Republic,Shots accuracy,0.08
+1309698294,home,Czech Republic,Failed passes,66
+1309698294,home,Czech Republic,Possession,0.52
+1309698294,home,Czech Republic,Shots on target,1
+1309698294,home,Czech Republic,Corners,5
+1309698294,home,Czech Republic,Offsides,1
+1309698294,home,Czech Republic,Successful passes,332
+1309698294,home,Czech Republic,Red cards,0
+1309698294,home,Czech Republic,Shots off target,8
+1309698294,home,Czech Republic,Blocked shots,4
+1309698294,home,Czech Republic,Shots within penalty area,6
+1309698294,home,Czech Republic,Total passes,398
+1309698294,home,Czech Republic,Goalkeeper saves,2
+1309698294,home,Czech Republic,Fouls,9
+1309698294,home,Czech Republic,Yellow cards,0
+1309698294,home,Czech Republic,Shots outside penalty area,7
+1309698294,away,Mexico,Expected Goals,1.79
+1309698294,away,Mexico,Big Chances Created,5
+1309698294,away,Mexico,Attacks,86
+1309698294,away,Mexico,Free Kicks,9
+1309698294,away,Mexico,Expected Assists,0.44
+1309698294,away,Mexico,Successful Crosses,1
+1309698294,away,Mexico,Crosses,13
+1309698294,away,Mexico,Passes Own Half,187
+1309698294,away,Mexico,Passes Opposition Half,214
+1309698294,away,Mexico,Successful Long Passes,36
+1309698294,away,Mexico,Long Passes,57
+1309698294,away,Mexico,Throw-Ins,20
+1309698294,away,Mexico,Key Passes,10
+1309698294,away,Mexico,Passes Into Final Third,84
+1309698294,away,Mexico,Backward Passes,49
+1309698294,away,Mexico,Goal Kicks,11
+1309698294,away,Mexico,Interceptions,7
+1309698294,away,Mexico,Successful Tackles,8
+1309698294,away,Mexico,Tackles,12
+1309698294,away,Mexico,Clearances,29
+1309698294,away,Mexico,Successful Aerial Duels,9
+1309698294,away,Mexico,Aerial Duels,21
+1309698294,away,Mexico,Successful Dribbles,4
+1309698294,away,Mexico,Dribbles,7
+1309698294,away,Mexico,Shots accuracy,0.45
+1309698294,away,Mexico,Failed passes,57
+1309698294,away,Mexico,Possession,0.48
+1309698294,away,Mexico,Shots on target,5
+1309698294,away,Mexico,Corners,1
+1309698294,away,Mexico,Offsides,0
+1309698294,away,Mexico,Successful passes,331
+1309698294,away,Mexico,Red cards,0
+1309698294,away,Mexico,Shots off target,4
+1309698294,away,Mexico,Blocked shots,2
+1309698294,away,Mexico,Shots within penalty area,9
+1309698294,away,Mexico,Total passes,388
+1309698294,away,Mexico,Goalkeeper saves,1
+1309698294,away,Mexico,Fouls,13
+1309698294,away,Mexico,Yellow cards,1
+1309698294,away,Mexico,Shots outside penalty area,2
