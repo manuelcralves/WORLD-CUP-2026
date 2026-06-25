@@ -49460,8 +49460,8 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2026-06-24,Morocco,Haiti,4,2,FIFA World Cup,Atlanta,United States,TRUE
 2026-06-25,United States,Turkey,NA,NA,FIFA World Cup,Inglewood,United States,FALSE
 2026-06-25,Paraguay,Australia,NA,NA,FIFA World Cup,Santa Clara,United States,TRUE
-2026-06-25,Curaçao,Ivory Coast,NA,NA,FIFA World Cup,Philadelphia,United States,TRUE
-2026-06-25,Ecuador,Germany,NA,NA,FIFA World Cup,East Rutherford,United States,TRUE
+2026-06-25,Curaçao,Ivory Coast,0,2,FIFA World Cup,Philadelphia,United States,TRUE
+2026-06-25,Ecuador,Germany,2,1,FIFA World Cup,East Rutherford,United States,TRUE
 2026-06-25,Japan,Sweden,NA,NA,FIFA World Cup,Arlington,United States,TRUE
 2026-06-25,Tunisia,Netherlands,NA,NA,FIFA World Cup,Kansas City,United States,TRUE
 2026-06-26,Egypt,Iran,NA,NA,FIFA World Cup,Seattle,United States,TRUE

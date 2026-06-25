@@ -820,3 +820,36 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1309698294,87,Czech Republic,Substitution,L. Cerv,26113388,,T. Chory,131852
 1309698294,87,Czech Republic,Substitution,T. Soucek,200277,,A. Sojka,62280911
 1309698294,90+4,Mexico,Goal,A. Fidalgo,120904,R. Alvarado,,463673
+1267488694,2,Germany,Goal,Leroy Sané,103838,Florian Wirtz,,32719218
+1267488694,9,Ecuador,Goal,Nilson Angulo,50158577,Pedro Vite,,38169712
+1267488694,43,Ecuador,Yellow Card,Piero Hincapié,20578691,,,
+1267488694,44,Germany,Yellow Card,Aleksandar Pavlović,52813467,,,
+1267488694,45,Germany,Substitution,Aleksandar Pavlović,52813467,,Angelo Stiller,22090964
+1267488694,47,Germany,VAR Penalty Cancelled,Kai Havertz,157612,,,
+1267488694,50,Ecuador,Yellow Card,Alan Franco,2634114,,,
+1267488694,60,Germany,Substitution,Kai Havertz,157612,,Deniz Undav,4262629
+1267488694,60,Germany,Substitution,Joshua Kimmich,80976,,Malick Thiaw,26273583
+1267488694,64,Ecuador,Substitution,Enner Valencia,5720967,,Kevin Rodriguez,58276680
+1267488694,64,Ecuador,Substitution,Alan Franco,2634114,,Angelo Preciado,416017
+1267488694,64,Germany,Substitution,Felix Nmecha,102711,,Maximilian Beier,25541838
+1267488694,71,Ecuador,Substitution,Piero Hincapié,20578691,,Pervis Estupinan,7523845
+1267488694,73,Germany,Substitution,Florian Wirtz,32719218,,Pascal Groß,3054324
+1267488694,77,Ecuador,Goal,Gonzalo Plata,2635563,Kevin Rodriguez,,58276680
+1267488694,85,Ecuador,Substitution,John Yeboah,4091808,,Felix Torres,10298358
+1267488694,85,Ecuador,Substitution,Nilson Angulo,50158577,,Jordy Caicedo,2671144
+1267488694,89,Ecuador,Yellow Card,Gonzalo Plata,2635563,,,
+1267487843,7,Ivory Coast,Goal,Nicolas Pépé,522760,Yan Diomande,,82718090
+1267487843,35,Ivory Coast,Yellow Card,Nicolas Pépé,522760,,,
+1267487843,45,Ivory Coast,Substitution,Amad Diallo,25437671,,Christ Inao Oulaï,76409305
+1267487843,61,Curaçao,Substitution,Livano Comenencia,49871997,,Jeremy Antonisse,26278574
+1267487843,64,Ivory Coast,Goal,Nicolas Pépé,522760,Ibrahim Sangaré,,3566143
+1267487843,67,Ivory Coast,Substitution,Ange-Yoan Bonny,44379965,,Oumar Diakité,53843223
+1267487843,67,Ivory Coast,Substitution,Nicolas Pépé,522760,,Sepe Elye Wahi,26195981
+1267487843,67,Ivory Coast,Substitution,Yan Diomande,82718090,,Bazoumana Touré,62410677
+1267487843,75,Curaçao,Yellow Card,Juninho Bacuna,3066721,,,
+1267487843,77,Curaçao,Substitution,Jurien Gaari,5934131,,Gervane Kastaneer,6232142
+1267487843,77,Curaçao,Substitution,Deveron Fonville,56963242,,Tyrese Noslin,65502360
+1267487843,77,Ivory Coast,Substitution,Franck Kessié,264516,,Jean Michaël Seri,522277
+1267487843,83,Curaçao,Yellow Card,Gervane Kastaneer,6232142,,,
+1267487843,90,Curaçao,Substitution,Joshua Brenet,113820,,Shurandy Sambo,31337999
+1267487843,90,Curaçao,Substitution,Jürgen Locadia,3056095,,Brandley Kuwas,6000946

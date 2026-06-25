@@ -4265,3 +4265,159 @@ match_id,side,team,stat,value
 1309698294,away,Mexico,Fouls,13
 1309698294,away,Mexico,Yellow cards,1
 1309698294,away,Mexico,Shots outside penalty area,2
+1267488694,home,Ecuador,Expected Goals,1.51
+1267488694,home,Ecuador,Big Chances Created,2
+1267488694,home,Ecuador,Attacks,102
+1267488694,home,Ecuador,Free Kicks,10
+1267488694,home,Ecuador,Expected Assists,1.57
+1267488694,home,Ecuador,Successful Crosses,3
+1267488694,home,Ecuador,Crosses,12
+1267488694,home,Ecuador,Passes Own Half,145
+1267488694,home,Ecuador,Passes Opposition Half,246
+1267488694,home,Ecuador,Successful Long Passes,24
+1267488694,home,Ecuador,Long Passes,50
+1267488694,home,Ecuador,Throw-Ins,18
+1267488694,home,Ecuador,Key Passes,7
+1267488694,home,Ecuador,Passes Into Final Third,79
+1267488694,home,Ecuador,Backward Passes,68
+1267488694,home,Ecuador,Goal Kicks,5
+1267488694,home,Ecuador,Interceptions,12
+1267488694,home,Ecuador,Successful Tackles,16
+1267488694,home,Ecuador,Tackles,26
+1267488694,home,Ecuador,Clearances,29
+1267488694,home,Ecuador,Successful Aerial Duels,9
+1267488694,home,Ecuador,Aerial Duels,19
+1267488694,home,Ecuador,Successful Dribbles,8
+1267488694,home,Ecuador,Dribbles,18
+1267488694,home,Ecuador,Shots accuracy,0.43
+1267488694,home,Ecuador,Failed passes,66
+1267488694,home,Ecuador,Possession,0.39
+1267488694,home,Ecuador,Shots on target,3
+1267488694,home,Ecuador,Corners,3
+1267488694,home,Ecuador,Offsides,0
+1267488694,home,Ecuador,Successful passes,313
+1267488694,home,Ecuador,Red cards,0
+1267488694,home,Ecuador,Shots off target,2
+1267488694,home,Ecuador,Blocked shots,2
+1267488694,home,Ecuador,Shots within penalty area,5
+1267488694,home,Ecuador,Total passes,379
+1267488694,home,Ecuador,Goalkeeper saves,2
+1267488694,home,Ecuador,Fouls,15
+1267488694,home,Ecuador,Yellow cards,3
+1267488694,away,Germany,Expected Goals,0.65
+1267488694,away,Germany,Big Chances Created,2
+1267488694,away,Germany,Attacks,113
+1267488694,away,Germany,Free Kicks,14
+1267488694,away,Germany,Expected Assists,0.68
+1267488694,away,Germany,Successful Crosses,5
+1267488694,away,Germany,Crosses,16
+1267488694,away,Germany,Passes Own Half,262
+1267488694,away,Germany,Passes Opposition Half,346
+1267488694,away,Germany,Successful Long Passes,17
+1267488694,away,Germany,Long Passes,37
+1267488694,away,Germany,Throw-Ins,21
+1267488694,away,Germany,Key Passes,9
+1267488694,away,Germany,Passes Into Final Third,110
+1267488694,away,Germany,Backward Passes,86
+1267488694,away,Germany,Goal Kicks,2
+1267488694,away,Germany,Interceptions,4
+1267488694,away,Germany,Successful Tackles,13
+1267488694,away,Germany,Tackles,20
+1267488694,away,Germany,Clearances,15
+1267488694,away,Germany,Successful Aerial Duels,10
+1267488694,away,Germany,Aerial Duels,19
+1267488694,away,Germany,Successful Dribbles,7
+1267488694,away,Germany,Dribbles,22
+1267488694,away,Germany,Shots accuracy,0.27
+1267488694,away,Germany,Failed passes,75
+1267488694,away,Germany,Possession,0.61
+1267488694,away,Germany,Shots on target,3
+1267488694,away,Germany,Corners,2
+1267488694,away,Germany,Offsides,0
+1267488694,away,Germany,Successful passes,517
+1267488694,away,Germany,Red cards,0
+1267488694,away,Germany,Shots off target,3
+1267488694,away,Germany,Blocked shots,5
+1267488694,away,Germany,Shots within penalty area,6
+1267488694,away,Germany,Total passes,592
+1267488694,away,Germany,Goalkeeper saves,1
+1267488694,away,Germany,Fouls,10
+1267488694,away,Germany,Yellow cards,1
+1267487843,home,Curaçao,Expected Goals,0.47
+1267487843,home,Curaçao,Big Chances Created,0
+1267487843,home,Curaçao,Attacks,86
+1267487843,home,Curaçao,Free Kicks,6
+1267487843,home,Curaçao,Expected Assists,0.4
+1267487843,home,Curaçao,Successful Crosses,5
+1267487843,home,Curaçao,Crosses,15
+1267487843,home,Curaçao,Passes Own Half,199
+1267487843,home,Curaçao,Passes Opposition Half,170
+1267487843,home,Curaçao,Successful Long Passes,14
+1267487843,home,Curaçao,Long Passes,30
+1267487843,home,Curaçao,Throw-Ins,19
+1267487843,home,Curaçao,Key Passes,9
+1267487843,home,Curaçao,Passes Into Final Third,49
+1267487843,home,Curaçao,Backward Passes,62
+1267487843,home,Curaçao,Goal Kicks,5
+1267487843,home,Curaçao,Interceptions,15
+1267487843,home,Curaçao,Successful Tackles,12
+1267487843,home,Curaçao,Tackles,20
+1267487843,home,Curaçao,Clearances,17
+1267487843,home,Curaçao,Successful Aerial Duels,9
+1267487843,home,Curaçao,Aerial Duels,16
+1267487843,home,Curaçao,Successful Dribbles,12
+1267487843,home,Curaçao,Dribbles,18
+1267487843,home,Curaçao,Shots accuracy,0.18
+1267487843,home,Curaçao,Failed passes,59
+1267487843,home,Curaçao,Possession,0.37
+1267487843,home,Curaçao,Shots on target,2
+1267487843,home,Curaçao,Corners,4
+1267487843,home,Curaçao,Offsides,2
+1267487843,home,Curaçao,Successful passes,295
+1267487843,home,Curaçao,Red cards,0
+1267487843,home,Curaçao,Shots off target,7
+1267487843,home,Curaçao,Blocked shots,2
+1267487843,home,Curaçao,Shots within penalty area,6
+1267487843,home,Curaçao,Total passes,354
+1267487843,home,Curaçao,Goalkeeper saves,1
+1267487843,home,Curaçao,Fouls,11
+1267487843,home,Curaçao,Yellow cards,2
+1267487843,away,Ivory Coast,Expected Goals,1.3
+1267487843,away,Ivory Coast,Big Chances Created,3
+1267487843,away,Ivory Coast,Attacks,114
+1267487843,away,Ivory Coast,Free Kicks,11
+1267487843,away,Ivory Coast,Expected Assists,1.42
+1267487843,away,Ivory Coast,Successful Crosses,3
+1267487843,away,Ivory Coast,Crosses,16
+1267487843,away,Ivory Coast,Passes Own Half,315
+1267487843,away,Ivory Coast,Passes Opposition Half,324
+1267487843,away,Ivory Coast,Successful Long Passes,21
+1267487843,away,Ivory Coast,Long Passes,39
+1267487843,away,Ivory Coast,Throw-Ins,20
+1267487843,away,Ivory Coast,Key Passes,6
+1267487843,away,Ivory Coast,Passes Into Final Third,105
+1267487843,away,Ivory Coast,Backward Passes,122
+1267487843,away,Ivory Coast,Goal Kicks,6
+1267487843,away,Ivory Coast,Interceptions,12
+1267487843,away,Ivory Coast,Successful Tackles,10
+1267487843,away,Ivory Coast,Tackles,17
+1267487843,away,Ivory Coast,Clearances,19
+1267487843,away,Ivory Coast,Successful Aerial Duels,7
+1267487843,away,Ivory Coast,Aerial Duels,16
+1267487843,away,Ivory Coast,Successful Dribbles,10
+1267487843,away,Ivory Coast,Dribbles,18
+1267487843,away,Ivory Coast,Shots accuracy,0.43
+1267487843,away,Ivory Coast,Failed passes,65
+1267487843,away,Ivory Coast,Possession,0.63
+1267487843,away,Ivory Coast,Shots on target,3
+1267487843,away,Ivory Coast,Corners,6
+1267487843,away,Ivory Coast,Offsides,1
+1267487843,away,Ivory Coast,Successful passes,558
+1267487843,away,Ivory Coast,Red cards,0
+1267487843,away,Ivory Coast,Shots off target,3
+1267487843,away,Ivory Coast,Blocked shots,1
+1267487843,away,Ivory Coast,Shots within penalty area,5
+1267487843,away,Ivory Coast,Total passes,623
+1267487843,away,Ivory Coast,Goalkeeper saves,2
+1267487843,away,Ivory Coast,Fouls,6
+1267487843,away,Ivory Coast,Yellow cards,1

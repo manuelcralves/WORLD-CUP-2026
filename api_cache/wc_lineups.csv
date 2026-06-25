@@ -2773,3 +2773,105 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1309698294,away,Mexico,4-3-3,no,464961,Raúl Jiménez,9,Forward
 1309698294,away,Mexico,4-3-3,no,15224636,Santiago Giménez,11,Forward
 1309698294,away,Mexico,4-3-3,no,46965947,Armando González,14,Forward
+1267488694,home,Ecuador,4-4-2,yes,2637334,H. Galíndez,1,Goalkeeper
+1267488694,home,Ecuador,4-4-2,yes,20578691,P. Hincapié,3,Defender
+1267488694,home,Ecuador,4-4-2,yes,2635241,W. Pacho,6,Defender
+1267488694,home,Ecuador,4-4-2,yes,56998501,J. Ordoñez,4,Defender
+1267488694,home,Ecuador,4-4-2,yes,2634114,A. Franco,21,Midfielder
+1267488694,home,Ecuador,4-4-2,yes,50158577,N. Angulo,20,Forward
+1267488694,home,Ecuador,4-4-2,yes,38169712,P. Vite,15,Midfielder
+1267488694,home,Ecuador,4-4-2,yes,18694991,M. Caicedo,23,Midfielder
+1267488694,home,Ecuador,4-4-2,yes,4091808,J. Yeboah,9,Midfielder
+1267488694,home,Ecuador,4-4-2,yes,5720967,E. Valencia,13,Forward
+1267488694,home,Ecuador,4-4-2,yes,2635563,G. Plata,19,Forward
+1267488694,home,Ecuador,4-4-2,no,10298358,F. Torres,2,Defender
+1267488694,home,Ecuador,4-4-2,no,7523845,P. Estupiñán,7,Defender
+1267488694,home,Ecuador,4-4-2,no,2671144,J. Caicedo,16,Forward
+1267488694,home,Ecuador,4-4-2,no,13077218,M. Ramírez,12,Goalkeeper
+1267488694,home,Ecuador,4-4-2,no,416017,A. Preciado,17,Defender
+1267488694,home,Ecuador,4-4-2,no,2651824,J. Alcívar,5,Midfielder
+1267488694,home,Ecuador,4-4-2,no,2679516,G. Valle,22,Goalkeeper
+1267488694,home,Ecuador,4-4-2,no,414729,J. Porozo,25,Defender
+1267488694,home,Ecuador,4-4-2,no,54425399,D. Castillo,18,Midfielder
+1267488694,home,Ecuador,4-4-2,no,49417494,Y. Medina,26,Defender
+1267488694,home,Ecuador,4-4-2,no,45192049,A. Minda,14,Forward
+1267488694,home,Ecuador,4-4-2,no,56478793,Jeremy Arévalo,24,Forward
+1267488694,home,Ecuador,4-4-2,no,31934021,A. Valencia,8,Forward
+1267488694,home,Ecuador,4-4-2,no,58276680,K. Rodríguez,11,Forward
+1267488694,home,Ecuador,4-4-2,no,65414937,K. Páez,10,Midfielder
+1267488694,away,Germany,4-2-3-1,yes,80171,M. Neuer,1,Goalkeeper
+1267488694,away,Germany,4-2-3-1,yes,4050592,D. Raum,22,Defender
+1267488694,away,Germany,4-2-3-1,yes,368039,A. Rüdiger,2,Defender
+1267488694,away,Germany,4-2-3-1,yes,156646,J. Tah,4,Defender
+1267488694,away,Germany,4-2-3-1,yes,80976,J. Kimmich,6,Midfielder
+1267488694,away,Germany,4-2-3-1,yes,52813467,A. Pavlović,5,Midfielder
+1267488694,away,Germany,4-2-3-1,yes,102711,F. Nmecha,23,Midfielder
+1267488694,away,Germany,4-2-3-1,yes,32719218,F. Wirtz,17,Midfielder
+1267488694,away,Germany,4-2-3-1,yes,29271886,J. Musiala,10,Midfielder
+1267488694,away,Germany,4-2-3-1,yes,103838,L. Sané,19,Forward
+1267488694,away,Germany,4-2-3-1,yes,157612,K. Havertz,7,Forward
+1267488694,away,Germany,4-2-3-1,no,61337612,A. Ouédraogo,25,Midfielder
+1267488694,away,Germany,4-2-3-1,no,26273583,M. Thiaw,24,Defender
+1267488694,away,Germany,4-2-3-1,no,20693967,J. Leweling,9,Forward
+1267488694,away,Germany,4-2-3-1,no,25446848,N. Woltemade,11,Forward
+1267488694,away,Germany,4-2-3-1,no,25541838,M. Beier,14,Forward
+1267488694,away,Germany,4-2-3-1,no,22090964,A. Stiller,16,Midfielder
+1267488694,away,Germany,4-2-3-1,no,4084402,W. Anton,3,Defender
+1267488694,away,Germany,4-2-3-1,no,4262629,D. Undav,26,Forward
+1267488694,away,Germany,4-2-3-1,no,64393,A. Nübel,21,Goalkeeper
+1267488694,away,Germany,4-2-3-1,no,115108,N. Amiri,20,Midfielder
+1267488694,away,Germany,4-2-3-1,no,82425,L. Goretzka,8,Midfielder
+1267488694,away,Germany,4-2-3-1,no,3054324,P. Groß,13,Midfielder
+1267488694,away,Germany,4-2-3-1,no,113176,O. Baumann,12,Goalkeeper
+1267487843,home,Curaçao,5-3-2,yes,35735,E. Room,1,Goalkeeper
+1267487843,home,Curaçao,5-3-2,yes,56963242,Deveron Fonville,24,Defender
+1267487843,home,Curaçao,5-3-2,yes,5952324,S. Floranus,5,Defender
+1267487843,home,Curaçao,5-3-2,yes,36862,A. Obispo,18,Defender
+1267487843,home,Curaçao,5-3-2,yes,5934131,J. Gaari,3,Defender
+1267487843,home,Curaçao,5-3-2,yes,113820,J. Brenet,20,Defender
+1267487843,home,Curaçao,5-3-2,yes,49871997,L. Comenencia,8,Midfielder
+1267487843,home,Curaçao,5-3-2,yes,3058671,L. Bacuna,10,Midfielder
+1267487843,home,Curaçao,5-3-2,yes,146020,T. Chong,21,Forward
+1267487843,home,Curaçao,5-3-2,yes,3066721,J. Bacuna,7,Forward
+1267487843,home,Curaçao,5-3-2,yes,3056095,J. Locadia,9,Forward
+1267487843,home,Curaçao,5-3-2,no,5985329,R. Bazoer,23,Defender
+1267487843,home,Curaçao,5-3-2,no,6000946,B. Kuwas,17,Midfielder
+1267487843,home,Curaçao,5-3-2,no,6232142,G. Kastaneer,19,Forward
+1267487843,home,Curaçao,5-3-2,no,6702101,K. Gorré,14,Forward
+1267487843,home,Curaçao,5-3-2,no,5967780,R. van Eijma,4,Defender
+1267487843,home,Curaçao,5-3-2,no,5931716,G. Roemeratoe,6,Midfielder
+1267487843,home,Curaçao,5-3-2,no,5951841,T. Doornbusch,26,Goalkeeper
+1267487843,home,Curaçao,5-3-2,no,31337999,S. Sambo,2,Defender
+1267487843,home,Curaçao,5-3-2,no,26278574,J. Antonisse,11,Forward
+1267487843,home,Curaçao,5-3-2,no,6031375,K. Felida,22,Midfielder
+1267487843,home,Curaçao,5-3-2,no,26063478,S. Hansen,12,Forward
+1267487843,home,Curaçao,5-3-2,no,26114193,A. Martha,15,Defender
+1267487843,home,Curaçao,5-3-2,no,31405941,J. Margaritha,16,Forward
+1267487843,home,Curaçao,5-3-2,no,34474923,T. Bodak,25,Goalkeeper
+1267487843,home,Curaçao,5-3-2,no,65502360,T. Noslin,13,Defender
+1267487843,away,Ivory Coast,4-4-2,yes,10334744,Y. Fofana,1,Goalkeeper
+1267487843,away,Ivory Coast,4-4-2,yes,3354750,C. Operi,13,Defender
+1267487843,away,Ivory Coast,4-4-2,yes,57115387,O. Diomande,2,Defender
+1267487843,away,Ivory Coast,4-4-2,yes,7747313,O. Kossounou,7,Defender
+1267487843,away,Ivory Coast,4-4-2,yes,26041421,G. Doué,17,Defender
+1267487843,away,Ivory Coast,4-4-2,yes,82718090,Y. Diomande,11,Forward
+1267487843,away,Ivory Coast,4-4-2,yes,264516,F. Kessié,8,Midfielder
+1267487843,away,Ivory Coast,4-4-2,yes,3566143,I. Sangaré,18,Midfielder
+1267487843,away,Ivory Coast,4-4-2,yes,25437671,A. Diallo,15,Forward
+1267487843,away,Ivory Coast,4-4-2,yes,44379965,A. Bonny,9,Forward
+1267487843,away,Ivory Coast,4-4-2,yes,522760,N. Pépé,19,Forward
+1267487843,away,Ivory Coast,4-4-2,no,76409305,C. Inao OulaÃ¯,26,Midfielder
+1267487843,away,Ivory Coast,4-4-2,no,62410677,B. Touré,24,Midfielder
+1267487843,away,Ivory Coast,4-4-2,no,53843223,O. Diakité,14,Forward
+1267487843,away,Ivory Coast,4-4-2,no,44604560,M. Koné,16,Goalkeeper
+1267487843,away,Ivory Coast,4-4-2,no,48585285,S. Adingra,10,Forward
+1267487843,away,Ivory Coast,4-4-2,no,26195981,E. Wahi,12,Forward
+1267487843,away,Ivory Coast,4-4-2,no,21746102,E. Agbadou,20,Defender
+1267487843,away,Ivory Coast,4-4-2,no,42379862,P. Guiagon,25,Forward
+1267487843,away,Ivory Coast,4-4-2,no,22105937,E. Guessand,22,Forward
+1267487843,away,Ivory Coast,4-4-2,no,291081,E. Ndicka,21,Defender
+1267487843,away,Ivory Coast,4-4-2,no,3542476,G. Konan,3,Defender
+1267487843,away,Ivory Coast,4-4-2,no,4893427,A. Lafont,23,Goalkeeper
+1267487843,away,Ivory Coast,4-4-2,no,522277,J. Seri,4,Midfielder
+1267487843,away,Ivory Coast,4-4-2,no,4960081,S. Fofana,6,Midfielder
+1267487843,away,Ivory Coast,4-4-2,no,4911298,W. Singo,5,Defender
