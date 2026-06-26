@@ -908,3 +908,41 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1267489545,84,Australia,Substitution,Nestory Irankunda,54420408,,Tete Yengi,47759999
 1267489545,92,Paraguay,Substitution,Diego Gomez,44817724,,Damian Bobadilla,31412381
 1267489545,92,Paraguay,Substitution,Matías Galarza,49239106,,Junior Alonso,402493
+1309752758,4,Senegal,Goal,H. Diarra,52748745,A. Seck,,1360604
+1309752758,13,Iraq,Red Card,R. Sulaka,6804175,,,
+1309752758,16,Iraq,Substitution,A. Qasem,36887186,,M. Younis,47558588
+1309752758,18,Senegal,Yellow Card,A. Seck,1360604,,,
+1309752758,46,Iraq,Substitution,A. Basil,31867367,,J. Hassan,8675800
+1309752758,56,Senegal,Goal,I. Sarr,357252,L. Camara,,60223492
+1309752758,57,Senegal,Substitution,H. Diarra,52748745,,P. Gueye,3332210
+1309752758,57,Senegal,Substitution,I. Mbaye,71846243,,I. Ndiaye,2993466
+1309752758,57,Senegal,Substitution,L. Camara,60223492,,N. Jackson,45572492
+1309752758,58,Iraq,Substitution,A. Jasim,87365838,,A. Al Reeshawee,107142112
+1309752758,58,Iraq,Substitution,A. Al Hamadi,48270047,,A. Yousif,26380648
+1309752758,58,Senegal,Substitution,A. Seck,1360604,,P. Ciss,6690026
+1309752758,59,Senegal,Goal,P. Gueye,3332210,I. Sarr,,357252
+1309752758,67,Iraq,Substitution,Z. Iqbal,45771649,,K. Yakob,7732179
+1309752758,71,Senegal,Goal,P. Gueye,3332210,I. Ndiaye,,2993466
+1309752758,75,Iraq,Yellow Card,A. Al Ammari,7694666,,,
+1309752758,81,Senegal,Substitution,I. Sarr,357252,,A. Diao,64552782
+1309752758,81,Senegal,Yellow Card,P. Gueye,3332210,,,
+1309752758,82,Senegal,Goal,I. Ndiaye,2993466,P. Gueye,,3332210
+1309752758,90,Iraq,Yellow Card,M. Doski,43702638,,,
+1267493800,7,France,Goal,O. Dembele,24787,K. Mbappe,,44912
+1267493800,10,Norway,Yellow Card,P. Berg,6289458,,,
+1267493800,20,France,Goal,O. Dembele,24787,K. Mbappe,,44912
+1267493800,21,Norway,Goal,T. Aasgaard,44746884,A. Schjelderup,,48546162
+1267493800,32,France,Goal,O. Dembele,24787,A. Tchouameni,,204785
+1267493800,46,Norway,Substitution,F. Bjorkan,6288492,,M. Pedersen,6337436
+1267493800,46,Norway,Substitution,K. Thorstvedt,6302177,,M. Thorsby,5953934
+1267493800,50,Norway,Missed Penalty,J. Larsen,327306,J. Larsen,,327306
+1267493800,65,France,Substitution,M. Olise,3158491,,R. Cherki,25192951
+1267493800,65,France,Substitution,O. Dembele,24787,,B. Barcola,26066698
+1267493800,66,Norway,Substitution,H. Falchener,29131011,,S. Langas,42736638
+1267493800,74,France,Yellow Card,A. Tchouameni,204785,,,
+1267493800,76,France,Substitution,D. Upamecano,185143,,I. Konate,184499
+1267493800,83,Norway,Substitution,A. Schjelderup,48546162,,A. Nusa,50636425
+1267493800,83,Norway,Substitution,O. Bobb,44779567,,J. Hauge,6290907
+1267493800,87,France,Substitution,J. Kounde,202531,,M. Gusto,26067181
+1267493800,87,France,Substitution,K. Mbappe,44912,,J. Mateta,4174401
+1267493800,90+4,France,Goal,D. Doue,55227501,B. Barcola,,26066698

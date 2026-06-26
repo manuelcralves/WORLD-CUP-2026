@@ -4733,3 +4733,163 @@ match_id,side,team,stat,value
 1267489545,away,Australia,Goalkeeper saves,2
 1267489545,away,Australia,Fouls,6
 1267489545,away,Australia,Yellow cards,1
+1309752758,home,Senegal,Expected Goals,3.03
+1309752758,home,Senegal,Big Chances Created,5
+1309752758,home,Senegal,Attacks,129
+1309752758,home,Senegal,Free Kicks,10
+1309752758,home,Senegal,Expected Assists,2.39
+1309752758,home,Senegal,Successful Crosses,7
+1309752758,home,Senegal,Crosses,25
+1309752758,home,Senegal,Passes Own Half,158
+1309752758,home,Senegal,Passes Opposition Half,457
+1309752758,home,Senegal,Successful Long Passes,23
+1309752758,home,Senegal,Long Passes,43
+1309752758,home,Senegal,Throw-Ins,26
+1309752758,home,Senegal,Key Passes,24
+1309752758,home,Senegal,Passes Into Final Third,197
+1309752758,home,Senegal,Backward Passes,95
+1309752758,home,Senegal,Goal Kicks,4
+1309752758,home,Senegal,Interceptions,2
+1309752758,home,Senegal,Successful Tackles,9
+1309752758,home,Senegal,Tackles,12
+1309752758,home,Senegal,Clearances,10
+1309752758,home,Senegal,Successful Aerial Duels,19
+1309752758,home,Senegal,Aerial Duels,31
+1309752758,home,Senegal,Successful Dribbles,8
+1309752758,home,Senegal,Dribbles,24
+1309752758,home,Senegal,Shots accuracy,0.43
+1309752758,home,Senegal,Failed passes,72
+1309752758,home,Senegal,Possession,0.69
+1309752758,home,Senegal,Shots on target,12
+1309752758,home,Senegal,Corners,12
+1309752758,home,Senegal,Offsides,1
+1309752758,home,Senegal,Successful passes,518
+1309752758,home,Senegal,Red cards,0
+1309752758,home,Senegal,Shots off target,11
+1309752758,home,Senegal,Blocked shots,5
+1309752758,home,Senegal,Shots within penalty area,17
+1309752758,home,Senegal,Total passes,590
+1309752758,home,Senegal,Goalkeeper saves,1
+1309752758,home,Senegal,Fouls,10
+1309752758,home,Senegal,Yellow cards,2
+1309752758,home,Senegal,Shots outside penalty area,11
+1309752758,away,Iraq,Expected Goals,0.18
+1309752758,away,Iraq,Big Chances Created,0
+1309752758,away,Iraq,Attacks,54
+1309752758,away,Iraq,Free Kicks,10
+1309752758,away,Iraq,Expected Assists,0.06
+1309752758,away,Iraq,Successful Crosses,0
+1309752758,away,Iraq,Crosses,6
+1309752758,away,Iraq,Passes Own Half,147
+1309752758,away,Iraq,Passes Opposition Half,124
+1309752758,away,Iraq,Successful Long Passes,14
+1309752758,away,Iraq,Long Passes,68
+1309752758,away,Iraq,Throw-Ins,16
+1309752758,away,Iraq,Key Passes,3
+1309752758,away,Iraq,Passes Into Final Third,28
+1309752758,away,Iraq,Backward Passes,45
+1309752758,away,Iraq,Goal Kicks,20
+1309752758,away,Iraq,Interceptions,7
+1309752758,away,Iraq,Successful Tackles,13
+1309752758,away,Iraq,Tackles,20
+1309752758,away,Iraq,Clearances,35
+1309752758,away,Iraq,Successful Aerial Duels,12
+1309752758,away,Iraq,Aerial Duels,31
+1309752758,away,Iraq,Successful Dribbles,8
+1309752758,away,Iraq,Dribbles,13
+1309752758,away,Iraq,Shots accuracy,0.17
+1309752758,away,Iraq,Failed passes,81
+1309752758,away,Iraq,Possession,0.31
+1309752758,away,Iraq,Shots on target,1
+1309752758,away,Iraq,Corners,3
+1309752758,away,Iraq,Offsides,0
+1309752758,away,Iraq,Successful passes,184
+1309752758,away,Iraq,Red cards,1
+1309752758,away,Iraq,Shots off target,1
+1309752758,away,Iraq,Blocked shots,4
+1309752758,away,Iraq,Shots within penalty area,1
+1309752758,away,Iraq,Total passes,265
+1309752758,away,Iraq,Goalkeeper saves,7
+1309752758,away,Iraq,Fouls,11
+1309752758,away,Iraq,Yellow cards,2
+1309752758,away,Iraq,Shots outside penalty area,5
+1267493800,home,Norway,Expected Goals,1.69
+1267493800,home,Norway,Big Chances Created,4
+1267493800,home,Norway,Attacks,89
+1267493800,home,Norway,Free Kicks,10
+1267493800,home,Norway,Expected Assists,0.65
+1267493800,home,Norway,Successful Crosses,3
+1267493800,home,Norway,Crosses,9
+1267493800,home,Norway,Passes Own Half,218
+1267493800,home,Norway,Passes Opposition Half,211
+1267493800,home,Norway,Successful Long Passes,18
+1267493800,home,Norway,Long Passes,41
+1267493800,home,Norway,Throw-Ins,23
+1267493800,home,Norway,Key Passes,7
+1267493800,home,Norway,Passes Into Final Third,77
+1267493800,home,Norway,Backward Passes,74
+1267493800,home,Norway,Goal Kicks,8
+1267493800,home,Norway,Interceptions,13
+1267493800,home,Norway,Successful Tackles,12
+1267493800,home,Norway,Tackles,17
+1267493800,home,Norway,Clearances,16
+1267493800,home,Norway,Successful Aerial Duels,7
+1267493800,home,Norway,Aerial Duels,20
+1267493800,home,Norway,Successful Dribbles,7
+1267493800,home,Norway,Dribbles,14
+1267493800,home,Norway,Shots accuracy,0.4
+1267493800,home,Norway,Failed passes,76
+1267493800,home,Norway,Possession,0.43
+1267493800,home,Norway,Shots on target,4
+1267493800,home,Norway,Corners,4
+1267493800,home,Norway,Offsides,1
+1267493800,home,Norway,Successful passes,344
+1267493800,home,Norway,Red cards,0
+1267493800,home,Norway,Shots off target,3
+1267493800,home,Norway,Blocked shots,3
+1267493800,home,Norway,Shots within penalty area,6
+1267493800,home,Norway,Total passes,420
+1267493800,home,Norway,Goalkeeper saves,5
+1267493800,home,Norway,Fouls,9
+1267493800,home,Norway,Yellow cards,1
+1267493800,home,Norway,Shots outside penalty area,4
+1267493800,away,France,Expected Goals,1.31
+1267493800,away,France,Big Chances Created,3
+1267493800,away,France,Attacks,103
+1267493800,away,France,Free Kicks,8
+1267493800,away,France,Expected Assists,1.07
+1267493800,away,France,Successful Crosses,3
+1267493800,away,France,Crosses,9
+1267493800,away,France,Passes Own Half,221
+1267493800,away,France,Passes Opposition Half,345
+1267493800,away,France,Successful Long Passes,28
+1267493800,away,France,Long Passes,52
+1267493800,away,France,Throw-Ins,12
+1267493800,away,France,Key Passes,16
+1267493800,away,France,Passes Into Final Third,135
+1267493800,away,France,Backward Passes,83
+1267493800,away,France,Goal Kicks,5
+1267493800,away,France,Interceptions,11
+1267493800,away,France,Successful Tackles,13
+1267493800,away,France,Tackles,18
+1267493800,away,France,Clearances,18
+1267493800,away,France,Successful Aerial Duels,13
+1267493800,away,France,Aerial Duels,20
+1267493800,away,France,Successful Dribbles,7
+1267493800,away,France,Dribbles,17
+1267493800,away,France,Shots accuracy,0.5
+1267493800,away,France,Failed passes,77
+1267493800,away,France,Possession,0.57
+1267493800,away,France,Shots on target,9
+1267493800,away,France,Corners,5
+1267493800,away,France,Offsides,2
+1267493800,away,France,Successful passes,480
+1267493800,away,France,Red cards,0
+1267493800,away,France,Shots off target,6
+1267493800,away,France,Blocked shots,3
+1267493800,away,France,Shots within penalty area,10
+1267493800,away,France,Total passes,557
+1267493800,away,France,Goalkeeper saves,3
+1267493800,away,France,Fouls,11
+1267493800,away,France,Yellow cards,1
+1267493800,away,France,Shots outside penalty area,8
