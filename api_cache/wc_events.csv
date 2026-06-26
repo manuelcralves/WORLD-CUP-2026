@@ -853,3 +853,32 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1267487843,83,Curaçao,Yellow Card,Gervane Kastaneer,6232142,,,
 1267487843,90,Curaçao,Substitution,Joshua Brenet,113820,,Shurandy Sambo,31337999
 1267487843,90,Curaçao,Substitution,Jürgen Locadia,3056095,,Brandley Kuwas,6000946
+1309699145,32,Sweden,Yellow Card,Isak Hien,22214290,,,
+1309699145,37,Sweden,Substitution,Isak Hien,22214290,,Lucas Bergvall,55918030
+1309699145,39,Japan,Substitution,Ko Itakura,6136508,,Shogo Taniguchi,5305748
+1309699145,56,Japan,Goal,Daizen Maeda,5349218,Ritsu Doan,,418432
+1309699145,62,Sweden,Goal,Anthony Elanga,24702384,Viktor Gyökeres,,3055773
+1309699145,66,Japan,Substitution,Ayase Ueda,11617109,,Koki Ogawa,5359683
+1309699145,67,Japan,Substitution,Ritsu Doan,418432,,Junya Ito,312816
+1309699145,75,Sweden,Substitution,Alexander Bernhardsson,7679210,,Daniel Svensson,31983448
+1309699145,75,Sweden,Substitution,Elliot Stroud,36509319,,Ken Sema,460614
+1309699145,75,Japan,Substitution,Keito Nakamura,5364835,,Yuto Nagatomo,70994
+1309699145,75,Japan,Substitution,Ayumu Seko,5339719,,Tsuyoshi Watanabe,5290292
+1309699145,77,Japan,Yellow Card,Shogo Taniguchi,5305748,,,
+1309699145,85,Sweden,Yellow Card,Viktor Gyökeres,3055773,,,
+1309699145,87,Sweden,Substitution,Victor Lindelöf,143283,,Carl Starfelt,7726222
+1309699145,88,Sweden,Substitution,Gabriel Gudmundsson,7723163,,Benjamin Nygren,7728476
+1267490396,3,Netherlands,Own Goal,Ellyes Skhiri,3475661,,,
+1267490396,7,Netherlands,Goal,Brian Brobbey,6238904,Virgil van Dijk,,46844
+1267490396,54,Tunisia,Goal,Hazem Mastouri,55522936,Hannibal Mejbri,,29070314
+1267490396,62,Netherlands,Goal,Jan Paul van Hecke,6230049,Tijjani Reijnders,,5941376
+1267490396,67,Tunisia,Substitution,Rani Khedira,4073454,,Mohamed Hadj Mahmoud,10818549
+1267490396,68,Tunisia,Substitution,Anis Ben Slimane,32089064,,Elias Achouri,6764086
+1267490396,68,Tunisia,Substitution,Mohamed Amine Ben Hamida,21744653,,Mortadha Ben Ouanes,7964663
+1267490396,72,Netherlands,Substitution,Frenkie de Jong,86772,,Teun Koopmeiners,5940893
+1267490396,72,Netherlands,Substitution,Tijjani Reijnders,5941376,,Justin Kluivert,127666
+1267490396,72,Netherlands,Substitution,Donyell Malen,40243,,Crysencio Summerville,6073718
+1267490396,75,Tunisia,Substitution,Ismael Gharbi,49941710,,Firas Chaouat,477036
+1267490396,77,Netherlands,Substitution,Brian Brobbey,6238904,,Memphis Depay,107541
+1267490396,84,Netherlands,Substitution,Cody Gakpo,39921,,Noa Lang,87738
+1267490396,90,Tunisia,Substitution,Hazem Mastouri,55522936,,Sebastian Tounekti,9260552

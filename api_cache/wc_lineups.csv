@@ -2875,3 +2875,104 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267487843,away,Ivory Coast,4-4-2,no,522277,J. Seri,4,Midfielder
 1267487843,away,Ivory Coast,4-4-2,no,4960081,S. Fofana,6,Midfielder
 1267487843,away,Ivory Coast,4-4-2,no,4911298,W. Singo,5,Defender
+1309699145,home,Japan,3-4-3,yes,32132212,Z. Suzuki,1,Goalkeeper
+1309699145,home,Japan,3-4-3,yes,5295927,H. Ito,21,Defender
+1309699145,home,Japan,3-4-3,yes,6136508,K. Itakura,4,Defender
+1309699145,home,Japan,3-4-3,yes,5339719,A. Seko,20,Defender
+1309699145,home,Japan,3-4-3,yes,5364835,Keito Nakamura,13,Forward
+1309699145,home,Japan,3-4-3,yes,5307680,A. Tanaka,7,Midfielder
+1309699145,home,Japan,3-4-3,yes,418915,D. Kamada,15,Midfielder
+1309699145,home,Japan,3-4-3,yes,5294961,Y. Sugawara,2,Defender
+1309699145,home,Japan,3-4-3,yes,5349218,D. Maeda,11,Forward
+1309699145,home,Japan,3-4-3,yes,11617109,A. Ueda,18,Forward
+1309699145,home,Japan,3-4-3,yes,418432,R. Dōan,10,Midfielder
+1309699145,home,Japan,3-4-3,no,5305748,S. Taniguchi,3,Defender
+1309699145,home,Japan,3-4-3,no,70994,Y. Nagatomo,5,Defender
+1309699145,home,Japan,3-4-3,no,312816,J. Ito,14,Forward
+1309699145,home,Japan,3-4-3,no,418271,T. Tomiyasu,22,Defender
+1309699145,home,Japan,3-4-3,no,5359683,Koki Ogawa,19,Forward
+1309699145,home,Japan,3-4-3,no,5318628,K. Osako,12,Goalkeeper
+1309699145,home,Japan,3-4-3,no,5456283,K. Sano,24,Midfielder
+1309699145,home,Japan,3-4-3,no,5290292,T. Watanabe,16,Defender
+1309699145,home,Japan,3-4-3,no,32062177,Y. Suzuki,17,Midfielder
+1309699145,home,Japan,3-4-3,no,49070056,T. Hayakawa,23,Goalkeeper
+1309699145,home,Japan,3-4-3,no,56513408,J. Suzuki,25,Defender
+1309699145,home,Japan,3-4-3,no,60524884,K. Goto,9,Forward
+1309699145,home,Japan,3-4-3,no,68034246,K. Shiogai,26,Forward
+1309699145,home,Japan,3-4-3,no,17203165,S. Machino,6,Forward
+1309699145,away,Sweden,3-4-1-2,yes,7733467,J. Widell Zetterström,1,Goalkeeper
+1309699145,away,Sweden,3-4-1-2,yes,143283,V. Lindelöf,3,Defender
+1309699145,away,Sweden,3-4-1-2,yes,22214290,I. Hien,4,Defender
+1309699145,away,Sweden,3-4-1-2,yes,22173235,G. Lagerbielke,2,Defender
+1309699145,away,Sweden,3-4-1-2,yes,7723163,G. Gudmundsson,5,Defender
+1309699145,away,Sweden,3-4-1-2,yes,42797174,Y. Ayari,18,Midfielder
+1309699145,away,Sweden,3-4-1-2,yes,36509319,E. Stroud,24,Defender
+1309699145,away,Sweden,3-4-1-2,yes,7679210,A. Bernhardsson,21,Forward
+1309699145,away,Sweden,3-4-1-2,yes,24702384,A. Elanga,11,Forward
+1309699145,away,Sweden,3-4-1-2,yes,461258,A. Isak,9,Forward
+1309699145,away,Sweden,3-4-1-2,yes,3055773,V. Gyökeres,17,Forward
+1309699145,away,Sweden,3-4-1-2,no,56487004,B. Zeneli,22,Midfielder
+1309699145,away,Sweden,3-4-1-2,no,55918030,L. Bergvall,7,Midfielder
+1309699145,away,Sweden,3-4-1-2,no,31983448,D. Svensson,8,Defender
+1309699145,away,Sweden,3-4-1-2,no,26002298,H. Johansson,6,Defender
+1309699145,away,Sweden,3-4-1-2,no,25909079,T. Ali,26,Forward
+1309699145,away,Sweden,3-4-1-2,no,7728476,B. Nygren,10,Forward
+1309699145,away,Sweden,3-4-1-2,no,25550854,V. Johansson,12,Goalkeeper
+1309699145,away,Sweden,3-4-1-2,no,7712537,H. Ekdal,14,Defender
+1309699145,away,Sweden,3-4-1-2,no,4908078,M. Svanberg,19,Midfielder
+1309699145,away,Sweden,3-4-1-2,no,2525117,G. Nilsson,25,Forward
+1309699145,away,Sweden,3-4-1-2,no,1366400,E. Smith,20,Defender
+1309699145,away,Sweden,3-4-1-2,no,7726222,C. Starfelt,15,Defender
+1309699145,away,Sweden,3-4-1-2,no,460614,K. Sema,13,Midfielder
+1309699145,away,Sweden,3-4-1-2,no,7735721,J. Karlström,16,Midfielder
+1309699145,away,Sweden,3-4-1-2,no,459165,K. Nordfeldt,23,Goalkeeper
+1267490396,home,Tunisia,4-2-3-1,yes,7957418,A. Dahmen,16,Goalkeeper
+1267490396,home,Tunisia,4-2-3-1,yes,21744653,A. Ben Hmida,21,Defender
+1267490396,home,Tunisia,4-2-3-1,yes,7983017,A. Abdi,2,Defender
+1267490396,home,Tunisia,4-2-3-1,yes,8054984,M. Talbi,3,Defender
+1267490396,home,Tunisia,4-2-3-1,yes,3049816,Y. Valery,20,Defender
+1267490396,home,Tunisia,4-2-3-1,yes,4073454,R. Khedira,13,Midfielder
+1267490396,home,Tunisia,4-2-3-1,yes,3475661,E. Skhiri,17,Midfielder
+1267490396,home,Tunisia,4-2-3-1,yes,49941710,Ismaël Gharbi,11,Midfielder
+1267490396,home,Tunisia,4-2-3-1,yes,29070314,H. Mejbri,10,Midfielder
+1267490396,home,Tunisia,4-2-3-1,yes,32089064,A. Ben Slimane,25,Midfielder
+1267490396,home,Tunisia,4-2-3-1,yes,55522936,H. Mastouri,9,Forward
+1267490396,home,Tunisia,4-2-3-1,no,7957257,S. Ben Hsan,22,Goalkeeper
+1267490396,home,Tunisia,4-2-3-1,no,474299,D. Bronn,6,Defender
+1267490396,home,Tunisia,4-2-3-1,no,7964663,M. Ben Ouanes,12,Midfielder
+1267490396,home,Tunisia,4-2-3-1,no,477036,F. Chaouat,19,Forward
+1267490396,home,Tunisia,4-2-3-1,no,26254102,O. Rekik,4,Defender
+1267490396,home,Tunisia,4-2-3-1,no,6764086,E. Achouri,7,Midfielder
+1267490396,home,Tunisia,4-2-3-1,no,9260552,S. Tounekti,26,Forward
+1267490396,home,Tunisia,4-2-3-1,no,10818549,H. Mahmoud,15,Midfielder
+1267490396,home,Tunisia,4-2-3-1,no,85876588,C. Abdelmouhib,1,Goalkeeper
+1267490396,home,Tunisia,4-2-3-1,no,52159968,E. Saad,8,Forward
+1267490396,home,Tunisia,4-2-3-1,no,85871114,R. Chikhaoui,24,Defender
+1267490396,home,Tunisia,4-2-3-1,no,85860649,K. Ayari,14,Forward
+1267490396,home,Tunisia,4-2-3-1,no,91135653,R. Elloumi,18,Forward
+1267490396,away,Netherlands,4-3-3,yes,20778492,B. Verbruggen,1,Goalkeeper
+1267490396,away,Netherlands,4-3-3,yes,3036775,N. Aké,5,Defender
+1267490396,away,Netherlands,4-3-3,yes,46844,V. van Dijk,4,Defender
+1267490396,away,Netherlands,4-3-3,yes,6230049,J. van Hecke,6,Defender
+1267490396,away,Netherlands,4-3-3,yes,36540,D. Dumfries,22,Defender
+1267490396,away,Netherlands,4-3-3,yes,5941376,T. Reijnders,14,Midfielder
+1267490396,away,Netherlands,4-3-3,yes,86772,F. de Jong,21,Midfielder
+1267490396,away,Netherlands,4-3-3,yes,87416,R. Gravenberch,8,Midfielder
+1267490396,away,Netherlands,4-3-3,yes,39921,C. Gakpo,11,Forward
+1267490396,away,Netherlands,4-3-3,yes,6238904,B. Brobbey,19,Forward
+1267490396,away,Netherlands,4-3-3,yes,40243,D. Malen,18,Forward
+1267490396,away,Netherlands,4-3-3,no,55004516,J. Hato,25,Defender
+1267490396,away,Netherlands,4-3-3,no,31320450,R. Roefs,13,Goalkeeper
+1267490396,away,Netherlands,4-3-3,no,24608843,M. van de Ven,15,Defender
+1267490396,away,Netherlands,4-3-3,no,6238421,Q. Timber,26,Midfielder
+1267490396,away,Netherlands,4-3-3,no,14972027,M. Wieffer,12,Midfielder
+1267490396,away,Netherlands,4-3-3,no,6073718,C. Summerville,24,Forward
+1267490396,away,Netherlands,4-3-3,no,87738,N. Lang,17,Forward
+1267490396,away,Netherlands,4-3-3,no,5980177,L. Geertruida,2,Defender
+1267490396,away,Netherlands,4-3-3,no,127666,J. Kluivert,7,Forward
+1267490396,away,Netherlands,4-3-3,no,5941859,G. Til,16,Midfielder
+1267490396,away,Netherlands,4-3-3,no,5940893,T. Koopmeiners,20,Midfielder
+1267490396,away,Netherlands,4-3-3,no,4092130,W. Weghorst,9,Forward
+1267490396,away,Netherlands,4-3-3,no,4223506,M. Flekken,23,Goalkeeper
+1267490396,away,Netherlands,4-3-3,no,107541,M. Depay,10,Forward
+1267490396,away,Netherlands,4-3-3,no,4899706,M. de Roon,3,Midfielder
