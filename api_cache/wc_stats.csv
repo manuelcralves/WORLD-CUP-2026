@@ -4577,3 +4577,159 @@ match_id,side,team,stat,value
 1267490396,away,Netherlands,Goalkeeper saves,3
 1267490396,away,Netherlands,Fouls,10
 1267490396,away,Netherlands,Yellow cards,0
+1309699996,home,Turkey,Expected Goals,2.71
+1309699996,home,Turkey,Big Chances Created,4
+1309699996,home,Turkey,Attacks,97
+1309699996,home,Turkey,Free Kicks,11
+1309699996,home,Turkey,Expected Assists,1.13
+1309699996,home,Turkey,Successful Crosses,0
+1309699996,home,Turkey,Crosses,11
+1309699996,home,Turkey,Passes Own Half,200
+1309699996,home,Turkey,Passes Opposition Half,246
+1309699996,home,Turkey,Successful Long Passes,23
+1309699996,home,Turkey,Long Passes,66
+1309699996,home,Turkey,Throw-Ins,28
+1309699996,home,Turkey,Key Passes,7
+1309699996,home,Turkey,Passes Into Final Third,79
+1309699996,home,Turkey,Backward Passes,75
+1309699996,home,Turkey,Goal Kicks,6
+1309699996,home,Turkey,Interceptions,7
+1309699996,home,Turkey,Successful Tackles,20
+1309699996,home,Turkey,Tackles,31
+1309699996,home,Turkey,Clearances,23
+1309699996,home,Turkey,Successful Aerial Duels,13
+1309699996,home,Turkey,Aerial Duels,24
+1309699996,home,Turkey,Successful Dribbles,9
+1309699996,home,Turkey,Dribbles,14
+1309699996,home,Turkey,Shots accuracy,0.44
+1309699996,home,Turkey,Failed passes,102
+1309699996,home,Turkey,Possession,0.48
+1309699996,home,Turkey,Shots on target,4
+1309699996,home,Turkey,Corners,2
+1309699996,home,Turkey,Offsides,2
+1309699996,home,Turkey,Successful passes,333
+1309699996,home,Turkey,Red cards,0
+1309699996,home,Turkey,Shots off target,3
+1309699996,home,Turkey,Blocked shots,2
+1309699996,home,Turkey,Shots within penalty area,8
+1309699996,home,Turkey,Total passes,435
+1309699996,home,Turkey,Goalkeeper saves,5
+1309699996,home,Turkey,Fouls,13
+1309699996,home,Turkey,Yellow cards,0
+1309699996,away,USA,Expected Goals,2.06
+1309699996,away,USA,Big Chances Created,4
+1309699996,away,USA,Attacks,91
+1309699996,away,USA,Free Kicks,13
+1309699996,away,USA,Expected Assists,0.86
+1309699996,away,USA,Successful Crosses,5
+1309699996,away,USA,Crosses,18
+1309699996,away,USA,Passes Own Half,234
+1309699996,away,USA,Passes Opposition Half,254
+1309699996,away,USA,Successful Long Passes,17
+1309699996,away,USA,Long Passes,43
+1309699996,away,USA,Throw-Ins,31
+1309699996,away,USA,Key Passes,14
+1309699996,away,USA,Passes Into Final Third,84
+1309699996,away,USA,Backward Passes,74
+1309699996,away,USA,Goal Kicks,4
+1309699996,away,USA,Interceptions,11
+1309699996,away,USA,Successful Tackles,9
+1309699996,away,USA,Tackles,14
+1309699996,away,USA,Clearances,25
+1309699996,away,USA,Successful Aerial Duels,11
+1309699996,away,USA,Aerial Duels,24
+1309699996,away,USA,Successful Dribbles,5
+1309699996,away,USA,Dribbles,14
+1309699996,away,USA,Shots accuracy,0.39
+1309699996,away,USA,Failed passes,72
+1309699996,away,USA,Possession,0.52
+1309699996,away,USA,Shots on target,7
+1309699996,away,USA,Corners,9
+1309699996,away,USA,Offsides,5
+1309699996,away,USA,Successful passes,398
+1309699996,away,USA,Red cards,0
+1309699996,away,USA,Shots off target,6
+1309699996,away,USA,Blocked shots,5
+1309699996,away,USA,Shots within penalty area,15
+1309699996,away,USA,Total passes,470
+1309699996,away,USA,Goalkeeper saves,0
+1309699996,away,USA,Fouls,13
+1309699996,away,USA,Yellow cards,1
+1267489545,home,Paraguay,Expected Goals,0.25
+1267489545,home,Paraguay,Big Chances Created,0
+1267489545,home,Paraguay,Attacks,95
+1267489545,home,Paraguay,Free Kicks,6
+1267489545,home,Paraguay,Expected Assists,0.19
+1267489545,home,Paraguay,Successful Crosses,0
+1267489545,home,Paraguay,Crosses,7
+1267489545,home,Paraguay,Passes Own Half,199
+1267489545,home,Paraguay,Passes Opposition Half,235
+1267489545,home,Paraguay,Successful Long Passes,14
+1267489545,home,Paraguay,Long Passes,58
+1267489545,home,Paraguay,Throw-Ins,26
+1267489545,home,Paraguay,Key Passes,5
+1267489545,home,Paraguay,Passes Into Final Third,52
+1267489545,home,Paraguay,Backward Passes,35
+1267489545,home,Paraguay,Goal Kicks,9
+1267489545,home,Paraguay,Interceptions,8
+1267489545,home,Paraguay,Successful Tackles,16
+1267489545,home,Paraguay,Tackles,24
+1267489545,home,Paraguay,Clearances,24
+1267489545,home,Paraguay,Successful Aerial Duels,20
+1267489545,home,Paraguay,Aerial Duels,45
+1267489545,home,Paraguay,Successful Dribbles,5
+1267489545,home,Paraguay,Dribbles,17
+1267489545,home,Paraguay,Shots accuracy,0.29
+1267489545,home,Paraguay,Failed passes,97
+1267489545,home,Paraguay,Possession,0.44
+1267489545,home,Paraguay,Shots on target,2
+1267489545,home,Paraguay,Corners,1
+1267489545,home,Paraguay,Offsides,0
+1267489545,home,Paraguay,Successful passes,330
+1267489545,home,Paraguay,Red cards,0
+1267489545,home,Paraguay,Shots off target,4
+1267489545,home,Paraguay,Blocked shots,1
+1267489545,home,Paraguay,Shots within penalty area,3
+1267489545,home,Paraguay,Total passes,427
+1267489545,home,Paraguay,Goalkeeper saves,5
+1267489545,home,Paraguay,Fouls,9
+1267489545,home,Paraguay,Yellow cards,1
+1267489545,away,Australia,Expected Goals,0.58
+1267489545,away,Australia,Big Chances Created,0
+1267489545,away,Australia,Attacks,116
+1267489545,away,Australia,Free Kicks,9
+1267489545,away,Australia,Expected Assists,0.36
+1267489545,away,Australia,Successful Crosses,4
+1267489545,away,Australia,Crosses,13
+1267489545,away,Australia,Passes Own Half,298
+1267489545,away,Australia,Passes Opposition Half,251
+1267489545,away,Australia,Successful Long Passes,18
+1267489545,away,Australia,Long Passes,57
+1267489545,away,Australia,Throw-Ins,28
+1267489545,away,Australia,Key Passes,11
+1267489545,away,Australia,Passes Into Final Third,74
+1267489545,away,Australia,Backward Passes,76
+1267489545,away,Australia,Goal Kicks,9
+1267489545,away,Australia,Interceptions,7
+1267489545,away,Australia,Successful Tackles,12
+1267489545,away,Australia,Tackles,19
+1267489545,away,Australia,Clearances,10
+1267489545,away,Australia,Successful Aerial Duels,25
+1267489545,away,Australia,Aerial Duels,45
+1267489545,away,Australia,Successful Dribbles,10
+1267489545,away,Australia,Dribbles,23
+1267489545,away,Australia,Shots accuracy,0.42
+1267489545,away,Australia,Failed passes,98
+1267489545,away,Australia,Possession,0.56
+1267489545,away,Australia,Shots on target,5
+1267489545,away,Australia,Corners,3
+1267489545,away,Australia,Offsides,0
+1267489545,away,Australia,Successful passes,438
+1267489545,away,Australia,Red cards,0
+1267489545,away,Australia,Shots off target,4
+1267489545,away,Australia,Blocked shots,3
+1267489545,away,Australia,Shots within penalty area,7
+1267489545,away,Australia,Total passes,536
+1267489545,away,Australia,Goalkeeper saves,2
+1267489545,away,Australia,Fouls,6
+1267489545,away,Australia,Yellow cards,1
