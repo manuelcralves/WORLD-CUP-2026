@@ -5213,3 +5213,163 @@ match_id,side,team,stat,value
 1267492098,away,Iran,Fouls,16
 1267492098,away,Iran,Yellow cards,4
 1267492098,away,Iran,Shots outside penalty area,3
+1267498906,home,Panama,Expected Goals,0.58
+1267498906,home,Panama,Big Chances Created,0
+1267498906,home,Panama,Attacks,54
+1267498906,home,Panama,Free Kicks,12
+1267498906,home,Panama,Expected Assists,0.42
+1267498906,home,Panama,Successful Crosses,3
+1267498906,home,Panama,Crosses,9
+1267498906,home,Panama,Passes Own Half,161
+1267498906,home,Panama,Passes Opposition Half,115
+1267498906,home,Panama,Successful Long Passes,24
+1267498906,home,Panama,Long Passes,54
+1267498906,home,Panama,Throw-Ins,24
+1267498906,home,Panama,Key Passes,9
+1267498906,home,Panama,Passes Into Final Third,30
+1267498906,home,Panama,Backward Passes,23
+1267498906,home,Panama,Goal Kicks,12
+1267498906,home,Panama,Interceptions,6
+1267498906,home,Panama,Successful Tackles,11
+1267498906,home,Panama,Tackles,16
+1267498906,home,Panama,Clearances,36
+1267498906,home,Panama,Successful Aerial Duels,11
+1267498906,home,Panama,Aerial Duels,28
+1267498906,home,Panama,Successful Dribbles,6
+1267498906,home,Panama,Dribbles,15
+1267498906,home,Panama,Shots accuracy,0.15
+1267498906,home,Panama,Failed passes,66
+1267498906,home,Panama,Possession,0.33
+1267498906,home,Panama,Shots on target,2
+1267498906,home,Panama,Corners,3
+1267498906,home,Panama,Offsides,4
+1267498906,home,Panama,Successful passes,201
+1267498906,home,Panama,Red cards,0
+1267498906,home,Panama,Shots off target,8
+1267498906,home,Panama,Blocked shots,3
+1267498906,home,Panama,Shots within penalty area,8
+1267498906,home,Panama,Total passes,267
+1267498906,home,Panama,Goalkeeper saves,4
+1267498906,home,Panama,Fouls,16
+1267498906,home,Panama,Yellow cards,2
+1267498906,home,Panama,Shots outside penalty area,4
+1267498906,away,England,Expected Goals,1.49
+1267498906,away,England,Big Chances Created,4
+1267498906,away,England,Attacks,129
+1267498906,away,England,Free Kicks,16
+1267498906,away,England,Expected Assists,2.37
+1267498906,away,England,Successful Crosses,4
+1267498906,away,England,Crosses,25
+1267498906,away,England,Passes Own Half,211
+1267498906,away,England,Passes Opposition Half,371
+1267498906,away,England,Successful Long Passes,20
+1267498906,away,England,Long Passes,36
+1267498906,away,England,Throw-Ins,14
+1267498906,away,England,Key Passes,13
+1267498906,away,England,Passes Into Final Third,140
+1267498906,away,England,Backward Passes,64
+1267498906,away,England,Goal Kicks,8
+1267498906,away,England,Interceptions,5
+1267498906,away,England,Successful Tackles,17
+1267498906,away,England,Tackles,18
+1267498906,away,England,Clearances,21
+1267498906,away,England,Successful Aerial Duels,17
+1267498906,away,England,Aerial Duels,28
+1267498906,away,England,Successful Dribbles,10
+1267498906,away,England,Dribbles,18
+1267498906,away,England,Shots accuracy,0.35
+1267498906,away,England,Failed passes,64
+1267498906,away,England,Possession,0.67
+1267498906,away,England,Shots on target,6
+1267498906,away,England,Corners,7
+1267498906,away,England,Offsides,4
+1267498906,away,England,Successful passes,493
+1267498906,away,England,Red cards,0
+1267498906,away,England,Shots off target,8
+1267498906,away,England,Blocked shots,3
+1267498906,away,England,Shots within penalty area,12
+1267498906,away,England,Total passes,557
+1267498906,away,England,Goalkeeper saves,2
+1267498906,away,England,Fouls,13
+1267498906,away,England,Yellow cards,1
+1267498906,away,England,Shots outside penalty area,4
+1267497204,home,Croatia,Expected Goals,0.46
+1267497204,home,Croatia,Big Chances Created,0
+1267497204,home,Croatia,Attacks,89
+1267497204,home,Croatia,Free Kicks,13
+1267497204,home,Croatia,Expected Assists,0.61
+1267497204,home,Croatia,Successful Crosses,3
+1267497204,home,Croatia,Crosses,15
+1267497204,home,Croatia,Passes Own Half,293
+1267497204,home,Croatia,Passes Opposition Half,245
+1267497204,home,Croatia,Successful Long Passes,16
+1267497204,home,Croatia,Long Passes,37
+1267497204,home,Croatia,Throw-Ins,16
+1267497204,home,Croatia,Key Passes,8
+1267497204,home,Croatia,Passes Into Final Third,75
+1267497204,home,Croatia,Backward Passes,95
+1267497204,home,Croatia,Goal Kicks,7
+1267497204,home,Croatia,Interceptions,4
+1267497204,home,Croatia,Successful Tackles,8
+1267497204,home,Croatia,Tackles,14
+1267497204,home,Croatia,Clearances,23
+1267497204,home,Croatia,Successful Aerial Duels,7
+1267497204,home,Croatia,Aerial Duels,15
+1267497204,home,Croatia,Successful Dribbles,6
+1267497204,home,Croatia,Dribbles,12
+1267497204,home,Croatia,Shots accuracy,0.5
+1267497204,home,Croatia,Failed passes,45
+1267497204,home,Croatia,Possession,0.53
+1267497204,home,Croatia,Shots on target,4
+1267497204,home,Croatia,Corners,3
+1267497204,home,Croatia,Offsides,1
+1267497204,home,Croatia,Successful passes,478
+1267497204,home,Croatia,Red cards,0
+1267497204,home,Croatia,Shots off target,2
+1267497204,home,Croatia,Blocked shots,2
+1267497204,home,Croatia,Shots within penalty area,3
+1267497204,home,Croatia,Total passes,523
+1267497204,home,Croatia,Goalkeeper saves,0
+1267497204,home,Croatia,Fouls,9
+1267497204,home,Croatia,Yellow cards,1
+1267497204,home,Croatia,Shots outside penalty area,5
+1267497204,away,Ghana,Expected Goals,0.73
+1267497204,away,Ghana,Big Chances Created,2
+1267497204,away,Ghana,Attacks,103
+1267497204,away,Ghana,Free Kicks,9
+1267497204,away,Ghana,Expected Assists,0.48
+1267497204,away,Ghana,Successful Crosses,3
+1267497204,away,Ghana,Crosses,12
+1267497204,away,Ghana,Passes Own Half,258
+1267497204,away,Ghana,Passes Opposition Half,209
+1267497204,away,Ghana,Successful Long Passes,18
+1267497204,away,Ghana,Long Passes,40
+1267497204,away,Ghana,Throw-Ins,10
+1267497204,away,Ghana,Key Passes,6
+1267497204,away,Ghana,Passes Into Final Third,45
+1267497204,away,Ghana,Backward Passes,66
+1267497204,away,Ghana,Goal Kicks,5
+1267497204,away,Ghana,Interceptions,10
+1267497204,away,Ghana,Successful Tackles,7
+1267497204,away,Ghana,Tackles,13
+1267497204,away,Ghana,Clearances,10
+1267497204,away,Ghana,Successful Aerial Duels,8
+1267497204,away,Ghana,Aerial Duels,15
+1267497204,away,Ghana,Successful Dribbles,6
+1267497204,away,Ghana,Dribbles,16
+1267497204,away,Ghana,Shots accuracy,0.17
+1267497204,away,Ghana,Failed passes,53
+1267497204,away,Ghana,Possession,0.47
+1267497204,away,Ghana,Shots on target,1
+1267497204,away,Ghana,Corners,2
+1267497204,away,Ghana,Offsides,2
+1267497204,away,Ghana,Successful passes,402
+1267497204,away,Ghana,Red cards,0
+1267497204,away,Ghana,Shots off target,3
+1267497204,away,Ghana,Blocked shots,2
+1267497204,away,Ghana,Shots within penalty area,3
+1267497204,away,Ghana,Total passes,455
+1267497204,away,Ghana,Goalkeeper saves,2
+1267497204,away,Ghana,Fouls,13
+1267497204,away,Ghana,Yellow cards,1
+1267497204,away,Ghana,Shots outside penalty area,2
