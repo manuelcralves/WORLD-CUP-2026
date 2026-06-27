@@ -3179,3 +3179,105 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267493800,away,France,4-2-3-1,no,3463103,Marcus Thuram,9,Forward
 1267493800,away,France,4-2-3-1,no,26066698,Bradley Barcola,12,Forward
 1267493800,away,France,4-2-3-1,no,4174401,Jean-Philippe Mateta,22,Forward
+1267494651,home,Uruguay,4-2-3-1,yes,69223,Fernando Muslera,23,Goalkeeper
+1267494651,home,Uruguay,4-2-3-1,yes,26225605,Juan Sanabria,25,Defender
+1267494651,home,Uruguay,4-2-3-1,yes,7608048,Mathías Olivera,16,Defender
+1267494651,home,Uruguay,4-2-3-1,yes,8297289,Sebastián Cáceres,3,Defender
+1267494651,home,Uruguay,4-2-3-1,yes,207844,Guillermo Varela,13,Defender
+1267494651,home,Uruguay,4-2-3-1,yes,8290688,Manuel Ugarte,5,Midfielder
+1267494651,home,Uruguay,4-2-3-1,yes,139097,Rodrigo Bentancur,6,Midfielder
+1267494651,home,Uruguay,4-2-3-1,yes,8336090,Maximiliano Araújo,20,Midfielder
+1267494651,home,Uruguay,4-2-3-1,yes,121870,Federico Valverde,8,Midfielder
+1267494651,home,Uruguay,4-2-3-1,yes,8308237,Agustín Canobbio,14,Midfielder
+1267494651,home,Uruguay,4-2-3-1,yes,8310491,Darwin Núñez,9,Forward
+1267494651,home,Uruguay,4-2-3-1,no,9965249,Santiago Mele,12,Goalkeeper
+1267494651,home,Uruguay,4-2-3-1,no,8062551,Sergio Rochet,1,Goalkeeper
+1267494651,home,Uruguay,4-2-3-1,no,8303246,Matías Viña,17,Defender
+1267494651,home,Uruguay,4-2-3-1,no,21788928,Santiago Bueno,24,Defender
+1267494651,home,Uruguay,4-2-3-1,no,5145,José María Giménez,2,Defender
+1267494651,home,Uruguay,4-2-3-1,no,16392208,Ronald Araújo,4,Defender
+1267494651,home,Uruguay,4-2-3-1,no,8286180,Joaquín Piquerez,22,Defender
+1267494651,home,Uruguay,4-2-3-1,no,965349,Nicolás de la Cruz,7,Midfielder
+1267494651,home,Uruguay,4-2-3-1,no,8310652,Brian Rodríguez,18,Forward
+1267494651,home,Uruguay,4-2-3-1,no,24646517,Emiliano Martínez,15,Midfielder
+1267494651,home,Uruguay,4-2-3-1,no,420686,Giorgian de Arrascaeta,10,Midfielder
+1267494651,home,Uruguay,4-2-3-1,no,11282712,Facundo Pellistri,11,Midfielder
+1267494651,home,Uruguay,4-2-3-1,no,8296484,Federico Viñas,21,Forward
+1267494651,home,Uruguay,4-2-3-1,no,2653756,Rodrigo Aguirre,19,Forward
+1267494651,home,Uruguay,4-2-3-1,no,17478797,Rodrigo Zalazar,26,Midfielder
+1267494651,away,Spain,4-3-3,yes,7610624,Unai Simón,23,Goalkeeper
+1267494651,away,Spain,4-3-3,yes,7628334,Marc Cucurella,24,Defender
+1267494651,away,Spain,4-3-3,yes,100296,Aymeric Laporte,14,Defender
+1267494651,away,Spain,4-3-3,yes,63856457,Pau Cubarsí,22,Defender
+1267494651,away,Spain,4-3-3,yes,121387,Marcos Llorente,5,Defender
+1267494651,away,Spain,4-3-3,yes,7617225,Mikel Merino,6,Midfielder
+1267494651,away,Spain,4-3-3,yes,7238,Rodri,16,Midfielder
+1267494651,away,Spain,4-3-3,yes,21511203,Pedri,20,Midfielder
+1267494651,away,Spain,4-3-3,yes,29337413,Alex Baena,15,Forward
+1267494651,away,Spain,4-3-3,yes,7619157,Mikel Oyarzabal,21,Forward
+1267494651,away,Spain,4-3-3,yes,62279462,Lamine Yamal,19,Forward
+1267494651,away,Spain,4-3-3,no,29417752,Joan García,13,Goalkeeper
+1267494651,away,Spain,4-3-3,no,3134019,David Raya,1,Goalkeeper
+1267494651,away,Spain,4-3-3,no,47622827,Marc Pubill,2,Defender
+1267494651,away,Spain,4-3-3,no,99813,Eric García,4,Defender
+1267494651,away,Spain,4-3-3,no,7650713,Pedro Porro,12,Defender
+1267494651,away,Spain,4-3-3,no,47763541,Pablo Gavi,9,Midfielder
+1267494651,away,Spain,4-3-3,no,7617869,Martín Zubimendi,18,Midfielder
+1267494651,away,Spain,4-3-3,no,29591793,Nico Williams,17,Forward
+1267494651,away,Spain,4-3-3,no,52962,Fabián Ruiz,8,Midfielder
+1267494651,away,Spain,4-3-3,no,90797,Alejandro Grimaldo,3,Defender
+1267494651,away,Spain,4-3-3,no,213157,Dani Olmo,10,Midfielder
+1267494651,away,Spain,4-3-3,no,7623182,Borja Iglesias,26,Forward
+1267494651,away,Spain,4-3-3,no,150045,Ferran Torres,7,Forward
+1267494651,away,Spain,4-3-3,no,29660540,Yéremy Pino,11,Midfielder
+1267494651,away,Spain,4-3-3,no,54539065,Víctor Muñoz,25,Forward
+1267491247,home,Cape Verde,4-2-3-1,yes,2464098,Vozinha,1,Goalkeeper
+1267491247,home,Cape Verde,4-2-3-1,yes,22864730,João Paulo,8,Defender
+1267491247,home,Cape Verde,4-2-3-1,yes,11151014,Pico,4,Defender
+1267491247,home,Cape Verde,4-2-3-1,yes,6699042,Diney Borges,3,Defender
+1267491247,home,Cape Verde,4-2-3-1,yes,53461170,Wagner Pina,24,Defender
+1267491247,home,Cape Verde,4-2-3-1,yes,6027189,Deroy Duarte,14,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,yes,15538586,Kevin Lenini,6,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,yes,18286534,Willy Semedo,17,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,yes,8170099,Jamiro Monteiro,10,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,yes,8093624,Ryan Mendes,20,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,yes,55269361,Dailon Rocha Livramento,19,Forward
+1267491247,home,Cape Verde,4-2-3-1,no,6724158,Márcio Rosa,12,Goalkeeper
+1267491247,home,Cape Verde,4-2-3-1,no,26275354,CJ Dos Santos,23,Goalkeeper
+1267491247,home,Cape Verde,4-2-3-1,no,375445,Stopira,2,Defender
+1267491247,home,Cape Verde,4-2-3-1,no,3541671,Logan Costa,5,Defender
+1267491247,home,Cape Verde,4-2-3-1,no,3564533,Steven Moreira,22,Defender
+1267491247,home,Cape Verde,4-2-3-1,no,43277920,Kelvin Pires,25,Defender
+1267491247,home,Cape Verde,4-2-3-1,no,7182686,Garry Rodrigues,11,Forward
+1267491247,home,Cape Verde,4-2-3-1,no,6027350,Laros Duarte,15,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,no,20609281,Yannick Semedo,16,Midfielder
+1267491247,home,Cape Verde,4-2-3-1,no,46855018,Hélio Varela,26,Forward
+1267491247,home,Cape Verde,4-2-3-1,no,240688,Jovane Cabral,7,Forward
+1267491247,home,Cape Verde,4-2-3-1,no,3584819,Nuno Da Costa,21,Forward
+1267491247,home,Cape Verde,4-2-3-1,no,49778456,Gilson Tavares,9,Forward
+1267491247,away,Saudi Arabia,4-4-2,yes,7150325,Mohammed Al-Owais,21,Goalkeeper
+1267491247,away,Saudi Arabia,4-4-2,yes,7138733,Nasser Al-Dawsari,6,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,yes,7142436,Hassan Tambakti,5,Defender
+1267491247,away,Saudi Arabia,4-4-2,yes,7160629,Abdulelah Al-Amri,4,Defender
+1267491247,away,Saudi Arabia,4-4-2,yes,21734349,Nawaf Boushal,13,Defender
+1267491247,away,Saudi Arabia,4-4-2,yes,7138894,Salem Al-Dawsari,10,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,yes,7140343,Mohamed Kanno,23,Forward
+1267491247,away,Saudi Arabia,4-4-2,yes,7134869,Abdullah Al-Khaibari,15,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,yes,7179788,Saud Abdulhamid,12,Defender
+1267491247,away,Saudi Arabia,4-4-2,yes,425033,Sultan Mandash,20,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,yes,7136318,Firas Al-Buraikan,9,Forward
+1267491247,away,Saudi Arabia,4-4-2,no,31119522,Nawaf Al-Aqidi,1,Goalkeeper
+1267491247,away,Saudi Arabia,4-4-2,no,7156443,Ahmed Al-Kassar,22,Goalkeeper
+1267491247,away,Saudi Arabia,4-4-2,no,7143241,Ali Majrashi,2,Defender
+1267491247,away,Saudi Arabia,4-4-2,no,32583495,Moteb Al-Harbi,24,Defender
+1267491247,away,Saudi Arabia,4-4-2,no,49019341,Jehad Thakri,25,Defender
+1267491247,away,Saudi Arabia,4-4-2,no,7138089,Hassan Kadesh,14,Defender
+1267491247,away,Saudi Arabia,4-4-2,no,7165781,Ali Lajami,3,Defender
+1267491247,away,Saudi Arabia,4-4-2,no,23797886,Ayman Yahya,8,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,no,43336846,Ziyad Aljohani,16,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,no,64897161,Mohammed Abu Al-Shamat,26,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,no,7076587,Ala'a Al-Hejji,18,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,no,49327334,Musab Al Juwayr,7,Midfielder
+1267491247,away,Saudi Arabia,4-4-2,no,7197015,Khalid Al-Ghannam,17,Forward
+1267491247,away,Saudi Arabia,4-4-2,no,7145656,Abdullah Al-Hamdan,19,Forward
+1267491247,away,Saudi Arabia,4-4-2,no,7172865,Saleh Al-Shehri,11,Forward

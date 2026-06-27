@@ -4893,3 +4893,163 @@ match_id,side,team,stat,value
 1267493800,away,France,Fouls,11
 1267493800,away,France,Yellow cards,1
 1267493800,away,France,Shots outside penalty area,8
+1267494651,home,Uruguay,Expected Goals,0.2
+1267494651,home,Uruguay,Big Chances Created,1
+1267494651,home,Uruguay,Attacks,94
+1267494651,home,Uruguay,Free Kicks,14
+1267494651,home,Uruguay,Expected Assists,0.33
+1267494651,home,Uruguay,Successful Crosses,1
+1267494651,home,Uruguay,Crosses,16
+1267494651,home,Uruguay,Passes Own Half,118
+1267494651,home,Uruguay,Passes Opposition Half,199
+1267494651,home,Uruguay,Successful Long Passes,15
+1267494651,home,Uruguay,Long Passes,43
+1267494651,home,Uruguay,Throw-Ins,17
+1267494651,home,Uruguay,Key Passes,5
+1267494651,home,Uruguay,Passes Into Final Third,69
+1267494651,home,Uruguay,Backward Passes,56
+1267494651,home,Uruguay,Goal Kicks,5
+1267494651,home,Uruguay,Interceptions,14
+1267494651,home,Uruguay,Successful Tackles,15
+1267494651,home,Uruguay,Tackles,25
+1267494651,home,Uruguay,Clearances,14
+1267494651,home,Uruguay,Successful Aerial Duels,4
+1267494651,home,Uruguay,Aerial Duels,20
+1267494651,home,Uruguay,Successful Dribbles,7
+1267494651,home,Uruguay,Dribbles,15
+1267494651,home,Uruguay,Shots accuracy,0.2
+1267494651,home,Uruguay,Failed passes,73
+1267494651,home,Uruguay,Possession,0.33
+1267494651,home,Uruguay,Shots on target,1
+1267494651,home,Uruguay,Corners,1
+1267494651,home,Uruguay,Offsides,5
+1267494651,home,Uruguay,Successful passes,228
+1267494651,home,Uruguay,Red cards,1
+1267494651,home,Uruguay,Shots off target,3
+1267494651,home,Uruguay,Blocked shots,1
+1267494651,home,Uruguay,Shots within penalty area,2
+1267494651,home,Uruguay,Total passes,301
+1267494651,home,Uruguay,Goalkeeper saves,0
+1267494651,home,Uruguay,Fouls,14
+1267494651,home,Uruguay,Yellow cards,3
+1267494651,home,Uruguay,Shots outside penalty area,3
+1267494651,away,Spain,Expected Goals,0.86
+1267494651,away,Spain,Big Chances Created,1
+1267494651,away,Spain,Attacks,107
+1267494651,away,Spain,Free Kicks,13
+1267494651,away,Spain,Expected Assists,0.54
+1267494651,away,Spain,Successful Crosses,3
+1267494651,away,Spain,Crosses,12
+1267494651,away,Spain,Passes Own Half,351
+1267494651,away,Spain,Passes Opposition Half,284
+1267494651,away,Spain,Successful Long Passes,18
+1267494651,away,Spain,Long Passes,34
+1267494651,away,Spain,Throw-Ins,10
+1267494651,away,Spain,Key Passes,6
+1267494651,away,Spain,Passes Into Final Third,78
+1267494651,away,Spain,Backward Passes,98
+1267494651,away,Spain,Goal Kicks,6
+1267494651,away,Spain,Interceptions,9
+1267494651,away,Spain,Successful Tackles,10
+1267494651,away,Spain,Tackles,17
+1267494651,away,Spain,Clearances,23
+1267494651,away,Spain,Successful Aerial Duels,16
+1267494651,away,Spain,Aerial Duels,20
+1267494651,away,Spain,Successful Dribbles,10
+1267494651,away,Spain,Dribbles,22
+1267494651,away,Spain,Shots accuracy,0.17
+1267494651,away,Spain,Failed passes,70
+1267494651,away,Spain,Possession,0.67
+1267494651,away,Spain,Shots on target,1
+1267494651,away,Spain,Corners,6
+1267494651,away,Spain,Offsides,2
+1267494651,away,Spain,Successful passes,553
+1267494651,away,Spain,Red cards,0
+1267494651,away,Spain,Shots off target,4
+1267494651,away,Spain,Blocked shots,1
+1267494651,away,Spain,Shots within penalty area,5
+1267494651,away,Spain,Total passes,623
+1267494651,away,Spain,Goalkeeper saves,2
+1267494651,away,Spain,Fouls,14
+1267494651,away,Spain,Yellow cards,1
+1267494651,away,Spain,Shots outside penalty area,1
+1267491247,home,Cape Verde,Expected Goals,1.52
+1267491247,home,Cape Verde,Big Chances Created,1
+1267491247,home,Cape Verde,Attacks,112
+1267491247,home,Cape Verde,Free Kicks,15
+1267491247,home,Cape Verde,Expected Assists,1.06
+1267491247,home,Cape Verde,Successful Crosses,2
+1267491247,home,Cape Verde,Crosses,18
+1267491247,home,Cape Verde,Passes Own Half,217
+1267491247,home,Cape Verde,Passes Opposition Half,252
+1267491247,home,Cape Verde,Successful Long Passes,29
+1267491247,home,Cape Verde,Long Passes,56
+1267491247,home,Cape Verde,Throw-Ins,21
+1267491247,home,Cape Verde,Key Passes,12
+1267491247,home,Cape Verde,Passes Into Final Third,87
+1267491247,home,Cape Verde,Backward Passes,76
+1267491247,home,Cape Verde,Goal Kicks,5
+1267491247,home,Cape Verde,Interceptions,13
+1267491247,home,Cape Verde,Successful Tackles,12
+1267491247,home,Cape Verde,Tackles,16
+1267491247,home,Cape Verde,Clearances,29
+1267491247,home,Cape Verde,Successful Aerial Duels,17
+1267491247,home,Cape Verde,Aerial Duels,28
+1267491247,home,Cape Verde,Successful Dribbles,10
+1267491247,home,Cape Verde,Dribbles,23
+1267491247,home,Cape Verde,Shots accuracy,0.13
+1267491247,home,Cape Verde,Failed passes,66
+1267491247,home,Cape Verde,Possession,0.51
+1267491247,home,Cape Verde,Shots on target,2
+1267491247,home,Cape Verde,Corners,4
+1267491247,home,Cape Verde,Offsides,2
+1267491247,home,Cape Verde,Successful passes,385
+1267491247,home,Cape Verde,Red cards,0
+1267491247,home,Cape Verde,Shots off target,8
+1267491247,home,Cape Verde,Blocked shots,5
+1267491247,home,Cape Verde,Shots within penalty area,9
+1267491247,home,Cape Verde,Total passes,451
+1267491247,home,Cape Verde,Goalkeeper saves,3
+1267491247,home,Cape Verde,Fouls,10
+1267491247,home,Cape Verde,Yellow cards,1
+1267491247,home,Cape Verde,Shots outside penalty area,6
+1267491247,away,Saudi Arabia,Expected Goals,0.4
+1267491247,away,Saudi Arabia,Big Chances Created,1
+1267491247,away,Saudi Arabia,Attacks,103
+1267491247,away,Saudi Arabia,Free Kicks,10
+1267491247,away,Saudi Arabia,Expected Assists,0.71
+1267491247,away,Saudi Arabia,Successful Crosses,3
+1267491247,away,Saudi Arabia,Crosses,11
+1267491247,away,Saudi Arabia,Passes Own Half,212
+1267491247,away,Saudi Arabia,Passes Opposition Half,241
+1267491247,away,Saudi Arabia,Successful Long Passes,23
+1267491247,away,Saudi Arabia,Long Passes,54
+1267491247,away,Saudi Arabia,Throw-Ins,27
+1267491247,away,Saudi Arabia,Key Passes,5
+1267491247,away,Saudi Arabia,Passes Into Final Third,72
+1267491247,away,Saudi Arabia,Backward Passes,57
+1267491247,away,Saudi Arabia,Goal Kicks,12
+1267491247,away,Saudi Arabia,Interceptions,10
+1267491247,away,Saudi Arabia,Successful Tackles,15
+1267491247,away,Saudi Arabia,Tackles,29
+1267491247,away,Saudi Arabia,Clearances,23
+1267491247,away,Saudi Arabia,Successful Aerial Duels,11
+1267491247,away,Saudi Arabia,Aerial Duels,28
+1267491247,away,Saudi Arabia,Successful Dribbles,6
+1267491247,away,Saudi Arabia,Dribbles,13
+1267491247,away,Saudi Arabia,Shots accuracy,0.43
+1267491247,away,Saudi Arabia,Failed passes,86
+1267491247,away,Saudi Arabia,Possession,0.49
+1267491247,away,Saudi Arabia,Shots on target,3
+1267491247,away,Saudi Arabia,Corners,2
+1267491247,away,Saudi Arabia,Offsides,0
+1267491247,away,Saudi Arabia,Successful passes,356
+1267491247,away,Saudi Arabia,Red cards,0
+1267491247,away,Saudi Arabia,Shots off target,1
+1267491247,away,Saudi Arabia,Blocked shots,3
+1267491247,away,Saudi Arabia,Shots within penalty area,5
+1267491247,away,Saudi Arabia,Total passes,442
+1267491247,away,Saudi Arabia,Goalkeeper saves,2
+1267491247,away,Saudi Arabia,Fouls,16
+1267491247,away,Saudi Arabia,Yellow cards,3
+1267491247,away,Saudi Arabia,Shots outside penalty area,2
