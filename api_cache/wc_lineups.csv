@@ -3588,3 +3588,106 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1309700847,away,Uzbekistan,3-4-2-1,no,11836874,Azizjon Ganiev,19,Midfielder
 1309700847,away,Uzbekistan,3-4-2-1,no,8667589,Odiljon Khamrobekov,9,Midfielder
 1309700847,away,Uzbekistan,3-4-2-1,no,11612762,Igor Sergeev,21,Forward
+1267495502,home,Algeria,4-3-3,yes,710808,Oussama Benbot,16,Goalkeeper
+1267495502,home,Algeria,4-3-3,yes,43717933,Jaouen Hadjam,13,Defender
+1267495502,home,Algeria,4-3-3,yes,353388,Ramy Bensebaini,21,Defender
+1267495502,home,Algeria,4-3-3,yes,252441,Aïssa Mandi,2,Defender
+1267495502,home,Algeria,4-3-3,yes,48841436,Rafik Belghali,17,Defender
+1267495502,home,Algeria,4-3-3,yes,61274661,Ibrahim Maza,22,Midfielder
+1267495502,home,Algeria,4-3-3,yes,66003,Nabil Bentaleb,19,Midfielder
+1267495502,home,Algeria,4-3-3,yes,106092,Houssem Aouar,8,Midfielder
+1267495502,home,Algeria,4-3-3,yes,44544024,Farès Chaïbi,10,Forward
+1267495502,home,Algeria,4-3-3,yes,13691755,Amine Gouiri,9,Forward
+1267495502,home,Algeria,4-3-3,yes,102389,Riyad Mahrez,7,Forward
+1267495502,home,Algeria,4-3-3,no,48981023,Melvin Mastil,1,Goalkeeper
+1267495502,home,Algeria,4-3-3,no,118006,Luca Zidane,23,Goalkeeper
+1267495502,home,Algeria,4-3-3,no,55181294,Achref Abada,3,Defender
+1267495502,home,Algeria,4-3-3,no,735763,Mohamed Tougai,4,Defender
+1267495502,home,Algeria,4-3-3,no,734475,Zineddine Belaid,5,Defender
+1267495502,home,Algeria,4-3-3,no,3403372,Rayan Aït-Nouri,15,Defender
+1267495502,home,Algeria,4-3-3,no,3360063,Samir Sophian Chergui,26,Defender
+1267495502,home,Algeria,4-3-3,no,20776721,Ramiz Zerrouki,6,Midfielder
+1267495502,home,Algeria,4-3-3,no,708393,Hicham Boudaoui,14,Midfielder
+1267495502,home,Algeria,4-3-3,no,52743593,Yassine Titraoui,24,Midfielder
+1267495502,home,Algeria,4-3-3,no,52496941,Anis Hadj Moussa,11,Forward
+1267495502,home,Algeria,4-3-3,no,52995397,Adil Boulbina,20,Forward
+1267495502,home,Algeria,4-3-3,no,47160918,Ahmed Nadhir Benbouali,12,Forward
+1267495502,home,Algeria,4-3-3,no,53921469,Farès Ghedjemis,25,Forward
+1267495502,away,Austria,4-2-3-1,yes,1211679,Alexander Schlager,1,Goalkeeper
+1267495502,away,Austria,4-2-3-1,yes,4172469,Phillipp Mwene,16,Defender
+1267495502,away,Austria,4-2-3-1,yes,81459,David Alaba,8,Defender
+1267495502,away,Austria,4-2-3-1,yes,4224794,Philipp Lienhart,15,Defender
+1267495502,away,Austria,4-2-3-1,yes,114625,Stefan Posch,5,Defender
+1267495502,away,Austria,4-2-3-1,yes,176449,Xaver Schlager,4,Midfielder
+1267495502,away,Austria,4-2-3-1,yes,1179962,Nicolas Seiwald,6,Midfielder
+1267495502,away,Austria,4-2-3-1,yes,186753,Marcel Sabitzer,9,Midfielder
+1267495502,away,Austria,4-2-3-1,yes,186431,Konrad Laimer,20,Midfielder
+1267495502,away,Austria,4-2-3-1,yes,1217636,Romano Schmid,18,Midfielder
+1267495502,away,Austria,4-2-3-1,yes,3031784,Marko Arnautović,7,Forward
+1267495502,away,Austria,4-2-3-1,no,35678559,Florian Wiegele,12,Goalkeeper
+1267495502,away,Austria,4-2-3-1,no,1223432,Patrick Pentz,13,Goalkeeper
+1267495502,away,Austria,4-2-3-1,no,20389194,David Affengruber,2,Defender
+1267495502,away,Austria,4-2-3-1,no,4071361,Kevin Danso,3,Defender
+1267495502,away,Austria,4-2-3-1,no,4075708,Marco Friedl,23,Defender
+1267495502,away,Austria,4-2-3-1,no,1141644,Michael Svoboda,25,Defender
+1267495502,away,Austria,4-2-3-1,no,115913,Florian Grillitsch,10,Midfielder
+1267495502,away,Austria,4-2-3-1,no,22368689,Carney Chukwuemeka,17,Midfielder
+1267495502,away,Austria,4-2-3-1,no,277879,Dejan Ljubičić,19,Midfielder
+1267495502,away,Austria,4-2-3-1,no,1179801,Alexander Prass,22,Defender
+1267495502,away,Austria,4-2-3-1,no,52791249,Paul Wanner,24,Midfielder
+1267495502,away,Austria,4-2-3-1,no,67291,Alessandro Schöpf,26,Midfielder
+1267495502,away,Austria,4-2-3-1,no,20389516,Patrick Wimmer,21,Midfielder
+1267495502,away,Austria,4-2-3-1,no,4072971,Michael Gregoritsch,11,Forward
+1267495502,away,Austria,4-2-3-1,no,1243396,Saša Kalajdžić,14,Forward
+1267498055,home,Jordan,3-4-2-1,yes,22637881,Yazeed Abu Laila,1,Goalkeeper
+1267498055,home,Jordan,3-4-2-1,yes,87428789,Husam Ali Mohammad Abudahab,4,Defender
+1267498055,home,Jordan,3-4-2-1,yes,8678054,Yazan Al-Arab,5,Defender
+1267498055,home,Jordan,3-4-2-1,yes,50044589,Abdallah Nasib,3,Defender
+1267498055,home,Jordan,3-4-2-1,yes,50036539,Mohannad Abu Taha,20,Midfielder
+1267498055,home,Jordan,3-4-2-1,yes,22638203,Noor Al-Rawabdeh,8,Midfielder
+1267498055,home,Jordan,3-4-2-1,yes,34450934,Nizar Al-Rashdan,21,Midfielder
+1267498055,home,Jordan,3-4-2-1,yes,8678376,Ehsan Haddad,23,Midfielder
+1267498055,home,Jordan,3-4-2-1,yes,26408340,Ali Olwan,9,Forward
+1267498055,home,Jordan,3-4-2-1,yes,92620717,Ali Al Azaizeh,24,Forward
+1267498055,home,Jordan,3-4-2-1,yes,79369934,Odeh Fakhoury,11,Forward
+1267498055,home,Jordan,3-4-2-1,no,26385478,Abdallah Al-Fakhouri,22,Goalkeeper
+1267498055,home,Jordan,3-4-2-1,no,26389342,Noureddin Zaid,12,Goalkeeper
+1267498055,home,Jordan,3-4-2-1,no,106908662,Anas Badawi,26,Defender
+1267498055,home,Jordan,3-4-2-1,no,16508772,Mo Abualnadi,16,Defender
+1267498055,home,Jordan,3-4-2-1,no,96898487,Mohammad Abu Ghoush,18,Defender
+1267498055,home,Jordan,3-4-2-1,no,50731093,Mohammad Ali Hasheesh,2,Defender
+1267498055,home,Jordan,3-4-2-1,no,50696156,Saad Al Rousan,19,Defender
+1267498055,home,Jordan,3-4-2-1,no,11614694,Saleem Obaid,17,Defender
+1267498055,home,Jordan,3-4-2-1,no,31912125,Amer Jamous,6,Midfielder
+1267498055,home,Jordan,3-4-2-1,no,26438608,Ibrahim Sadeh,15,Midfielder
+1267498055,home,Jordan,3-4-2-1,no,11615016,Mohammad Abu Zrayq,7,Forward
+1267498055,home,Jordan,3-4-2-1,no,16783438,Mohammad Al Daoud,25,Midfielder
+1267498055,home,Jordan,3-4-2-1,no,16783116,Rajaei Ayed,14,Midfielder
+1267498055,home,Jordan,3-4-2-1,no,19888484,Mahmoud Al-Mardi,13,Forward
+1267498055,home,Jordan,3-4-2-1,no,2461200,Mousa Tamari,10,Forward
+1267498055,away,Argentina,4-4-2,yes,3155593,Emiliano Martínez,23,Goalkeeper
+1267498055,away,Argentina,4-4-2,yes,85323,Nicolás Tagliafico,3,Defender
+1267498055,away,Argentina,4-4-2,yes,1064364,Marcos Senesi,2,Defender
+1267498055,away,Argentina,4-4-2,yes,100618,Nicolás Otamendi,19,Defender
+1267498055,away,Argentina,4-4-2,yes,52153689,Giuliano Simeone,17,Defender
+1267498055,away,Argentina,4-4-2,yes,254212,Giovani Lo Celso,11,Midfielder
+1267498055,away,Argentina,4-4-2,yes,966476,Exequiel Palacios,14,Midfielder
+1267498055,away,Argentina,4-4-2,yes,43785,Leandro Paredes,5,Midfielder
+1267498055,away,Argentina,4-4-2,yes,56356111,Nico Paz,18,Midfielder
+1267498055,away,Argentina,4-4-2,yes,35091,Lautaro Martínez,22,Forward
+1267498055,away,Argentina,4-4-2,yes,967603,Julián Alvarez,9,Forward
+1267498055,away,Argentina,4-4-2,no,7614810,Gerónimo Rulli,12,Goalkeeper
+1267498055,away,Argentina,4-4-2,no,397019,Juan Musso,1,Goalkeeper
+1267498055,away,Argentina,4-4-2,no,1003345,Facundo Medina,25,Defender
+1267498055,away,Argentina,4-4-2,no,397341,Lisandro Martínez,6,Defender
+1267498055,away,Argentina,4-4-2,no,1047137,Nahuel Molina,26,Defender
+1267498055,away,Argentina,4-4-2,no,4955090,Cristian Romero,13,Defender
+1267498055,away,Argentina,4-4-2,no,397502,Gonzalo Montiel,4,Defender
+1267498055,away,Argentina,4-4-2,no,1081430,Alexis Mac Allister,20,Midfielder
+1267498055,away,Argentina,4-4-2,no,965510,Enzo Fernández,24,Midfielder
+1267498055,away,Argentina,4-4-2,no,4236869,Nicolás González,15,Forward
+1267498055,away,Argentina,4-4-2,no,398146,Rodrigo De Paul,7,Midfielder
+1267498055,away,Argentina,4-4-2,no,976941,Thiago Almada,16,Midfielder
+1267498055,away,Argentina,4-4-2,no,51451246,Valentín Barco,8,Midfielder
+1267498055,away,Argentina,4-4-2,no,47577747,José Manuel López,21,Forward
+1267498055,away,Argentina,4-4-2,no,24948,Lionel Messi,10,Forward

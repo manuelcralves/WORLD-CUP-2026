@@ -1073,3 +1073,36 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1309700847,82,Uzbekistan,Substitution,A. Mozgovoy,11837196,,J. Iskanderov,10557890
 1309700847,83,Congo DR,Substitution,A. Masuaku,3029530,,J. Kayembe,3396932
 1309700847,90+1,Congo DR,Goal,Y. Wissa,3324643,M. Elia,,488628
+1267495502,11,Austria,Yellow Card,M. Arnautovic,3031784,,,
+1267495502,28,Austria,Goal,M. Arnautovic,3031784,D. Alaba,,81459
+1267495502,45,Algeria,Goal,R. Belghali,48841436,,,
+1267495502,46,Austria,Substitution,M. Arnautovic,3031784,,M. Gregoritsch,4072971
+1267495502,46,Austria,Substitution,X. Schlager,176449,,F. Grillitsch,115913
+1267495502,46,Austria,Substitution,R. Schmid,1217636,,P. Wanner,52791249
+1267495502,55,Austria,Goal,M. Sabitzer,186753,K. Laimer,,186431
+1267495502,60,Algeria,Goal,R. Mahrez,102389,H. Aouar,,106092
+1267495502,62,Austria,Substitution,D. Alaba,81459,,K. Danso,4071361
+1267495502,71,Algeria,Substitution,J. Hadjam,43717933,,R. Ait-Nouri,3403372
+1267495502,71,Algeria,Substitution,A. Gouiri,13691755,,Z. Belaid,734475
+1267495502,71,Algeria,Substitution,R. Belghali,48841436,,S. Chergui,3360063
+1267495502,90+3,Algeria,Goal,R. Mahrez,102389,H. Aouar,,106092
+1267495502,90+4,Algeria,Substitution,H. Aouar,106092,,F. Ghedjemis,53921469
+1267495502,90+5,Austria,Substitution,P. Mwene,4172469,,S. Kalajdzic,1243396
+1267495502,90+6,Austria,Goal,S. Kalajdzic,1243396,M. Gregoritsch,,4072971
+1267498055,17,Jordan,Yellow Card,M. Abu Taha,50036539,,,
+1267498055,19,Argentina,Goal,G. Lo Celso,254212,,,
+1267498055,31,Argentina,Penalty,L. Martinez,35091,,,
+1267498055,46,Jordan,Substitution,O. Al Fakhouri,91537670,,M. Al Mardi,19888484
+1267498055,46,Jordan,Substitution,A. Azaizeh,92620717,,M. Tamari,2461200
+1267498055,55,Jordan,Goal,M. Tamari,2461200,E. Haddad,,8678376
+1267498055,60,Argentina,Substitution,G. Lo Celso,254212,,T. Almada,976941
+1267498055,60,Argentina,Substitution,L. Martinez,35091,,L. Messi,24948
+1267498055,61,Argentina,Substitution,N. Paz,56356111,,A. Mac Allister,1081430
+1267498055,64,Jordan,Yellow Card,Y. Al Arab,8678054,,,
+1267498055,71,Argentina,Substitution,G. Simeone,52153689,,V. Barco,51451246
+1267498055,76,Jordan,Substitution,N. Al Rashdan,34450934,,A. Jamous,31912125
+1267498055,80,Argentina,Goal,L. Messi,24948,,,
+1267498055,82,Argentina,Substitution,J. Alvarez,967603,,J. Lopez,47577747
+1267498055,90,Jordan,Substitution,H. Abu Dahab,87394496,,S. Obaid,11614694
+1267498055,90,Jordan,Substitution,A. Olwan,26408340,,Shararh,11615016
+1267498055,90+4,Jordan,Yellow Card,Shararh,11615016,,,
