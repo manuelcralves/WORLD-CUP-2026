@@ -3484,3 +3484,107 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1267497204,away,Ghana,4-3-3,no,13216644,Brandon Thomas-Asante,10,Forward
 1267497204,away,Ghana,4-3-3,no,56487970,Ernest Nuamah,24,Forward
 1267497204,away,Ghana,4-3-3,no,66012730,Prince Kwabena Adu,25,Forward
+1267496353,home,Colombia,4-3-3,yes,399756,Camilo Vargas,12,Goalkeeper
+1267496353,home,Colombia,4-3-3,yes,399917,Deiver Machado,22,Defender
+1267496353,home,Colombia,4-3-3,yes,310723,Jhon Lucumí,3,Defender
+1267496353,home,Colombia,4-3-3,yes,27202,Davinson Sánchez,23,Defender
+1267496353,home,Colombia,4-3-3,yes,4984,Santiago Arias,4,Defender
+1267496353,home,Colombia,4-3-3,yes,2207142,Jhon Arias,11,Midfielder
+1267496353,home,Colombia,4-3-3,yes,401044,Jefferson Lerma,16,Midfielder
+1267496353,home,Colombia,4-3-3,yes,52169628,Gustavo Puerta,14,Midfielder
+1267496353,home,Colombia,4-3-3,yes,400883,Luis Díaz,7,Forward
+1267496353,home,Colombia,4-3-3,yes,3994564,Jhon Córdoba,9,Forward
+1267496353,home,Colombia,4-3-3,yes,83391,James Rodríguez,10,Forward
+1267496353,home,Colombia,4-3-3,no,50547,David Ospina,1,Goalkeeper
+1267496353,home,Colombia,4-3-3,no,399595,Álvaro Montero,24,Goalkeeper
+1267496353,home,Colombia,4-3-3,no,10347302,Johan Mojica,17,Defender
+1267496353,home,Colombia,4-3-3,no,2185085,Willer Ditta,18,Defender
+1267496353,home,Colombia,4-3-3,no,400078,Yerry Mina,13,Defender
+1267496353,home,Colombia,4-3-3,no,55665582,Andrés Gómez,26,Forward
+1267496353,home,Colombia,4-3-3,no,2211650,Daniel Muñoz,2,Defender
+1267496353,home,Colombia,4-3-3,no,2153690,Jaminton Campaz,21,Midfielder
+1267496353,home,Colombia,4-3-3,no,965188,Jorge Carrascal,8,Midfielder
+1267496353,home,Colombia,4-3-3,no,966959,Juan Fernando Quintero,20,Midfielder
+1267496353,home,Colombia,4-3-3,no,2117465,Juan Portilla,15,Midfielder
+1267496353,home,Colombia,4-3-3,no,46624466,Kevin Castaño,5,Midfielder
+1267496353,home,Colombia,4-3-3,no,31411898,Richard Ríos,6,Midfielder
+1267496353,home,Colombia,4-3-3,no,7660856,Cucho Hernández,19,Forward
+1267496353,home,Colombia,4-3-3,no,7605311,Luis Javier Suárez,25,Forward
+1267496353,away,Portugal,4-2-3-1,yes,59563,Diogo Costa,1,Goalkeeper
+1267496353,away,Portugal,4-2-3-1,yes,42420756,Nuno Mendes,25,Defender
+1267496353,away,Portugal,4-2-3-1,yes,54204185,Renato Veiga,13,Defender
+1267496353,away,Portugal,4-2-3-1,yes,91441,Rúben Dias,3,Defender
+1267496353,away,Portugal,4-2-3-1,yes,137809,João Cancelo,20,Defender
+1267496353,away,Portugal,4-2-3-1,yes,20669978,Vitinha,23,Midfielder
+1267496353,away,Portugal,4-2-3-1,yes,430990,Rúben Neves,21,Midfielder
+1267496353,away,Portugal,4-2-3-1,yes,94017,João Félix,11,Midfielder
+1267496353,away,Portugal,4-2-3-1,yes,239239,Bruno Fernandes,8,Midfielder
+1267496353,away,Portugal,4-2-3-1,yes,300258,Pedro Neto,18,Midfielder
+1267496353,away,Portugal,4-2-3-1,yes,140868,Cristiano Ronaldo,7,Forward
+1267496353,away,Portugal,4-2-3-1,no,256144,José Sá,12,Goalkeeper
+1267496353,away,Portugal,4-2-3-1,no,7514346,Rui Silva,22,Goalkeeper
+1267496353,away,Portugal,4-2-3-1,no,142800,Diogo Dalot,5,Defender
+1267496353,away,Portugal,4-2-3-1,no,42760949,Gonçalo Inácio,14,Defender
+1267496353,away,Portugal,4-2-3-1,no,6701135,Matheus Nunes,6,Midfielder
+1267496353,away,Portugal,4-2-3-1,no,21084,Nélson Semedo,2,Defender
+1267496353,away,Portugal,4-2-3-1,no,26072333,Tomás Araújo,4,Defender
+1267496353,away,Portugal,4-2-3-1,no,102550,Bernardo Silva,10,Midfielder
+1267496353,away,Portugal,4-2-3-1,no,6619186,Francisco Trincão,16,Forward
+1267496353,away,Portugal,4-2-3-1,no,149079,Gonçalo Guedes,19,Forward
+1267496353,away,Portugal,4-2-3-1,no,53943365,João Neves,15,Midfielder
+1267496353,away,Portugal,4-2-3-1,no,30668239,Samú Costa,24,Midfielder
+1267496353,away,Portugal,4-2-3-1,no,26015339,Francisco Conceição,26,Forward
+1267496353,away,Portugal,4-2-3-1,no,6695339,Gonçalo Ramos,9,Forward
+1267496353,away,Portugal,4-2-3-1,no,3580150,Rafael Leão,17,Forward
+1309700847,home,Congo DR,4-4-2,yes,3866086,Lionel Mpasi Nzau,1,Goalkeeper
+1309700847,home,Congo DR,4-4-2,yes,3029530,Arthur Masuaku,26,Defender
+1309700847,home,Congo DR,4-4-2,yes,3088456,Axel Tuanzebe,4,Defender
+1309700847,home,Congo DR,4-4-2,yes,60529,Chancel Mbemba,22,Defender
+1309700847,home,Congo DR,4-4-2,yes,3034360,Aaron Wan-Bissaka,2,Defender
+1309700847,home,Congo DR,4-4-2,yes,44996756,Brian Cipenga,9,Midfielder
+1309700847,home,Congo DR,4-4-2,yes,58818445,Noah Sadiki,14,Midfielder
+1309700847,home,Congo DR,4-4-2,yes,3397415,Samuel Moutoussamy,8,Midfielder
+1309700847,home,Congo DR,4-4-2,yes,20877024,Nathanaël Mbuku,7,Midfielder
+1309700847,home,Congo DR,4-4-2,yes,488467,Cédric Bakambu,17,Forward
+1309700847,home,Congo DR,4-4-2,yes,3324643,Yoane Wissa,20,Forward
+1309700847,home,Congo DR,4-4-2,no,50636103,Matthieu Epolo,21,Goalkeeper
+1309700847,home,Congo DR,4-4-2,no,7808815,Timothy Fayulu,16,Goalkeeper
+1309700847,home,Congo DR,4-4-2,no,1359799,Dylan Batubinsika,5,Defender
+1309700847,home,Congo DR,4-4-2,no,3903599,Gedeon Kalulu,24,Defender
+1309700847,home,Congo DR,4-4-2,no,3396932,Joris Kayembe,12,Defender
+1309700847,home,Congo DR,4-4-2,no,32162641,Steve Kapuadi,3,Defender
+1309700847,home,Congo DR,4-4-2,no,7211505,Aaron Tshibola,15,Midfielder
+1309700847,home,Congo DR,4-4-2,no,7817509,Charles Pickel,18,Midfielder
+1309700847,home,Congo DR,4-4-2,no,7654899,Gaël Kakuta,11,Midfielder
+1309700847,home,Congo DR,4-4-2,no,1389101,Théo Bongonda,10,Midfielder
+1309700847,home,Congo DR,4-4-2,no,229418,Edo Kayembe,25,Midfielder
+1309700847,home,Congo DR,4-4-2,no,60471432,Ngal'ayel Mukau,6,Midfielder
+1309700847,home,Congo DR,4-4-2,no,28931693,Fiston Mayele,19,Forward
+1309700847,home,Congo DR,4-4-2,no,488628,Meschak Elia,13,Forward
+1309700847,home,Congo DR,4-4-2,no,3328668,Simon Banza,23,Forward
+1309700847,away,Uzbekistan,3-4-2-1,yes,11834781,Abduvokhid Nematov,12,Goalkeeper
+1309700847,away,Uzbekistan,3-4-2-1,yes,5493635,Rustam Ashurmatov,5,Defender
+1309700847,away,Uzbekistan,3-4-2-1,yes,57706901,Jakhongir Urozov,26,Defender
+1309700847,away,Uzbekistan,3-4-2-1,yes,57978508,Abdukodir Khusanov,2,Defender
+1309700847,away,Uzbekistan,3-4-2-1,yes,11835908,Sherzod Nasrullaev,13,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,yes,8093946,Otabek Shukurov,7,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,yes,11837196,Akmal Mozgovoy,6,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,yes,11611796,Khozhiakbar Alizhonov,3,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,yes,42451990,Abbosbek Fayzullaev,22,Forward
+1309700847,away,Uzbekistan,3-4-2-1,yes,8667428,Dostonbek Khamdamov,17,Forward
+1309700847,away,Uzbekistan,3-4-2-1,yes,8619289,Eldor Shomurodov,14,Forward
+1309700847,away,Uzbekistan,3-4-2-1,no,11611474,Botirali Ergashev,16,Goalkeeper
+1309700847,away,Uzbekistan,3-4-2-1,no,11839128,Utkir Yusupov,1,Goalkeeper
+1309700847,away,Uzbekistan,3-4-2-1,no,10557085,Avazbek Ulmasaliyev,25,Defender
+1309700847,away,Uzbekistan,3-4-2-1,no,8666784,Farrukh Sayfiev,4,Defender
+1309700847,away,Uzbekistan,3-4-2-1,no,11835264,Umarbek Eshmuradov,15,Defender
+1309700847,away,Uzbekistan,3-4-2-1,no,67131358,Bekhruz Karimov,24,Defender
+1309700847,away,Uzbekistan,3-4-2-1,no,10559178,Azizbek Amanov,20,Forward
+1309700847,away,Uzbekistan,3-4-2-1,no,10557890,Jamshid Iskandarov,8,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,11612601,Oston Urunov,11,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,50269345,Ruslanbek Jiyanov,10,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,58559557,Sherzod Esanov,23,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,11820452,Abdulla Abdullaev,18,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,11836874,Azizjon Ganiev,19,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,8667589,Odiljon Khamrobekov,9,Midfielder
+1309700847,away,Uzbekistan,3-4-2-1,no,11612762,Igor Sergeev,21,Forward

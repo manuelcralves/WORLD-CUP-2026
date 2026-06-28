@@ -5373,3 +5373,163 @@ match_id,side,team,stat,value
 1267497204,away,Ghana,Fouls,13
 1267497204,away,Ghana,Yellow cards,1
 1267497204,away,Ghana,Shots outside penalty area,2
+1267496353,home,Colombia,Expected Goals,1.63
+1267496353,home,Colombia,Big Chances Created,2
+1267496353,home,Colombia,Attacks,88
+1267496353,home,Colombia,Free Kicks,6
+1267496353,home,Colombia,Expected Assists,1.55
+1267496353,home,Colombia,Successful Crosses,3
+1267496353,home,Colombia,Crosses,10
+1267496353,home,Colombia,Passes Own Half,206
+1267496353,home,Colombia,Passes Opposition Half,349
+1267496353,home,Colombia,Successful Long Passes,24
+1267496353,home,Colombia,Long Passes,45
+1267496353,home,Colombia,Throw-Ins,10
+1267496353,home,Colombia,Key Passes,20
+1267496353,home,Colombia,Passes Into Final Third,167
+1267496353,home,Colombia,Backward Passes,98
+1267496353,home,Colombia,Goal Kicks,14
+1267496353,home,Colombia,Interceptions,5
+1267496353,home,Colombia,Successful Tackles,8
+1267496353,home,Colombia,Tackles,14
+1267496353,home,Colombia,Clearances,17
+1267496353,home,Colombia,Successful Aerial Duels,5
+1267496353,home,Colombia,Aerial Duels,13
+1267496353,home,Colombia,Successful Dribbles,4
+1267496353,home,Colombia,Dribbles,5
+1267496353,home,Colombia,Shots accuracy,0.25
+1267496353,home,Colombia,Failed passes,60
+1267496353,home,Colombia,Possession,0.55
+1267496353,home,Colombia,Shots on target,6
+1267496353,home,Colombia,Corners,5
+1267496353,home,Colombia,Offsides,3
+1267496353,home,Colombia,Successful passes,485
+1267496353,home,Colombia,Red cards,0
+1267496353,home,Colombia,Shots off target,11
+1267496353,home,Colombia,Blocked shots,7
+1267496353,home,Colombia,Shots within penalty area,15
+1267496353,home,Colombia,Total passes,545
+1267496353,home,Colombia,Goalkeeper saves,2
+1267496353,home,Colombia,Fouls,12
+1267496353,home,Colombia,Yellow cards,1
+1267496353,home,Colombia,Shots outside penalty area,9
+1267496353,away,Portugal,Expected Goals,0.69
+1267496353,away,Portugal,Big Chances Created,1
+1267496353,away,Portugal,Attacks,83
+1267496353,away,Portugal,Free Kicks,12
+1267496353,away,Portugal,Expected Assists,0.43
+1267496353,away,Portugal,Successful Crosses,2
+1267496353,away,Portugal,Crosses,14
+1267496353,away,Portugal,Passes Own Half,209
+1267496353,away,Portugal,Passes Opposition Half,250
+1267496353,away,Portugal,Successful Long Passes,20
+1267496353,away,Portugal,Long Passes,30
+1267496353,away,Portugal,Throw-Ins,9
+1267496353,away,Portugal,Key Passes,8
+1267496353,away,Portugal,Passes Into Final Third,93
+1267496353,away,Portugal,Backward Passes,64
+1267496353,away,Portugal,Goal Kicks,9
+1267496353,away,Portugal,Interceptions,11
+1267496353,away,Portugal,Successful Tackles,4
+1267496353,away,Portugal,Tackles,8
+1267496353,away,Portugal,Clearances,22
+1267496353,away,Portugal,Successful Aerial Duels,8
+1267496353,away,Portugal,Aerial Duels,13
+1267496353,away,Portugal,Successful Dribbles,9
+1267496353,away,Portugal,Dribbles,16
+1267496353,away,Portugal,Shots accuracy,0.15
+1267496353,away,Portugal,Failed passes,40
+1267496353,away,Portugal,Possession,0.45
+1267496353,away,Portugal,Shots on target,2
+1267496353,away,Portugal,Corners,2
+1267496353,away,Portugal,Offsides,2
+1267496353,away,Portugal,Successful passes,405
+1267496353,away,Portugal,Red cards,0
+1267496353,away,Portugal,Shots off target,7
+1267496353,away,Portugal,Blocked shots,4
+1267496353,away,Portugal,Shots within penalty area,5
+1267496353,away,Portugal,Total passes,445
+1267496353,away,Portugal,Goalkeeper saves,6
+1267496353,away,Portugal,Fouls,6
+1267496353,away,Portugal,Yellow cards,0
+1267496353,away,Portugal,Shots outside penalty area,8
+1309700847,home,Congo DR,Expected Goals,2.27
+1309700847,home,Congo DR,Big Chances Created,3
+1309700847,home,Congo DR,Attacks,144
+1309700847,home,Congo DR,Free Kicks,14
+1309700847,home,Congo DR,Expected Assists,0.89
+1309700847,home,Congo DR,Successful Crosses,4
+1309700847,home,Congo DR,Crosses,20
+1309700847,home,Congo DR,Passes Own Half,218
+1309700847,home,Congo DR,Passes Opposition Half,273
+1309700847,home,Congo DR,Successful Long Passes,28
+1309700847,home,Congo DR,Long Passes,58
+1309700847,home,Congo DR,Throw-Ins,26
+1309700847,home,Congo DR,Key Passes,14
+1309700847,home,Congo DR,Passes Into Final Third,88
+1309700847,home,Congo DR,Backward Passes,66
+1309700847,home,Congo DR,Goal Kicks,6
+1309700847,home,Congo DR,Interceptions,6
+1309700847,home,Congo DR,Successful Tackles,13
+1309700847,home,Congo DR,Tackles,19
+1309700847,home,Congo DR,Clearances,23
+1309700847,home,Congo DR,Successful Aerial Duels,10
+1309700847,home,Congo DR,Aerial Duels,33
+1309700847,home,Congo DR,Successful Dribbles,11
+1309700847,home,Congo DR,Dribbles,23
+1309700847,home,Congo DR,Shots accuracy,0.21
+1309700847,home,Congo DR,Failed passes,84
+1309700847,home,Congo DR,Possession,0.58
+1309700847,home,Congo DR,Shots on target,4
+1309700847,home,Congo DR,Corners,2
+1309700847,home,Congo DR,Offsides,3
+1309700847,home,Congo DR,Successful passes,387
+1309700847,home,Congo DR,Red cards,0
+1309700847,home,Congo DR,Shots off target,14
+1309700847,home,Congo DR,Blocked shots,1
+1309700847,home,Congo DR,Shots within penalty area,10
+1309700847,home,Congo DR,Total passes,471
+1309700847,home,Congo DR,Goalkeeper saves,1
+1309700847,home,Congo DR,Fouls,6
+1309700847,home,Congo DR,Yellow cards,3
+1309700847,home,Congo DR,Shots outside penalty area,8
+1309700847,away,Uzbekistan,Expected Goals,0.2
+1309700847,away,Uzbekistan,Big Chances Created,0
+1309700847,away,Uzbekistan,Attacks,90
+1309700847,away,Uzbekistan,Free Kicks,6
+1309700847,away,Uzbekistan,Expected Assists,0.23
+1309700847,away,Uzbekistan,Successful Crosses,2
+1309700847,away,Uzbekistan,Crosses,15
+1309700847,away,Uzbekistan,Passes Own Half,143
+1309700847,away,Uzbekistan,Passes Opposition Half,204
+1309700847,away,Uzbekistan,Successful Long Passes,20
+1309700847,away,Uzbekistan,Long Passes,56
+1309700847,away,Uzbekistan,Throw-Ins,23
+1309700847,away,Uzbekistan,Key Passes,2
+1309700847,away,Uzbekistan,Passes Into Final Third,57
+1309700847,away,Uzbekistan,Backward Passes,52
+1309700847,away,Uzbekistan,Goal Kicks,13
+1309700847,away,Uzbekistan,Interceptions,12
+1309700847,away,Uzbekistan,Successful Tackles,18
+1309700847,away,Uzbekistan,Tackles,29
+1309700847,away,Uzbekistan,Clearances,38
+1309700847,away,Uzbekistan,Successful Aerial Duels,23
+1309700847,away,Uzbekistan,Aerial Duels,33
+1309700847,away,Uzbekistan,Successful Dribbles,6
+1309700847,away,Uzbekistan,Dribbles,16
+1309700847,away,Uzbekistan,Shots accuracy,0.33
+1309700847,away,Uzbekistan,Failed passes,83
+1309700847,away,Uzbekistan,Possession,0.42
+1309700847,away,Uzbekistan,Shots on target,1
+1309700847,away,Uzbekistan,Corners,4
+1309700847,away,Uzbekistan,Offsides,1
+1309700847,away,Uzbekistan,Successful passes,249
+1309700847,away,Uzbekistan,Red cards,0
+1309700847,away,Uzbekistan,Shots off target,2
+1309700847,away,Uzbekistan,Blocked shots,0
+1309700847,away,Uzbekistan,Shots within penalty area,2
+1309700847,away,Uzbekistan,Total passes,332
+1309700847,away,Uzbekistan,Goalkeeper saves,1
+1309700847,away,Uzbekistan,Fouls,15
+1309700847,away,Uzbekistan,Yellow cards,2
+1309700847,away,Uzbekistan,Shots outside penalty area,1
