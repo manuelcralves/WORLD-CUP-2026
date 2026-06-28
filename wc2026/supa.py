@@ -57,7 +57,7 @@ def push_matches(data: dict) -> None:
         row = {"match_id": f"{h}|{a}", "home": h, "away": a,
                "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
                "away_score": int(m["as"]), "model_home": int(mh),
-               "model_away": int(ma), "stage": "group", "played": True}
+               "model_away": int(ma), "stage": m.get("stage", "group"), "played": True}
         if adv:
             row["advance"] = adv          # only when there was a shootout — keeps the push safe before the column exists
         played[f"{h}|{a}"] = row
@@ -72,7 +72,7 @@ def push_matches(data: dict) -> None:
         upcoming[f"{h}|{a}"] = {"match_id": f"{h}|{a}", "home": h, "away": a,
                                 "kickoff": _ko_iso(ko, h, a),
                                 "model_home": int(mh), "model_away": int(ma),
-                                "stage": "group"}
+                                "stage": m.get("stage", "group")}
     try:
         n_played = _post(url, key, list(played.values()))
         n_up = _post(url, key, list(upcoming.values()))

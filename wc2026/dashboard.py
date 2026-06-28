@@ -85,6 +85,10 @@ def collect(bundle, trained, table, val=None, backtests=None,
         t["gd"], t["gf"] = s["gd"], s["gf"]
 
     matches = PR.match_predictions(bundle, trained, topn=3)
+    ko_upcoming, ko_played = PR.knockout_predictions(bundle, trained, topn=3)
+    matches = matches + ko_upcoming                  # knockout ties feed the same predict list
+    if ko_played:
+        played_review = (played_review or []) + ko_played
 
     bracket = [{"label": label,
                 "matches": [{"home": m["home"], "away": m["away"],
@@ -1268,7 +1272,7 @@ function pbBracket(picks){
   return {ties,champ:win[104]};
 }
 function realBracket(){   // actual knockout winner per bracket slot, from the real results — empty until the knockouts are played
-  if((D.matches||[]).length)return {};   // group stage not finished -> the Round of 32 isn't seeded yet
+  if((D.matches||[]).some(m=>m.stage!=='knockout'))return {};   // only remaining GROUP games block R32 seeding
   const {gres,qual3}=wifGroups(),W={},RU={},TH={};
   for(const L in gres){const o=gres[L].order;W[L]=o[0];RU[L]=o[1];TH[L]=o[2];}
   const sm=assignThirds(qual3),teamOf=sp=>sp[0]==="W"?W[sp[1]]:sp[0]==="RU"?RU[sp[1]]:TH[sm[String(sp[1])]];
@@ -1296,7 +1300,7 @@ function bracketLB(){   // separate bracket leaderboard — dormant (all 0) unti
 }
 function predBracketRender(){
   const el=document.getElementById("predbracket");if(!el)return;
-  if((D.matches||[]).length){el.innerHTML=`<div class="pbrlock">🔒 Opens when the group stage finishes (~28 Jun). You'll fill the full knockout bracket — every tie from the Round of 32 to the title — on its own leaderboard.</div>`;return;}
+  if((D.matches||[]).some(m=>m.stage!=='knockout')){el.innerHTML=`<div class="pbrlock">🔒 Opens when the group stage finishes (~28 Jun). You'll fill the full knockout bracket — every tie from the Round of 32 to the title — on its own leaderboard.</div>`;return;}
   if(!sbUser){el.innerHTML=`<div class="pbrlock">🔒 Sign in to fill your knockout bracket.</div>`;return;}
   if(!wifScores)wifInit();
   const {ties,champ}=pbBracket(pbPicks);
@@ -1331,7 +1335,7 @@ function predShare(){   // share a Wordle-style card of your run (native share s
 }
 function predStandings(){   // per-user points by jornada + by football-day, from everyone's post-kickoff picks
   const allM=[...(D.played_review||[]),...(D.matches||[])];
-  const byG={};allM.forEach(m=>{const g=(byName[m.home]||{}).group;if(g)(byG[g]=byG[g]||[]).push(m);});
+  const byG={};allM.forEach(m=>{if(m.stage==='knockout')return;const g=(byName[m.home]||{}).group;if(g)(byG[g]=byG[g]||[]).push(m);});
   const md={};Object.values(byG).forEach(ms=>{ms.sort((a,b)=>(predKO(a.home,a.away)||0)-(predKO(b.home,b.away)||0));
     ms.forEach((m,i)=>md[m.home+"|"+m.away]=Math.floor(i/2)+1);});   // 2 games per matchday per group
   const info={};
@@ -1804,7 +1808,7 @@ def build_interactive(data: dict, out_path) -> Path:
                          f"<th>Before</th><th>Now</th><th>Δ</th></tr>{rows}</table>")
         ev_html = "".join(parts)
 
-    mgroups = sorted({m["group"] for m in data["matches"]})
+    mgroups = sorted({m["group"] for m in data["matches"] if m["group"]})   # knockout rows carry no group
     opts = '<option value="all">All groups</option>' + "".join(
         f'<option value="{g}">Group {g}</option>' for g in mgroups)
     fav, sec, fin = data["favorite"], data["second"], data["finalists"]

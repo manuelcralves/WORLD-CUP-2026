@@ -69,6 +69,14 @@ def world_cup_2026(df: pd.DataFrame) -> pd.DataFrame:
     return wc.sort_values("date", kind="stable").head(72).copy()
 
 
+def knockout_2026(df: pd.DataFrame) -> pd.DataFrame:
+    """The 2026 World Cup KNOCKOUT fixtures — everything after the 72 group games
+    (the cross-group ties the dataset adds once the bracket is drawn). Empty until
+    the draw lands. For the Beat-the-Machine predict list, NOT the group sim."""
+    wc = df[(df["tournament"] == "FIFA World Cup") & (df["date"].dt.year == 2026)]
+    return wc.sort_values("date", kind="stable").iloc[72:].copy()
+
+
 def reconstruct_groups(wc: pd.DataFrame) -> dict[str, list[str]]:
     """Reconstruct the 12 groups from who plays against whom.
 
@@ -161,6 +169,7 @@ def load_all(data_dir: Path | str = DATA_DIR, cutoff=None, asof=None) -> dict:
         "wc": wc,
         "wc_played": wc[is_played(wc)].copy(),
         "wc_remaining": wc[~is_played(wc)].copy(),
+        "knockout": knockout_2026(df),
         "groups": groups,
         "cutoff": None,
     }

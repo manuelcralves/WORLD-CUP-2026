@@ -93,6 +93,42 @@ def match_predictions(bundle, trained, topn=3) -> list:
     return rows
 
 
+def knockout_predictions(bundle, trained, topn=3) -> tuple[list, list]:
+    """Knockout fixtures (from the dataset) for the Beat-the-Machine predict list.
+
+    Returns (upcoming, played): `upcoming` match the `match_predictions` shape (so
+    they slot straight into the predict list), `played` match the `played_review`
+    shape (so they score). Both tagged stage="knockout"; the model pick is the
+    LIVE model (a pre-tournament blind call makes no sense for ties drawn later).
+    """
+    ko = bundle.get("knockout")
+    upcoming, played = [], []
+    if ko is None or len(ko) == 0:
+        return upcoming, played
+    for g in ko.itertuples(index=False):
+        rep = match_report(trained, g.home_team, g.away_team, neutral=bool(g.neutral))
+        base = {"date": str(pd.Timestamp(g.date).date()), "stage": "knockout",
+                "group": "", "home": g.home_team, "away": g.away_team,
+                "xg_home": round(rep["xg_home"], 2), "xg_away": round(rep["xg_away"], 2),
+                "p_home": rep["p_home"], "p_draw": rep["p_draw"], "p_away": rep["p_away"]}
+        if pd.notna(g.home_score) and pd.notna(g.away_score):
+            hs, a_s = int(g.home_score), int(g.away_score)
+            actual = "home" if hs > a_s else ("away" if a_s > hs else "draw")
+            probs = {"home": rep["p_home"], "draw": rep["p_draw"], "away": rep["p_away"]}
+            pred = max(probs, key=probs.get)
+            played.append({**base, "hs": hs, "as": a_s, "ml_score": rep["most_likely"],
+                           "p_ml": rep["p_most_likely"], "actual": actual, "pred": pred,
+                           "hit": pred == actual, "p_actual": probs[actual]})
+        else:
+            upcoming.append({**base, "ml_score": rep["most_likely"],
+                             "p_ml": round(rep["p_most_likely"], 3),
+                             "top": [{"score": s["score"], "p": s["p"]}
+                                     for s in rep["top_scorelines"][:topn]]})
+    upcoming.sort(key=lambda r: r["date"])
+    played.sort(key=lambda r: r["date"])
+    return upcoming, played
+
+
 # --------------------------------------------------------------------------- #
 def expected_standings(table: pd.DataFrame) -> pd.DataFrame:
     """Expected standings of each group (sorted by expected points)."""
