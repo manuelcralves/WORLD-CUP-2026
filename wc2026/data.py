@@ -56,9 +56,17 @@ def is_played(df: pd.DataFrame) -> pd.Series:
 
 
 def world_cup_2026(df: pd.DataFrame) -> pd.DataFrame:
-    """Return only the 2026 World Cup matches (group stage in the dataset)."""
+    """Return only the 2026 World Cup GROUP-STAGE matches (the 72 earliest).
+
+    Once the bracket is drawn, the knockout fixtures also land in the dataset as
+    "FIFA World Cup" games — but the model builds the knockouts from the official
+    bracket + simulated standings, NOT from dataset fixtures, and a cross-group
+    knockout game would break the group reconstruction (it would merge two
+    groups). The group stage is exactly 12*6 = 72 games and is fully played
+    before any knockout, so the 72 earliest WC-2026 matches ARE the group stage.
+    """
     wc = df[(df["tournament"] == "FIFA World Cup") & (df["date"].dt.year == 2026)]
-    return wc.copy()
+    return wc.sort_values("date", kind="stable").head(72).copy()
 
 
 def reconstruct_groups(wc: pd.DataFrame) -> dict[str, list[str]]:
