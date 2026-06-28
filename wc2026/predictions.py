@@ -154,8 +154,10 @@ def most_likely_bracket(table: pd.DataFrame, trained: dict) -> list:
         winner[L] = w
         third[L] = g.sort_values("p_3rd", ascending=False)["team"].iloc[0]
 
-    # 8 best third-placed teams (proxy: by expected points of each group's 3rd)
-    strength = {L: float(by_group[L].set_index("team").loc[third[L], "exp_points"])
+    # 8 best third-placed teams — rank by the sim's qualifying probability (which
+    # applies the full FIFA tie-breakers: pts, GD, GF, ...), not raw expected
+    # points (which can't break a points tie -> could pick the wrong third).
+    strength = {L: float(by_group[L].set_index("team").loc[third[L], "p_ko"])
                 for L in OFFICIAL_GROUPS}
     qual = sorted(strength, key=strength.get, reverse=True)[:8]
     assign = _match_thirds(sorted(qual), THIRD_SLOTS)  # {slot: group}

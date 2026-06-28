@@ -69,6 +69,15 @@ THIRD_ELIGIBLE = {
     81: "BEFIJ", 82: "AEHIJ", 85: "EFGIJ", 87: "DEIJL",
 }
 
+# Several eligibility-valid assignments can exist, so the bipartite matching in
+# _match_thirds doesn't always reproduce FIFA's official allocation. The actual
+# tournament's third-place combination is pinned here to the real R32 draw; any
+# other combination (pre-tournament / hypothetical) falls back to the matching.
+THIRD_ASSIGNMENT = {
+    frozenset("BDEFIJKL"): {74: "D", 77: "F", 79: "E", 80: "K",
+                            81: "B", 82: "I", 85: "J", 87: "L"},
+}
+
 # Bracket from the Round of 16 onwards (match -> (source_match_1, source_match_2)).
 LATER = {
     89: (74, 77), 90: (73, 75), 91: (76, 78), 92: (79, 80),
@@ -122,9 +131,14 @@ def _lambda_matrices(teams, model, state, default, host_adv=0.5):
 def _match_thirds(letters_q, slots):
     """Assigns each qualified group (third place) to an eligible R32 match.
 
-    Solves the bipartite matching while respecting the official eligibility
-    lists (avoids group rematches). Returns {match_number: group}.
+    The eligibility lists alone don't uniquely determine FIFA's choice (several
+    assignments can be valid), so a known official combination is pinned in
+    THIRD_ASSIGNMENT; otherwise we solve the bipartite matching respecting the
+    eligibility lists (avoids group rematches). Returns {match_number: group}.
     """
+    pin = THIRD_ASSIGNMENT.get(frozenset(letters_q))
+    if pin is not None:
+        return {s: pin[s] for s in slots}
     C = np.ones((8, 8)) * 1000.0
     for i, s in enumerate(slots):
         for j, L in enumerate(letters_q):
