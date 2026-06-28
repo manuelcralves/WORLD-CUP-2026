@@ -1396,7 +1396,7 @@ function predRender(){
                        :(ST.phases[_ph]||[]).filter(r=>r.uid!=="machine");
   if(_lb.length||PHL.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
     h+=`<h3 class="psec">🏆 Leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
-    const won=PHL.filter(p=>ST.complete[p[0]]).map(p=>{const w=(ST.phases[p[0]]||[]).filter(r=>r.uid!=="machine")[0];return w?`🏆 ${p[1]}: <b>${w.name}</b>`:"";}).filter(Boolean);
+    const won=PHL.filter(p=>ST.complete[p[0]]).map(p=>{const ps=(ST.phases[p[0]]||[]).filter(r=>r.uid!=="machine");if(!ps.length)return "";const tied=ps.filter(r=>r.points===ps[0].points);return `🏆 ${p[1]}: <b>${tied.map(r=>r.name).join(" &amp; ")}</b>`;}).filter(Boolean);
     if(won.length)h+=`<div class="pwinners">${won.join(" · ")}</div>`;
     if(PHL.length)h+=`<div class="pphtabs"><button class="pphtab${_ph==="all"?" on":""}" data-ph="all">Overall</button>`+PHL.map(p=>`<button class="pphtab${_ph===p[0]?" on":""}" data-ph="${p[0]}">${p[1]}</button>`).join("")+`</div>`;
     let rivalUids=new Set();
@@ -1445,7 +1445,7 @@ function predRender(){
     if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${pc0(s.p)}</button>`).join("")+`</div>`;
     const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
     h+=`</div>`;});
-  if(more)h+=`<p class="note">…and ${more} more group match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
+  if(more)h+=`<p class="note">…and ${more} more match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
   if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;
     const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
     const _rescards=[];
@@ -1811,6 +1811,9 @@ def build_interactive(data: dict, out_path) -> Path:
     mgroups = sorted({m["group"] for m in data["matches"] if m["group"]})   # knockout rows carry no group
     opts = '<option value="all">All groups</option>' + "".join(
         f'<option value="{g}">Group {g}</option>' for g in mgroups)
+    mtitle = "Group-stage matches" if mgroups else "Matches"   # no upcoming group games -> knockouts
+    msel = (f"<select id='mfilter'>{opts}</select>" if mgroups
+            else f"<select id='mfilter' style='display:none'>{opts}</select>")   # keep the element (JS reads it) but hide the now-useless group filter
     fav, sec, fin = data["favorite"], data["second"], data["finalists"]
     contenders = sum(1 for t in data["teams"] if t["p_champion"] > 0.05)
     eby_years = sorted(int(y) for y in data.get("elo_by_year", {}))
@@ -1905,8 +1908,8 @@ def build_interactive(data: dict, out_path) -> Path:
         "8-best-third-placed-teams rule. <b style='color:#00e0a4'>Green</b> = very likely, "
         "<b style='color:#ff6b6b'>red</b> = very unlikely.</p>"
         "<div class='grid' id='groups'></div>"
-        "<h2 class='col mcol'>Group-stage matches <span class='tag'>times in WEST (UTC+1)</span></h2>"
-        f"<select id='mfilter'>{opts}</select><div id='matches' style='margin-top:10px'></div>"
+        f"<h2 class='col mcol'>{mtitle} <span class='tag'>times in WEST (UTC+1)</span></h2>"
+        f"{msel}<div id='matches' style='margin-top:10px'></div>"
         "<h2 class='col mcol'>📈 Extra analysis</h2><div id='analysis'></div>"
         "</div>"
         "<div class='tab' id='tab-play'>"
