@@ -19,7 +19,7 @@ from . import goldenboot as GB
 from . import predictions as PR
 from . import richdata as RICH
 from . import schedule as SCH
-from .tournament import HOSTS, LATER, OFFICIAL_GROUPS, R32, THIRD_ELIGIBLE
+from .tournament import HOSTS, LATER, OFFICIAL_GROUPS, R32, THIRD_ASSIGNMENT, THIRD_ELIGIBLE
 from .viz import CODES, FAVICON, FLAGS, SITE, elo_by_year
 
 _CACHE = Path(__file__).resolve().parent.parent / "api_cache"   # Highlightly rich-data CSVs
@@ -181,6 +181,8 @@ def collect(bundle, trained, table, val=None, backtests=None,
             "groups": OFFICIAL_GROUPS,
             "r32": {str(k): [list(s) for s in v] for k, v in R32.items()},
             "third_elig": {str(k): v for k, v in THIRD_ELIGIBLE.items()},
+            "third_pin": {"".join(sorted(k)): {str(s): g for s, g in v.items()}
+                          for k, v in THIRD_ASSIGNMENT.items()},
             "later": {str(k): list(v) for k, v in LATER.items()},
             "hosts": sorted(HOSTS),
         },
@@ -999,8 +1001,11 @@ function wifRender(){
    each knockout winner, you tap the other team to override, up to the champion ---- */
 let bywState={};
 function assignThirds(qualSet){  // 8 best thirds -> their official R32 slots
+  const qual=[...qualSet].sort();
+  const pin=(D.structure.third_pin||{})[qual.join("")];   // official FIFA assignment when this combo is known
+  if(pin)return pin;
   const slots=Object.keys(D.structure.third_elig),el=D.structure.third_elig;
-  const qual=[...qualSet].sort(),used=new Set(),sm={};
+  const used=new Set(),sm={};
   (function asg(i){if(i===slots.length)return true;const s=slots[i];
     for(const L of qual){if(used.has(L)||!el[s].includes(L))continue;
       used.add(L);sm[s]=L;if(asg(i+1))return true;used.delete(L);delete sm[s];}
@@ -1589,13 +1594,8 @@ function rollTournament(){
   for(const L in gres){const o=gres[L].order;win[L]=o[0];ru[L]=o[1];third[L]=o[2];
     ts3.push(Object.assign({L},gres[L].st[o[2]]));}
   ts3.sort(fifaThird);
-  const qual=ts3.slice(0,8).map(x=>x.L),slots=Object.keys(D.structure.third_elig),el=D.structure.third_elig;
-  (function(){const used=new Set();window._sm={};
-    (function asg(i){if(i===slots.length)return true;const s=slots[i];
-      for(const L of qual){if(used.has(L)||!el[s].includes(L))continue;
-        used.add(L);window._sm[s]=L;if(asg(i+1))return true;used.delete(L);delete window._sm[s];}
-      return false;})(0);})();
-  const sm=window._sm;
+  const qual=ts3.slice(0,8).map(x=>x.L);
+  const sm=assignThirds(new Set(qual));   // shared: official pin when known, else eligibility matching
   const teamOf=sp=>sp[0]==="W"?win[sp[1]]:sp[0]==="RU"?ru[sp[1]]:third[sm[String(sp[1])]];
   const wk={},ko=[],R=D.structure.r32;
   for(const m in R){const a=teamOf(R[m][0]),b=teamOf(R[m][1]),r=koGame(a,b);
