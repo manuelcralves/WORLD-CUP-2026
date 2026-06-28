@@ -68,7 +68,10 @@ def group_stage_predictions(bundle, trained, only_remaining=True) -> pd.DataFram
             "top3": ",".join(f"{s['score']}:{round(s['p'] * 100)}"
                              for s in rep["top_scorelines"][:3]),
         })
-    return pd.DataFrame(rows).sort_values(["date", "group"]).reset_index(drop=True)
+    cols = ["date", "group", "home", "away", "xg_home", "xg_away",
+            "p_home", "p_draw", "p_away", "ml_score", "p_ml", "top3"]
+    df = pd.DataFrame(rows, columns=cols)            # keep the header even with 0 remaining games
+    return df if df.empty else df.sort_values(["date", "group"]).reset_index(drop=True)
 
 
 def match_predictions(bundle, trained, topn=3) -> list:
