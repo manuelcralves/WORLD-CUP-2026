@@ -326,6 +326,76 @@ def _likely_opponents(rnd="Round of 32", n_teams=6) -> list:
     return out
 
 
+def _knockout_previews(today: str) -> list:
+    """Win-or-go-home previews for today's knockout ties (knockout_matches.csv)."""
+    p = OUT / "knockout_matches.csv"
+    if not p.exists():
+        return []
+    d = pd.read_csv(p)
+    d = d[d["date"] == today]
+    return ["🏆 Knockout — win or go home.\n\n" + _match_preview(r)
+            for r in d.itertuples(index=False)]
+
+
+def _knockout_reveal() -> str:
+    """One-off 'the Round of 32 is set' card — the ties that fit, rest on the site."""
+    p = OUT / "knockout_matches.csv"
+    if not p.exists():
+        return ""
+    d = pd.read_csv(p)
+    if d.empty:
+        return ""
+    lines = [f"{_flag(r.home) or '⚽'} {r.home} v {r.away} {_flag(r.away) or '⚽'}"
+             for r in d.itertuples(index=False)]
+    head = "🏆 Groups done — the Round of 32 is SET!\n\nThe ties:\n"
+    tail = f"\n\nFull bracket + odds 👇\n{SITE}"
+    return head + _fit(lines, head, tail) + tail
+
+
+def _path_to_final(teams=("Argentina", "Spain", "France", "Portugal", "Brazil"), n=4) -> list:
+    """Per marquee team: its likeliest opponents on the road to the final (opponents.csv)."""
+    p = OUT / "opponents.csv"
+    if not p.exists():
+        return []
+    o = pd.read_csv(p)
+    if o.empty or "round" not in o.columns:
+        return []
+    short = {"Round of 32": "R32", "Round of 16": "R16", "Quarter-finals": "QF",
+             "Semi-finals": "SF", "Final": "Final"}
+    out = []
+    for tm in teams[:n]:
+        g = o[o["team"] == tm]
+        if g.empty:
+            continue
+        lines = []
+        for rnd, lab in short.items():
+            gr = g[g["round"] == rnd].sort_values("p_cond", ascending=False)
+            if not gr.empty:
+                r = gr.iloc[0]
+                lines.append(f"{lab}: {_flag(r['opponent']) or '⚽'} {r['opponent']} ({_pct(r['p_cond'])})")
+        if lines:
+            head = f"🛣️ {_flag(tm) or '⚽'} {tm} — likeliest road to the final:\n\n"
+            out.append((f"{tm} · path to the final",
+                        head + "\n".join(lines) + f"\n\n👇 {SITE}"))
+    return out
+
+
+def _survival_text() -> str:
+    """During the knockouts: how many teams are left + the surviving title odds."""
+    kp, p = OUT / "knockout_matches.csv", OUT / "predictions.csv"
+    if not kp.exists() or not p.exists():            # group stage -> the title-race tweet covers it
+        return ""
+    ko = pd.read_csv(kp)
+    if ko.empty:
+        return ""
+    n_alive = len(set(ko["home"]) | set(ko["away"]))   # teams with an upcoming knockout tie
+    d = pd.read_csv(p).sort_values("p_champion", ascending=False)
+    head = f"⚔️ {n_alive} teams left — who lifts the trophy?\n\n"
+    lines = [f"{i}. {_flag(r.team)} {r.team} {_pct(r.p_champion)}"
+             for i, r in enumerate(d.head(6).itertuples(index=False), 1)]
+    return head + "\n".join(lines) + f"\n\n👇 {SITE}"
+
+
 def evergreen_tweets() -> list:
     """(label, text) tweets for the kit — copy-paste only, never auto-posted."""
     out = [("Recruitment · post anytime", COME_PLAY)]
@@ -333,14 +403,21 @@ def evergreen_tweets() -> list:
     if g:
         out.append(("Golden Boot · refreshed each build", g))
     out += _group_overviews()                 # one card per group still in play (group stage only)
+    reveal = _knockout_reveal()               # 'the R32 is set' — once the groups finish
+    if reveal:
+        out.append(("Knockouts · the Round of 32 is set", reveal))
     out += _likely_opponents()                # most-likely next-round opponents (per marquee team)
+    out += _path_to_final()                   # marquee teams' road to the final (knockouts)
+    surv = _survival_text()                   # surviving teams' title odds (knockouts)
+    if surv:
+        out.append(("Survival odds · who wins it all", surv))
     out.append(("Bracket · for ~28 Jun (when knockouts open)", BRACKET))
     return out
 
 
 def build_thread() -> list:
     today = _today_utc()
-    tweets = list(_today_previews(today))
+    tweets = list(_today_previews(today)) + list(_knockout_previews(today))   # group + knockout games today
     recap = _recap_text()
     if recap:
         tweets.append(recap)

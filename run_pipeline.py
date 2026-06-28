@@ -106,8 +106,18 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     if opp_rows:
         pd.DataFrame(opp_rows).to_csv(
             out_dir / "opponents.csv", index=False, encoding="utf-8")
-    if cutoff is None and review:                # for the daily tweet (recap/upsets)
-        pd.DataFrame(review).to_csv(
+    # Knockout fixtures (once the groups are done) -> knockout_matches.csv for the
+    # tweet kit (KO previews + the R32 reveal). Reuses data["matches"]; empty in groups.
+    ko_rows = [{"date": m["date"], "home": m["home"], "away": m["away"],
+                "p_home": m["p_home"], "p_draw": m["p_draw"], "p_away": m["p_away"],
+                "ml_score": m["ml_score"],
+                "top3": ",".join(f"{s['score']}:{round(s['p'] * 100)}" for s in m.get("top", []))}
+               for m in data["matches"] if m.get("stage") == "knockout"]
+    if ko_rows:
+        pd.DataFrame(ko_rows).to_csv(
+            out_dir / "knockout_matches.csv", index=False, encoding="utf-8")
+    if cutoff is None and data.get("played_review"):   # for the daily tweet (recap/upsets) -- incl. knockouts
+        pd.DataFrame(data["played_review"]).drop(columns=["goals"], errors="ignore").to_csv(
             out_dir / "played_review.csv", index=False, encoding="utf-8")
     if cutoff is None:                           # push the match table for the leaderboard
         from wc2026 import supa as SUPA
