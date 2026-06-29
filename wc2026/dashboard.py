@@ -529,6 +529,13 @@ box-shadow:0 0 18px rgba(255,211,77,.12)}
 .tv{font-size:9.5px;color:var(--muted);font-weight:700}
 .tt.win .tv{color:var(--green)}
 .tpe{font-size:8.5px;color:var(--gold);text-align:right;margin-top:1px}
+.tmatch.pbhit{border-color:var(--green);box-shadow:0 0 10px rgba(0,224,164,.18)}
+.tmatch.pbmiss{border-color:var(--red)}
+.pbbadge{font-size:8.5px;font-weight:800;text-align:right;margin-top:1px;line-height:1.1}
+.pbbadge.h{color:var(--green)}.pbbadge.m{color:var(--red)}
+.kox{color:var(--red);text-decoration:line-through;opacity:.85}
+.pmod.wide{max-width:min(1180px,96vw)}
+.pbrow{cursor:pointer}.pbrow:hover{background:rgba(0,224,164,.08)}
 .tree .flag.sm{width:14px;height:10px}
 .tcol.l .tmatch::after{content:"";position:absolute;left:100%;top:50%;width:8px;height:2px;background:var(--line)}
 .tcol.r .tmatch::after{content:"";position:absolute;right:100%;top:50%;width:8px;height:2px;background:var(--line)}
@@ -892,10 +899,12 @@ const BORDER={
  "Quarter-finals":[97,98,99,100],"Semi-finals":[101,102],"Final":[104]};
 function tmatch(m){const wa=m.win&&m.win===m.a,wb=m.win&&m.win===m.b;
   const da=m.byw?` data-m="${m.m}" data-team="${m.a||''}"`:"",db=m.byw?` data-m="${m.m}" data-team="${m.b||''}"`:"";
-  return `<div class="tmatch">
-   <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn">${m.a||'?'}</span><span class="tv">${m.va||''}</span></div>
-   <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn">${m.b||'?'}</span><span class="tv">${m.vb||''}</span></div>
-   ${m.pe?'<div class="tpe">on penalties</div>':''}</div>`;}
+  const vc=m.verdict==='hit'?' pbhit':m.verdict==='miss'?' pbmiss':'';   // your-pick scoring outline
+  const badge=m.verdict==='hit'?`<div class="pbbadge h">✓ +${m.pts}</div>`:m.verdict==='miss'?`<div class="pbbadge m">✗ 0</div>`:'';
+  return `<div class="tmatch${vc}">
+   <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn${m.ea?' kox':''}">${m.a||'?'}</span><span class="tv">${m.va||''}</span></div>
+   <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn${m.eb?' kox':''}">${m.b||'?'}</span><span class="tv">${m.vb||''}</span></div>
+   ${m.pe?'<div class="tpe">on penalties</div>':''}${badge}</div>`;}
 function bracketTree(rounds){
   const ord=l=>BORDER[l]||[];
   const S=rounds.map(r=>({label:r.label,
@@ -1306,18 +1315,20 @@ function pbBracket(picks){
     ties.push({m,rn:roundName(m),a,b,w});});
   return {ties,champ:win[104]};
 }
-function realBracket(){   // actual knockout winner per bracket slot, from the real results — empty until the knockouts are played
-  if((D.matches||[]).some(m=>m.stage!=='knockout'))return {};   // only remaining GROUP games block R32 seeding
+function realProgress(){   // {real: actual winner per slot, elim: Set of teams knocked out} from the real results
+  if((D.matches||[]).some(m=>m.stage!=='knockout'))return {real:{},elim:new Set()};   // only remaining GROUP games block R32 seeding
   const {gres,qual3}=wifGroups(),W={},RU={},TH={};
   for(const L in gres){const o=gres[L].order;W[L]=o[0];RU[L]=o[1];TH[L]=o[2];}
   const sm=assignThirds(qual3),teamOf=sp=>sp[0]==="W"?W[sp[1]]:sp[0]==="RU"?RU[sp[1]]:TH[sm[String(sp[1])]];
   const won=(a,b)=>{if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];   // the real knockout match between these two
     if(!r)return null;if(r.hs>r["as"])return r.home;if(r["as"]>r.hs)return r.away;return r.adv||null;};   // draw -> the advancer (penalties), once that gets recorded
-  const real={},R=D.structure.r32,LA=D.structure.later;
-  for(const m in R)real[m]=won(teamOf(R[m][0]),teamOf(R[m][1]));
-  Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>real[m]=won(real[LA[m][0]],real[LA[m][1]]));
-  return real;
+  const real={},elim=new Set(),R=D.structure.r32,LA=D.structure.later;
+  const step=(a,b)=>{const w=won(a,b);if(w)elim.add(w===a?b:a);return w;};   // played tie -> the loser is knocked out
+  for(const m in R)real[m]=step(teamOf(R[m][0]),teamOf(R[m][1]));
+  Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>real[m]=step(real[LA[m][0]],real[LA[m][1]]));
+  return {real,elim};
 }
+function realBracket(){return realProgress().real;}   // winner per slot (kept for bracketScore + bracketLB)
 function bracketScore(picks,real){   // R32 +20 · R16 +40 · QF +80 · SF +160 · Champion +320 (320 per round, max 1600)
   const pts=m=>m<=88?20:m<=96?40:m<=100?80:m<=102?160:320;
   let s=0;for(const m in real){if(real[m]&&(picks||{})[m]===real[m])s+=pts(+m);}return s;
@@ -1330,8 +1341,26 @@ function bracketLB(){   // separate bracket leaderboard — dormant (all 0) unti
   if(!rows.length)return "";
   let h=`<h3 class="psec">🏆 Bracket leaderboard <span class="tag">${scored?"scored live":"scores as the knockouts play"}</span></h3><div class="lbx">`;
   rows.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id;
-    h+=`<div class="lbrow${me?" lbme":""}"><span class="lbrank">${i+1}</span><span class="lbname">${me?"🟢":"🧑"} ${r.name}${me?" · you":""}</span><span class="lbpts">${r.pts}</span></div>`;});
+    h+=`<div class="lbrow pbrow${me?" lbme":""}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}" title="See their bracket"><span class="lbrank">${i+1}</span><span class="lbname">${me?"🟢":"🧑"} ${r.name}${me?" · you":""}</span><span class="lbpts">${r.pts}</span></div>`;});
   return h+`</div>`;
+}
+function showBracketModal(name,picks){   // another player's locked bracket (read-only): hit/miss outline + eliminated strikethrough
+  const {ties,champ}=pbBracket(picks||{});
+  const {real,elim}=realProgress();
+  const pbPts=m=>m<=88?20:m<=96?40:m<=100?80:m<=102?160:320;
+  const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
+  ties.forEach(t=>{const rw=real[t.m]||null;   // no byw -> read-only (no tap handlers)
+    rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,ea:elim.has(t.a),eb:elim.has(t.b),
+      verdict:rw?(t.w?(t.w===rw?'hit':'miss'):null):null,pts:pbPts(t.m)});});
+  const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})),cs=champ&&elim.has(champ);
+  const html=`<div class="pmodbg" id="pmodbg"><div class="pmod wide"><div class="pmodh"><b>👤 ${name} · ${bracketScore(picks,real)} pts</b><button class="pbtn" id="pmodx">✕</button></div>`
+    +`<div class="bywchamp" style="font-size:15px;margin:6px 0">🏆 Champion: ${champ?flag(champ,'sm')+` <b${cs?' class="kox"':''}>`+champ+"</b>"+(cs?' <span class="note" style="color:var(--red)">· eliminated</span>':''):'<span class="note">—</span>'}</div>`
+    +bracketTree(rounds)+`</div></div>`;
+  const old=document.getElementById("pmodbg");if(old)old.remove();
+  document.body.insertAdjacentHTML("beforeend",html);
+  const bg=document.getElementById("pmodbg");
+  document.getElementById("pmodx").onclick=()=>bg.remove();
+  bg.onclick=e=>{if(e.target===bg)bg.remove();};
 }
 function predBracketRender(){
   const el=document.getElementById("predbracket");if(!el)return;
@@ -1340,15 +1369,22 @@ function predBracketRender(){
   if(!wifScores)wifInit();
   const lk=(D.structure||{}).bracket_lock,LOCKED=!!(lk&&new Date()>=new Date(lk));
   const {ties,champ}=pbBracket(pbPicks);
+  const {real,elim}=realProgress();
+  const pbPts=m=>m<=88?20:m<=96?40:m<=100?80:m<=102?160:320;
   const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
-  ties.forEach(t=>rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true}));
+  ties.forEach(t=>{const rw=real[t.m]||null;   // real winner of this slot (null until played)
+    rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true,ea:elim.has(t.a),eb:elim.has(t.b),
+      verdict:rw?(t.w?(t.w===rw?'hit':'miss'):null):null,pts:pbPts(t.m)});});
   const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})),n=ties.filter(t=>t.w).length;
   const sub=LOCKED
     ?`<div class="pbrlock" style="margin:0 0 10px">🔒 Bracket locked — it closed at the first knockout kickoff${(D.structure||{}).bracket_lock_label?" ("+D.structure.bracket_lock_label+" WEST)":""}. Watch your picks score live below. 🍿</div>`
     :`<div class="note" style="text-align:center;margin:0 0 8px">Tap a team to send them through · ${n}/${ties.length} ties picked</div>`;
-  el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":'<span class="note">tap your way through the bracket</span>'}</div>`
+  const champKO=champ&&elim.has(champ);
+  el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+` <b${champKO?' class="kox"':''}>`+champ+"</b>"+(champKO?' <span class="note" style="color:var(--red)">· eliminated</span>':''):'<span class="note">tap your way through the bracket</span>'}</div>`
     +sub+bracketTree(rounds)+bracketLB();
   if(!LOCKED)el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{if(tt.dataset.team)pbSet(+tt.dataset.m,tt.dataset.team);});
+  el.querySelectorAll(".pbrow[data-uid]").forEach(row=>row.onclick=()=>{   // tap a leaderboard player -> their bracket
+    const b=(allBrackets||[]).find(x=>x.user_id===row.dataset.uid);if(b)showBracketModal(row.dataset.name||"Player",b.picks);});
 }
 function pbSet(m,team){
   const lk=(D.structure||{}).bracket_lock;if(lk&&new Date()>=new Date(lk))return;   // locked: no edits
