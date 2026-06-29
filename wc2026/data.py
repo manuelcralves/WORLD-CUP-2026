@@ -109,6 +109,38 @@ def reconstruct_groups(wc: pd.DataFrame) -> dict[str, list[str]]:
     return {chr(ord("A") + i): comp for i, comp in enumerate(comps)}
 
 
+def knockout_winners(knockout, mapping, data_dir: Path | str = DATA_DIR) -> dict:
+    """Played knockout ties -> {frozenset({home, away}): winner}.
+
+    Lets the simulator FIX games already played in the knockouts instead of
+    re-simulating them, so the bracket/odds reflect reality and eliminated teams
+    fall to 0%. Decisive games -> the higher score; draws settled on penalties ->
+    the winner from shootouts.csv (names normalized to match the results frame).
+    """
+    shoot = {}
+    sp = Path(data_dir) / "shootouts.csv"
+    if sp.exists():
+        try:
+            for r in pd.read_csv(sp).itertuples(index=False):
+                h = mapping.get(r.home_team, r.home_team)
+                a = mapping.get(r.away_team, r.away_team)
+                shoot[frozenset({h, a})] = mapping.get(r.winner, r.winner)
+        except Exception:
+            pass
+    out = {}
+    for g in knockout.itertuples(index=False):
+        if pd.isna(g.home_score) or pd.isna(g.away_score):
+            continue
+        pair = frozenset({g.home_team, g.away_team})
+        if g.home_score > g.away_score:
+            out[pair] = g.home_team
+        elif g.away_score > g.home_score:
+            out[pair] = g.away_team
+        elif pair in shoot:
+            out[pair] = shoot[pair]
+    return out
+
+
 def load_all(data_dir: Path | str = DATA_DIR, cutoff=None, asof=None) -> dict:
     """Shortcut that returns everything the rest of the pipeline needs.
 
@@ -163,13 +195,15 @@ def load_all(data_dir: Path | str = DATA_DIR, cutoff=None, asof=None) -> dict:
         }
 
     played_mask = is_played(df)
+    ko = knockout_2026(df)
     return {
         "matches": df,
         "played": df[played_mask].copy(),
         "wc": wc,
         "wc_played": wc[is_played(wc)].copy(),
         "wc_remaining": wc[~is_played(wc)].copy(),
-        "knockout": knockout_2026(df),
+        "knockout": ko,
+        "ko_results": knockout_winners(ko, mapping, data_dir),
         "groups": groups,
         "cutoff": None,
     }

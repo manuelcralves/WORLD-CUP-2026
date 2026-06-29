@@ -265,6 +265,15 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
     slot_team = _assign_thirds(qual, thirds, letters, N)
 
     # ---- knockout rounds ------------------------------------------------- #
+    # Knockout games already played: force the real winner (instead of
+    # re-simulating the tie), so the bracket/odds reflect reality and the
+    # eliminated team correctly falls to 0%.
+    ko_fix = []
+    for pair, w in (bundle.get("ko_results") or {}).items():
+        ps = [t for t in pair if t in ti]
+        if len(ps) == 2 and w in ti:
+            ko_fix.append((ti[ps[0]], ti[ps[1]], ti[w]))
+
     def resolve(spec):
         typ, key = spec
         if typ == "W":
@@ -293,7 +302,12 @@ def simulate(bundle: dict, trained: dict, n_sims: int = 20000, seed: int = 42,
             pen = rng.random(idx.size) < pa
             wt = np.where(still, pen, wt)
             winA[idx] = wt
-        return np.where(winA, A, B)
+        res = np.where(winA, A, B)
+        for a_, b_, w in ko_fix:                        # honour the real knockout results
+            m = ((A == a_) & (B == b_)) | ((A == b_) & (B == a_))
+            if m.any():
+                res[m] = w
+        return res
 
     results = {}
     for mno, (sa, sb) in R32.items():

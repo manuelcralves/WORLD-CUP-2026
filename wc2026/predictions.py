@@ -175,9 +175,10 @@ def opponents_for(table: pd.DataFrame, team: str, topn=4) -> dict:
 
 
 # --------------------------------------------------------------------------- #
-def most_likely_bracket(table: pd.DataFrame, trained: dict) -> list:
+def most_likely_bracket(table: pd.DataFrame, trained: dict, ko_results: dict = None) -> list:
     """"Favourites" bracket: fills each slot with the modal team and resolves
-    each tie in favour of the favourite (probability of advancing).
+    each tie in favour of the favourite (probability of advancing). Knockout
+    ties already played resolve to their real winner (via `ko_results`).
 
     Returns a list of rounds, each with its ties.
     """
@@ -205,6 +206,9 @@ def most_likely_bracket(table: pd.DataFrame, trained: dict) -> list:
             else slot_third[key]
 
     def advance(a, b):
+        w = (ko_results or {}).get(frozenset({a, b}))
+        if w:                                   # tie already played -> the real winner
+            return (w, 1.0)
         host = (a in HOSTS) ^ (b in HOSTS)
         rep = match_report(trained, a, b, neutral=not host)
         pa = rep["p_home"] + rep["p_draw"] / 2  # includes extra time/penalties ~ 50/50

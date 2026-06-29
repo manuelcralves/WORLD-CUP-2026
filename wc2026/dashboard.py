@@ -119,7 +119,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
                 "matches": [{"home": m["home"], "away": m["away"],
                              "adv": m["advances"], "p": m["p"], "m": m["m"]}
                             for m in ms]}
-               for label, ms in PR.most_likely_bracket(table, trained)]
+               for label, ms in PR.most_likely_bracket(table, trained, bundle.get("ko_results"))]
 
     gb = GB.predict(bundle, table, before=gb_before, topn=15)
     golden = [{"scorer": r["scorer"], "team": r["team"],
@@ -631,7 +631,7 @@ const STAGES=[["p_ko","Last 32"],["p_r16","Round of 16"],["p_qf","Quarter-finals
 const pct=x=>(x*100).toFixed(1)+"%", pc0=pct;   // pc0 aliases pct — 1 decimal everywhere (never round 99.9% to 100%)
 const pctv=x=>{const v=x*100;if(v<=0)return"0%";if(v<0.01)return"<0.01%";
   if(v<0.1)return v.toFixed(2)+"%";return v.toFixed(1)+"%";};
-let sortKey="p_champion",sortDir=-1,selected=D.teams[0].team,query="";
+let sortKey="p_champion",sortDir=-1,selected=D.teams[0].team,query="",showAllTeams=false;
 const qteam=new URLSearchParams(location.search).get("team");  // ?team= deep link
 if(qteam&&byName[qteam])selected=qteam;
 
@@ -647,17 +647,24 @@ function renderRanking(){
   ["p_qf","QF"],["p_r16","R16"],["p_ko","R32"]];
   let rows=[...T].sort((a,b)=>sortDir*(a[sortKey]-b[sortKey]));
   if(query) rows=rows.filter(t=>t.team.toLowerCase().includes(query));
+  // once the knockouts start, fold away teams that can no longer win the title (p_champion==0)
+  const koOn=(D.matches||[]).some(m=>m.stage==='knockout')||(D.played_review||[]).some(m=>m.stage==='knockout');
+  const out=(koOn&&!query)?rows.filter(t=>!(t.p_champion>0)):[];
+  const hideOut=out.length>0&&!showAllTeams;
+  const shown=hideOut?rows.filter(t=>t.p_champion>0):rows;
   let h=`<table><thead><tr><th>#</th><th>Team</th><th>Gr</th><th>Elo</th>`;
   cols.forEach(c=>h+=`<th data-k="${c[0]}">${c[1]}${sortKey===c[0]?(sortDir<0?" ▾":" ▴"):""}</th>`);
   h+=`</tr></thead><tbody>`;
-  rows.forEach((t,i)=>{h+=`<tr class="row${t.team===selected?' sel':''}" data-t="${t.team}">
+  shown.forEach((t,i)=>{h+=`<tr class="row${t.team===selected?' sel':''}" data-t="${t.team}">
   <td>${i+1}</td><td><span class="row-team">${flag(t.team)} ${t.team}</span></td>
   <td>${t.group}</td><td>${t.elo}</td>
   <td style="min-width:170px">${bar(t.p_champion,"#00e0a4")}</td>
   <td>${pctv(t.p_final)}</td><td>${pctv(t.p_sf)}</td><td>${pctv(t.p_qf)}</td>
   <td>${pctv(t.p_r16)}</td><td>${pctv(t.p_ko)}</td></tr>`;});
   h+=`</tbody></table>`;
+  if(out.length)h+=`<div style="text-align:center;margin-top:10px"><button class="pbtn" id="show-all-teams">${hideOut?`Show ${out.length} eliminated team${out.length!==1?'s':''} ↓`:`Hide eliminated ↑`}</button></div>`;
   const c=document.getElementById("ranking");c.innerHTML=h;
+  const sa=document.getElementById("show-all-teams");if(sa)sa.onclick=()=>{showAllTeams=!showAllTeams;renderRanking();};
   c.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;
     if(k===sortKey)sortDir*=-1;else{sortKey=k;sortDir=-1;}renderRanking();});
   c.querySelectorAll("tr.row").forEach(tr=>tr.onclick=()=>{selected=tr.dataset.t;
