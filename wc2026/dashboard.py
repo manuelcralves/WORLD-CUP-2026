@@ -90,6 +90,22 @@ def collect(bundle, trained, table, val=None, backtests=None,
     if ko_played:
         played_review = (played_review or []) + ko_played
 
+    # bracket lock = the first knockout kickoff -> the predict bracket goes read-only then
+    bracket_lock = bracket_lock_label = None
+    ko_df = bundle.get("knockout")
+    if ko_df is not None and len(ko_df):
+        kos = []
+        for g in ko_df.itertuples(index=False):
+            iso = SCH.KICKOFFS_UTC.get("|".join(sorted([g.home_team, g.away_team])))
+            if iso:
+                kos.append((iso, g.home_team, g.away_team))
+        if kos:
+            kos.sort()
+            iso, h, a = kos[0]
+            bracket_lock = iso + ":00+00:00"
+            _lab = SCH.lisbon(h, a)
+            bracket_lock_label = _lab["label"] if _lab else None
+
     bracket = [{"label": label,
                 "matches": [{"home": m["home"], "away": m["away"],
                              "adv": m["advances"], "p": m["p"], "m": m["m"]}
@@ -188,6 +204,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
             "third_pin": {"".join(sorted(k)): {str(s): g for s, g in v.items()}
                           for k, v in THIRD_ASSIGNMENT.items()},
             "later": {str(k): list(v) for k, v in LATER.items()},
+            "bracket_lock": bracket_lock, "bracket_lock_label": bracket_lock_label,
             "hosts": sorted(HOSTS),
         },
         "analysis": {
@@ -1303,16 +1320,20 @@ function predBracketRender(){
   if((D.matches||[]).some(m=>m.stage!=='knockout')){el.innerHTML=`<div class="pbrlock">🔒 Opens when the group stage finishes (~28 Jun). You'll fill the full knockout bracket — every tie from the Round of 32 to the title — on its own leaderboard.</div>`;return;}
   if(!sbUser){el.innerHTML=`<div class="pbrlock">🔒 Sign in to fill your knockout bracket.</div>`;return;}
   if(!wifScores)wifInit();
+  const lk=(D.structure||{}).bracket_lock,LOCKED=!!(lk&&new Date()>=new Date(lk));
   const {ties,champ}=pbBracket(pbPicks);
   const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
   ties.forEach(t=>rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true}));
   const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})),n=ties.filter(t=>t.w).length;
+  const sub=LOCKED
+    ?`<div class="pbrlock" style="margin:0 0 10px">🔒 Bracket locked — it closed at the first knockout kickoff${(D.structure||{}).bracket_lock_label?" ("+D.structure.bracket_lock_label+" WEST)":""}. Watch your picks score live below. 🍿</div>`
+    :`<div class="note" style="text-align:center;margin:0 0 8px">Tap a team to send them through · ${n}/${ties.length} ties picked</div>`;
   el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":'<span class="note">tap your way through the bracket</span>'}</div>`
-    +`<div class="note" style="text-align:center;margin:0 0 8px">Tap a team to send them through · ${n}/${ties.length} ties picked</div>`
-    +bracketTree(rounds)+bracketLB();
-  el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{if(tt.dataset.team)pbSet(+tt.dataset.m,tt.dataset.team);});
+    +sub+bracketTree(rounds)+bracketLB();
+  if(!LOCKED)el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{if(tt.dataset.team)pbSet(+tt.dataset.m,tt.dataset.team);});
 }
 function pbSet(m,team){
+  const lk=(D.structure||{}).bracket_lock;if(lk&&new Date()>=new Date(lk))return;   // locked: no edits
   pbPicks[m]=team;predBracketRender();
   if(sb&&sbUser){clearTimeout(_pbT);_pbT=setTimeout(()=>{
     sb.from("brackets").upsert({user_id:sbUser.id,picks:pbPicks},{onConflict:"user_id"})
