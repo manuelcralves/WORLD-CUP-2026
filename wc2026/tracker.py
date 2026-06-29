@@ -19,8 +19,11 @@ KEYS = ["p_champion", "p_ko", "p_final"]
 
 
 def data_asof(bundle) -> str:
-    """Reference date: the most recent World Cup match with a result."""
+    """Reference date: the most recent World Cup match with a result (group OR knockout)."""
     wc = bundle["wc"]
+    ko = bundle.get("knockout")
+    if ko is not None and len(ko):
+        wc = pd.concat([wc, ko], ignore_index=True)   # knockouts live outside bundle["wc"] now
     played = wc[wc["home_score"].notna()]
     d = played["date"].max() if len(played) else bundle["played"]["date"].max()
     return str(pd.Timestamp(d).date())

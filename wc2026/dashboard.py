@@ -1283,8 +1283,8 @@ function realBracket(){   // actual knockout winner per bracket slot, from the r
   Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>real[m]=won(real[LA[m][0]],real[LA[m][1]]));
   return real;
 }
-function bracketScore(picks,real){   // R32 +1 · R16 +2 · QF +4 · SF +8 · Champion +16 (16 per round, max 80)
-  const pts=m=>m<=88?1:m<=96?2:m<=100?4:m<=102?8:16;
+function bracketScore(picks,real){   // R32 +20 · R16 +40 · QF +80 · SF +160 · Champion +320 (320 per round, max 1600)
+  const pts=m=>m<=88?20:m<=96?40:m<=100?80:m<=102?160:320;
   let s=0;for(const m in real){if(real[m]&&(picks||{})[m]===real[m])s+=pts(+m);}return s;
 }
 function bracketLB(){   // separate bracket leaderboard — dormant (all 0) until the knockouts start scoring
