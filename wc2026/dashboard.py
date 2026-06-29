@@ -41,6 +41,15 @@ def _fixtures(bundle) -> list:
     for g in bundle["wc_remaining"].itertuples(index=False):
         out.append({"home": g.home_team, "away": g.away_team, "group": tl[g.home_team],
                     "neutral": bool(g.neutral), "played": False})
+    ko = bundle.get("knockout")                      # knockout fixtures (group "" -> they cross groups)
+    if ko is not None:
+        for g in ko.itertuples(index=False):
+            played = (g.home_score == g.home_score) and (g.away_score == g.away_score)   # not-NaN
+            row = {"home": g.home_team, "away": g.away_team, "group": "",
+                   "neutral": bool(g.neutral), "played": bool(played), "stage": "knockout"}
+            if played:
+                row["hs"], row["as"] = int(g.home_score), int(g.away_score)
+            out.append(row)
     return out
 
 
@@ -786,10 +795,11 @@ function renderMatches(){
   const sel=document.getElementById("mfilter").value;
   const ms=D.matches.filter(m=>sel==="all"||m.group===sel)
     .sort((a,b)=>(predKO(a.home,a.away)||0)-(predKO(b.home,b.away)||0));   // chronological by real kickoff
-  let h=`<table class="mtable"><thead><tr><th>Kickoff (WEST)</th><th>Gr</th><th>Match</th>
+  const hasGr=ms.some(m=>m.group);   // knockout rows carry no group -> drop the column
+  let h=`<table class="mtable"><thead><tr><th>Kickoff (WEST)</th>${hasGr?"<th>Gr</th>":""}<th>Match</th>
   <th>Top scorelines</th><th>W/D/L</th></tr></thead><tbody>`;
   ms.forEach(m=>{const top=m.top.map((s,i)=>`<b>${s.score}</b> ${pc0(s.p)}`).join(" · ");
-    h+=`<tr><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td><td>${m.group}</td>
+    h+=`<tr><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td>${hasGr?`<td>${m.group}</td>`:""}
     <td><span class="row-team">${flag(m.home,"sm")} ${m.home} – ${m.away} ${flag(m.away,"sm")}</span></td>
     <td class="score3">${top}</td>
     <td style="color:#8b95ab">${pc0(m.p_home)}/${pc0(m.p_draw)}/${pc0(m.p_away)}</td></tr>`;});
