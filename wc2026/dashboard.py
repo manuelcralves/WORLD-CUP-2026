@@ -1184,7 +1184,7 @@ function last5more(cards){   // cards: HTML strings (newest-first) — show the 
   if(cards.length<=5)return cards.join("");
   return cards.slice(0,5).join("")+`<details class="pmore"><summary>Show ${cards.length-5} more</summary>${cards.slice(5).join("")}</details>`;
 }
-function predPicksModal(name,preds,isMachine){
+function predPicksModal(name,preds,isMachine,hidePending){
   const rev={};(D.played_review||[]).forEach(m=>rev[m.home+"|"+m.away]=m);Object.assign(rev,liveRev);   // live Supabase results win over the baked ones
   const now=new Date();let pts=0,n=0,exact=0,beat=0;const scored=[],pending=[];
   Object.keys(preds).forEach(key=>{const i=key.split("|"),h=i[0],aw=i[1],kt=predKO(h,aw);
@@ -1206,9 +1206,10 @@ function predPicksModal(name,preds,isMachine){
       +`<span>picked <b>${pick.join('-')}</b> <span class="ppts ${yp>=10?'g':yp?'a':'r'}">${tag(yp)}</span></span></div>`
       +`<div class="pbreak" style="margin:-2px 0 8px 2px">↳ ${predBreak(pick,a)}</div>`);});
   html+=last5more(_pcards);
-  pending.slice().reverse().forEach(({h,aw,pick})=>{
+  if(!hidePending)pending.slice().reverse().forEach(({h,aw,pick})=>{
     html+=`<div class="presrow2"><span>${flag(h,'sm')} ${h} <span class="note">vs</span> ${aw} ${flag(aw,'sm')}</span>`
       +`<span>picked <b>${pick.join('-')}</b> <span class="note">🔒 awaiting result</span></span></div>`;});
+  else if(pending.length)html+=`<div class="note" style="text-align:center;padding:8px 0 2px">🔒 ${pending.length} pick${pending.length!==1?'s':''} for in-progress games hidden until they finish</div>`;
   if(!scored.length&&!pending.length)html+=`<div class="note" style="text-align:center;padding:14px 0">No picks for kicked-off matches yet.</div>`;
   html+=`</div></div>`;
   const old=document.getElementById("pmodbg");if(old)old.remove();
@@ -1221,7 +1222,7 @@ async function showProfile(uid,name){
   let preds={};
   try{const{data}=await sb.from("predictions").select("match_id,pred_home,pred_away").eq("user_id",uid);
     (data||[]).forEach(p=>preds[p.match_id]=[p.pred_home,p.pred_away]);}catch(e){}
-  predPicksModal(name,preds,false);}
+  predPicksModal(name,preds,false,true);}   // other players: only finished-game picks (hide in-progress)
 function showMachine(){
   const preds={};
   (D.matches||[]).forEach(m=>{if(m.top&&m.top[0])preds[m.home+"|"+m.away]=m.top[0].score.split("-").map(Number);});   // upcoming: model's top call
