@@ -166,7 +166,7 @@ def main() -> None:
         pass
 
     # 2) line-ups + events for FINISHED matches, one request each, cached
-    finished = [r for r in rows if r["status"] == "Finished" and r["score"]]   # only FINISHED games -- never cache mid-game data
+    finished = [r for r in rows if (r.get("status") or "").startswith("Finished") and r["score"]]   # FINISHED / after extra time / penalties -- never cache mid-game data
     # one-time: drop a pre-out_pid events cache so every game re-fetches with the sub-on id.
     # Gated on `rows` (the matches fetch worked) so we never wipe events when the API is
     # unreachable (Cloudflare) and couldn't refill them.

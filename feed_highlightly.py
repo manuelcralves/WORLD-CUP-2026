@@ -34,7 +34,7 @@ def feed(results_csv: Path, matches_csv: Path) -> int:
     played = []                                   # (date, home, away, home_score, away_score)
     with matches_csv.open(encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if (r.get("status") or "") != "Finished":   # only FINISHED games — never feed a live/mid-game score (mirrors fetch_wc_data.py)
+            if not (r.get("status") or "").startswith("Finished"):   # FINISHED / after extra time / after penalties — never a live/mid-game score (mirrors fetch_wc_data.py)
                 continue
             sc = (r.get("score") or "").replace(" ", "")
             if "-" not in sc:
