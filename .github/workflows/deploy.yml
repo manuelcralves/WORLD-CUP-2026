@@ -95,6 +95,7 @@ jobs:
           mkdir -p _site
           echo "worldcup2026ml.pt" > _site/CNAME   # custom domain -- keeps GitHub Pages serving it on every Actions deploy
           cp index.html _site/
+          cp manifest.json icon-192.png icon-512.png apple-touch-icon.png _site/ 2>/dev/null || true   # PWA assets (existed but weren't deployed -> 404)
           cp -r outputs _site/outputs
           cp -r outputs_pretournament _site/outputs_pretournament
           cp compare.html _site/ 2>/dev/null || true
