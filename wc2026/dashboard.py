@@ -1064,7 +1064,8 @@ function koWinner(a,b){   // real winner of a PLAYED knockout tie (decisive or p
   if(!r)return null;if(r.hs>r["as"])return r.home;if(r["as"]>r.hs)return r.away;return r.adv||null;}
 function realKoGame(a,b){   // a PLAYED knockout tie in koGame's {w,sx,sy,pe} shape (real score + winner), else null
   if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];if(!r)return null;
-  const ah=r.home===a;return {w:koWinner(a,b),sx:ah?r.hs:r["as"],sy:ah?r["as"]:r.hs,pe:r.hs===r["as"]};}
+  const w=koWinner(a,b);if(!w)return null;   // level draw with no penalty advancer recorded yet -> let it simulate (never return a null winner)
+  const ah=r.home===a;return {w,sx:ah?r.hs:r["as"],sy:ah?r["as"]:r.hs,pe:r.hs===r["as"]};}
 function bywWinner(m,a,b){
   if(!a||!b)return a||b||null;
   const rw=koWinner(a,b);if(rw)return rw;                   // already played -> the real winner is fixed
