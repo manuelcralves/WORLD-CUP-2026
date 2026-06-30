@@ -3946,3 +3946,54 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1331636223,away,Norway,4-3-3,no,4000199,Julian Ryerson,26,Defender
 1331636223,away,Norway,4-3-3,no,327306,Jørgen Strand Larsen,11,Forward
 1331636223,away,Norway,4-3-3,no,6290907,Jens Petter Hauge,23,Midfielder
+1331966411,home,France,4-2-3-1,yes,3577735,Mike Maignan,16,Goalkeeper
+1331966411,home,France,4-2-3-1,yes,438718,Lucas Digne,3,Defender
+1331966411,home,France,4-2-3-1,yes,3556644,William Saliba,17,Defender
+1331966411,home,France,4-2-3-1,yes,185143,Dayot Upamecano,4,Defender
+1331966411,home,France,4-2-3-1,yes,202531,Jules Koundé,5,Defender
+1331966411,home,France,4-2-3-1,yes,43946,Adrien Rabiot,14,Midfielder
+1331966411,home,France,4-2-3-1,yes,204785,Aurélien Tchouaméni,8,Midfielder
+1331966411,home,France,4-2-3-1,yes,26066698,Bradley Barcola,12,Midfielder
+1331966411,home,France,4-2-3-1,yes,3158491,Michael Olise,11,Midfielder
+1331966411,home,France,4-2-3-1,yes,24787,Ousmane Dembélé,7,Midfielder
+1331966411,home,France,4-2-3-1,yes,44912,Kylian Mbappé,10,Forward
+1331966411,home,France,4-2-3-1,no,55901125,Robin Risser,23,Goalkeeper
+1331966411,home,France,4-2-3-1,no,3482262,Brice Samba,1,Goalkeeper
+1331966411,home,France,4-2-3-1,no,26067181,Malo Gusto,2,Defender
+1331966411,home,France,4-2-3-1,no,5467,Lucas Hernández,21,Defender
+1331966411,home,France,4-2-3-1,no,3380349,Maxence Lacroix,26,Defender
+1331966411,home,France,4-2-3-1,no,184499,Ibrahima Konaté,15,Defender
+1331966411,home,France,4-2-3-1,no,7615454,Theo Hernández,19,Defender
+1331966411,home,France,4-2-3-1,no,3565821,Manu Koné,6,Midfielder
+1331966411,home,France,4-2-3-1,no,25192951,Rayan Cherki,24,Midfielder
+1331966411,home,France,4-2-3-1,no,44162454,Maghnes Akliouche,25,Midfielder
+1331966411,home,France,4-2-3-1,no,54201931,Warren Zaïre-Emery,18,Midfielder
+1331966411,home,France,4-2-3-1,no,368844,N'Golo Kanté,13,Midfielder
+1331966411,home,France,4-2-3-1,no,4174401,Jean-Philippe Mateta,22,Forward
+1331966411,home,France,4-2-3-1,no,55227501,Désiré Doué,20,Forward
+1331966411,home,France,4-2-3-1,no,3463103,Marcus Thuram,9,Forward
+1331966411,away,Sweden,3-4-2-1,yes,7733467,Jacob Widell Zetterström,1,Goalkeeper
+1331966411,away,Sweden,3-4-2-1,yes,7723163,Gabriel Gudmundsson,5,Defender
+1331966411,away,Sweden,3-4-2-1,yes,143283,Victor Lindelöf,3,Defender
+1331966411,away,Sweden,3-4-2-1,yes,22173235,Gustaf Lagerbielke,2,Defender
+1331966411,away,Sweden,3-4-2-1,yes,36509319,Elliot Stroud,24,Midfielder
+1331966411,away,Sweden,3-4-2-1,yes,55918030,Lucas Bergvall,7,Midfielder
+1331966411,away,Sweden,3-4-2-1,yes,42797174,Yasin Ayari,18,Midfielder
+1331966411,away,Sweden,3-4-2-1,yes,31983448,Daniel Svensson,8,Midfielder
+1331966411,away,Sweden,3-4-2-1,yes,461258,Alexander Isak,9,Forward
+1331966411,away,Sweden,3-4-2-1,yes,24702384,Anthony Elanga,11,Forward
+1331966411,away,Sweden,3-4-2-1,yes,3055773,Viktor Gyökeres,17,Forward
+1331966411,away,Sweden,3-4-2-1,no,459165,Kristoffer Nordfeldt,23,Goalkeeper
+1331966411,away,Sweden,3-4-2-1,no,25550854,Viktor Johansson,12,Goalkeeper
+1331966411,away,Sweden,3-4-2-1,no,7712537,Hjalmar Ekdal,14,Defender
+1331966411,away,Sweden,3-4-2-1,no,1366400,Eric Smith,20,Defender
+1331966411,away,Sweden,3-4-2-1,no,7726222,Carl Starfelt,15,Defender
+1331966411,away,Sweden,3-4-2-1,no,56487004,Besfort Zeneli,22,Midfielder
+1331966411,away,Sweden,3-4-2-1,no,26002298,Herman Johansson,6,Midfielder
+1331966411,away,Sweden,3-4-2-1,no,460614,Ken Sema,13,Midfielder
+1331966411,away,Sweden,3-4-2-1,no,25909079,Taha Abdi Ali,26,Midfielder
+1331966411,away,Sweden,3-4-2-1,no,7735721,Jesper Karlström,16,Midfielder
+1331966411,away,Sweden,3-4-2-1,no,4908078,Mattias Svanberg,19,Midfielder
+1331966411,away,Sweden,3-4-2-1,no,7728476,Benjamin Nygren,10,Forward
+1331966411,away,Sweden,3-4-2-1,no,2525117,Gustaf Nilsson,25,Forward
+1331966411,away,Sweden,3-4-2-1,no,7679210,Alexander Bernhardsson,21,Forward

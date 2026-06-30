@@ -1203,3 +1203,17 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1331636223,87,Ivory Coast,Substitution,N. Pepe,522760,,O. Diakite,53843223
 1331636223,90+3,Ivory Coast,Substitution,Y. Diomande,82718090,,E. Guessand,22105937
 1331636223,90+3,Ivory Coast,Substitution,G. Konan,3542476,,B. Toure,62410677
+1331966411,21,France,VAR Goal Cancelled - Offside,K. Mbappe,44912,,,
+1331966411,45,France,Goal,K. Mbappe,44912,O. Dembele,,24787
+1331966411,53,France,Goal,B. Barcola,26066698,M. Olise,,3158491
+1331966411,66,Sweden,Substitution,E. Stroud,36509319,,T. Ali,25909079
+1331966411,66,Sweden,Substitution,L. Bergvall,55918030,,B. Zeneli,56487004
+1331966411,74,France,Goal,K. Mbappe,44912,M. Olise,,3158491
+1331966411,75,France,Substitution,J. Kounde,202531,,M. Gusto,26067181
+1331966411,75,France,Substitution,O. Dembele,24787,,D. Doue,55227501
+1331966411,78,France,Substitution,L. Digne,438718,,T. Hernandez,7615454
+1331966411,82,Sweden,Substitution,D. Svensson,31983448,,M. Svanberg,4908078
+1331966411,82,Sweden,Substitution,Y. Ayari,42797174,,B. Nygren,7728476
+1331966411,85,France,Substitution,K. Mbappe,44912,,J. Mateta,4174401
+1331966411,85,France,Substitution,M. Olise,3158491,,R. Cherki,25192951
+1331966411,89,Sweden,Substitution,A. Isak,461258,,G. Nilsson,2525117
