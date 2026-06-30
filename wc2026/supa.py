@@ -49,7 +49,7 @@ def push_matches(data: dict) -> None:
                     shoot[(r["date"], frozenset((r["home_team"], r["away_team"])))] = r["winner"]
         except Exception:
             pass
-    played, upcoming = {}, {}
+    played, upcoming, advances = {}, {}, {}
     for m in data.get("played_review") or []:        # played: model pick + result
         h, a = m["home"], m["away"]
         mh, ma = m["ml_score"].split("-")
@@ -58,9 +58,9 @@ def push_matches(data: dict) -> None:
                "kickoff": _ko_iso(ko, h, a), "home_score": int(m["hs"]),
                "away_score": int(m["as"]), "model_home": int(mh),
                "model_away": int(ma), "stage": m.get("stage", "group"), "played": True}
-        if adv:
-            row["advance"] = adv          # only when there was a shootout — keeps the push safe before the column exists
         played[f"{h}|{a}"] = row
+        if adv:
+            advances[f"{h}|{a}"] = adv    # pushed SEPARATELY (below): a missing `advance` column must never 400 the whole results batch
     for m in data.get("matches") or []:              # upcoming: model pick = top[0]
         h, a = m["home"], m["away"]
         if f"{h}|{a}" in played:
@@ -79,3 +79,9 @@ def push_matches(data: dict) -> None:
         print(f"Supabase: upserted {n_played} played + {n_up} upcoming matches.")
     except Exception as e:                            # never break the pipeline
         print("Supabase push failed (continuing):", type(e).__name__, e)
+    if advances:                                      # penalty advancers — a SEPARATE upsert, so a missing `advance` column can't fail the results push
+        try:
+            _post(url, key, [{"match_id": k, "advance": v} for k, v in advances.items()])
+            print(f"Supabase: set advance on {len(advances)} shootout tie(s).")
+        except Exception as e:
+            print("Supabase advance push skipped — run once: alter table matches add column advance text;", type(e).__name__, e)
