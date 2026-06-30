@@ -1258,12 +1258,13 @@ function matchModal(home,away){   // rich detail (timeline + line-ups) for a pla
   const R=(D.rich||{}).matchDetail||{},md=R[home+"|"+away]||R[away+"|"+home];
   if(!md||(!md.timeline.length&&!md.home.xi.length))return;   // nothing rich for this game
   const H=md.home,A=md.away;
-  const ICON={"Goal":"⚽","Own Goal":"🥅","Penalty":"⚽","Yellow Card":"🟨","Red Card":"🟥","Substitution":"🔄"};
+  const ICON={"Goal":"⚽","Own Goal":"🥅","Penalty":"⚽","Missed Penalty":"❌","Yellow Card":"🟨","Red Card":"🟥","Substitution":"🔄"};
   let h=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>${flag(H.team,'sm')} ${H.team}${md.score?` <span class="mdsc">${md.score}</span> `:' v '}${A.team} ${flag(A.team,'sm')}</b><button class="pbtn" id="pmodx">✕</button></div>`;
   if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div><div class="mdtl">`;
     md.timeline.forEach(e=>{const ic=ICON[e.type]||"•",isH=e.team===H.team;
+      const pen=(e.type==="Penalty"||e.type==="Missed Penalty")?` <span class="note">pen${/^120\+/.test(e.minute||"")?' · shootout':''}</span>`:'';
       const body=e.type==="Substitution"?`<b>${e.out||e.player}</b>${e.out?` <span class="note">for ${e.player}</span>`:''}`
-        :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}`;
+        :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}${pen}`;
       const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
       h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${e.minute}'</div><div class="mda">${isH?'':cellA}</div></div>`;});
     h+=`</div>`;}

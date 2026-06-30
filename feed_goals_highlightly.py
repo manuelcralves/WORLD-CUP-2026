@@ -87,6 +87,8 @@ def feed(repo: Path) -> int:
             continue
         rows_here = []
         for e in evs:
+            if e["type"] == "Penalty" and (e.get("minute") or "").startswith("120+"):
+                continue   # penalty-SHOOTOUT kick (after extra time) -> not a match goal; feeding it would inflate the score + Golden Boot
             full, scteam = pmap.get(e.get("player_id"), (None, None))
             if full is None:                              # scorer not in the line-ups
                 unmapped += 1
