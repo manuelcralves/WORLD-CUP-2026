@@ -1134,3 +1134,60 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1329555528,90+5,Brazil,Goal,G. Martinelli,20570963,Bruno Guimaraes,,1631889
 1329555528,90+7,Japan,Substitution,D. Maeda,5349218,,K. Ogawa,5359683
 1329555528,90+8,Brazil,Substitution,Bruno Guimaraes,1631889,,Danilo Santos,44302524
+1329556379,47,Morocco,Yellow Card,I. Diop,3029208,,,
+1329556379,71,Netherlands,Substitution,N. Ake,3036775,,T. Koopmeiners,5940893
+1329556379,71,Netherlands,Substitution,B. Brobbey,6238904,,W. Weghorst,4092130
+1329556379,72,Netherlands,Goal,C. Gakpo,39921,C. Summerville,,6073718
+1329556379,75,Morocco,Substitution,C. Riad,44902732,,A. Salah-Eddine,26154765
+1329556379,79,Morocco,Substitution,B. Diaz,119938,,G. Yassine,59496738
+1329556379,79,Morocco,Substitution,A. Bouaddi,70628922,,S. El Mourabet,66884545
+1329556379,86,Morocco,Substitution,A. Ounahi,20878312,,S. Rahimi,5889373
+1329556379,86,Netherlands,Substitution,M. van de Ven,24608843,,J. Hato,55004516
+1329556379,86,Netherlands,Substitution,R. Gravenberch,87416,,Q. Timber,6238421
+1329556379,87,Morocco,Substitution,B. El Khannouss,54832407,,C. Talbi,54202253
+1329556379,90+1,Morocco,Goal,I. Diop,3029208,C. Talbi,,54202253
+1329556379,110,Netherlands,Substitution,F. de Jong,86772,,M. De Roon,4899706
+1329556379,113,Netherlands,Substitution,C. Gakpo,39921,,J. Kluivert,127666
+1329556379,120+1,Netherlands,Penalty,T. Koopmeiners,5940893,,,
+1329556379,120+1,Morocco,Missed Penalty,N. El Aynaoui,44597637,,,
+1329556379,120+2,Netherlands,Missed Penalty,J. Kluivert,127666,,,
+1329556379,120+2,Morocco,Penalty,S. Rahimi,5889373,,,
+1329556379,120+3,Netherlands,Penalty,W. Weghorst,4092130,,,
+1329556379,120+3,Morocco,Penalty,C. Talbi,54202253,,,
+1329556379,120+4,Netherlands,Missed Penalty,Q. Timber,6238421,,,
+1329556379,120+4,Morocco,Missed Penalty,A. Hakimi,1603,,,
+1329556379,120+5,Netherlands,Missed Penalty,C. Summerville,6073718,,,
+1329556379,120+5,Morocco,Penalty,I. Saibari,26065571,,,
+1331965560,42,Paraguay,Goal,J. Enciso,11390421,M. Galarza,,49239106
+1331965560,46,Germany,Substitution,F. Nmecha,102711,,L. Goretzka,82425
+1331965560,54,Germany,Goal,K. Havertz,157612,F. Wirtz,,32719218
+1331965560,55,Paraguay,Substitution,G. Avalos,1043917,,G. Caballero,19179762
+1331965560,57,Paraguay,Substitution,J. Enciso,11390421,,Mauricio,17144239
+1331965560,63,Germany,Substitution,D. Undav,4262629,,J. Musiala,29271886
+1331965560,65,Paraguay,Yellow Card,A. Cubas,1004150,,,
+1331965560,79,Germany,Substitution,A. Pavlovic,52813467,,W. Anton,4084402
+1331965560,88,Germany,Substitution,L. Sane,103838,,N. Woltemade,25446848
+1331965560,91,Paraguay,Substitution,M. Almiron,403781,,G. Velazquez,5765242
+1331965560,99,Paraguay,Substitution,J. Caceres,31554866,,B. Ojeda,11393641
+1331965560,99,Paraguay,Substitution,D. Bobadilla,31412381,,A. Sanabria,406196
+1331965560,102,Germany,VAR Goal Cancelled,J. Tah,156646,,,
+1331965560,105,Paraguay,Yellow Card,G. Alfaro,,,,
+1331965560,105+1,Germany,Yellow Card,J. Nagelsmann,65507834,,,
+1331965560,106,Germany,Yellow Card,K. Havertz,157612,,,
+1331965560,110,Germany,Substitution,F. Wirtz,32719218,,N. Amiri,115108
+1331965560,110,Germany,Substitution,A. Rudiger,368039,,M. Thiaw,26273583
+1331965560,115,Germany,Yellow Card,J. Musiala,29271886,,,
+1331965560,117,Paraguay,Yellow Card,M. Galarza,49239106,,,
+1331965560,120+2,Paraguay,Substitution,J. Alonso,402493,,Fabian Balbuena,402654
+1331965560,120+1,Germany,Missed Penalty,K. Havertz,157612,,,
+1331965560,120+1,Paraguay,Penalty,Mauricio,17144239,,,
+1331965560,120+2,Germany,Penalty,J. Kimmich,80976,,,
+1331965560,120+2,Paraguay,Penalty,G. Gomez,402976,,,
+1331965560,120+3,Germany,Penalty,J. Musiala,29271886,,,
+1331965560,120+3,Paraguay,Penalty,M. Galarza,49239106,,,
+1331965560,120+4,Germany,Missed Penalty,N. Woltemade,25446848,,,
+1331965560,120+4,Paraguay,Missed Penalty,A. Sanabria,406196,,,
+1331965560,120+5,Germany,Penalty,N. Amiri,115108,,,
+1331965560,120+5,Paraguay,Missed Penalty,Fabian Balbuena,402654,,,
+1331965560,120+6,Germany,Missed Penalty,J. Tah,156646,,,
+1331965560,120+6,Paraguay,Penalty,J. Canale,11388006,,,

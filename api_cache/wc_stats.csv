@@ -5853,3 +5853,163 @@ match_id,side,team,stat,value
 1329555528,away,Japan,Fouls,13
 1329555528,away,Japan,Yellow cards,3
 1329555528,away,Japan,Shots outside penalty area,3
+1329556379,home,Netherlands,Expected Goals,0.23
+1329556379,home,Netherlands,Big Chances Created,1
+1329556379,home,Netherlands,Attacks,68
+1329556379,home,Netherlands,Free Kicks,15
+1329556379,home,Netherlands,Expected Assists,0.41
+1329556379,home,Netherlands,Successful Crosses,3
+1329556379,home,Netherlands,Crosses,10
+1329556379,home,Netherlands,Passes Own Half,192
+1329556379,home,Netherlands,Passes Opposition Half,191
+1329556379,home,Netherlands,Successful Long Passes,16
+1329556379,home,Netherlands,Long Passes,47
+1329556379,home,Netherlands,Throw-Ins,28
+1329556379,home,Netherlands,Key Passes,4
+1329556379,home,Netherlands,Passes Into Final Third,45
+1329556379,home,Netherlands,Backward Passes,56
+1329556379,home,Netherlands,Goal Kicks,8
+1329556379,home,Netherlands,Interceptions,11
+1329556379,home,Netherlands,Successful Tackles,9
+1329556379,home,Netherlands,Tackles,18
+1329556379,home,Netherlands,Clearances,21
+1329556379,home,Netherlands,Successful Aerial Duels,19
+1329556379,home,Netherlands,Aerial Duels,30
+1329556379,home,Netherlands,Successful Dribbles,2
+1329556379,home,Netherlands,Dribbles,15
+1329556379,home,Netherlands,Shots accuracy,0.33
+1329556379,home,Netherlands,Failed passes,80
+1329556379,home,Netherlands,Possession,0.3
+1329556379,home,Netherlands,Shots on target,2
+1329556379,home,Netherlands,Corners,5
+1329556379,home,Netherlands,Offsides,3
+1329556379,home,Netherlands,Successful passes,293
+1329556379,home,Netherlands,Red cards,0
+1329556379,home,Netherlands,Shots off target,1
+1329556379,home,Netherlands,Blocked shots,3
+1329556379,home,Netherlands,Shots within penalty area,4
+1329556379,home,Netherlands,Total passes,373
+1329556379,home,Netherlands,Goalkeeper saves,5
+1329556379,home,Netherlands,Fouls,18
+1329556379,home,Netherlands,Yellow cards,0
+1329556379,home,Netherlands,Shots outside penalty area,2
+1329556379,away,Morocco,Expected Goals,1.4
+1329556379,away,Morocco,Big Chances Created,5
+1329556379,away,Morocco,Attacks,119
+1329556379,away,Morocco,Free Kicks,15
+1329556379,away,Morocco,Expected Assists,1.49
+1329556379,away,Morocco,Successful Crosses,4
+1329556379,away,Morocco,Crosses,18
+1329556379,away,Morocco,Passes Own Half,386
+1329556379,away,Morocco,Passes Opposition Half,510
+1329556379,away,Morocco,Successful Long Passes,21
+1329556379,away,Morocco,Long Passes,49
+1329556379,away,Morocco,Throw-Ins,17
+1329556379,away,Morocco,Key Passes,9
+1329556379,away,Morocco,Passes Into Final Third,155
+1329556379,away,Morocco,Backward Passes,118
+1329556379,away,Morocco,Goal Kicks,5
+1329556379,away,Morocco,Interceptions,10
+1329556379,away,Morocco,Successful Tackles,14
+1329556379,away,Morocco,Tackles,19
+1329556379,away,Morocco,Clearances,35
+1329556379,away,Morocco,Successful Aerial Duels,11
+1329556379,away,Morocco,Aerial Duels,30
+1329556379,away,Morocco,Successful Dribbles,7
+1329556379,away,Morocco,Dribbles,19
+1329556379,away,Morocco,Shots accuracy,0.45
+1329556379,away,Morocco,Failed passes,78
+1329556379,away,Morocco,Possession,0.7
+1329556379,away,Morocco,Shots on target,5
+1329556379,away,Morocco,Corners,8
+1329556379,away,Morocco,Offsides,0
+1329556379,away,Morocco,Successful passes,800
+1329556379,away,Morocco,Red cards,0
+1329556379,away,Morocco,Shots off target,4
+1329556379,away,Morocco,Blocked shots,2
+1329556379,away,Morocco,Shots within penalty area,7
+1329556379,away,Morocco,Total passes,878
+1329556379,away,Morocco,Goalkeeper saves,1
+1329556379,away,Morocco,Fouls,15
+1329556379,away,Morocco,Yellow cards,1
+1329556379,away,Morocco,Shots outside penalty area,4
+1331965560,home,Germany,Expected Goals,1.49
+1331965560,home,Germany,Big Chances Created,2
+1331965560,home,Germany,Attacks,18615322
+1331965560,home,Germany,Free Kicks,12
+1331965560,home,Germany,Expected Assists,1.71
+1331965560,home,Germany,Successful Crosses,10
+1331965560,home,Germany,Crosses,56
+1331965560,home,Germany,Passes Own Half,209
+1331965560,home,Germany,Passes Opposition Half,646
+1331965560,home,Germany,Successful Long Passes,26
+1331965560,home,Germany,Long Passes,39
+1331965560,home,Germany,Throw-Ins,23
+1331965560,home,Germany,Key Passes,10
+1331965560,home,Germany,Passes Into Final Third,255
+1331965560,home,Germany,Backward Passes,110
+1331965560,home,Germany,Goal Kicks,5
+1331965560,home,Germany,Interceptions,4
+1331965560,home,Germany,Successful Tackles,10
+1331965560,home,Germany,Tackles,14
+1331965560,home,Germany,Clearances,23
+1331965560,home,Germany,Successful Aerial Duels,21
+1331965560,home,Germany,Aerial Duels,40
+1331965560,home,Germany,Successful Dribbles,13
+1331965560,home,Germany,Dribbles,33
+1331965560,home,Germany,Shots accuracy,0.29
+1331965560,home,Germany,Failed passes,80
+1331965560,home,Germany,Possession,0.75
+1331965560,home,Germany,Shots on target,6
+1331965560,home,Germany,Corners,16
+1331965560,home,Germany,Offsides,4
+1331965560,home,Germany,Successful passes,719
+1331965560,home,Germany,Red cards,0
+1331965560,home,Germany,Shots off target,7
+1331965560,home,Germany,Blocked shots,8
+1331965560,home,Germany,Shots within penalty area,11
+1331965560,home,Germany,Total passes,799
+1331965560,home,Germany,Goalkeeper saves,2
+1331965560,home,Germany,Fouls,18
+1331965560,home,Germany,Yellow cards,2
+1331965560,home,Germany,Shots outside penalty area,10
+1331965560,away,Paraguay,Expected Goals,0.42
+1331965560,away,Paraguay,Big Chances Created,3
+1331965560,away,Paraguay,Attacks,644229
+1331965560,away,Paraguay,Free Kicks,17
+1331965560,away,Paraguay,Expected Assists,0.44
+1331965560,away,Paraguay,Successful Crosses,6
+1331965560,away,Paraguay,Crosses,21
+1331965560,away,Paraguay,Passes Own Half,115
+1331965560,away,Paraguay,Passes Opposition Half,163
+1331965560,away,Paraguay,Successful Long Passes,20
+1331965560,away,Paraguay,Long Passes,78
+1331965560,away,Paraguay,Throw-Ins,12
+1331965560,away,Paraguay,Key Passes,5
+1331965560,away,Paraguay,Passes Into Final Third,40
+1331965560,away,Paraguay,Backward Passes,41
+1331965560,away,Paraguay,Goal Kicks,14
+1331965560,away,Paraguay,Interceptions,13
+1331965560,away,Paraguay,Successful Tackles,21
+1331965560,away,Paraguay,Tackles,33
+1331965560,away,Paraguay,Clearances,54
+1331965560,away,Paraguay,Successful Aerial Duels,19
+1331965560,away,Paraguay,Aerial Duels,40
+1331965560,away,Paraguay,Successful Dribbles,8
+1331965560,away,Paraguay,Dribbles,14
+1331965560,away,Paraguay,Shots accuracy,0.43
+1331965560,away,Paraguay,Failed passes,96
+1331965560,away,Paraguay,Possession,0.25
+1331965560,away,Paraguay,Shots on target,3
+1331965560,away,Paraguay,Corners,6
+1331965560,away,Paraguay,Offsides,1
+1331965560,away,Paraguay,Successful passes,161
+1331965560,away,Paraguay,Red cards,0
+1331965560,away,Paraguay,Shots off target,2
+1331965560,away,Paraguay,Blocked shots,2
+1331965560,away,Paraguay,Shots within penalty area,6
+1331965560,away,Paraguay,Total passes,257
+1331965560,away,Paraguay,Goalkeeper saves,6
+1331965560,away,Paraguay,Fouls,12
+1331965560,away,Paraguay,Yellow cards,2
+1331965560,away,Paraguay,Shots outside penalty area,1
