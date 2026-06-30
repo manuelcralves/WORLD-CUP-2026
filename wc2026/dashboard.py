@@ -413,6 +413,7 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .mdmin{color:#7d8aa3;text-align:center;font-variant-numeric:tabular-nums;font-size:12px}
 .mdic{margin:0 2px}
 .mdphase{text-align:center;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#6b7689;margin:9px 0 2px}
+.mdempty{text-align:center;color:#3e4860;font-size:13px;padding:1px 0 3px}
 .mdlu{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .mdtt{font-weight:700;font-size:13px;margin-bottom:6px}
 .mdp{font-size:12.5px;padding:2px 0}
@@ -533,6 +534,7 @@ box-shadow:0 0 18px rgba(255,211,77,.12)}
 .tmatch.pbhit{border-color:var(--green);box-shadow:0 0 10px rgba(0,224,164,.18)}
 .tmatch.pbmiss{border-color:var(--red)}
 .tmatch.tmlock{border-color:rgba(0,224,164,.4)}.tmlock .tv{font-size:11px}
+.tmatch.tmclick{cursor:pointer}.tmatch.tmclick:hover{box-shadow:0 0 0 1px rgba(0,224,164,.5)}
 .pbbadge{font-size:8.5px;font-weight:800;text-align:right;margin-top:1px;line-height:1.1}
 .pbbadge.h{color:var(--green)}.pbbadge.m{color:var(--red)}
 .kox{color:var(--red);text-decoration:line-through;opacity:.85}
@@ -904,7 +906,8 @@ function tmatch(m){const wa=m.win&&m.win===m.a,wb=m.win&&m.win===m.b;
   const vc=m.verdict==='hit'?' pbhit':m.verdict==='miss'?' pbmiss':'';   // your-pick scoring outline
   const badge=m.verdict==='hit'?`<div class="pbbadge h">✓ +${m.pts}</div>`:m.verdict==='miss'?`<div class="pbbadge m">✗ 0</div>`:'';
   const lk=m.byw&&m.locked,va=lk&&wa?'🔒':(m.va||''),vb=lk&&wb?'🔒':(m.vb||'');   // byw: lock icon on the real winner of a tie already played
-  return `<div class="tmatch${vc}${lk?' tmlock':''}">
+  const clk=(m.real||m.locked)&&m.a&&m.b;   // a tie already played -> tap opens the match detail
+  return `<div class="tmatch${vc}${lk?' tmlock':''}${clk?' tmclick':''}"${clk?` data-mh="${m.a}" data-ma="${m.b}"`:''}>
    <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn${m.ea?' kox':''}">${m.a||'?'}</span><span class="tv">${va}</span></div>
    <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn${m.eb?' kox':''}">${m.b||'?'}</span><span class="tv">${vb}</span></div>
    ${m.pe?'<div class="tpe">on penalties</div>':''}${badge}</div>`;}
@@ -1097,6 +1100,7 @@ function bywRender(){
   el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":"—"}</div>`+bracketTree(rounds);
   el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{const t=tt.dataset.team;
     if(t){bywState[+tt.dataset.m]=t;bywRender();}});
+  el.querySelectorAll(".tmclick").forEach(t=>t.onclick=()=>matchModal(t.dataset.mh,t.dataset.ma));   // a locked (played) tie -> match detail
 }
 /* ---- Beat the Machine: predict upcoming matches and score against the model.
    Phase 1 — saved in localStorage, no backend. Only on the live dashboard. ---- */
@@ -1148,7 +1152,7 @@ async function supaSync(){
     const{data:mm}=await sb.from("matches").select("*");   // "*" so a column added later (e.g. advance) never breaks the read
     liveRev={};(mm||[]).forEach(m=>{if(m.home_score!=null)liveRev[m.match_id]={home:m.home,away:m.away,hs:m.home_score,as:m.away_score,ml_score:(m.model_home!=null?m.model_home+"-"+m.model_away:"1-1"),date:(m.kickoff||"").slice(0,10),adv:m.advance};});
   }catch(e){console.warn("Supabase sync:",e);}
-  predRender();}
+  predRender();try{bywRender();}catch(e){}}   // re-render Build-Your-WC too, so its locks show as soon as liveRev loads (not only after a pick)
 async function supaSignIn(){if(sb)try{await sb.auth.signInWithOAuth(
   {provider:"google",options:{redirectTo:location.href.split("#")[0]}});}
   catch(e){alert("Couldn't start Google sign-in. Try again.");}}
@@ -1266,15 +1270,17 @@ function matchModal(home,away){   // rich detail (timeline + line-ups) for a pla
   if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div><div class="mdtl">`;
     const PHL=["","First half","Second half","Extra time · 1st half","Extra time · 2nd half","Penalty shootout"];
     const phaseOf=e=>{const b=parseInt((e.minute||"").split("+")[0])||0,sh=(e.type==="Penalty"||e.type==="Missed Penalty")&&/^120\+/.test(e.minute||"");return sh?5:b<=45?1:b<=90?2:b<=105?3:4;};
-    let curPh=0;
-    md.timeline.forEach(e=>{const ph=phaseOf(e);
-      if(ph!==curPh){curPh=ph;h+=`<div class="mdphase">${PHL[ph]}</div>`;}
-      const ic=ICON[e.type]||"•",isH=e.team===H.team;
-      const pen=(e.type==="Penalty"||e.type==="Missed Penalty")?` <span class="note">pen</span>`:'';
-      const body=e.type==="Substitution"?`<b>${e.out||e.player}</b>${e.out?` <span class="note">for ${e.player}</span>`:''}`
-        :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}${pen}`;
-      const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
-      h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${ph===5?'':e.minute+"'"}</div><div class="mda">${isH?'':cellA}</div></div>`;});
+    const byPh={},mx=Math.max(...md.timeline.map(phaseOf));   // show every phase the game reached, even the empty ones
+    md.timeline.forEach(e=>{(byPh[phaseOf(e)]=byPh[phaseOf(e)]||[]).push(e);});
+    for(let ph=1;ph<=mx;ph++){h+=`<div class="mdphase">${PHL[ph]}</div>`;
+      const evs=byPh[ph]||[];
+      if(!evs.length){h+=`<div class="mdempty">—</div>`;continue;}
+      evs.forEach(e=>{const ic=ICON[e.type]||"•",isH=e.team===H.team;
+        const pen=(e.type==="Penalty"||e.type==="Missed Penalty")?` <span class="note">pen</span>`:'';
+        const body=e.type==="Substitution"?`<b>${e.out||e.player}</b>${e.out?` <span class="note">for ${e.player}</span>`:''}`
+          :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}${pen}`;
+        const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
+        h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${ph===5?'':e.minute+"'"}</div><div class="mda">${isH?'':cellA}</div></div>`;});}
     h+=`</div>`;}
   if(md.stats&&md.stats.length){h+=`<div class="mdsec">📊 Match stats</div><div class="mdst">`;
     md.stats.forEach(s=>{const hv=parseFloat(s.home)||0,av=parseFloat(s.away)||0,tot=hv+av,hp=tot?Math.round(hv/tot*100):50;
@@ -1717,9 +1723,10 @@ function renderRoll(gres,qual,ko,champ,ts3){
     h+=`<details class="gres"><summary>match results</summary>${mr}</details></div>`;}
   h+=`</div>`+thirdsBox((ts3||[]).map(x=>({team:x.t,group:x.L,played:3,pts:x.pts,gd:x.gd,gf:x.gf})),"this simulation · 8 of 12 advance")+`<h3 style="margin:20px 0 8px">Knockout bracket</h3>`;
   const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
-  ko.forEach(g=>rmap[g.rn].push({a:g.a,b:g.b,win:g.w,m:g.m,va:""+g.sx,vb:""+g.sy,pe:g.pe}));
+  ko.forEach(g=>rmap[g.rn].push({a:g.a,b:g.b,win:g.w,m:g.m,va:""+g.sx,vb:""+g.sy,pe:g.pe,real:!!realKoGame(g.a,g.b)}));
   h+=bracketTree(Object.keys(rmap).map(l=>({label:l,ms:rmap[l]})));
   const so=document.getElementById("sim-out");so.innerHTML=h;
+  so.querySelectorAll(".tmclick").forEach(t=>t.onclick=()=>matchModal(t.dataset.mh,t.dataset.ma));   // a real played tie -> match detail
   so.querySelectorAll(".t3box .gclick").forEach(r=>r.onclick=()=>teamPage(r.dataset.t));
 }
 
