@@ -71,7 +71,8 @@ GOALS = [
 # otherwise wipe a manual shootouts.csv row), so the model sends the real winner
 # through. Drop a row once martj42 merges it upstream.
 SHOOTOUTS = [
-    ("2026-06-29", "Germany", "Paraguay", "Paraguay", "Germany"),
+    ("2026-06-29", "Germany",     "Paraguay", "Paraguay", "Germany"),      # Paraguay won the shootout
+    ("2026-06-29", "Netherlands", "Morocco",  "Morocco",  "Netherlands"),  # Morocco won the shootout 3-2
 ]
 
 
