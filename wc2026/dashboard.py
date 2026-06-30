@@ -898,7 +898,7 @@ const BORDER={
  "Round of 16":[89,90,93,94,91,92,95,96],
  "Quarter-finals":[97,98,99,100],"Semi-finals":[101,102],"Final":[104]};
 function tmatch(m){const wa=m.win&&m.win===m.a,wb=m.win&&m.win===m.b;
-  const da=m.byw?` data-m="${m.m}" data-team="${m.a||''}"`:"",db=m.byw?` data-m="${m.m}" data-team="${m.b||''}"`:"";
+  const tap=m.byw&&!m.locked,da=tap?` data-m="${m.m}" data-team="${m.a||''}"`:"",db=tap?` data-m="${m.m}" data-team="${m.b||''}"`:"";   // byw locks ties already played
   const vc=m.verdict==='hit'?' pbhit':m.verdict==='miss'?' pbmiss':'';   // your-pick scoring outline
   const badge=m.verdict==='hit'?`<div class="pbbadge h">✓ +${m.pts}</div>`:m.verdict==='miss'?`<div class="pbbadge m">✗ 0</div>`:'';
   return `<div class="tmatch${vc}">
@@ -1059,8 +1059,12 @@ function assignThirds(qualSet){  // 8 best thirds -> their official R32 slots
     return false;})(0);
   return sm;
 }
+function koWinner(a,b){   // real winner of a PLAYED knockout tie (decisive or penalty advancer), else null
+  if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];
+  if(!r)return null;if(r.hs>r["as"])return r.home;if(r["as"]>r.hs)return r.away;return r.adv||null;}
 function bywWinner(m,a,b){
   if(!a||!b)return a||b||null;
+  const rw=koWinner(a,b);if(rw)return rw;                   // already played -> the real winner is fixed
   const ov=bywState[m];if(ov===a||ov===b)return ov;        // your override
   const r=h2h(a,b);return (r.ph+r.pd/2)>=0.5?a:b;          // else the model's pick
 }
@@ -1081,7 +1085,7 @@ function bywRender(){
   const el=document.getElementById("byw");if(!el)return;if(!wifScores)wifInit();
   const {ties,champ}=bywBracket();
   const rmap={"Round of 32":[],"Round of 16":[],"Quarter-finals":[],"Semi-finals":[],"Final":[]};
-  ties.forEach(t=>rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true}));
+  ties.forEach(t=>rmap[t.rn].push({a:t.a,b:t.b,win:t.w,m:t.m,byw:true,locked:!!koWinner(t.a,t.b)}));
   const rounds=Object.keys(rmap).map(l=>({label:l,ms:rmap[l]}));
   el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+" <b>"+champ+"</b>":"—"}</div>`+bracketTree(rounds);
   el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{const t=tt.dataset.team;
@@ -1320,8 +1324,7 @@ function realProgress(){   // {real: actual winner per slot, elim: Set of teams 
   const {gres,qual3}=wifGroups(),W={},RU={},TH={};
   for(const L in gres){const o=gres[L].order;W[L]=o[0];RU[L]=o[1];TH[L]=o[2];}
   const sm=assignThirds(qual3),teamOf=sp=>sp[0]==="W"?W[sp[1]]:sp[0]==="RU"?RU[sp[1]]:TH[sm[String(sp[1])]];
-  const won=(a,b)=>{if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];   // the real knockout match between these two
-    if(!r)return null;if(r.hs>r["as"])return r.home;if(r["as"]>r.hs)return r.away;return r.adv||null;};   // draw -> the advancer (penalties), once that gets recorded
+  const won=koWinner;   // real winner of a played tie (decisive or penalty advancer)
   const real={},elim=new Set(),R=D.structure.r32,LA=D.structure.later;
   const step=(a,b)=>{const w=won(a,b);if(w)elim.add(w===a?b:a);return w;};   // played tie -> the loser is knocked out
   for(const m in R)real[m]=step(teamOf(R[m][0]),teamOf(R[m][1]));
