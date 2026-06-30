@@ -64,6 +64,16 @@ GOALS = [
     ("2026-06-18", "Mexico", "South Korea", "Mexico", "Luis Romo",    50, False, False),
 ]
 
+# (date, home_team, away_team, winner, first_shooter) — penalty-shootout outcomes.
+# Highlightly's free tier doesn't expose the shootout WINNER (only the status
+# 'Finished after penalties' + the level score), so we source these by hand here.
+# Re-applied every build AFTER update_data.py pulls martj42's copy (which would
+# otherwise wipe a manual shootouts.csv row), so the model sends the real winner
+# through. Drop a row once martj42 merges it upstream.
+SHOOTOUTS = [
+    ("2026-06-29", "Germany", "Paraguay", "Paraguay", "Germany"),
+]
+
 
 def _b(v: bool) -> str:
     return "TRUE" if v else "FALSE"
@@ -114,15 +124,38 @@ def add_goals(path: Path) -> int:
     return len(new)
 
 
+def fill_shootouts(path: Path) -> int:
+    if not path.exists() or not SHOOTOUTS:
+        return 0
+    data = path.read_bytes()
+    nl = _newline(data)
+    if not data.endswith(nl):
+        data += nl
+    lines = data.split(nl)
+    new = []
+    for d, h, a, winner, first in SHOOTOUTS:
+        pres = [f"{d},{h},{a},".encode("utf-8"), f"{d},{a},{h},".encode("utf-8")]   # either home/away order
+        if any(ln.startswith(p) for ln in lines for p in pres):
+            print(f"  shootout: SKIP {h} v {a} (already present)")
+        else:
+            new.append(f"{d},{h},{a},{winner},{first}".encode("utf-8"))
+            print(f"  shootout: {h} v {a} -> {winner} won on penalties")
+    if new:
+        data += nl.join(new) + nl
+        path.write_bytes(data)
+    return len(new)
+
+
 def main() -> None:
     repo = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
-    res, gls = repo / "results.csv", repo / "goalscorers.csv"
+    res, gls, sho = repo / "results.csv", repo / "goalscorers.csv", repo / "shootouts.csv"
     if not res.exists() or not gls.exists():
         sys.exit(f"results.csv / goalscorers.csv not found in {repo.resolve()}")
     print(f"Updating dataset in {repo.resolve()} ...")
     r = fill_results(res)
     g = add_goals(gls)
-    print(f"\nDone: {r} result(s) filled, {g} goal(s) added.")
+    s = fill_shootouts(sho)
+    print(f"\nDone: {r} result(s) filled, {g} goal(s) added, {s} shootout(s) added.")
 
 
 if __name__ == "__main__":
