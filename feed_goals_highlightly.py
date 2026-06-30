@@ -57,11 +57,14 @@ def feed(repo: Path) -> int:
             if r["tournament"] == "FIFA World Cup" and r["date"].startswith("2026-"):
                 res[frozenset((r["home_team"], r["away_team"]))] = (r["date"], r["home_team"], r["away_team"])
 
-    # team pairs that already have ANY scorer row -> never touched
+    # (date, pair) that already has a scorer row -> never overwritten. Keyed on the
+    # DATE too, not just the pair: the same two teams meet again and again across
+    # history (and across rounds), so a pair-only check skipped every new game
+    # between teams that have ever played — i.e. essentially all knockout ties.
     have = set()
     with gfile.open(encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            have.add(frozenset((r["home_team"], r["away_team"])))
+            have.add((r["date"], frozenset((r["home_team"], r["away_team"]))))
 
     # goal events grouped by match
     goals_by = {}
@@ -75,13 +78,13 @@ def feed(repo: Path) -> int:
         if mid not in matches:
             continue
         pair = frozenset(matches[mid])
-        if pair in have:
-            skipped += 1
-            continue
         if pair not in res:
             no_fixture += 1
             continue
         gdate, ghome, gaway = res[pair]
+        if (gdate, pair) in have:                       # this exact game already has scorers
+            skipped += 1
+            continue
         rows_here = []
         for e in evs:
             full, scteam = pmap.get(e.get("player_id"), (None, None))
