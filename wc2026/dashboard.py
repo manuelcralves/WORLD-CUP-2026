@@ -1062,6 +1062,9 @@ function assignThirds(qualSet){  // 8 best thirds -> their official R32 slots
 function koWinner(a,b){   // real winner of a PLAYED knockout tie (decisive or penalty advancer), else null
   if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];
   if(!r)return null;if(r.hs>r["as"])return r.home;if(r["as"]>r.hs)return r.away;return r.adv||null;}
+function realKoGame(a,b){   // a PLAYED knockout tie in koGame's {w,sx,sy,pe} shape (real score + winner), else null
+  if(!a||!b)return null;const r=liveRev[a+"|"+b]||liveRev[b+"|"+a];if(!r)return null;
+  const ah=r.home===a;return {w:koWinner(a,b),sx:ah?r.hs:r["as"],sy:ah?r["as"]:r.hs,pe:r.hs===r["as"]};}
 function bywWinner(m,a,b){
   if(!a||!b)return a||b||null;
   const rw=koWinner(a,b);if(rw)return rw;                   // already played -> the real winner is fixed
@@ -1680,11 +1683,11 @@ function rollTournament(){
   const sm=assignThirds(new Set(qual));   // shared: official pin when known, else eligibility matching
   const teamOf=sp=>sp[0]==="W"?win[sp[1]]:sp[0]==="RU"?ru[sp[1]]:third[sm[String(sp[1])]];
   const wk={},ko=[],R=D.structure.r32;
-  for(const m in R){const a=teamOf(R[m][0]),b=teamOf(R[m][1]),r=koGame(a,b);
+  for(const m in R){const a=teamOf(R[m][0]),b=teamOf(R[m][1]),r=realKoGame(a,b)||koGame(a,b);   // games already played are fixed to their real result
     wk[m]=r.w;ko.push({rn:"Round of 32",m:+m,a,b,sx:r.sx,sy:r.sy,pe:r.pe,w:r.w});}
   const LA=D.structure.later;
   Object.keys(LA).map(Number).sort((x,y)=>x-y).forEach(m=>{
-    const a=wk[LA[m][0]],b=wk[LA[m][1]],r=koGame(a,b);
+    const a=wk[LA[m][0]],b=wk[LA[m][1]],r=realKoGame(a,b)||koGame(a,b);   // games already played are fixed to their real result
     wk[m]=r.w;ko.push({rn:roundName(m),m:+m,a,b,sx:r.sx,sy:r.sy,pe:r.pe,w:r.w});});
   renderRoll(gres,qual,ko,wk[104],ts3);
 }
