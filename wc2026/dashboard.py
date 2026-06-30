@@ -412,6 +412,7 @@ border:1px solid #243049;border-radius:12px;padding:9px 14px;margin-bottom:12px;
 .mda{text-align:left}
 .mdmin{color:#7d8aa3;text-align:center;font-variant-numeric:tabular-nums;font-size:12px}
 .mdic{margin:0 2px}
+.mdphase{text-align:center;font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#6b7689;margin:9px 0 2px}
 .mdlu{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .mdtt{font-weight:700;font-size:13px;margin-bottom:6px}
 .mdp{font-size:12.5px;padding:2px 0}
@@ -531,6 +532,7 @@ box-shadow:0 0 18px rgba(255,211,77,.12)}
 .tpe{font-size:8.5px;color:var(--gold);text-align:right;margin-top:1px}
 .tmatch.pbhit{border-color:var(--green);box-shadow:0 0 10px rgba(0,224,164,.18)}
 .tmatch.pbmiss{border-color:var(--red)}
+.tmatch.tmlock{border-color:rgba(0,224,164,.4)}.tmlock .tv{font-size:11px}
 .pbbadge{font-size:8.5px;font-weight:800;text-align:right;margin-top:1px;line-height:1.1}
 .pbbadge.h{color:var(--green)}.pbbadge.m{color:var(--red)}
 .kox{color:var(--red);text-decoration:line-through;opacity:.85}
@@ -901,9 +903,10 @@ function tmatch(m){const wa=m.win&&m.win===m.a,wb=m.win&&m.win===m.b;
   const tap=m.byw&&!m.locked,da=tap?` data-m="${m.m}" data-team="${m.a||''}"`:"",db=tap?` data-m="${m.m}" data-team="${m.b||''}"`:"";   // byw locks ties already played
   const vc=m.verdict==='hit'?' pbhit':m.verdict==='miss'?' pbmiss':'';   // your-pick scoring outline
   const badge=m.verdict==='hit'?`<div class="pbbadge h">✓ +${m.pts}</div>`:m.verdict==='miss'?`<div class="pbbadge m">✗ 0</div>`:'';
-  return `<div class="tmatch${vc}">
-   <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn${m.ea?' kox':''}">${m.a||'?'}</span><span class="tv">${m.va||''}</span></div>
-   <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn${m.eb?' kox':''}">${m.b||'?'}</span><span class="tv">${m.vb||''}</span></div>
+  const lk=m.byw&&m.locked,va=lk&&wa?'🔒':(m.va||''),vb=lk&&wb?'🔒':(m.vb||'');   // byw: lock icon on the real winner of a tie already played
+  return `<div class="tmatch${vc}${lk?' tmlock':''}">
+   <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn${m.ea?' kox':''}">${m.a||'?'}</span><span class="tv">${va}</span></div>
+   <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn${m.eb?' kox':''}">${m.b||'?'}</span><span class="tv">${vb}</span></div>
    ${m.pe?'<div class="tpe">on penalties</div>':''}${badge}</div>`;}
 function bracketTree(rounds){
   const ord=l=>BORDER[l]||[];
@@ -1261,12 +1264,17 @@ function matchModal(home,away){   // rich detail (timeline + line-ups) for a pla
   const ICON={"Goal":"⚽","Own Goal":"🥅","Penalty":"⚽","Missed Penalty":"❌","Yellow Card":"🟨","Red Card":"🟥","Substitution":"🔄"};
   let h=`<div class="pmodbg" id="pmodbg"><div class="pmod"><div class="pmodh"><b>${flag(H.team,'sm')} ${H.team}${md.score?` <span class="mdsc">${md.score}</span> `:' v '}${A.team} ${flag(A.team,'sm')}</b><button class="pbtn" id="pmodx">✕</button></div>`;
   if(md.timeline.length){h+=`<div class="mdsec">⏱️ Timeline</div><div class="mdtl">`;
-    md.timeline.forEach(e=>{const ic=ICON[e.type]||"•",isH=e.team===H.team;
-      const pen=(e.type==="Penalty"||e.type==="Missed Penalty")?` <span class="note">pen${/^120\+/.test(e.minute||"")?' · shootout':''}</span>`:'';
+    const PHL=["","First half","Second half","Extra time · 1st half","Extra time · 2nd half","Penalty shootout"];
+    const phaseOf=e=>{const b=parseInt((e.minute||"").split("+")[0])||0,sh=(e.type==="Penalty"||e.type==="Missed Penalty")&&/^120\+/.test(e.minute||"");return sh?5:b<=45?1:b<=90?2:b<=105?3:4;};
+    let curPh=0;
+    md.timeline.forEach(e=>{const ph=phaseOf(e);
+      if(ph!==curPh){curPh=ph;h+=`<div class="mdphase">${PHL[ph]}</div>`;}
+      const ic=ICON[e.type]||"•",isH=e.team===H.team;
+      const pen=(e.type==="Penalty"||e.type==="Missed Penalty")?` <span class="note">pen</span>`:'';
       const body=e.type==="Substitution"?`<b>${e.out||e.player}</b>${e.out?` <span class="note">for ${e.player}</span>`:''}`
         :`<b>${e.player}</b>${e.assist?` <span class="note">(${e.assist})</span>`:''}${pen}`;
       const cellH=`${body} <span class="mdic">${ic}</span>`,cellA=`<span class="mdic">${ic}</span> ${body}`;
-      h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${e.minute}'</div><div class="mda">${isH?'':cellA}</div></div>`;});
+      h+=`<div class="mdrow"><div class="mdh">${isH?cellH:''}</div><div class="mdmin">${ph===5?'':e.minute+"'"}</div><div class="mda">${isH?'':cellA}</div></div>`;});
     h+=`</div>`;}
   if(md.stats&&md.stats.length){h+=`<div class="mdsec">📊 Match stats</div><div class="mdst">`;
     md.stats.forEach(s=>{const hv=parseFloat(s.home)||0,av=parseFloat(s.away)||0,tot=hv+av,hp=tot?Math.round(hv/tot*100):50;
