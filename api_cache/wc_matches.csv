@@ -9,7 +9,7 @@ match_id,date,round,status,home,home_id,away,away_id,score
 1333780743,2026-07-02,Round of 32,Not started,Portugal,23761,Croatia,3337,
 1333782445,2026-07-02,Round of 32,Not started,Spain,8443,Austria,660309,
 1329761470,2026-07-02,Round of 32,Not started,USA,2029568,Bosnia & Herzegovina,947947,
-1333779892,2026-07-01,Round of 32,Not started,Belgium,1635,Senegal,11847,
+1333779892,2026-07-01,Round of 32,First half,Belgium,1635,Senegal,11847,0 - 0
 1333779041,2026-07-01,Round of 32,Finished,England,9294,Congo DR,1284092,2 - 1
 1333778190,2026-07-01,Round of 32,Finished,Mexico,14400,Ecuador,2027866,2 - 0
 1331966411,2026-06-30,Round of 32,Finished,France,2486,Sweden,5039,3 - 0
@@ -18,12 +18,12 @@ match_id,date,round,status,home,home_id,away,away_id,score
 1331965560,2026-06-29,Round of 32,Finished after penalties,Germany,22059,Paraguay,2026164,1 - 1
 1329555528,2026-06-29,Round of 32,Finished,Brazil,5890,Japan,10996,2 - 1
 1328691763,2026-06-28,Round of 32,Finished,South Africa,1303665,Canada,4705963,0 - 1
-1267498055,2026-06-28,Group Stage - 3,Finished,Jordan,1318132,Argentina,22910,1 - 3
 1267495502,2026-06-28,Group Stage - 3,Finished,Algeria,1304516,Austria,660309,3 - 3
-1309700847,2026-06-27,Group Stage - 3,Finished,Congo DR,1284092,Uzbekistan,1335152,3 - 1
+1267498055,2026-06-28,Group Stage - 3,Finished,Jordan,1318132,Argentina,22910,1 - 3
 1267496353,2026-06-27,Group Stage - 3,Finished,Colombia,7592,Portugal,23761,0 - 0
-1267498906,2026-06-27,Group Stage - 3,Finished,Panama,10145,England,9294,0 - 2
+1309700847,2026-06-27,Group Stage - 3,Finished,Congo DR,1284092,Uzbekistan,1335152,3 - 1
 1267497204,2026-06-27,Group Stage - 3,Finished,Croatia,3337,Ghana,1280688,2 - 1
+1267498906,2026-06-27,Group Stage - 3,Finished,Panama,10145,England,9294,0 - 2
 1267492949,2026-06-27,Group Stage - 3,Finished,New Zealand,3977507,Belgium,1635,1 - 5
 1267492098,2026-06-27,Group Stage - 3,Finished,Egypt,28016,Iran,19506,1 - 1
 1267494651,2026-06-27,Group Stage - 3,Finished,Uruguay,6741,Spain,8443,0 - 1
