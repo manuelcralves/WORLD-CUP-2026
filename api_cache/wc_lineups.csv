@@ -4101,3 +4101,53 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1333779041,away,Congo DR,4-2-3-1,no,488467,Cédric Bakambu,17,Forward
 1333779041,away,Congo DR,4-2-3-1,no,3328668,Simon Banza,23,Forward
 1333779041,away,Congo DR,4-2-3-1,no,488628,Meschak Elia,13,Forward
+1333779892,home,Belgium,4-2-3-1,yes,117684,Thibaut Courtois,1,Goalkeeper
+1333779892,home,Belgium,4-2-3-1,yes,26083281,Maxim De Cuyper,5,Defender
+1333779892,home,Belgium,4-2-3-1,yes,32851077,Arthur Theate,3,Defender
+1333779892,home,Belgium,4-2-3-1,yes,11263,Brandon Mechele,4,Defender
+1333779892,home,Belgium,4-2-3-1,yes,470274,Timothy Castagne,21,Defender
+1333779892,home,Belgium,4-2-3-1,yes,12712,Hans Vanaken,20,Midfielder
+1333779892,home,Belgium,4-2-3-1,yes,471240,Youri Tielemans,8,Midfielder
+1333779892,home,Belgium,4-2-3-1,yes,229096,Jérémy Doku,11,Midfielder
+1333779892,home,Belgium,4-2-3-1,yes,101423,Kevin De Bruyne,7,Midfielder
+1333779892,home,Belgium,4-2-3-1,yes,313460,Leandro Trossard,10,Midfielder
+1333779892,home,Belgium,4-2-3-1,yes,23805453,Charles De Ketelaere,17,Forward
+1333779892,home,Belgium,4-2-3-1,no,54764465,Mike Penders,13,Goalkeeper
+1333779892,home,Belgium,4-2-3-1,no,26164425,Senne Lammens,12,Goalkeeper
+1333779892,home,Belgium,4-2-3-1,no,42658,Thomas Meunier,15,Defender
+1333779892,home,Belgium,4-2-3-1,no,26104855,Koni De Winter,16,Defender
+1333779892,home,Belgium,4-2-3-1,no,60531968,Joaquin Seys,18,Defender
+1333779892,home,Belgium,4-2-3-1,no,50387358,Nathan Ngoy,25,Defender
+1333779892,home,Belgium,4-2-3-1,no,3374,Axel Witsel,6,Midfielder
+1333779892,home,Belgium,4-2-3-1,no,53944170,Diego Moreira,19,Forward
+1333779892,home,Belgium,4-2-3-1,no,228291,Alexis Saelemaekers,22,Forward
+1333779892,home,Belgium,4-2-3-1,no,341474,Nicolas Raskin,23,Midfielder
+1333779892,home,Belgium,4-2-3-1,no,26197108,Amadou Onana,24,Midfielder
+1333779892,home,Belgium,4-2-3-1,no,4098892,Dodi Lukebakio,14,Forward
+1333779892,home,Belgium,4-2-3-1,no,146181,Romelu Lukaku,9,Forward
+1333779892,home,Belgium,4-2-3-1,no,54752551,Matías Fernández-Pardo,26,Forward
+1333779892,away,Senegal,4-3-3,yes,19296487,Mory Diaw,23,Goalkeeper
+1333779892,away,Senegal,4-3-3,yes,25457635,Ismail Jakobs,14,Defender
+1333779892,away,Senegal,4-3-3,yes,4172630,Moussa Niakhaté,19,Defender
+1333779892,away,Senegal,4-3-3,yes,6690026,Pathé Ismaël Ciss,6,Defender
+1333779892,away,Senegal,4-3-3,yes,13195,Krépin Diatta,15,Defender
+1333779892,away,Senegal,4-3-3,yes,3332210,Pape Gueye,26,Midfielder
+1333779892,away,Senegal,4-3-3,yes,481544,Idrissa Gana Gueye,5,Midfielder
+1333779892,away,Senegal,4-3-3,yes,52748745,Habib Diarra,21,Midfielder
+1333779892,away,Senegal,4-3-3,yes,49098,Sadio Mané,10,Forward
+1333779892,away,Senegal,4-3-3,yes,357252,Ismaïla Sarr,18,Forward
+1333779892,away,Senegal,4-3-3,yes,2993466,Iliman Ndiaye,13,Forward
+1333779892,away,Senegal,4-3-3,no,3311280,Yehvann Diouf,1,Goalkeeper
+1333779892,away,Senegal,4-3-3,no,51352,Kalidou Koulibaly,3,Defender
+1333779892,away,Senegal,4-3-3,no,1360604,Abdoulaye Seck,4,Defender
+1333779892,away,Senegal,4-3-3,no,50544011,Antoine Mendy,24,Defender
+1333779892,away,Senegal,4-3-3,no,65897937,El Hadji Malick Diouf,25,Defender
+1333779892,away,Senegal,4-3-3,no,44465778,Mamadou Sarr,2,Defender
+1333779892,away,Senegal,4-3-3,no,38177923,Pape Matar Sarr,17,Midfielder
+1333779892,away,Senegal,4-3-3,no,60223492,Lamine Camara,8,Midfielder
+1333779892,away,Senegal,4-3-3,no,101574249,Bara Sapoko Ndiaye,22,Midfielder
+1333779892,away,Senegal,4-3-3,no,64552782,Assane Diao,7,Forward
+1333779892,away,Senegal,4-3-3,no,45735746,Ahmadou Bamba Dieng,9,Forward
+1333779892,away,Senegal,4-3-3,no,45572492,Nicolas Jackson,11,Forward
+1333779892,away,Senegal,4-3-3,no,2315173,Cherif Ndiaye,12,Forward
+1333779892,away,Senegal,4-3-3,no,71846243,Ibrahim Mbaye,20,Forward
