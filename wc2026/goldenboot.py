@@ -63,13 +63,17 @@ def predict(bundle, table, since="2023-01-01", before=None, topn=20) -> pd.DataF
     # load_all already normalised every name, so the keys line up directly.
     wc_goals, played_wc = {}, {}
     wcp = bundle.get("wc_played")
-    if before is None and wcp is not None and len(wcp):
+    ko = bundle.get("knockout")                                   # knockout games live OUTSIDE wc_played now (world_cup_2026 is head(72))
+    kop = ko[ko["home_score"].notna()] if ko is not None and len(ko) else None
+    frames = [f for f in (wcp, kop) if f is not None and len(f)]
+    wcplayed = pd.concat(frames, ignore_index=True) if frames else None   # every played WC game: group + knockout
+    if before is None and wcplayed is not None and len(wcplayed):
         wc_keys = {(d, h, a) for d, h, a in
-                   zip(wcp["date"], wcp["home_team"], wcp["away_team"])}
+                   zip(wcplayed["date"], wcplayed["home_team"], wcplayed["away_team"])}
         in_wc = [(d, h, a) in wc_keys
                  for d, h, a in zip(g["date"], g["home_team"], g["away_team"])]
         wc_goals = g[pd.Series(in_wc, index=g.index)].groupby("scorer").size().to_dict()
-        for h, a in zip(wcp["home_team"], wcp["away_team"]):
+        for h, a in zip(wcplayed["home_team"], wcplayed["away_team"]):
             played_wc[h] = played_wc.get(h, 0) + 1
             played_wc[a] = played_wc.get(a, 0) + 1
 
