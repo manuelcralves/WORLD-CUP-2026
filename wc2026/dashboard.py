@@ -200,7 +200,7 @@ def collect(bundle, trained, table, val=None, backtests=None,
         "shoot_b1": float(trained.get("shootout", {}).get("b1", 0.0)),
         "odds_history": odds_history, "golden_history": golden_history,
         "elo_by_year": elo_by_year(bundle["matches"]),
-        "kickoffs": SCH.all_lisbon(),
+        "kickoffs": SCH.all_lisbon(bundle.get("knockout")),
         "codes": dict(CODES),   # name -> ISO flag code for every nation (not just finalists)
         "fifa": FIFA.compare(table),
         "goals": goals_an,

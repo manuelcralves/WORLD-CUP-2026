@@ -136,12 +136,29 @@ def lisbon(home: str, away: str) -> dict | None:
             "label": f"{_WD[t.weekday()]} {t.day} {_MO[t.month]} · {t.strftime('%H:%M')}"}
 
 
-def all_lisbon() -> dict:
-    """{sorted-pair-key: {hm, label}} for every scheduled fixture (for the dashboard)."""
+def date_only(date) -> dict:
+    """Kickoff info with the DATE only, for a fixture not yet in the published schedule
+    (future knockout rounds whose exact time isn't set here) — so it still shows a date.
+    The placeholder hour (23:00) keeps its picks open through the day until the real time
+    is added to _RAW above."""
+    t = pd.Timestamp(date)
+    return {"hm": "23:00", "date": t.strftime("%Y-%m-%d"),
+            "label": f"{_WD[t.weekday()]} {t.day} {_MO[t.month]}"}
+
+
+def all_lisbon(knockout=None) -> dict:
+    """{sorted-pair-key: {hm, label}} for every scheduled fixture (for the dashboard).
+    A knockout game not yet in the schedule falls back to its fixture date (date only), so
+    future rounds show a date automatically without hand-adding each pairing."""
     out = {}
     for key in KICKOFFS_UTC:
         a, b = key.split("|")
         out[key] = lisbon(a, b)
+    if knockout is not None and len(knockout):
+        for h, a, d in zip(knockout["home_team"], knockout["away_team"], knockout["date"]):
+            key = "|".join(sorted([h, a]))
+            if not out.get(key):
+                out[key] = date_only(d)
     return out
 
 
