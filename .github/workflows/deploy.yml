@@ -14,7 +14,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false   # let an in-progress Pages deploy FINISH instead of cancelling it mid-flight — avoids the transient "Deployment failed, try again later" when builds/pushes stack up (GitHub's recommended Pages setting; a queued run just waits, and only the latest queued one runs)
 
 jobs:
   build:
