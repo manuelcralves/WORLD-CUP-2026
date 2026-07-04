@@ -104,6 +104,14 @@ _RAW = """
 2026-07-03 18:00 Australia vs Egypt
 2026-07-03 22:00 Argentina vs Cape Verde
 2026-07-04 01:30 Colombia vs Ghana
+2026-07-04 17:00 Canada vs Morocco
+2026-07-04 21:00 Paraguay vs France
+2026-07-05 20:00 Brazil vs Norway
+2026-07-06 00:00 Mexico vs England
+2026-07-06 19:00 Portugal vs Spain
+2026-07-07 00:00 United States vs Belgium
+2026-07-07 16:00 Argentina vs Egypt
+2026-07-07 20:00 Switzerland vs Colombia
 """
 
 _WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
