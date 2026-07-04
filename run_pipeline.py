@@ -107,15 +107,19 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
         pd.DataFrame(opp_rows).to_csv(
             out_dir / "opponents.csv", index=False, encoding="utf-8")
     # Knockout fixtures (once the groups are done) -> knockout_matches.csv for the
-    # tweet kit (KO previews + the R32 reveal). Reuses data["matches"]; empty in groups.
+    # tweet kit (KO previews + the round-aware reveal). Reuses data["matches"].
+    KO_COLS = ["date", "home", "away", "p_home", "p_draw", "p_away", "ml_score", "top3"]
     ko_rows = [{"date": m["date"], "home": m["home"], "away": m["away"],
                 "p_home": m["p_home"], "p_draw": m["p_draw"], "p_away": m["p_away"],
                 "ml_score": m["ml_score"],
                 "top3": ",".join(f"{s['score']}:{round(s['p'] * 100)}" for s in m.get("top", []))}
                for m in data["matches"] if m.get("stage") == "knockout"]
-    if ko_rows:
-        pd.DataFrame(ko_rows).to_csv(
-            out_dir / "knockout_matches.csv", index=False, encoding="utf-8")
+    ko_df = bundle.get("knockout")
+    ko_started = ko_df is not None and len(ko_df) and ko_df["home_score"].notna().any()
+    if ko_rows or ko_started:                        # once the KO starts, ALWAYS refresh so a
+        pd.DataFrame(ko_rows, columns=KO_COLS).to_csv(   # between-rounds gap writes an empty
+            out_dir / "knockout_matches.csv",            # (header-only) file instead of leaving
+            index=False, encoding="utf-8")               # the previous round's ties stale
     if cutoff is None and data.get("played_review"):   # for the daily tweet (recap/upsets) -- incl. knockouts
         pd.DataFrame(data["played_review"]).drop(columns=["goals"], errors="ignore").to_csv(
             out_dir / "played_review.csv", index=False, encoding="utf-8")

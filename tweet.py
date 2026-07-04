@@ -55,6 +55,11 @@ try:
 except Exception:
     FLAGS = {}
 
+# X counts each emoji as length 2, but Python's len() counts a multi-codepoint emoji
+# by its code points — the England/Scotland/Wales "tag" flags are 7 each — which
+# over-states the tweet length and needlessly drops ties that would really fit.
+_LONG_FLAGS = [f for f in FLAGS.values() if len(f) > 2]
+
 
 def _flag(team: str) -> str:
     return FLAGS.get(team, "")
@@ -76,7 +81,11 @@ def _pct(p) -> str:
 
 
 def _eff_len(text: str) -> int:
-    return len(text) - len(SITE) + URL_LEN if SITE in text else len(text)
+    n = (len(text) - len(SITE) + URL_LEN) if SITE in text else len(text)
+    for fl in _LONG_FLAGS:                     # discount the code-point surplus of tag flags
+        if fl in text:
+            n -= text.count(fl) * (len(fl) - 2)
+    return n
 
 
 def _today_utc() -> str:
@@ -337,23 +346,65 @@ def _knockout_previews(today: str) -> list:
             for r in d.itertuples(index=False)]
 
 
+# Which knockout round is live, inferred from the number of upcoming ties.
+_KO_BY_TIES = {16: "Round of 32", 8: "Round of 16", 4: "Quarter-finals",
+               2: "Semi-finals", 1: "Final"}
+_KO_ORDER = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Final"]
+_KO_PREV = {"Round of 16": "Round of 32 done", "Quarter-finals": "Round of 16 done",
+            "Semi-finals": "Quarter-finals done", "Final": "Semis done"}
+
+
+def _current_ko_round() -> str:
+    """The knockout round coming up, from the number of upcoming ties in
+    knockout_matches.csv (16 = R32, 8 = R16 … 1 = the Final). '' during the groups."""
+    p = OUT / "knockout_matches.csv"
+    if not p.exists():
+        return ""
+    try:
+        n = len(pd.read_csv(p))
+    except Exception:
+        return ""
+    return _KO_BY_TIES.get(n, "")
+
+
+def _next_ko_round() -> str:
+    """The round after the current one (R16 -> QF …), or '' at/after the final."""
+    cur = _current_ko_round()
+    if cur in _KO_ORDER and _KO_ORDER.index(cur) + 1 < len(_KO_ORDER):
+        return _KO_ORDER[_KO_ORDER.index(cur) + 1]
+    return ""
+
+
 def _knockout_reveal() -> str:
-    """One-off 'the Round of 32 is set' card — the ties that fit, rest on the site."""
+    """One-off 'the next round is SET' card — auto-detects the round from the number
+    of upcoming ties, so it reads 'Round of 16 is SET', 'Quarter-finals are SET', …
+    without any per-phase editing."""
     p = OUT / "knockout_matches.csv"
     if not p.exists():
         return ""
     d = pd.read_csv(p)
     if d.empty:
         return ""
-    lines = [f"{_flag(r.home) or '⚽'} {r.home} v {r.away} {_flag(r.away) or '⚽'}"
+    rnd = _KO_BY_TIES.get(len(d), "")
+    if rnd == "Final":
+        r = d.iloc[0]
+        return (f"🏆 It all comes down to this — the FINAL is SET!\n\n"
+                f"{_flag(r['home']) or '⚽'} {r['home']} v {r['away']} "
+                f"{_flag(r['away']) or '⚽'}\n\nWho lifts the trophy? 👇\n{SITE}")
+    lines = [f"{_flag(r.home) or '⚽'} {r.home}–{r.away} {_flag(r.away) or '⚽'}"
              for r in d.itertuples(index=False)]
-    head = "🏆 Groups done — the Round of 32 is SET!\n\nThe ties:\n"
-    tail = f"\n\nFull bracket + odds 👇\n{SITE}"
+    verb = "are" if rnd in ("Quarter-finals", "Semi-finals") else "is"
+    label = rnd or "knockouts"
+    prev = _KO_PREV.get(rnd)
+    head = (f"🏆 {prev} — the {label} {verb} SET!\n\n" if prev
+            else f"🏆 Groups done — the {label} {verb} SET!\n\n")
+    tail = f"\n\nFull bracket 👇\n{SITE}"
     return head + _fit(lines, head, tail) + tail
 
 
 def _path_to_final(teams=("Argentina", "Spain", "France", "Portugal", "Brazil"), n=4) -> list:
-    """Per marquee team: its likeliest opponents on the road to the final (opponents.csv)."""
+    """Per marquee team: its likeliest opponents on the road still ahead — only the
+    rounds still to play, so once we're in the R16 it skips the finished R32."""
     p = OUT / "opponents.csv"
     if not p.exists():
         return []
@@ -362,17 +413,19 @@ def _path_to_final(teams=("Argentina", "Spain", "France", "Portugal", "Brazil"),
         return []
     short = {"Round of 32": "R32", "Round of 16": "R16", "Quarter-finals": "QF",
              "Semi-finals": "SF", "Final": "Final"}
+    cur = _current_ko_round()
+    active = _KO_ORDER[_KO_ORDER.index(cur):] if cur in _KO_ORDER else _KO_ORDER
     out = []
     for tm in teams[:n]:
         g = o[o["team"] == tm]
         if g.empty:
             continue
         lines = []
-        for rnd, lab in short.items():
+        for rnd in active:
             gr = g[g["round"] == rnd].sort_values("p_cond", ascending=False)
             if not gr.empty:
                 r = gr.iloc[0]
-                lines.append(f"{lab}: {_flag(r['opponent']) or '⚽'} {r['opponent']} ({_pct(r['p_cond'])})")
+                lines.append(f"{short[rnd]}: {_flag(r['opponent']) or '⚽'} {r['opponent']} ({_pct(r['p_cond'])})")
         if lines:
             head = f"🛣️ {_flag(tm) or '⚽'} {tm} — likeliest road to the final:\n\n"
             out.append((f"{tm} · path to the final",
@@ -403,11 +456,11 @@ def evergreen_tweets() -> list:
     if g:
         out.append(("Golden Boot · refreshed each build", g))
     out += _group_overviews()                 # one card per group still in play (group stage only)
-    reveal = _knockout_reveal()               # 'the R32 is set' — once the groups finish
+    reveal = _knockout_reveal()               # 'the <round> is set' — round-aware (R32/R16/QF/SF/Final)
     if reveal:
-        out.append(("Knockouts · the Round of 32 is set", reveal))
-    out += _likely_opponents()                # most-likely next-round opponents (per marquee team)
-    out += _path_to_final()                   # marquee teams' road to the final (knockouts)
+        out.append((f"Knockouts · the {_current_ko_round() or 'next round'} is set", reveal))
+    out += _likely_opponents(rnd=_next_ko_round() or "Round of 32")   # who each contender may face NEXT
+    out += _path_to_final()                   # marquee teams' road still ahead (knockouts)
     surv = _survival_text()                   # surviving teams' title odds (knockouts)
     if surv:
         out.append(("Survival odds · who wins it all", surv))
