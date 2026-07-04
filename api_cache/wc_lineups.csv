@@ -4401,3 +4401,107 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1331967262,away,Egypt,4-2-3-1,no,11356289,Ibrahim Adel,20,Forward
 1331967262,away,Egypt,4-2-3-1,no,2716385,Zizo,25,Forward
 1331967262,away,Egypt,4-2-3-1,no,88638221,Hamza Abdelkarim,9,Forward
+1333781594,home,Colombia,4-3-3,yes,399756,Camilo Vargas,12,Goalkeeper
+1333781594,home,Colombia,4-3-3,yes,10347302,Johan Mojica,17,Defender
+1333781594,home,Colombia,4-3-3,yes,310723,Jhon Lucumí,3,Defender
+1333781594,home,Colombia,4-3-3,yes,27202,Davinson Sánchez,23,Defender
+1333781594,home,Colombia,4-3-3,yes,2211650,Daniel Muñoz,2,Defender
+1333781594,home,Colombia,4-3-3,yes,52169628,Gustavo Puerta,14,Midfielder
+1333781594,home,Colombia,4-3-3,yes,401044,Jefferson Lerma,16,Midfielder
+1333781594,home,Colombia,4-3-3,yes,2207142,Jhon Arias,11,Midfielder
+1333781594,home,Colombia,4-3-3,yes,400883,Luis Díaz,7,Forward
+1333781594,home,Colombia,4-3-3,yes,3994564,Jhon Córdoba,9,Forward
+1333781594,home,Colombia,4-3-3,yes,83391,James Rodríguez,10,Forward
+1333781594,home,Colombia,4-3-3,no,50547,David Ospina,1,Goalkeeper
+1333781594,home,Colombia,4-3-3,no,399595,Álvaro Montero,24,Goalkeeper
+1333781594,home,Colombia,4-3-3,no,4984,Santiago Arias,4,Defender
+1333781594,home,Colombia,4-3-3,no,400078,Yerry Mina,13,Defender
+1333781594,home,Colombia,4-3-3,no,2185085,Willer Ditta,18,Defender
+1333781594,home,Colombia,4-3-3,no,399917,Deiver Machado,22,Defender
+1333781594,home,Colombia,4-3-3,no,46624466,Kevin Castaño,5,Midfielder
+1333781594,home,Colombia,4-3-3,no,31411898,Richard Ríos,6,Midfielder
+1333781594,home,Colombia,4-3-3,no,965188,Jorge Carrascal,8,Midfielder
+1333781594,home,Colombia,4-3-3,no,2117465,Juan Portilla,15,Midfielder
+1333781594,home,Colombia,4-3-3,no,966959,Juan Fernando Quintero,20,Midfielder
+1333781594,home,Colombia,4-3-3,no,2153690,Jaminton Campaz,21,Midfielder
+1333781594,home,Colombia,4-3-3,no,55665582,Andrés Gómez,26,Forward
+1333781594,home,Colombia,4-3-3,no,7660856,Cucho Hernández,19,Forward
+1333781594,home,Colombia,4-3-3,no,7605311,Luis Javier Suárez,25,Forward
+1333781594,away,Ghana,4-1-4-1,yes,549486,Lawrence Ati Zigi,1,Goalkeeper
+1333781594,away,Ghana,4-1-4-1,yes,1220212,Gideon Mensah,14,Defender
+1333781594,away,Ghana,4-1-4-1,yes,22093057,Jerome Opoku,18,Defender
+1333781594,away,Ghana,4-1-4-1,yes,4080055,Derrick Luckassen,23,Defender
+1333781594,away,Ghana,4-1-4-1,yes,30789794,Marvin Senaya,26,Defender
+1333781594,away,Ghana,4-1-4-1,yes,8043,Thomas Partey,5,Midfielder
+1333781594,away,Ghana,4-1-4-1,yes,3104395,Antoine Semenyo,11,Midfielder
+1333781594,away,Ghana,4-1-4-1,yes,581042,Kwasi Sibo,8,Midfielder
+1333781594,away,Ghana,4-1-4-1,yes,76567729,Caleb Yirenkyi,3,Midfielder
+1333781594,away,Ghana,4-1-4-1,yes,7614488,Iñaki Williams,19,Midfielder
+1333781594,away,Ghana,4-1-4-1,yes,552062,Jordan Ayew,9,Forward
+1333781594,away,Ghana,4-1-4-1,no,23298303,Joseph Anang,12,Goalkeeper
+1333781594,away,Ghana,4-1-4-1,no,77297542,Benjamin Asare,16,Goalkeeper
+1333781594,away,Ghana,4-1-4-1,no,31586261,Alidu Seidu,2,Defender
+1333781594,away,Ghana,4-1-4-1,no,59477579,Jonas Adjei Adjetey,4,Defender
+1333781594,away,Ghana,4-1-4-1,no,2560054,Abdul Mumin,6,Defender
+1333781594,away,Ghana,4-1-4-1,no,3541510,Rahman Baba,17,Defender
+1333781594,away,Ghana,4-1-4-1,no,65071846,Kojo Peprah Oppong,21,Defender
+1333781594,away,Ghana,4-1-4-1,no,3382764,Elisha Owusu,15,Midfielder
+1333781594,away,Ghana,4-1-4-1,no,48858341,Abdul Fatawu Issahaku,7,Forward
+1333781594,away,Ghana,4-1-4-1,no,66299954,Christopher Baah,13,Forward
+1333781594,away,Ghana,4-1-4-1,no,54325740,Augustine Boakye,20,Midfielder
+1333781594,away,Ghana,4-1-4-1,no,13216644,Brandon Thomas-Asante,10,Forward
+1333781594,away,Ghana,4-1-4-1,no,32173911,Kamaldeen Sulemana,22,Forward
+1333781594,away,Ghana,4-1-4-1,no,56487970,Ernest Nuamah,24,Forward
+1333781594,away,Ghana,4-1-4-1,no,66012730,Prince Kwabena Adu,25,Forward
+1331968113,home,Argentina,4-4-2,yes,3155593,Emiliano Martínez,23,Goalkeeper
+1331968113,home,Argentina,4-4-2,yes,1003345,Facundo Medina,25,Defender
+1331968113,home,Argentina,4-4-2,yes,397341,Lisandro Martínez,6,Defender
+1331968113,home,Argentina,4-4-2,yes,4955090,Cristian Romero,13,Defender
+1331968113,home,Argentina,4-4-2,yes,1047137,Nahuel Molina,26,Defender
+1331968113,home,Argentina,4-4-2,yes,976941,Thiago Almada,16,Midfielder
+1331968113,home,Argentina,4-4-2,yes,965510,Enzo Fernández,24,Midfielder
+1331968113,home,Argentina,4-4-2,yes,1081430,Alexis Mac Allister,20,Midfielder
+1331968113,home,Argentina,4-4-2,yes,398146,Rodrigo De Paul,7,Midfielder
+1331968113,home,Argentina,4-4-2,yes,35091,Lautaro Martínez,22,Forward
+1331968113,home,Argentina,4-4-2,yes,24948,Lionel Messi,10,Forward
+1331968113,home,Argentina,4-4-2,no,7614810,Gerónimo Rulli,12,Goalkeeper
+1331968113,home,Argentina,4-4-2,no,397019,Juan Musso,1,Goalkeeper
+1331968113,home,Argentina,4-4-2,no,397502,Gonzalo Montiel,4,Defender
+1331968113,home,Argentina,4-4-2,no,1064364,Marcos Senesi,2,Defender
+1331968113,home,Argentina,4-4-2,no,85323,Nicolás Tagliafico,3,Defender
+1331968113,home,Argentina,4-4-2,no,100618,Nicolás Otamendi,19,Defender
+1331968113,home,Argentina,4-4-2,no,966476,Exequiel Palacios,14,Midfielder
+1331968113,home,Argentina,4-4-2,no,254212,Giovani Lo Celso,11,Midfielder
+1331968113,home,Argentina,4-4-2,no,52153689,Giuliano Simeone,17,Forward
+1331968113,home,Argentina,4-4-2,no,43785,Leandro Paredes,5,Midfielder
+1331968113,home,Argentina,4-4-2,no,56356111,Nico Paz,18,Forward
+1331968113,home,Argentina,4-4-2,no,4236869,Nicolás González,15,Forward
+1331968113,home,Argentina,4-4-2,no,51451246,Valentín Barco,8,Midfielder
+1331968113,home,Argentina,4-4-2,no,967603,Julián Alvarez,9,Forward
+1331968113,home,Argentina,4-4-2,no,47577747,José Manuel López,21,Forward
+1331968113,away,Cape Verde,4-1-4-1,yes,2464098,Vozinha,1,Goalkeeper
+1331968113,away,Cape Verde,4-1-4-1,yes,49699083,Sidny Lopes Cabral,13,Defender
+1331968113,away,Cape Verde,4-1-4-1,yes,6699042,Diney Borges,3,Defender
+1331968113,away,Cape Verde,4-1-4-1,yes,11151014,Pico,4,Defender
+1331968113,away,Cape Verde,4-1-4-1,yes,3564533,Steven Moreira,22,Defender
+1331968113,away,Cape Verde,4-1-4-1,yes,15538586,Kevin Lenini,6,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,yes,240688,Jovane Cabral,7,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,yes,6027189,Deroy Duarte,14,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,yes,6027350,Laros Duarte,15,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,yes,8093624,Ryan Mendes,20,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,yes,3584819,Nuno Da Costa,21,Forward
+1331968113,away,Cape Verde,4-1-4-1,no,26275354,CJ Dos Santos,23,Goalkeeper
+1331968113,away,Cape Verde,4-1-4-1,no,6724158,Márcio Rosa,12,Goalkeeper
+1331968113,away,Cape Verde,4-1-4-1,no,3541671,Logan Costa,5,Defender
+1331968113,away,Cape Verde,4-1-4-1,no,43277920,Kelvin Pires,25,Defender
+1331968113,away,Cape Verde,4-1-4-1,no,375445,Stopira,2,Defender
+1331968113,away,Cape Verde,4-1-4-1,no,53461170,Wagner Pina,24,Defender
+1331968113,away,Cape Verde,4-1-4-1,no,7182686,Garry Rodrigues,11,Forward
+1331968113,away,Cape Verde,4-1-4-1,no,46855018,Hélio Varela,26,Forward
+1331968113,away,Cape Verde,4-1-4-1,no,8170099,Jamiro Monteiro,10,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,no,22864730,João Paulo,8,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,no,18286534,Willy Semedo,17,Forward
+1331968113,away,Cape Verde,4-1-4-1,no,20609281,Yannick Semedo,16,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,no,42754670,Telmo Arcanjo,18,Midfielder
+1331968113,away,Cape Verde,4-1-4-1,no,55269361,Dailon Rocha Livramento,19,Forward
+1331968113,away,Cape Verde,4-1-4-1,no,49778456,Gilson Tavares,9,Forward

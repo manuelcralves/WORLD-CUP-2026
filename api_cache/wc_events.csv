@@ -1349,3 +1349,37 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1331967262,120+3,Egypt,Penalty,M. Salah,49420,,,
 1331967262,120+4,Australia,Missed Penalty,L. Herrington,68663434,,,
 1331967262,120+4,Egypt,Penalty,H. Abdelmaguid,43409135,,,
+1333781594,8,Colombia,Substitution,J. Cordoba,3994564,,L. Suarez,7605311
+1333781594,12,Colombia,Yellow Card,J. Arias,2207142,,,
+1333781594,13,Ghana,Substitution,M. Senaya,30789794,,A. Seidu,31586261
+1333781594,14,Colombia,Goal,J. Arias,2207142,L. Suarez,,7605311
+1333781594,46,Colombia,Substitution,J. Rodriguez,83391,,R. Rios,31411898
+1333781594,49,Ghana,Yellow Card,C. Yirenkyi,76567729,,,
+1333781594,56,Colombia,VAR Goal Cancelled - Offside,L. Diaz,400883,,,
+1333781594,62,Ghana,Substitution,I. Williams,7614488,,I. Fatawu,48858341
+1333781594,62,Ghana,Substitution,K. Sibo,581042,,E. Owusu,3382764
+1333781594,66,Ghana,Yellow Card,I. Fatawu,48858341,,,
+1333781594,73,Colombia,Substitution,J. Arias,2207142,,J. Quintero,966959
+1333781594,76,Ghana,Yellow Card,A. Seidu,31586261,,,
+1333781594,78,Colombia,Yellow Card,R. Rios,31411898,,,
+1333781594,79,Ghana,Substitution,J. Ayew,552062,,E. Nuamah,56487970
+1333781594,79,Ghana,Substitution,C. Yirenkyi,76567729,,P. Adu,66012730
+1333781594,90,Colombia,Substitution,L. Diaz,400883,,J. Campaz,2153690
+1331968113,29,Argentina,Goal,L. Messi,24948,L. Martinez,,397341
+1331968113,59,Cape Verde,Goal,D. Duarte,6027189,R. Mendes,,8093624
+1331968113,63,Argentina,Substitution,L. Martinez,35091,,J. Alvarez,967603
+1331968113,64,Argentina,Substitution,T. Almada,976941,,N. Gonzalez,4236869
+1331968113,67,Cape Verde,Substitution,L. Duarte,6027350,,J. Monteiro,8170099
+1331968113,67,Cape Verde,Substitution,N. Da Costa,3584819,,D. Livramento,55269361
+1331968113,68,Cape Verde,Yellow Card,K. Lenini,15538586,,,
+1331968113,80,Cape Verde,Substitution,R. Mendes,8093624,,W. Semedo,18286534
+1331968113,80,Cape Verde,Substitution,J. Cabral,240688,,H. Varela,46855018
+1331968113,84,Argentina,Substitution,R. de Paul,398146,,L. Paredes,43785
+1331968113,86,Argentina,Substitution,F. Medina,1003345,,N. Tagliafico,85323
+1331968113,92,Argentina,Goal,L. Martinez,397341,A. Mac Allister,,1081430
+1331968113,100,Cape Verde,Substitution,D. Duarte,6027189,,Y. Semedo,20609281
+1331968113,100,Cape Verde,Substitution,K. Lenini,15538586,,Benchimol,49778456
+1331968113,103,Cape Verde,Goal,S. Lopes Cabral,49699083,Y. Semedo,,20609281
+1331968113,104,Argentina,Substitution,N. Molina,1047137,,G. Montiel,397502
+1331968113,111,Argentina,Own Goal,D. Borges,6699042,,,
+1331968113,115,Argentina,Yellow Card,G. Montiel,397502,,,
