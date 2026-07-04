@@ -73,6 +73,7 @@ GOALS = [
 SHOOTOUTS = [
     ("2026-06-29", "Germany",     "Paraguay", "Paraguay", "Germany"),      # Paraguay won the shootout
     ("2026-06-29", "Netherlands", "Morocco",  "Morocco",  "Netherlands"),  # Morocco won the shootout 3-2
+    ("2026-07-03", "Australia",   "Egypt",    "Egypt",    "Australia"),     # Egypt won the shootout (R32)
 ]
 
 
