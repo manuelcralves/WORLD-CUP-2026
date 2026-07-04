@@ -1383,3 +1383,24 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1331968113,104,Argentina,Substitution,N. Molina,1047137,,G. Montiel,397502
 1331968113,111,Argentina,Own Goal,D. Borges,6699042,,,
 1331968113,115,Argentina,Yellow Card,G. Montiel,397502,,,
+1334219008,20,Morocco,Yellow Card,R. Halhal,52515617,,,
+1334219008,22,Morocco,Substitution,I. Saibari,26065571,,S. Rahimi,5889373
+1334219008,40,Morocco,Yellow Card,A. Hakimi,1603,,,
+1334219008,40,Canada,Yellow Card,R. Laryea,8181530,,,
+1334219008,43,Canada,Yellow Card,J. David,1366883,,,
+1334219008,45,Morocco,Yellow Card,A. Ounahi,20878312,,,
+1334219008,45+6,Morocco,Yellow Card,B. El Khannouss,54832407,,,
+1334219008,49,Canada,Yellow Card,L. De Fougerolles,52765972,,,
+1334219008,50,Morocco,Goal,A. Ounahi,20878312,A. Hakimi,,1603
+1334219008,63,Morocco,Substitution,A. Bouaddi,70628922,,S. Amrabat,12068
+1334219008,63,Morocco,Substitution,B. El Khannouss,54832407,,C. Talbi,54202253
+1334219008,63,Canada,Substitution,T. Oluwaseyi,56605661,,C. Larin,322315
+1334219008,67,Canada,Yellow Card,C. Larin,322315,,,
+1334219008,78,Canada,Substitution,A. Ahmed,58305499,,P. David,50449987
+1334219008,79,Canada,Substitution,R. Laryea,8181530,,J. Shaffelburg,8183140
+1334219008,82,Morocco,Goal,A. Ounahi,20878312,B. Diaz,,119938
+1334219008,87,Morocco,Substitution,I. Diop,3029208,,M. Saadane,8056916
+1334219008,87,Morocco,Substitution,A. Ounahi,20878312,,S. El Mourabet,66884545
+1334219008,87,Canada,Substitution,T. Buchanan,8213730,,J. Nelson,31118073
+1334219008,87,Canada,Substitution,N. Sigur,67121215,,J. Osorio,8181691
+1334219008,90+8,Morocco,Goal,S. Rahimi,5889373,B. Diaz,,119938
