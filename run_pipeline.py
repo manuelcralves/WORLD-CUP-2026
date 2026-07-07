@@ -107,9 +107,18 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
         pd.DataFrame(opp_rows).to_csv(
             out_dir / "opponents.csv", index=False, encoding="utf-8")
     # Knockout fixtures (once the groups are done) -> knockout_matches.csv for the
-    # tweet kit (KO previews + the round-aware reveal). Reuses data["matches"].
+    # tweet kit (KO previews + the round-aware reveal). Reuses data["matches"]; the date
+    # is the REAL kickoff date (schedule.py, WEST) rather than the dataset's venue-local
+    # date, so "today's games" previews fire on the right day.
     KO_COLS = ["date", "home", "away", "p_home", "p_draw", "p_away", "ml_score", "top3"]
-    ko_rows = [{"date": m["date"], "home": m["home"], "away": m["away"],
+    _kick = data.get("kickoffs", {})
+
+    def _ko_date(h, a, fallback):
+        k = _kick.get("|".join(sorted([h, a])))
+        return k["date"] if k else fallback
+
+    ko_rows = [{"date": _ko_date(m["home"], m["away"], m["date"]),
+                "home": m["home"], "away": m["away"],
                 "p_home": m["p_home"], "p_draw": m["p_draw"], "p_away": m["p_away"],
                 "ml_score": m["ml_score"],
                 "top3": ",".join(f"{s['score']}:{round(s['p'] * 100)}" for s in m.get("top", []))}
