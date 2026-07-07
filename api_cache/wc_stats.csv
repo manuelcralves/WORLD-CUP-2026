@@ -7337,3 +7337,81 @@ match_id,side,team,stat,value
 1341820140,away,Spain,Goalkeeper saves,2
 1341820140,away,Spain,Fouls,13
 1341820140,away,Spain,Yellow cards,1
+1336679249,home,USA,Expected Goals,0.67
+1336679249,home,USA,Big Chances Created,0
+1336679249,home,USA,Free Kicks,9
+1336679249,home,USA,Expected Assists,0.61
+1336679249,home,USA,Successful Crosses,2
+1336679249,home,USA,Crosses,11
+1336679249,home,USA,Passes Own Half,224
+1336679249,home,USA,Passes Opposition Half,314
+1336679249,home,USA,Successful Long Passes,20
+1336679249,home,USA,Long Passes,37
+1336679249,home,USA,Throw-Ins,25
+1336679249,home,USA,Key Passes,5
+1336679249,home,USA,Passes Into Final Third,97
+1336679249,home,USA,Backward Passes,79
+1336679249,home,USA,Goal Kicks,6
+1336679249,home,USA,Interceptions,9
+1336679249,home,USA,Successful Tackles,10
+1336679249,home,USA,Tackles,21
+1336679249,home,USA,Clearances,22
+1336679249,home,USA,Successful Aerial Duels,10
+1336679249,home,USA,Aerial Duels,22
+1336679249,home,USA,Successful Dribbles,10
+1336679249,home,USA,Dribbles,19
+1336679249,home,USA,Shots accuracy,0.29
+1336679249,home,USA,Failed passes,69
+1336679249,home,USA,Possession,0.56
+1336679249,home,USA,Shots on target,2
+1336679249,home,USA,Corners,3
+1336679249,home,USA,Offsides,0
+1336679249,home,USA,Successful passes,458
+1336679249,home,USA,Red cards,0
+1336679249,home,USA,Shots off target,5
+1336679249,home,USA,Blocked shots,0
+1336679249,home,USA,Shots within penalty area,5
+1336679249,home,USA,Total passes,527
+1336679249,home,USA,Goalkeeper saves,3
+1336679249,home,USA,Fouls,11
+1336679249,home,USA,Yellow cards,2
+1336679249,home,USA,Shots outside penalty area,2
+1336679249,away,Belgium,Expected Goals,2.15
+1336679249,away,Belgium,Big Chances Created,4
+1336679249,away,Belgium,Free Kicks,11
+1336679249,away,Belgium,Expected Assists,1.5
+1336679249,away,Belgium,Successful Crosses,5
+1336679249,away,Belgium,Crosses,14
+1336679249,away,Belgium,Passes Own Half,225
+1336679249,away,Belgium,Passes Opposition Half,199
+1336679249,away,Belgium,Successful Long Passes,19
+1336679249,away,Belgium,Long Passes,59
+1336679249,away,Belgium,Throw-Ins,18
+1336679249,away,Belgium,Key Passes,13
+1336679249,away,Belgium,Passes Into Final Third,61
+1336679249,away,Belgium,Backward Passes,88
+1336679249,away,Belgium,Goal Kicks,7
+1336679249,away,Belgium,Interceptions,9
+1336679249,away,Belgium,Successful Tackles,11
+1336679249,away,Belgium,Tackles,23
+1336679249,away,Belgium,Clearances,20
+1336679249,away,Belgium,Successful Aerial Duels,12
+1336679249,away,Belgium,Aerial Duels,22
+1336679249,away,Belgium,Successful Dribbles,10
+1336679249,away,Belgium,Dribbles,21
+1336679249,away,Belgium,Shots accuracy,0.47
+1336679249,away,Belgium,Failed passes,78
+1336679249,away,Belgium,Possession,0.44
+1336679249,away,Belgium,Shots on target,7
+1336679249,away,Belgium,Corners,5
+1336679249,away,Belgium,Offsides,1
+1336679249,away,Belgium,Successful passes,332
+1336679249,away,Belgium,Red cards,0
+1336679249,away,Belgium,Shots off target,4
+1336679249,away,Belgium,Blocked shots,4
+1336679249,away,Belgium,Shots within penalty area,10
+1336679249,away,Belgium,Total passes,410
+1336679249,away,Belgium,Goalkeeper saves,1
+1336679249,away,Belgium,Fouls,9
+1336679249,away,Belgium,Yellow cards,0
+1336679249,away,Belgium,Shots outside penalty area,5
