@@ -346,58 +346,77 @@ def _knockout_previews(today: str) -> list:
             for r in d.itertuples(index=False)]
 
 
-# Which knockout round is live, inferred from the number of upcoming ties.
-_KO_BY_TIES = {16: "Round of 32", 8: "Round of 16", 4: "Quarter-finals",
-               2: "Semi-finals", 1: "Final"}
 _KO_ORDER = ["Round of 32", "Round of 16", "Quarter-finals", "Semi-finals", "Final"]
 _KO_PREV = {"Round of 16": "Round of 32 done", "Quarter-finals": "Round of 16 done",
             "Semi-finals": "Quarter-finals done", "Final": "Semis done"}
+# Current round from how many knockout ties are already PLAYED — robust to a mid-round
+# state where some R16 are done AND a QF is already on the board (counting upcoming ties
+# would mix rounds). R32=16 ties, R16=8, QF=4, SF=2, Final=1 -> cumulative done 16/24/28/30/31.
+_KO_BOUNDS = [(16, "Round of 32"), (24, "Round of 16"), (28, "Quarter-finals"),
+              (30, "Semi-finals"), (31, "Final")]
+# A round is "just drawn" (a fresh reveal moment) when the done-count sits EXACTLY on a
+# boundary — 0 R32, 16 R16, 24 QF, 28 SF, 30 Final — i.e. none of it has been played yet.
+_FRESH_ROUND = {0: "Round of 32", 16: "Round of 16", 24: "Quarter-finals",
+                28: "Semi-finals", 30: "Final"}
+
+
+def _ko_played_count() -> int:
+    """How many knockout ties have already been played (from played_review.csv)."""
+    p = OUT / "played_review.csv"
+    if not p.exists():
+        return 0
+    try:
+        d = pd.read_csv(p)
+        return int((d["stage"] == "knockout").sum()) if "stage" in d.columns else 0
+    except Exception:
+        return 0
+
+
+def _in_knockouts() -> bool:
+    p = OUT / "knockout_matches.csv"
+    try:
+        return p.exists() and not pd.read_csv(p).empty
+    except Exception:
+        return False
 
 
 def _current_ko_round() -> str:
-    """The knockout round coming up, from the number of upcoming ties in
-    knockout_matches.csv (16 = R32, 8 = R16 … 1 = the Final). '' during the groups."""
-    p = OUT / "knockout_matches.csv"
-    if not p.exists():
+    """The knockout round currently in progress, from how many KO ties are done.
+    '' during the group stage (and once the trophy is lifted)."""
+    if not _in_knockouts() and _ko_played_count() == 0:
         return ""
-    try:
-        n = len(pd.read_csv(p))
-    except Exception:
-        return ""
-    return _KO_BY_TIES.get(n, "")
-
-
-def _next_ko_round() -> str:
-    """The round after the current one (R16 -> QF …), or '' at/after the final."""
-    cur = _current_ko_round()
-    if cur in _KO_ORDER and _KO_ORDER.index(cur) + 1 < len(_KO_ORDER):
-        return _KO_ORDER[_KO_ORDER.index(cur) + 1]
+    n = _ko_played_count()
+    for bound, name in _KO_BOUNDS:
+        if n < bound:
+            return name
     return ""
 
 
 def _knockout_reveal() -> str:
-    """One-off 'the next round is SET' card — auto-detects the round from the number
-    of upcoming ties, so it reads 'Round of 16 is SET', 'Quarter-finals are SET', …
-    without any per-phase editing."""
+    """One-off 'the <round> is SET' card — fires ONLY right when a round is drawn (the
+    KO played-count is exactly on a round boundary), so it never shows a stale, half-
+    played round. At that moment knockout_matches.csv holds exactly that round's ties
+    (no next-round fixture exists until a game is played), so no filtering is needed."""
     p = OUT / "knockout_matches.csv"
     if not p.exists():
         return ""
     d = pd.read_csv(p)
     if d.empty:
         return ""
-    rnd = _KO_BY_TIES.get(len(d), "")
+    rnd = _FRESH_ROUND.get(_ko_played_count())
+    if not rnd:                                     # mid-round -> not a reveal moment
+        return ""
     if rnd == "Final":
         r = d.iloc[0]
         return (f"🏆 It all comes down to this — the FINAL is SET!\n\n"
                 f"{_flag(r['home']) or '⚽'} {r['home']} v {r['away']} "
                 f"{_flag(r['away']) or '⚽'}\n\nWho lifts the trophy? 👇\n{SITE}")
-    lines = [f"{_flag(r.home) or '⚽'} {r.home}–{r.away} {_flag(r.away) or '⚽'}"
+    lines = [f"{_flag(r.home) or '⚽'} {r.home} v {r.away} {_flag(r.away) or '⚽'}"
              for r in d.itertuples(index=False)]
     verb = "are" if rnd in ("Quarter-finals", "Semi-finals") else "is"
-    label = rnd or "knockouts"
     prev = _KO_PREV.get(rnd)
-    head = (f"🏆 {prev} — the {label} {verb} SET!\n\n" if prev
-            else f"🏆 Groups done — the {label} {verb} SET!\n\n")
+    head = (f"🏆 {prev} — the {rnd} {verb} SET!\n\n" if prev
+            else f"🏆 Groups done — the {rnd} {verb} SET!\n\n")
     tail = f"\n\nFull bracket 👇\n{SITE}"
     return head + _fit(lines, head, tail) + tail
 
@@ -435,13 +454,12 @@ def _path_to_final(teams=("Argentina", "Spain", "France", "Portugal", "Brazil"),
 
 def _survival_text() -> str:
     """During the knockouts: how many teams are left + the surviving title odds."""
-    kp, p = OUT / "knockout_matches.csv", OUT / "predictions.csv"
-    if not kp.exists() or not p.exists():            # group stage -> the title-race tweet covers it
+    p = OUT / "predictions.csv"
+    if (not _in_knockouts() and not _ko_played_count()) or not p.exists():   # group stage -> title-race tweet covers it
         return ""
-    ko = pd.read_csv(kp)
-    if ko.empty:
+    n_alive = 32 - _ko_played_count()                # each knockout tie eliminates one team
+    if n_alive < 2:                                  # trophy already lifted
         return ""
-    n_alive = len(set(ko["home"]) | set(ko["away"]))   # teams with an upcoming knockout tie
     d = pd.read_csv(p).sort_values("p_champion", ascending=False)
     head = f"⚔️ {n_alive} teams left — who lifts the trophy?\n\n"
     lines = [f"{i}. {_flag(r.team)} {r.team} {_pct(r.p_champion)}"
@@ -459,12 +477,13 @@ def evergreen_tweets() -> list:
     reveal = _knockout_reveal()               # 'the <round> is set' — round-aware (R32/R16/QF/SF/Final)
     if reveal:
         out.append((f"Knockouts · the {_current_ko_round() or 'next round'} is set", reveal))
-    out += _likely_opponents(rnd=_next_ko_round() or "Round of 32")   # who each contender may face NEXT
-    out += _path_to_final()                   # marquee teams' road still ahead (knockouts)
+    if not _current_ko_round():               # only before the bracket is drawn (group stage): once the
+        out += _likely_opponents()            # ties are set the opponent is known, not "likely"
+    out += _path_to_final()                   # marquee teams' road still ahead, round by round
     surv = _survival_text()                   # surviving teams' title odds (knockouts)
     if surv:
         out.append(("Survival odds · who wins it all", surv))
-    out.append(("Bracket · for ~28 Jun (when knockouts open)", BRACKET))
+    out.append(("Bracket · knockouts are live", BRACKET))
     return out
 
 
