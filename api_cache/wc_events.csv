@@ -1478,3 +1478,23 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1336679249,90+2,USA,Substitution,F. Balogun,22352589,,H. Wright,68901
 1336679249,90+2,USA,Substitution,A. Robinson,3147543,,M. Arfsten,58346554
 1336679249,90+3,Belgium,Goal,R. Lukaku,146181,H. Vanaken,,12712
+1341860988,15,Egypt,Goal,Y. Ibrahim,2705598,M. Attia,,30682729
+1341860988,21,Argentina,Missed Penalty,L. Messi,24948,L. Messi,,24948
+1341860988,46,Egypt,Substitution,E. Ashour,2780463,,H. Fathy,2707047
+1341860988,58,Egypt,VAR Goal Cancelled,M. Ziko,63607229,,,
+1341860988,66,Argentina,Substitution,N. Tagliafico,85323,,N. Gonzalez,4236869
+1341860988,66,Argentina,Substitution,R. de Paul,398146,,L. Martinez,35091
+1341860988,67,Egypt,Goal,M. Ziko,63607229,H. Hassan,,3356038
+1341860988,73,Argentina,Substitution,N. Molina,1047137,,G. Montiel,397502
+1341860988,73,Egypt,Substitution,H. Hassan,3356038,,Trezeguet,429058
+1341860988,79,Argentina,Goal,C. Romero,4955090,L. Messi,,24948
+1341860988,80,Egypt,Substitution,M. Ziko,63607229,,O. Marmoush,13133407
+1341860988,83,Argentina,Goal,L. Messi,24948,G. Montiel,,397502
+1341860988,90+2,Argentina,Goal,E. Fernandez,965510,L. Martinez,,35091
+1341860988,90+3,Egypt,Yellow Card,M. Shobeir,43337168,,,
+1341860988,90+4,Egypt,Yellow Card,H. Fathy,2707047,,,
+1341860988,90+5,Argentina,Substitution,C. Romero,4955090,,N. Otamendi,100618
+1341860988,90+5,Argentina,Substitution,J. Alvarez,967603,,F. Medina,1003345
+1341860988,90+6,Egypt,Substitution,M. Lasheen,2711555,,Zizo,2716385
+1341860988,90+8,Egypt,Yellow Card,M. Attia,30682729,,,
+1341860988,90+9,Egypt,Yellow Card,H. Hassan,43718577,,,
