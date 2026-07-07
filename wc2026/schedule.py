@@ -14,7 +14,12 @@ import pandas as pd
 _FIX = {"Czechia": "Czech Republic", "USA": "United States",
         "Turkiye": "Turkey", "Curacao": "Curaçao"}
 
-# date(UTC) time(UTC) Home vs Away  — full 72-match group stage, in UTC.
+# date(UTC) time(UTC) Home vs Away  — the 72-match group stage plus every knockout tie
+# whose teams are known, all in UTC (the WEST kickoff shown on the site = this + 1h).
+# The last quarter-final's teams aren't decided yet, so all four possible pairings are
+# listed at its kickoff; only the real one ever matches a fixture (the other three each
+# contain an eliminated team), so the extras are inert. Lines must stay "DATE TIME H vs A"
+# — the parser splits on " vs ", so no blank or comment lines inside the block.
 _RAW = """
 2026-06-11 19:00 Mexico vs South Africa
 2026-06-12 02:00 South Korea vs Czechia
@@ -112,6 +117,13 @@ _RAW = """
 2026-07-07 00:00 United States vs Belgium
 2026-07-07 16:00 Argentina vs Egypt
 2026-07-07 20:00 Switzerland vs Colombia
+2026-07-09 20:00 Morocco vs France
+2026-07-10 19:00 Spain vs Belgium
+2026-07-11 21:00 Norway vs England
+2026-07-12 01:00 Argentina vs Switzerland
+2026-07-12 01:00 Argentina vs Colombia
+2026-07-12 01:00 Egypt vs Switzerland
+2026-07-12 01:00 Egypt vs Colombia
 """
 
 _WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
