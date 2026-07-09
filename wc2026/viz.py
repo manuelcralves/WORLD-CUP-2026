@@ -14,12 +14,12 @@ import matplotlib.animation as animation
 
 from .tournament import OFFICIAL_GROUPS, STAGE_LABELS, STAGES
 
-GOLD = "#ffd34d"      # highlight (favourite / selected team)
-GREEN = "#00d68f"     # accent color
-INK = "#11161f"
-PANEL = "#1a2233"
-TEXT = "#e6e9ef"
-MUTED = "#8a93a8"
+GOLD = "#ffcb5c"      # highlight (favourite / selected team)
+GREEN = "#2ee6a6"     # accent color (Emerald Pitch)
+INK = "#0a0e14"
+PANEL = "#131a26"
+TEXT = "#f0f3f9"
+MUTED = "#8a95a9"
 
 # Deployed GitHub Pages base URL (for absolute Open Graph / share links).
 SITE = "https://worldcup2026ml.pt"
@@ -104,14 +104,14 @@ def flag_code(team: str) -> str:
 # file path would not work everywhere; a data URI sidesteps that).
 _TROPHY_SVG = (
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
-    '<rect width="64" height="64" rx="15" fill="#0c1018"/>'
-    '<circle cx="32" cy="24" r="13.5" fill="#ffd34d"/>'
-    '<g stroke="#0c1018" stroke-width="1.7" fill="none">'
+    '<rect width="64" height="64" rx="15" fill="#0a0e14"/>'
+    '<circle cx="32" cy="24" r="13.5" fill="#ffcb5c"/>'
+    '<g stroke="#0a0e14" stroke-width="1.7" fill="none">'
     '<line x1="18.5" y1="24" x2="45.5" y2="24"/>'
     '<ellipse cx="32" cy="24" rx="13.5" ry="6.75"/>'
     '<line x1="32" y1="10.5" x2="32" y2="37.5"/>'
     '<ellipse cx="32" cy="24" rx="6.75" ry="13.5"/></g>'
-    '<g fill="#ffd34d"><rect x="30.5" y="37" width="3" height="9"/>'
+    '<g fill="#ffcb5c"><rect x="30.5" y="37" width="3" height="9"/>'
     '<rect x="23" y="46" width="18" height="4" rx="2"/>'
     '<rect x="18" y="50" width="28" height="5" rx="2.5"/></g></svg>'
 )

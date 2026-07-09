@@ -2,8 +2,8 @@
 the SVG favicon. Run once: `python make_icons.py`."""
 from PIL import Image, ImageDraw
 
-GOLD = (255, 211, 77, 255)
-DARK = (12, 16, 24, 255)
+GOLD = (255, 203, 92, 255)
+DARK = (10, 14, 20, 255)
 
 
 def make(px: int, path: str):

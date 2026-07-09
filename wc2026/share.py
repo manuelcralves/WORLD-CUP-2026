@@ -109,11 +109,11 @@ def spotlight_card(table, out, team=None):
 # renders the same locally (Windows) and in the GitHub Action (Ubuntu).
 # --------------------------------------------------------------------------- #
 _HERO = (1200, 630)
-_GOLD = (255, 211, 77)
-_GREEN = (0, 224, 164)
-_WHITE = (238, 241, 247)
-_GREY = (139, 149, 171)
-_DARK = (12, 16, 24)
+_GOLD = (255, 203, 92)
+_GREEN = (46, 230, 166)
+_WHITE = (240, 243, 249)
+_GREY = (138, 149, 169)
+_DARK = (10, 14, 20)
 
 
 def _ttf(size: int, bold: bool = True):
@@ -125,7 +125,7 @@ def _hero_bg(w: int, h: int) -> Image.Image:
     """Dark vertical gradient with soft radial glows (the homepage's backdrop)."""
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     t = (yy / h)[..., None]
-    img = np.array([12, 16, 24], np.float32) * (1 - t) + np.array([7, 10, 17], np.float32) * t
+    img = np.array([10, 14, 20], np.float32) * (1 - t) + np.array([6, 9, 16], np.float32) * t
 
     def glow(cx, cy, rx, ry, col, peak):
         dd = ((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2
@@ -217,19 +217,19 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
     for t in order:
         s = snap.loc[t, "p_champion"] * 100
         p = pre.loc[t, "p_champion"] * 100 if t in pre.index else 0.0
-        hl = " style='color:#ffd34d;font-weight:700'" if t == order[0] else ""
+        hl = " style='color:#ffcb5c;font-weight:700'" if t == order[0] else ""
         rows += (f"<tr{hl}><td>{_flag_img(t)}{t}</td><td>{s:.1f}%</td>"
                  f"<td>{p:.1f}%</td><td>{s-p:+.1f}</td></tr>")
 
-    css = ("body{background:#0f1420;color:#e6e9ef;font-family:-apple-system,"
+    css = ("body{background:#0a0e14;color:#f0f3f9;font-family:-apple-system,"
            "Segoe UI,Roboto,Arial,sans-serif;max-width:680px;margin:0 auto;"
            "padding:64px 18px 30px}h1{font-size:24px}table{width:100%;border-collapse:"
-           "collapse}td,th{padding:8px;border-bottom:1px solid #232c40;text-align:"
-           "left;font-size:14px}th{color:#8a93a8}.sub{color:#8a93a8}"
+           "collapse}td,th{padding:8px;border-bottom:1px solid #263143;text-align:"
+           "left;font-size:14px}th{color:#8a95a9}.sub{color:#8a95a9}"
            ".homebtn{position:fixed;top:14px;left:14px;display:inline-flex;align-items:"
-           "center;gap:6px;background:#161d2b;border:1px solid #243049;color:#e6e9ef;"
+           "center;gap:6px;background:#131a26;border:1px solid #263143;color:#f0f3f9;"
            "text-decoration:none;font-size:13px;font-weight:600;padding:7px 13px;"
-           "border-radius:999px}.homebtn:hover{border-color:#00e0a4;color:#00e0a4}"
+           "border-radius:999px}.homebtn:hover{border-color:#2ee6a6;color:#2ee6a6}"
            "@media(max-width:560px){body{padding:56px 12px 30px}h1{font-size:20px}"
            "table{display:block;overflow-x:auto;white-space:nowrap}"
            "td,th{font-size:13px;padding:7px}}")
@@ -246,7 +246,7 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
         f'<meta property="og:url" content="{SITE}/compare.html">'
         '<meta property="og:type" content="website">'
         '<meta name="twitter:card" content="summary_large_image">'
-        '<meta name="theme-color" content="#0c1018">'
+        '<meta name="theme-color" content="#0a0e14">'
         '<link rel="manifest" href="manifest.json">'
         '<link rel="apple-touch-icon" href="apple-touch-icon.png">'
         f"<style>{css}</style></head><body>"
@@ -258,8 +258,8 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
         f"<table><tr><th>Team</th><th>Live</th><th>Pre-tournament</th><th>Δ</th></tr>"
         f"{rows}</table>"
         f"<p class='sub'>Open the full dashboards: "
-        f"<a style='color:#00d68f' href='outputs/dashboard.html'>live</a> · "
-        f"<a style='color:#00d68f' href='outputs_pretournament/dashboard.html'>"
+        f"<a style='color:#2ee6a6' href='outputs/dashboard.html'>live</a> · "
+        f"<a style='color:#2ee6a6' href='outputs_pretournament/dashboard.html'>"
         f"pre-tournament</a>.</p></body></html>"
     )
     Path(out_html).write_text(html, encoding="utf-8")

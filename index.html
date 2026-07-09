@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FIFA World Cup 2026 — ML Prediction</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230c1018%22/%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2224%22%20r%3D%2213.5%22%20fill%3D%22%23ffd34d%22/%3E%3Cg%20stroke%3D%22%230c1018%22%20stroke-width%3D%221.7%22%20fill%3D%22none%22%3E%3Cline%20x1%3D%2218.5%22%20y1%3D%2224%22%20x2%3D%2245.5%22%20y2%3D%2224%22/%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2224%22%20rx%3D%2213.5%22%20ry%3D%226.75%22/%3E%3Cline%20x1%3D%2232%22%20y1%3D%2210.5%22%20x2%3D%2232%22%20y2%3D%2237.5%22/%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2224%22%20rx%3D%226.75%22%20ry%3D%2213.5%22/%3E%3C/g%3E%3Cg%20fill%3D%22%23ffd34d%22%3E%3Crect%20x%3D%2230.5%22%20y%3D%2237%22%20width%3D%223%22%20height%3D%229%22/%3E%3Crect%20x%3D%2223%22%20y%3D%2246%22%20width%3D%2218%22%20height%3D%224%22%20rx%3D%222%22/%3E%3Crect%20x%3D%2218%22%20y%3D%2250%22%20width%3D%2228%22%20height%3D%225%22%20rx%3D%222.5%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%230a0e14%22/%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2224%22%20r%3D%2213.5%22%20fill%3D%22%23ffcb5c%22/%3E%3Cg%20stroke%3D%22%230a0e14%22%20stroke-width%3D%221.7%22%20fill%3D%22none%22%3E%3Cline%20x1%3D%2218.5%22%20y1%3D%2224%22%20x2%3D%2245.5%22%20y2%3D%2224%22/%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2224%22%20rx%3D%2213.5%22%20ry%3D%226.75%22/%3E%3Cline%20x1%3D%2232%22%20y1%3D%2210.5%22%20x2%3D%2232%22%20y2%3D%2237.5%22/%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2224%22%20rx%3D%226.75%22%20ry%3D%2213.5%22/%3E%3C/g%3E%3Cg%20fill%3D%22%23ffcb5c%22%3E%3Crect%20x%3D%2230.5%22%20y%3D%2237%22%20width%3D%223%22%20height%3D%229%22/%3E%3Crect%20x%3D%2223%22%20y%3D%2246%22%20width%3D%2218%22%20height%3D%224%22%20rx%3D%222%22/%3E%3Crect%20x%3D%2218%22%20y%3D%2250%22%20width%3D%2228%22%20height%3D%225%22%20rx%3D%222.5%22/%3E%3C/g%3E%3C/svg%3E">
 <meta property="og:title" content="Who wins the World Cup 2026?">
 <meta property="og:description" content="An ML model (Poisson + Elo) trained on 150 years of football — title odds, the bracket, a Match Lab and more.">
 <meta property="og:image" content="https://worldcup2026ml.pt/outputs/share_card.png">
@@ -10,30 +10,31 @@
 <meta property="og:url" content="https://worldcup2026ml.pt/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#0c1018">
+<meta name="theme-color" content="#0a0e14">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="WC 2026">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
-:root{--panel:#161d2b;--panel2:#1c2536;--line:#243049;--text:#eef1f7;--muted:#8b95ab;
---green:#00e0a4;--gold:#ffd34d;--red:#ff6b6b}
+:root{--panel:#131a26;--panel2:#1a2434;--line:#263143;--text:#f0f3f9;--muted:#8a95a9;
+--green:#2ee6a6;--gold:#ffcb5c;--red:#ff6b6b}
 body{margin:0;min-height:100vh;color:var(--text);line-height:1.55;text-align:center;
-font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;-webkit-font-smoothing:antialiased;
 display:flex;flex-direction:column;align-items:center;padding:48px 18px 56px;
 background:
-radial-gradient(1100px 520px at 50% -140px,rgba(0,224,164,.14),transparent 70%),
-radial-gradient(820px 420px at 88% 8%,rgba(255,211,77,.07),transparent 60%),
+radial-gradient(1100px 520px at 50% -140px,rgba(46,230,166,.14),transparent 70%),
+radial-gradient(820px 420px at 88% 8%,rgba(255,203,92,.07),transparent 60%),
 radial-gradient(820px 460px at 8% 26%,rgba(91,141,239,.06),transparent 60%),
-linear-gradient(180deg,#0c1018,#090d15 80%)}
-.logo{width:72px;height:72px;filter:drop-shadow(0 6px 18px rgba(255,211,77,.25))}
-.badge{display:inline-block;margin:14px 0 16px;padding:5px 14px;border-radius:999px;
-background:rgba(0,224,164,.12);color:var(--green);font-size:12px;font-weight:700;
-border:1px solid rgba(0,224,164,.3);letter-spacing:.6px}
+linear-gradient(180deg,#0a0e14,#060910 80%)}
+.logo{width:72px;height:72px;filter:drop-shadow(0 6px 18px rgba(255,203,92,.25))}
+.badge{display:inline-flex;align-items:center;gap:8px;margin:14px 0 16px;padding:6px 14px;border-radius:999px;
+background:rgba(46,230,166,.12);color:var(--green);font-size:11.5px;font-weight:700;
+border:1px solid rgba(46,230,166,.28);letter-spacing:1.4px;text-transform:uppercase}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
 h1{font-family:'Outfit',-apple-system,Segoe UI,sans-serif;font-size:clamp(28px,6.4vw,46px);
 margin:0 0 16px;font-weight:800;letter-spacing:-.5px;max-width:740px}
 h1 .hl{color:var(--gold)}
@@ -43,7 +44,7 @@ h1 .hl{color:var(--gold)}
 text-decoration:none;color:var(--text);background:linear-gradient(160deg,var(--panel),var(--panel2));
 border:1px solid var(--line);border-radius:18px;padding:22px 22px 20px;
 transition:transform .2s,border-color .2s,box-shadow .2s}
-.simcard:hover{transform:translateY(-4px);border-color:rgba(0,224,164,.5);
+.simcard:hover{transform:translateY(-4px);border-color:rgba(46,230,166,.5);
 box-shadow:0 16px 44px rgba(0,0,0,.45)}
 .simcard .ic{font-size:13px;font-weight:700;letter-spacing:.5px;display:inline-flex;
 align-items:center;gap:7px;padding:5px 11px;border-radius:999px;margin-bottom:14px}
@@ -59,16 +60,16 @@ box-shadow:0 0 0 0 rgba(255,107,107,.6);animation:pulse 1.8s infinite}
 font-size:14px;font-weight:600;border-bottom:1px dashed #36425e;padding-bottom:2px}
 .comparelink:hover{color:var(--green);border-color:var(--green)}
 .xlink{display:block;width:fit-content;margin:16px auto 0;border-bottom:none;border-radius:999px;
-padding:9px 18px;background:rgba(0,224,164,.13);color:var(--green);
-border:1px solid rgba(0,224,164,.4);font-weight:700}
-.xlink:hover{background:rgba(0,224,164,.22);color:var(--green);border-color:var(--green)}
+padding:9px 18px;background:rgba(46,230,166,.13);color:var(--green);
+border:1px solid rgba(46,230,166,.4);font-weight:700}
+.xlink:hover{background:rgba(46,230,166,.22);color:var(--green);border-color:var(--green)}
 .xlink b{font-weight:800}
 .playlink{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;max-width:780px;
 margin:18px auto 0;padding:15px 22px;border-radius:14px;text-decoration:none;font-weight:700;
 font-size:clamp(14px,2.3vw,16px);color:var(--green);
-background:linear-gradient(120deg,rgba(0,224,164,.16),rgba(91,141,239,.12));
-border:1px solid rgba(0,224,164,.45);transition:transform .2s,box-shadow .2s,border-color .2s}
-.playlink:hover{transform:translateY(-2px);border-color:var(--green);box-shadow:0 14px 36px rgba(0,224,164,.2)}
+background:linear-gradient(120deg,rgba(46,230,166,.16),rgba(91,141,239,.12));
+border:1px solid rgba(46,230,166,.45);transition:transform .2s,box-shadow .2s,border-color .2s}
+.playlink:hover{transform:translateY(-2px);border-color:var(--green);box-shadow:0 14px 36px rgba(46,230,166,.2)}
 .playlink b{color:var(--text);font-weight:800}
 .features{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:700px;margin:38px 0 0}
 .features a{background:var(--panel);border:1px solid var(--line);border-radius:999px;
@@ -78,9 +79,9 @@ padding:7px 13px;font-size:13px;color:var(--muted);text-decoration:none;transiti
 @media(max-width:620px){.picker{grid-template-columns:1fr}body{padding:34px 14px 48px}}
 </style></head><body>
 <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-<path d="M19 17h-6a8 8 0 0 0 8 10" fill="none" stroke="#ffd34d" stroke-width="3.5" stroke-linecap="round"/>
-<path d="M45 17h6a8 8 0 0 1-8 10" fill="none" stroke="#ffd34d" stroke-width="3.5" stroke-linecap="round"/>
-<g fill="#ffd34d"><path d="M18 14h28v7a14 14 0 0 1-28 0z"/><rect x="30" y="33" width="4" height="9"/>
+<path d="M19 17h-6a8 8 0 0 0 8 10" fill="none" stroke="#ffcb5c" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M45 17h6a8 8 0 0 1-8 10" fill="none" stroke="#ffcb5c" stroke-width="3.5" stroke-linecap="round"/>
+<g fill="#ffcb5c"><path d="M18 14h28v7a14 14 0 0 1-28 0z"/><rect x="30" y="33" width="4" height="9"/>
 <rect x="22" y="42" width="20" height="4" rx="1.5"/><rect x="17" y="46" width="30" height="5" rx="2"/></g></svg>
 <div class="badge">MACHINE LEARNING PREDICTION</div>
 <h1>Who wins the <span class="hl">World Cup 2026</span>?</h1>
