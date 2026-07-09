@@ -1524,3 +1524,16 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1341861839,120+4,Switzerland,Penalty,C. Itten,7808171,,,
 1341861839,120+5,Colombia,Penalty,L. Diaz,400883,,,
 1341861839,120+5,Switzerland,Penalty,,,,,
+1343337473,28,France,Missed Penalty,K. Mbappe,44912,K. Mbappe,,44912
+1343337473,60,France,Goal,K. Mbappe,44912,D. Doue,,55227501
+1343337473,62,Morocco,Substitution,A. Bouaddi,70628922,,S. Amrabat,12068
+1343337473,62,Morocco,Substitution,B. El Khannouss,54832407,,S. Rahimi,5889373
+1343337473,63,Morocco,Yellow Card,I. Diop,3029208,,,
+1343337473,66,France,Goal,O. Dembele,24787,K. Mbappe,,44912
+1343337473,71,France,Substitution,M. Kone,3565821,,W. Zaire-Emery,54201931
+1343337473,74,Morocco,Substitution,B. Diaz,119938,,G. Yassine,59496738
+1343337473,74,Morocco,Substitution,A. Salah-Eddine,26154765,,Z. El Ouahdi,45603726
+1343337473,77,France,Substitution,K. Mbappe,44912,,J. Mateta,4174401
+1343337473,77,France,Substitution,D. Doue,55227501,,B. Barcola,26066698
+1343337473,85,Morocco,Substitution,C. Talbi,54202253,,A. Sbai,30797683
+1343337473,87,France,Substitution,J. Kounde,202531,,M. Gusto,26067181

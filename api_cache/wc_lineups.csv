@@ -4912,3 +4912,55 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1341861839,away,Colombia,4-3-3,no,2153690,Jaminton Campaz,21,Midfielder
 1341861839,away,Colombia,4-3-3,no,3994564,Jhon Córdoba,9,Forward
 1341861839,away,Colombia,4-3-3,no,7660856,Cucho Hernández,19,Forward
+1343337473,home,France,4-2-3-1,yes,3577735,Mike Maignan,16,Goalkeeper
+1343337473,home,France,4-2-3-1,yes,438718,Lucas Digne,3,Defender
+1343337473,home,France,4-2-3-1,yes,3556644,William Saliba,17,Defender
+1343337473,home,France,4-2-3-1,yes,185143,Dayot Upamecano,4,Defender
+1343337473,home,France,4-2-3-1,yes,202531,Jules Koundé,5,Defender
+1343337473,home,France,4-2-3-1,yes,43946,Adrien Rabiot,14,Midfielder
+1343337473,home,France,4-2-3-1,yes,3565821,Manu Koné,6,Midfielder
+1343337473,home,France,4-2-3-1,yes,55227501,Désiré Doué,20,Midfielder
+1343337473,home,France,4-2-3-1,yes,3158491,Michael Olise,11,Midfielder
+1343337473,home,France,4-2-3-1,yes,24787,Ousmane Dembélé,7,Midfielder
+1343337473,home,France,4-2-3-1,yes,44912,Kylian Mbappé,10,Forward
+1343337473,home,France,4-2-3-1,no,3482262,Brice Samba,1,Goalkeeper
+1343337473,home,France,4-2-3-1,no,55901125,Robin Risser,23,Goalkeeper
+1343337473,home,France,4-2-3-1,no,184499,Ibrahima Konaté,15,Defender
+1343337473,home,France,4-2-3-1,no,5467,Lucas Hernández,21,Defender
+1343337473,home,France,4-2-3-1,no,26067181,Malo Gusto,2,Defender
+1343337473,home,France,4-2-3-1,no,7615454,Theo Hernández,19,Defender
+1343337473,home,France,4-2-3-1,no,3380349,Maxence Lacroix,26,Defender
+1343337473,home,France,4-2-3-1,no,204785,Aurélien Tchouaméni,8,Midfielder
+1343337473,home,France,4-2-3-1,no,54201931,Warren Zaïre-Emery,18,Midfielder
+1343337473,home,France,4-2-3-1,no,25192951,Rayan Cherki,24,Midfielder
+1343337473,home,France,4-2-3-1,no,368844,N'Golo Kanté,13,Midfielder
+1343337473,home,France,4-2-3-1,no,44162454,Maghnes Akliouche,25,Midfielder
+1343337473,home,France,4-2-3-1,no,3463103,Marcus Thuram,9,Forward
+1343337473,home,France,4-2-3-1,no,4174401,Jean-Philippe Mateta,22,Forward
+1343337473,home,France,4-2-3-1,no,26066698,Bradley Barcola,12,Forward
+1343337473,away,Morocco,4-2-3-1,yes,435015,Yassine Bounou,1,Goalkeeper
+1343337473,away,Morocco,4-2-3-1,yes,26154765,Anass Salah-Eddine,26,Defender
+1343337473,away,Morocco,4-2-3-1,yes,87899,Noussair Mazraoui,3,Defender
+1343337473,away,Morocco,4-2-3-1,yes,3029208,Issa Diop,14,Defender
+1343337473,away,Morocco,4-2-3-1,yes,1603,Achraf Hakimi,2,Defender
+1343337473,away,Morocco,4-2-3-1,yes,44597637,Neil El Aynaoui,24,Midfielder
+1343337473,away,Morocco,4-2-3-1,yes,70628922,Ayyoub Bouaddi,6,Midfielder
+1343337473,away,Morocco,4-2-3-1,yes,54832407,Bilal El Khannouss,23,Midfielder
+1343337473,away,Morocco,4-2-3-1,yes,20878312,Azzedine Ounahi,8,Midfielder
+1343337473,away,Morocco,4-2-3-1,yes,54202253,Chemsdine Talbi,7,Midfielder
+1343337473,away,Morocco,4-2-3-1,yes,119938,Brahim Díaz,10,Forward
+1343337473,away,Morocco,4-2-3-1,no,435176,Munir El Kajoui,12,Goalkeeper
+1343337473,away,Morocco,4-2-3-1,no,435337,Ahmed Reda Tagnaouti,22,Goalkeeper
+1343337473,away,Morocco,4-2-3-1,no,8056916,Marwane Saadane,5,Defender
+1343337473,away,Morocco,4-2-3-1,no,45603726,Zakaria El Ouahdi,13,Defender
+1343337473,away,Morocco,4-2-3-1,no,44902732,Chadi Riad,18,Defender
+1343337473,away,Morocco,4-2-3-1,no,52515617,Redouane Halhal,25,Defender
+1343337473,away,Morocco,4-2-3-1,no,23630446,Youssef Belammari,19,Defender
+1343337473,away,Morocco,4-2-3-1,no,30797683,Amine Sbai,17,Forward
+1343337473,away,Morocco,4-2-3-1,no,59496738,Gessime Yassine,16,Forward
+1343337473,away,Morocco,4-2-3-1,no,66884545,Samir El Mourabet,15,Midfielder
+1343337473,away,Morocco,4-2-3-1,no,12068,Sofyan Amrabat,4,Midfielder
+1343337473,away,Morocco,4-2-3-1,no,26065571,Ismael Saibari,11,Midfielder
+1343337473,away,Morocco,4-2-3-1,no,438396,Ayoub El Kaabi,20,Forward
+1343337473,away,Morocco,4-2-3-1,no,86142560,Ayoube Amaimouni Echghouyab,21,Forward
+1343337473,away,Morocco,4-2-3-1,no,5889373,Soufiane Rahimi,9,Forward
