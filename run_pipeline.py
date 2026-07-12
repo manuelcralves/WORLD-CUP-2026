@@ -76,7 +76,18 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
         TRK.record_golden_snapshot(GB.predict(bundle, table, topn=100), asof, ghist)  # deep enough that a later top-6 riser still has back-history
         chart = TRK.evolution_chart(hist, out_dir / "odds_evolution.png")
         evolution = {"movers": TRK.movers(hist), "has_chart": chart is not None}
-        odds_history = TRK.history_series(hist)
+        # pin the odds chart to the quarter-finalists (teams with >=3 knockout ties), so
+        # eliminated sides stay on it and you can see each one's arc + when it dropped to 0
+        ko = bundle.get("knockout")
+        _qf = None
+        if ko is not None and len(ko):
+            from collections import Counter
+            _c = Counter()
+            for _h, _a in zip(ko["home_team"], ko["away_team"]):
+                _c[_h] += 1
+                _c[_a] += 1
+            _qf = [t for t, n in _c.items() if n >= 3] or None
+        odds_history = TRK.history_series(hist, teams=_qf)
         golden_history = TRK.golden_history_series(ghist)
 
     viz.save_charts(table, out_dir)

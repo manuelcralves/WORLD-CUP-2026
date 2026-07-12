@@ -63,15 +63,21 @@ def movers(path, n: int = 6) -> list[dict]:
              "delta": float(b[t] - a[t])} for t in delta.index]
 
 
-def history_series(path, top: int = 8) -> dict:
-    """Top teams' title-probability series over time, for the interactive chart."""
+def history_series(path, top: int = 8, teams=None) -> dict:
+    """Title-probability series over time, for the interactive chart. By default the
+    current top-`top` teams; pass `teams` to PIN a specific set (e.g. the quarter-
+    finalists) so eliminated sides stay on the chart and you can watch them drop to 0."""
     hist = load_history(path)
     if hist.empty:
         return None
     dates = sorted(hist["date"].unique())
     piv = hist.pivot_table(index="date", columns="team",
                            values="p_champion").reindex(dates)
-    leaders = piv.iloc[-1].sort_values(ascending=False).head(top).index
+    if teams:
+        pick = [t for t in teams if t in piv.columns]
+        leaders = piv[pick].iloc[-1].sort_values(ascending=False).index    # order by latest odds
+    else:
+        leaders = piv.iloc[-1].sort_values(ascending=False).head(top).index
     return {"dates": list(dates),
             "series": [{"team": t,
                         "data": [round(float(piv.loc[d, t]), 4) for d in dates]}
