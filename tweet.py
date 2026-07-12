@@ -229,7 +229,8 @@ def _title_text():
     p = OUT / "predictions.csv"
     if not p.exists():
         return None
-    d = pd.read_csv(p).sort_values("p_champion", ascending=False).head(5)
+    d = pd.read_csv(p).sort_values("p_champion", ascending=False)
+    d = d[d["p_champion"] > 0].head(5)               # only teams still in it (drop eliminated 0%)
     lines = [f"{i}. {_flag(r.team)} {r.team} {r.p_champion * 100:.0f}%"
              for i, r in enumerate(d.itertuples(index=False), 1)]
     mover = _mover_line()
@@ -461,6 +462,7 @@ def _survival_text() -> str:
     if n_alive < 2:                                  # trophy already lifted
         return ""
     d = pd.read_csv(p).sort_values("p_champion", ascending=False)
+    d = d[d["p_champion"] > 0]                        # only teams still alive (drop eliminated 0%)
     head = f"⚔️ {n_alive} teams left — who lifts the trophy?\n\n"
     lines = [f"{i}. {_flag(r.team)} {r.team} {_pct(r.p_champion)}"
              for i, r in enumerate(d.head(6).itertuples(index=False), 1)]
