@@ -77,6 +77,15 @@ SHOOTOUTS = [
     ("2026-07-07", "Switzerland", "Colombia", "Switzerland", "Colombia"),   # Switzerland won the shootout (R16)
 ]
 
+# (date, home_team, away_team, city, country) — UPCOMING knockout fixtures not yet in the
+# pulled results.csv, so the model + Beat-the-Machine predict list can show them before
+# martj42 lists them. Appended as NA,NA (unplayed); idempotent (skipped once present, either
+# order). Drop a row once martj42 adds it upstream.
+FIXTURES = [
+    ("2026-07-14", "France",  "Spain",     "Arlington", "United States"),   # semi-final 1
+    ("2026-07-15", "England", "Argentina", "Atlanta",   "United States"),   # semi-final 2
+]
+
 
 def _b(v: bool) -> str:
     return "TRUE" if v else "FALSE"
@@ -149,16 +158,42 @@ def fill_shootouts(path: Path) -> int:
     return len(new)
 
 
+def add_fixtures(path: Path) -> int:
+    """Append upcoming knockout fixtures (score NA,NA) not yet present, so they show as
+    upcoming before martj42 lists them. Idempotent: skips a fixture already in the file
+    (either home/away order)."""
+    if not FIXTURES:
+        return 0
+    data = path.read_bytes()
+    nl = _newline(data)
+    if not data.endswith(nl):
+        data += nl
+    lines = data.split(nl)
+    new = []
+    for d, h, a, city, country in FIXTURES:
+        pres = [f"{d},{h},{a},".encode("utf-8"), f"{d},{a},{h},".encode("utf-8")]   # either order
+        if any(ln.startswith(p) for ln in lines for p in pres):
+            print(f"  fixture : SKIP {h} v {a} (already present)")
+        else:
+            new.append(f"{d},{h},{a},NA,NA,FIFA World Cup,{city},{country},TRUE".encode("utf-8"))
+            print(f"  fixture : + {h} v {a} ({d}, upcoming)")
+    if new:
+        data += nl.join(new) + nl
+        path.write_bytes(data)
+    return len(new)
+
+
 def main() -> None:
     repo = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     res, gls, sho = repo / "results.csv", repo / "goalscorers.csv", repo / "shootouts.csv"
     if not res.exists() or not gls.exists():
         sys.exit(f"results.csv / goalscorers.csv not found in {repo.resolve()}")
     print(f"Updating dataset in {repo.resolve()} ...")
+    x = add_fixtures(res)
     r = fill_results(res)
     g = add_goals(gls)
     s = fill_shootouts(sho)
-    print(f"\nDone: {r} result(s) filled, {g} goal(s) added, {s} shootout(s) added.")
+    print(f"\nDone: {x} fixture(s) added, {r} result(s) filled, {g} goal(s) added, {s} shootout(s) added.")
 
 
 if __name__ == "__main__":
