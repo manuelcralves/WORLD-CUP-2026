@@ -7727,3 +7727,81 @@ match_id,side,team,stat,value
 1346130455,away,Belgium,Fouls,16
 1346130455,away,Belgium,Yellow cards,1
 1346130455,away,Belgium,Shots outside penalty area,1
+1345463271,home,Norway,Expected Goals,0.77
+1345463271,home,Norway,Big Chances Created,1
+1345463271,home,Norway,Free Kicks,6
+1345463271,home,Norway,Expected Assists,0.81
+1345463271,home,Norway,Successful Crosses,3
+1345463271,home,Norway,Crosses,19
+1345463271,home,Norway,Passes Own Half,293
+1345463271,home,Norway,Passes Opposition Half,302
+1345463271,home,Norway,Successful Long Passes,20
+1345463271,home,Norway,Long Passes,48
+1345463271,home,Norway,Throw-Ins,16
+1345463271,home,Norway,Key Passes,11
+1345463271,home,Norway,Passes Into Final Third,124
+1345463271,home,Norway,Backward Passes,96
+1345463271,home,Norway,Goal Kicks,10
+1345463271,home,Norway,Interceptions,8
+1345463271,home,Norway,Successful Tackles,12
+1345463271,home,Norway,Tackles,24
+1345463271,home,Norway,Clearances,21
+1345463271,home,Norway,Successful Aerial Duels,12
+1345463271,home,Norway,Aerial Duels,24
+1345463271,home,Norway,Successful Dribbles,5
+1345463271,home,Norway,Dribbles,14
+1345463271,home,Norway,Shots accuracy,0.31
+1345463271,home,Norway,Failed passes,84
+1345463271,home,Norway,Possession,0.48
+1345463271,home,Norway,Shots on target,4
+1345463271,home,Norway,Corners,7
+1345463271,home,Norway,Offsides,1
+1345463271,home,Norway,Successful passes,492
+1345463271,home,Norway,Red cards,0
+1345463271,home,Norway,Shots off target,6
+1345463271,home,Norway,Blocked shots,3
+1345463271,home,Norway,Shots within penalty area,10
+1345463271,home,Norway,Total passes,576
+1345463271,home,Norway,Goalkeeper saves,6
+1345463271,home,Norway,Fouls,10
+1345463271,home,Norway,Yellow cards,1
+1345463271,home,Norway,Shots outside penalty area,3
+1345463271,away,England,Expected Goals,0.96
+1345463271,away,England,Big Chances Created,3
+1345463271,away,England,Free Kicks,10
+1345463271,away,England,Expected Assists,0.85
+1345463271,away,England,Successful Crosses,9
+1345463271,away,England,Crosses,21
+1345463271,away,England,Passes Own Half,235
+1345463271,away,England,Passes Opposition Half,414
+1345463271,away,England,Successful Long Passes,26
+1345463271,away,England,Long Passes,50
+1345463271,away,England,Throw-Ins,27
+1345463271,away,England,Key Passes,8
+1345463271,away,England,Passes Into Final Third,140
+1345463271,away,England,Backward Passes,88
+1345463271,away,England,Goal Kicks,7
+1345463271,away,England,Interceptions,7
+1345463271,away,England,Successful Tackles,11
+1345463271,away,England,Tackles,15
+1345463271,away,England,Clearances,35
+1345463271,away,England,Successful Aerial Duels,12
+1345463271,away,England,Aerial Duels,24
+1345463271,away,England,Successful Dribbles,17
+1345463271,away,England,Dribbles,28
+1345463271,away,England,Shots accuracy,0.57
+1345463271,away,England,Failed passes,59
+1345463271,away,England,Possession,0.52
+1345463271,away,England,Shots on target,8
+1345463271,away,England,Corners,4
+1345463271,away,England,Offsides,5
+1345463271,away,England,Successful passes,569
+1345463271,away,England,Red cards,0
+1345463271,away,England,Shots off target,3
+1345463271,away,England,Blocked shots,3
+1345463271,away,England,Shots within penalty area,8
+1345463271,away,England,Total passes,628
+1345463271,away,England,Goalkeeper saves,3
+1345463271,away,England,Fouls,8
+1345463271,away,England,Yellow cards,0
+1345463271,away,England,Shots outside penalty area,6

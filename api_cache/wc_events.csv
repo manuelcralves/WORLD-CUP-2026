@@ -1553,3 +1553,20 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1346130455,88,Spain,Goal,M. Merino,7617225,,,
 1346130455,90+3,Spain,Yellow Card,A. Laporte,100296,,,
 1346130455,90+5,Belgium,Yellow Card,A. Witsel,3374,,,
+1345463271,36,Norway,Goal,A. Schjelderup,48546162,M. Odegaard,,5977601
+1345463271,45+2,England,Goal,J. Bellingham,20884752,A. Gordon,,22344861
+1345463271,46,England,Substitution,N. Madueke,22012557,,B. Saka,235214
+1345463271,46,England,Substitution,D. Rice,473011,,E. Eze,3153500
+1345463271,55,Norway,VAR Goal Cancelled,T. Heggem,6320048,,,
+1345463271,60,Norway,Substitution,J. Ryerson,4000199,,F. Aursnes,6286077
+1345463271,68,Norway,Substitution,A. Sorloth,1367366,,O. Bobb,44779567
+1345463271,68,Norway,Substitution,A. Schjelderup,48546162,,A. Nusa,50636425
+1345463271,71,England,Substitution,A. Gordon,22344861,,R. James,3146899
+1345463271,86,England,Substitution,N. O'Reilly,49446957,,D. Spence,3096989
+1345463271,89,England,Substitution,E. Konsa,3116148,,M. Rogers,3086524
+1345463271,90,Norway,Substitution,D. Wolfe,42791056,,M. Pedersen,6337436
+1345463271,91,Norway,Substitution,T. Heggem,6320048,,L. Ostigard,3053841
+1345463271,93,England,Goal,J. Bellingham,20884752,,,
+1345463271,106,Norway,Substitution,E. Haaland,177254,,J. Larsen,327306
+1345463271,111,England,Substitution,J. Bellingham,20884752,,D. Burn,3052875
+1345463271,117,Norway,Yellow Card,K. Ajer,180313,,,
