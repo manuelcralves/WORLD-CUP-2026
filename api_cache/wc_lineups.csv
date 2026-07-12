@@ -5065,3 +5065,54 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1345463271,away,England,4-2-3-1,no,146503,Marcus Rashford,11,Forward
 1345463271,away,England,4-2-3-1,no,3118080,Ollie Watkins,19,Forward
 1345463271,away,England,4-2-3-1,no,3215968,Ivan Toney,22,Forward
+1346862315,home,Argentina,4-1-3-2,yes,3155593,Emiliano Martínez,23,Goalkeeper
+1346862315,home,Argentina,4-1-3-2,yes,85323,Nicolás Tagliafico,3,Defender
+1346862315,home,Argentina,4-1-3-2,yes,397341,Lisandro Martínez,6,Defender
+1346862315,home,Argentina,4-1-3-2,yes,4955090,Cristian Romero,13,Defender
+1346862315,home,Argentina,4-1-3-2,yes,1047137,Nahuel Molina,26,Defender
+1346862315,home,Argentina,4-1-3-2,yes,43785,Leandro Paredes,5,Midfielder
+1346862315,home,Argentina,4-1-3-2,yes,965510,Enzo Fernández,24,Midfielder
+1346862315,home,Argentina,4-1-3-2,yes,1081430,Alexis Mac Allister,20,Midfielder
+1346862315,home,Argentina,4-1-3-2,yes,398146,Rodrigo De Paul,7,Midfielder
+1346862315,home,Argentina,4-1-3-2,yes,967603,Julián Alvarez,9,Forward
+1346862315,home,Argentina,4-1-3-2,yes,24948,Lionel Messi,10,Forward
+1346862315,home,Argentina,4-1-3-2,no,397019,Juan Musso,1,Goalkeeper
+1346862315,home,Argentina,4-1-3-2,no,7614810,Gerónimo Rulli,12,Goalkeeper
+1346862315,home,Argentina,4-1-3-2,no,1064364,Marcos Senesi,2,Defender
+1346862315,home,Argentina,4-1-3-2,no,397502,Gonzalo Montiel,4,Defender
+1346862315,home,Argentina,4-1-3-2,no,100618,Nicolás Otamendi,19,Defender
+1346862315,home,Argentina,4-1-3-2,no,1003345,Facundo Medina,25,Defender
+1346862315,home,Argentina,4-1-3-2,no,51451246,Valentín Barco,8,Midfielder
+1346862315,home,Argentina,4-1-3-2,no,254212,Giovani Lo Celso,11,Midfielder
+1346862315,home,Argentina,4-1-3-2,no,966476,Exequiel Palacios,14,Midfielder
+1346862315,home,Argentina,4-1-3-2,no,4236869,Nicolás González,15,Forward
+1346862315,home,Argentina,4-1-3-2,no,976941,Thiago Almada,16,Midfielder
+1346862315,home,Argentina,4-1-3-2,no,52153689,Giuliano Simeone,17,Forward
+1346862315,home,Argentina,4-1-3-2,no,56356111,Nico Paz,18,Forward
+1346862315,home,Argentina,4-1-3-2,no,47577747,José Manuel López,21,Forward
+1346862315,home,Argentina,4-1-3-2,no,35091,Lautaro Martínez,22,Forward
+1346862315,away,Switzerland,4-2-3-1,yes,4070556,Gregor Kobel,1,Goalkeeper
+1346862315,away,Switzerland,4-2-3-1,yes,262745,Ricardo Rodríguez,13,Defender
+1346862315,away,Switzerland,4-2-3-1,yes,959,Manuel Akanji,5,Defender
+1346862315,away,Switzerland,4-2-3-1,yes,451437,Nico Elvedi,4,Defender
+1346862315,away,Switzerland,4-2-3-1,yes,452564,Denis Zakaria,6,Defender
+1346862315,away,Switzerland,4-2-3-1,yes,235858,Granit Xhaka,10,Midfielder
+1346862315,away,Switzerland,4-2-3-1,yes,452081,Remo Freuler,8,Midfielder
+1346862315,away,Switzerland,4-2-3-1,yes,7832482,Dan Ndoye,11,Midfielder
+1346862315,away,Switzerland,4-2-3-1,yes,154231,Djibril Sow,15,Midfielder
+1346862315,away,Switzerland,4-2-3-1,yes,26248306,Fabian Rieder,22,Midfielder
+1346862315,away,Switzerland,4-2-3-1,yes,67935,Breel Embolo,7,Forward
+1346862315,away,Switzerland,4-2-3-1,no,184016,Yvon Mvogo,12,Goalkeeper
+1346862315,away,Switzerland,4-2-3-1,no,19878502,Marvin Keller,21,Goalkeeper
+1346862315,away,Switzerland,4-2-3-1,no,7788046,Eray Cömert,18,Defender
+1346862315,away,Switzerland,4-2-3-1,no,26148808,Aurèle Amenda,24,Defender
+1346862315,away,Switzerland,4-2-3-1,no,56244538,Luca Jaquez,25,Defender
+1346862315,away,Switzerland,4-2-3-1,no,7806883,Miro Muheim,2,Defender
+1346862315,away,Switzerland,4-2-3-1,no,7789012,Silvan Widmer,3,Defender
+1346862315,away,Switzerland,4-2-3-1,no,42617659,Ardon Jashari,14,Midfielder
+1346862315,away,Switzerland,4-2-3-1,no,153265,Michel Aebischer,20,Midfielder
+1346862315,away,Switzerland,4-2-3-1,no,153426,Christian Fassnacht,16,Midfielder
+1346862315,away,Switzerland,4-2-3-1,no,7803985,Rubén Vargas,17,Midfielder
+1346862315,away,Switzerland,4-2-3-1,no,7790783,Noah Okafor,19,Forward
+1346862315,away,Switzerland,4-2-3-1,no,19878663,Zeki Amdouni,23,Forward
+1346862315,away,Switzerland,4-2-3-1,no,7808171,Cédric Itten,26,Forward
