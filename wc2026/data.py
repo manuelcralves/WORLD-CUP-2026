@@ -74,7 +74,10 @@ def knockout_2026(df: pd.DataFrame) -> pd.DataFrame:
     (the cross-group ties the dataset adds once the bracket is drawn). Empty until
     the draw lands. For the Beat-the-Machine predict list, NOT the group sim."""
     wc = df[(df["tournament"] == "FIFA World Cup") & (df["date"].dt.year == 2026)]
-    return wc.sort_values("date", kind="stable").iloc[72:].copy()
+    ko = wc.sort_values("date", kind="stable").iloc[72:].copy()
+    # drop TBD placeholder ties the dataset adds before their teams are set (e.g. the final /
+    # third-place row with NaN teams) — they'd break every team-pair lookup downstream.
+    return ko[ko["home_team"].notna() & ko["away_team"].notna()]
 
 
 def reconstruct_groups(wc: pd.DataFrame) -> dict[str, list[str]]:
