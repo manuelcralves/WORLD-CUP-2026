@@ -179,6 +179,11 @@ def main(n_sims: int = 1000000, model: str = "poisson", mode: str = "snapshot"):
     if snap.exists() and pre.exists():
         SH.comparison_page(snap, pre, BASE / "compare.html")
         print("Comparison page: compare.html")
+    try:                                   # unlisted model report card -> outputs/report.html
+        import report as RPT                # (auto-updates each build; not linked from the site)
+        RPT.main()
+    except Exception as e:
+        print("Report card skipped:", type(e).__name__, e)
     print("\nDone.")
 
 
