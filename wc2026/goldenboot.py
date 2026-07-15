@@ -43,8 +43,11 @@ def _team_scoring_rate(played, teams, since):
 
 def predict(bundle, table, since="2023-01-01", before=None, topn=20) -> pd.DataFrame:
     teams = set(table["team"])
-    # expected number of World Cup matches (3 group + knockout matches)
-    exp_matches = {r.team: 3 + r.p_ko + r.p_r16 + r.p_qf + r.p_sf + r.p_final
+    # expected number of World Cup matches (3 group + knockout). Everyone who reaches the
+    # semis plays one more game whatever happens — the final if they win, the third-place
+    # play-off if they lose — so the semi-onward games are 2*p_sf, not p_sf + p_final (the
+    # old formula silently assumed the losing semi-finalists went home).
+    exp_matches = {r.team: 3 + r.p_ko + r.p_r16 + r.p_qf + 2 * r.p_sf
                    for r in table.itertuples(index=False)}
     rate = _team_scoring_rate(bundle["played"], teams, pd.Timestamp(since))
 
