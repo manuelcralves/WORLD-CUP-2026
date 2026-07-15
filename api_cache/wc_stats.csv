@@ -7961,3 +7961,81 @@ match_id,side,team,stat,value
 1348947265,away,Spain,Fouls,12
 1348947265,away,Spain,Yellow cards,1
 1348947265,away,Spain,Shots outside penalty area,5
+1349752311,home,England,Expected Goals,0.54
+1349752311,home,England,Big Chances Created,1
+1349752311,home,England,Free Kicks,15
+1349752311,home,England,Expected Assists,0.57
+1349752311,home,England,Successful Crosses,3
+1349752311,home,England,Crosses,15
+1349752311,home,England,Passes Own Half,152
+1349752311,home,England,Passes Opposition Half,176
+1349752311,home,England,Successful Long Passes,15
+1349752311,home,England,Long Passes,38
+1349752311,home,England,Throw-Ins,17
+1349752311,home,England,Key Passes,4
+1349752311,home,England,Passes Into Final Third,60
+1349752311,home,England,Backward Passes,44
+1349752311,home,England,Goal Kicks,9
+1349752311,home,England,Interceptions,9
+1349752311,home,England,Successful Tackles,8
+1349752311,home,England,Tackles,14
+1349752311,home,England,Clearances,29
+1349752311,home,England,Successful Aerial Duels,11
+1349752311,home,England,Aerial Duels,19
+1349752311,home,England,Successful Dribbles,8
+1349752311,home,England,Dribbles,19
+1349752311,home,England,Shots accuracy,0.4
+1349752311,home,England,Failed passes,48
+1349752311,home,England,Possession,0.35
+1349752311,home,England,Shots on target,2
+1349752311,home,England,Corners,1
+1349752311,home,England,Offsides,1
+1349752311,home,England,Successful passes,265
+1349752311,home,England,Red cards,0
+1349752311,home,England,Shots off target,1
+1349752311,home,England,Blocked shots,2
+1349752311,home,England,Shots within penalty area,2
+1349752311,home,England,Total passes,313
+1349752311,home,England,Goalkeeper saves,3
+1349752311,home,England,Fouls,10
+1349752311,home,England,Yellow cards,1
+1349752311,home,England,Shots outside penalty area,3
+1349752311,away,Argentina,Expected Goals,1.8
+1349752311,away,Argentina,Big Chances Created,3
+1349752311,away,Argentina,Free Kicks,10
+1349752311,away,Argentina,Expected Assists,1.58
+1349752311,away,Argentina,Successful Crosses,6
+1349752311,away,Argentina,Crosses,19
+1349752311,away,Argentina,Passes Own Half,235
+1349752311,away,Argentina,Passes Opposition Half,369
+1349752311,away,Argentina,Successful Long Passes,12
+1349752311,away,Argentina,Long Passes,24
+1349752311,away,Argentina,Throw-Ins,20
+1349752311,away,Argentina,Key Passes,13
+1349752311,away,Argentina,Passes Into Final Third,196
+1349752311,away,Argentina,Backward Passes,80
+1349752311,away,Argentina,Goal Kicks,3
+1349752311,away,Argentina,Interceptions,6
+1349752311,away,Argentina,Successful Tackles,10
+1349752311,away,Argentina,Tackles,19
+1349752311,away,Argentina,Clearances,28
+1349752311,away,Argentina,Successful Aerial Duels,8
+1349752311,away,Argentina,Aerial Duels,19
+1349752311,away,Argentina,Successful Dribbles,12
+1349752311,away,Argentina,Dribbles,15
+1349752311,away,Argentina,Shots accuracy,0.33
+1349752311,away,Argentina,Failed passes,51
+1349752311,away,Argentina,Possession,0.65
+1349752311,away,Argentina,Shots on target,5
+1349752311,away,Argentina,Corners,6
+1349752311,away,Argentina,Offsides,3
+1349752311,away,Argentina,Successful passes,534
+1349752311,away,Argentina,Red cards,0
+1349752311,away,Argentina,Shots off target,7
+1349752311,away,Argentina,Blocked shots,3
+1349752311,away,Argentina,Shots within penalty area,7
+1349752311,away,Argentina,Total passes,585
+1349752311,away,Argentina,Goalkeeper saves,1
+1349752311,away,Argentina,Fouls,15
+1349752311,away,Argentina,Yellow cards,3
+1349752311,away,Argentina,Shots outside penalty area,8

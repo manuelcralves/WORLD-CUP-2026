@@ -5168,3 +5168,54 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1348947265,away,Spain,4-2-3-1,no,150045,Ferran Torres,7,Forward
 1348947265,away,Spain,4-2-3-1,no,54539065,Víctor Muñoz,25,Forward
 1348947265,away,Spain,4-2-3-1,no,29660540,Yéremy Pino,11,Midfielder
+1349752311,home,England,4-2-3-1,yes,472206,Jordan Pickford,1,Goalkeeper
+1349752311,home,England,4-2-3-1,yes,3096989,Djed Spence,25,Defender
+1349752311,home,England,4-2-3-1,yes,10943485,Marc Guéhi,6,Defender
+1349752311,home,England,4-2-3-1,yes,100940,John Stones,5,Defender
+1349752311,home,England,4-2-3-1,yes,3146899,Reece James,24,Defender
+1349752311,home,England,4-2-3-1,yes,22364342,Elliot Anderson,8,Midfielder
+1349752311,home,England,4-2-3-1,yes,473011,Declan Rice,4,Midfielder
+1349752311,home,England,4-2-3-1,yes,22344861,Anthony Gordon,18,Midfielder
+1349752311,home,England,4-2-3-1,yes,20884752,Jude Bellingham,10,Midfielder
+1349752311,home,England,4-2-3-1,yes,3086524,Morgan Rogers,17,Midfielder
+1349752311,home,England,4-2-3-1,yes,29778,Harry Kane,9,Forward
+1349752311,home,England,4-2-3-1,no,26160883,James Trafford,23,Goalkeeper
+1349752311,home,England,4-2-3-1,no,3073322,Dean Henderson,13,Goalkeeper
+1349752311,home,England,4-2-3-1,no,49446957,Nico O'Reilly,3,Defender
+1349752311,home,England,4-2-3-1,no,3116148,Ezri Konsa,2,Defender
+1349752311,home,England,4-2-3-1,no,3052875,Dan Burn,15,Defender
+1349752311,home,England,4-2-3-1,no,3175074,Trevoh Chalobah,12,Defender
+1349752311,home,England,4-2-3-1,no,3153500,Eberechi Eze,21,Midfielder
+1349752311,home,England,4-2-3-1,no,47166,Jordan Henderson,14,Midfielder
+1349752311,home,England,4-2-3-1,no,45775996,Kobbie Mainoo,16,Midfielder
+1349752311,home,England,4-2-3-1,no,235214,Bukayo Saka,7,Forward
+1349752311,home,England,4-2-3-1,no,22012557,Noni Madueke,20,Forward
+1349752311,home,England,4-2-3-1,no,146503,Marcus Rashford,11,Forward
+1349752311,home,England,4-2-3-1,no,3215968,Ivan Toney,22,Forward
+1349752311,home,England,4-2-3-1,no,3118080,Ollie Watkins,19,Forward
+1349752311,away,Argentina,4-4-2,yes,3155593,Emiliano Martínez,23,Goalkeeper
+1349752311,away,Argentina,4-4-2,yes,85323,Nicolás Tagliafico,3,Defender
+1349752311,away,Argentina,4-4-2,yes,397341,Lisandro Martínez,6,Defender
+1349752311,away,Argentina,4-4-2,yes,4955090,Cristian Romero,13,Defender
+1349752311,away,Argentina,4-4-2,yes,1047137,Nahuel Molina,26,Defender
+1349752311,away,Argentina,4-4-2,yes,965510,Enzo Fernández,24,Midfielder
+1349752311,away,Argentina,4-4-2,yes,1081430,Alexis Mac Allister,20,Midfielder
+1349752311,away,Argentina,4-4-2,yes,43785,Leandro Paredes,5,Midfielder
+1349752311,away,Argentina,4-4-2,yes,52153689,Giuliano Simeone,17,Midfielder
+1349752311,away,Argentina,4-4-2,yes,967603,Julián Alvarez,9,Forward
+1349752311,away,Argentina,4-4-2,yes,24948,Lionel Messi,10,Forward
+1349752311,away,Argentina,4-4-2,no,397019,Juan Musso,1,Goalkeeper
+1349752311,away,Argentina,4-4-2,no,7614810,Gerónimo Rulli,12,Goalkeeper
+1349752311,away,Argentina,4-4-2,no,1003345,Facundo Medina,25,Defender
+1349752311,away,Argentina,4-4-2,no,100618,Nicolás Otamendi,19,Defender
+1349752311,away,Argentina,4-4-2,no,397502,Gonzalo Montiel,4,Defender
+1349752311,away,Argentina,4-4-2,no,1064364,Marcos Senesi,2,Defender
+1349752311,away,Argentina,4-4-2,no,4236869,Nicolás González,15,Forward
+1349752311,away,Argentina,4-4-2,no,976941,Thiago Almada,16,Midfielder
+1349752311,away,Argentina,4-4-2,no,398146,Rodrigo De Paul,7,Midfielder
+1349752311,away,Argentina,4-4-2,no,254212,Giovani Lo Celso,11,Midfielder
+1349752311,away,Argentina,4-4-2,no,966476,Exequiel Palacios,14,Midfielder
+1349752311,away,Argentina,4-4-2,no,56356111,Nico Paz,18,Forward
+1349752311,away,Argentina,4-4-2,no,51451246,Valentín Barco,8,Midfielder
+1349752311,away,Argentina,4-4-2,no,35091,Lautaro Martínez,22,Forward
+1349752311,away,Argentina,4-4-2,no,47577747,José Manuel López,21,Forward
