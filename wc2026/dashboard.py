@@ -122,11 +122,11 @@ def collect(bundle, trained, table, val=None, backtests=None,
                for label, ms in PR.most_likely_bracket(table, trained, bundle.get("ko_results"))]
 
     gb = GB.predict(bundle, table, before=gb_before, topn=15)
-    _ast = assists or {}                                 # WC assists by surname (Golden Boot tie-break)
+    _ast = assists or {}                                 # WC assists by initial+surname (Golden Boot tie-break)
     golden = [{"scorer": r["scorer"], "team": r["team"],
                "flag": FLAGS.get(r["team"], "🏳️"),
                "form10": int(r["form10"]), "wc": int(r["wc_goals"]),
-               "ast": _ast.get(str(r["scorer"]).split()[-1].lower(), 0) if _ast else None,
+               "ast": _ast.get(RICH.assist_key(str(r["scorer"])), 0) if _ast else None,
                "proj": float(r["proj_goals"])}
               for _, r in gb.iterrows()]
     if _ast:                                             # rank by the Golden Boot criteria: goals, then assists (projection breaks any remaining tie)
