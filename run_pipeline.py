@@ -59,6 +59,7 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     trained = _train(bundle, model)
     val = V.evaluate(bundle)
     fp = RICH.load_rich(BASE / "api_cache").get("fairplay", {}) if cutoff is None else {}
+    assists = RICH.assist_counts(BASE / "api_cache") if cutoff is None else {}
     table = T.simulate(bundle, trained, n_sims=n_sims, fairplay=fp)
 
     # Tracker (live version only): records the snapshot, the odds history and
@@ -100,7 +101,7 @@ def _run(n_sims, model, cutoff, out_dir, label, backtests, mega, review):
     data = DASH.collect(bundle, trained, table, val, backtests,
                         gb_before=cutoff, mode_label=label, evolution=evolution,
                         odds_history=odds_history, golden_history=golden_history,
-                        mega_backtest=mega,
+                        mega_backtest=mega, assists=assists,
                         # "results so far" only makes sense for the live version
                         played_review=(review if cutoff is None else None))
     DASH.build_interactive(data, out_dir / "dashboard.html")

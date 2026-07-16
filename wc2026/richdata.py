@@ -22,6 +22,21 @@ def _norm(name: str) -> str:
     return HL_TO_MARTJ42.get(name, name)
 
 
+def assist_counts(cache) -> dict:
+    """WC assists tallied by the assister's lower-cased surname, from the Highlightly goal
+    events (which give only an abbreviated name and no id, so we match on surname). Used to
+    show assists + break Golden Boot ties (goals -> assists). Empty if the cache is absent."""
+    out: dict = defaultdict(int)
+    ef = Path(cache) / "wc_events.csv"
+    if ef.exists():
+        with ef.open(encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                a = (r.get("assist") or "").strip()
+                if a:
+                    out[a.split()[-1].lower()] += 1
+    return dict(out)
+
+
 def _num(v) -> int:
     try:
         return int(v)

@@ -72,7 +72,7 @@ def _standings(bundle) -> dict:
 def collect(bundle, trained, table, val=None, backtests=None,
             gb_before=None, mode_label=None, evolution=None,
             odds_history=None, golden_history=None, mega_backtest=None,
-            played_review=None) -> dict:
+            played_review=None, assists=None) -> dict:
     """Gathers all the data (JSON-serialisable) that the dashboard shows."""
     teams = [{
         "team": r["team"], "group": r["group"], "elo": int(r["elo"]),
@@ -122,11 +122,15 @@ def collect(bundle, trained, table, val=None, backtests=None,
                for label, ms in PR.most_likely_bracket(table, trained, bundle.get("ko_results"))]
 
     gb = GB.predict(bundle, table, before=gb_before, topn=15)
+    _ast = assists or {}                                 # WC assists by surname (Golden Boot tie-break)
     golden = [{"scorer": r["scorer"], "team": r["team"],
                "flag": FLAGS.get(r["team"], "🏳️"),
                "form10": int(r["form10"]), "wc": int(r["wc_goals"]),
+               "ast": _ast.get(str(r["scorer"]).split()[-1].lower(), 0) if _ast else None,
                "proj": float(r["proj_goals"])}
               for _, r in gb.iterrows()]
+    if _ast:                                             # rank by the Golden Boot criteria: goals, then assists (projection breaks any remaining tie)
+        golden.sort(key=lambda x: (-x["wc"], -(x["ast"] or 0), -x["proj"]))
 
     fav, second = table.iloc[0], table.iloc[1]
     finalists = table.sort_values("p_final", ascending=False).head(2)
@@ -1677,11 +1681,12 @@ function renderBacktest(){
 }
 
 function renderGolden(){
-  const g=D.golden_boot||[];if(!g.length)return;const mx=g[0].proj;
-  let h=`<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th title="Goals in the national team's last 10 matches — recent form">Last 10</th><th title="Goals actually scored in the 2026 World Cup so far (played matches only)">This WC</th><th title="Goals already banked in this World Cup + expected goals in the matches still to play">Projected total</th></tr></thead><tbody>`;
+  const g=D.golden_boot||[];if(!g.length)return;const mx=Math.max(...g.map(x=>x.proj),0.01);
+  let h=`<table><thead><tr><th>#</th><th>Player</th><th>Team</th><th title="Goals in the national team's last 10 matches — recent form">Last 10</th><th title="Goals actually scored in the 2026 World Cup so far (played matches only)">This WC</th><th title="Assists in the 2026 World Cup so far">Assists</th><th title="Goals already banked in this World Cup + expected goals in the matches still to play">Projected total</th></tr></thead><tbody>`;
   g.forEach((p,i)=>{h+=`<tr><td>${i+1}</td><td>${p.scorer}</td>
   <td><span class="row-team">${flag(p.team,'sm')} ${p.team}</span></td><td>${p.form10}</td>
   <td>${(p.wc||0)>0?'<b>'+p.wc+'</b>':'<span class="note">0</span>'}</td>
+  <td>${p.ast!=null?((p.ast>0)?p.ast:'<span class="note">0</span>'):'<span class="note">—</span>'}</td>
   <td style="min-width:150px">${bar(p.proj/mx,"#2ee6a6",p.proj.toFixed(1)+" goals")}</td></tr>`;});
   h+=`</tbody></table><p class="note" style="margin-top:8px"><b>Projected total</b> = goals already scored in this World Cup + expected goals in the matches still to play · <b>Last 10</b> = goals in the national team's last 10 matches.</p>`;
   document.getElementById("golden").innerHTML=h;
