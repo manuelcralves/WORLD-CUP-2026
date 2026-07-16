@@ -408,7 +408,7 @@ def _knockout_reveal() -> str:
     if not rnd:                                     # mid-round -> not a reveal moment
         return ""
     if rnd == "Final":
-        r = d.iloc[0]
+        r = d.iloc[-1]   # last-dated tie = the final; an earlier row here is the 3rd-place play-off
         return (f"🏆 It all comes down to this — the FINAL is SET!\n\n"
                 f"{_flag(r['home']) or '⚽'} {r['home']} v {r['away']} "
                 f"{_flag(r['away']) or '⚽'}\n\nWho lifts the trophy? 👇\n{SITE}")
