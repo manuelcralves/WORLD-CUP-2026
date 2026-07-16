@@ -82,8 +82,8 @@ SHOOTOUTS = [
 # martj42 lists them. Appended as NA,NA (unplayed); idempotent (skipped once present, either
 # order). Drop a row once martj42 adds it upstream.
 FIXTURES = [
-    ("2026-07-14", "France",  "Spain",     "Arlington", "United States"),   # semi-final 1
-    ("2026-07-15", "England", "Argentina", "Atlanta",   "United States"),   # semi-final 2
+    # (empty) — the semis merged upstream into martj42, and the final / third-place ties are
+    # now in the pull too. Add an upcoming tie here only when the dataset lags behind.
 ]
 
 
