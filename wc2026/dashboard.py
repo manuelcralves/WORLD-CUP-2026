@@ -1945,6 +1945,28 @@ def build_interactive(data: dict, out_path) -> Path:
     ely_min, ely_max = (eby_years[0], eby_years[-1]) if eby_years else (1960, 2026)
     fl = lambda d: (f'<img class="flag" src="https://flagcdn.com/w40/{d["code"]}.png">'
                     if d.get("code") else d.get("flag", ""))
+    # Once the title is settled (champion at 100%, everyone else at 0%) the "2nd favourite" and
+    # "teams above 5%" KPIs would just show a meaningless 0% team (the alphabetically-first tie) --
+    # swap in the runner-up + the Golden Boot leader instead.
+    decided = fav["p"] >= 0.999
+    runner = next((f for f in fin if f["team"] != fav["team"]), sec)
+    _gb = data.get("golden_boot") or []
+
+    def _kpi(big, lbl):
+        return f"<div class='kpi'><div class='big'>{big}</div><div class='lbl'>{lbl}</div></div>"
+    if decided:
+        kpis_html = (
+            _kpi(f"{fl(fav)} 🏆", f"World Champion: {fav['team']}")
+            + _kpi(fl(runner), f"Runner-up: {runner['team']}")
+            + _kpi(f"{fl(fin[0])} {fl(fin[1])}", "The final")
+            + (_kpi(f"{_gb[0]['wc']} ⚽", f"Golden Boot: {_gb[0]['scorer']}") if _gb
+               else _kpi(f"{contenders}", "teams above 5% to win")))
+    else:
+        kpis_html = (
+            _kpi(f"{fl(fav)} {fav['p']*100:.1f}%", f"Favourite: {fav['team']}")
+            + _kpi(f"{fl(sec)} {sec['p']*100:.1f}%", f"2nd favourite: {sec['team']}")
+            + _kpi(f"{fl(fin[0])} {fl(fin[1])}", "Most likely finalists")
+            + _kpi(f"{contenders}", "teams above 5% to win"))
     mode = (data.get("mode_label") + " · ") if data.get("mode_label") else ""
     pre = "Pre-tournament" in (data.get("mode_label") or "")
     ogdir = "/outputs_pretournament" if pre else "/outputs"
@@ -2006,15 +2028,7 @@ def build_interactive(data: dict, out_path) -> Path:
         f"{pred_btn}"
         "<button data-tab='insights'>📈 Insights</button></div>"
         "<div class='tab' id='tab-overview'>"
-        "<div class='cards'>"
-        f"<div class='kpi'><div class='big'>{fl(fav)} {fav['p']*100:.1f}%</div>"
-        f"<div class='lbl'>Favourite: {fav['team']}</div></div>"
-        f"<div class='kpi'><div class='big'>{fl(sec)} {sec['p']*100:.1f}%</div>"
-        f"<div class='lbl'>2nd favourite: {sec['team']}</div></div>"
-        f"<div class='kpi'><div class='big'>{fl(fin[0])} {fl(fin[1])}</div>"
-        f"<div class='lbl'>Most likely finalists</div></div>"
-        f"<div class='kpi'><div class='big'>{contenders}</div>"
-        f"<div class='lbl'>teams above 5% to win</div></div></div>"
+        f"<div class='cards'>{kpis_html}</div>"
         "<div id='todaysec'><h2>📅 <span id='todayhead'>Today's matches</span> "
         "<span class='tag'>kickoffs in WEST (UTC+1)</span></h2><div id='today'></div></div>"
         f"{ev_html}"
