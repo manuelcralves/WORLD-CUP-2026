@@ -1624,3 +1624,23 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1349752311,90+4,Argentina,Yellow Card,R. de Paul,398146,,,
 1349752311,90+6,England,Substitution,J. Stones,100940,,I. Toney,3215968
 1349752311,90+6,England,Substitution,D. Spence,3096989,,M. Rashford,146503
+1354677899,3,England,Goal,D. Rice,473011,,,
+1354677899,18,England,Goal,E. Konsa,3116148,D. Rice,,473011
+1354677899,37,England,Goal,B. Saka,235214,M. Rashford,,146503
+1354677899,45+1,England,Goal,B. Saka,235214,E. Eze,,3153500
+1354677899,46,France,Substitution,R. Cherki,25192951,,O. Dembele,24787
+1354677899,46,France,Substitution,D. Doue,55227501,,B. Barcola,26066698
+1354677899,46,France,Substitution,T. Hernandez,7615454,,L. Digne,438718
+1354677899,46,France,Substitution,I. Konate,184499,,D. Upamecano,185143
+1354677899,46,England,Substitution,M. Rashford,146503,,O. Watkins,3118080
+1354677899,48,France,Goal,K. Mbappe,44912,M. Olise,,3158491
+1354677899,54,France,Goal,B. Barcola,26066698,K. Mbappe,,44912
+1354677899,66,France,Goal,K. Mbappe,44912,M. Olise,,3158491
+1354677899,79,England,Substitution,I. Toney,3215968,,E. Anderson,22364342
+1354677899,79,England,Substitution,E. Eze,3153500,,J. Bellingham,20884752
+1354677899,83,England,Substitution,J. Quansah,25550532,,R. James,3146899
+1354677899,87,England,Penalty,B. Saka,235214,,,
+1354677899,90+1,France,Substitution,M. Gusto,26067181,,J. Kounde,202531
+1354677899,90+3,England,Substitution,M. Guehi,10943485,,T. Chalobah,3175074
+1354677899,90+6,France,Goal,O. Dembele,24787,D. Upamecano,,185143
+1354677899,90+8,England,Goal,J. Bellingham,20884752,,,
