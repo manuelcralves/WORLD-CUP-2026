@@ -190,6 +190,11 @@ def main(n_sims: int = 1000000, model: str = "poisson", mode: str = "snapshot"):
         CMP.main()
     except Exception as e:
         print("Competition stats skipped:", type(e).__name__, e)
+    try:                                   # 'tournament review' hub -> outputs/review.html (linked from index post-final)
+        import review as RVW
+        RVW.main()
+    except Exception as e:
+        print("Review skipped:", type(e).__name__, e)
     print("\nDone.")
 
 
