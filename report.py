@@ -106,6 +106,42 @@ def reliability_svg(bins) -> str:
 
 
 # --------------------------------------------------------------------------- #
+# bracket funnel — the pre-tournament title-odds ranking vs who actually got there
+# --------------------------------------------------------------------------- #
+def bracket_funnel():
+    """Rank every team by the BLIND pre-tournament title odds, then count how many of the top
+    N actually reached the last N (top 2 = finalists, top 4 = semi-finalists, ...). Returns a
+    broad->narrow list, or None if the pre-tournament predictions / round labels aren't present."""
+    import csv as _csv
+    pre_f = OUT.parent / "outputs_pretournament" / "predictions.csv"
+    mf = OUT.parent / "api_cache" / "wc_matches.csv"
+    if not pre_f.exists() or not mf.exists():
+        return None
+    try:
+        from wc2026.richdata import HL_TO_MARTJ42 as HL
+    except Exception:
+        HL = {}
+    order = list(pd.read_csv(pre_f).sort_values("p_champion", ascending=False)["team"])
+    rd = {"Round of 16": set(), "Quarter-finals": set(), "Semi-finals": set(), "Final": set()}
+    with open(mf, encoding="utf-8") as f:
+        for r in _csv.DictReader(f):
+            if r["round"] in rd:
+                rd[r["round"]].add(HL.get(r["home"], r["home"]))
+                rd[r["round"]].add(HL.get(r["away"], r["away"]))
+    last4 = rd["Semi-finals"] | rd["Final"]
+    last8 = rd["Quarter-finals"] | last4
+    last16 = rd["Round of 16"] | last8
+    rows = []
+    for N, actual, lbl in [(16, last16, "Round of 16"), (8, last8, "Quarter-finals"),
+                           (4, last4, "Semi-finals"), (2, rd["Final"], "The final")]:
+        if len(actual) < N:            # that stage isn't fully set yet -> skip
+            continue
+        hit = [t for t in order[:N] if t in actual]
+        rows.append({"lbl": lbl, "N": N, "hit": len(hit), "teams": hit})
+    return rows or None
+
+
+# --------------------------------------------------------------------------- #
 # page
 # --------------------------------------------------------------------------- #
 def _fl(r, side):
@@ -124,6 +160,33 @@ def build(pr: pd.DataFrame, m: dict) -> str:
         kpi(f'{m["brier"]:.3f}', "Brier score", "multiclass W/D/L"),
         kpi(f'{m["logloss"]:.3f}', "Log loss", "lower = better"),
     ])
+
+    # bracket-level call: pre-tournament ranking vs who actually reached each stage
+    fn = bracket_funnel()
+    funnel_html = ""
+    if fn:
+        frows = "".join(
+            f'<div class="frow{" perfect" if r["hit"] == r["N"] else ""}">'
+            f'<span class="fst">{r["lbl"]}<em> · last {r["N"]}</em></span>'
+            f'<span class="fbar"><i style="width:{r["hit"] / r["N"] * 100:.0f}%"></i></span>'
+            f'<span class="fn">{r["hit"]} / {r["N"]}</span></div>'
+            for r in fn)
+        fin = next((r for r in fn if r["lbl"] == "The final" and r["hit"] == r["N"]), None)
+        semi = next((r for r in fn if r["lbl"] == "Semi-finals" and r["hit"] == r["N"]), None)
+        punch = ""
+        if fin:
+            punch = f'🎯 Its top two — <b>{" &amp; ".join(_html.escape(t) for t in fin["teams"])}</b> — are the two finalists'
+            if semi:
+                punch += ", and its top four were the <b>exact</b> four semi-finalists"
+            punch += ". All before a ball was kicked."
+        funnel_html = f"""
+<h2>Did it call the bracket?</h2>
+<div class="panel">
+<p class="sub" style="margin:0 0 14px">Rank every team by the model's <b>pre-tournament</b> title odds, then see how
+many of its top&nbsp;N actually reached the last&nbsp;N. The call sharpens the deeper the tournament runs.</p>
+{frows}
+{f'<p class="note">{punch}</p>' if punch else ''}
+</div>"""
 
     # calibration table
     crows = "".join(
@@ -188,6 +251,15 @@ tbody tr:last-child td{border-bottom:0}
 .pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
 .pill.g{color:var(--green);background:rgba(46,230,166,.12)}
 .pill.r{color:var(--gold);background:rgba(255,203,92,.12)}
+.frow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2)}
+.frow:last-of-type{border-bottom:0}
+.fst{width:148px;font-size:13.5px;color:var(--text2);font-weight:600}
+.fst em{color:var(--faint);font-style:normal;font-weight:400;font-size:12px}
+.fbar{flex:1;height:9px;background:var(--line2);border-radius:99px;overflow:hidden}
+.fbar i{display:block;height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:99px}
+.fn{width:50px;text-align:right;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;color:var(--text2)}
+.frow.perfect .fbar i{background:linear-gradient(90deg,var(--gold),#ffd97a)}
+.frow.perfect .fn{color:var(--gold)}
 .foota{margin-top:44px;color:var(--faint);font-size:12px;text-align:center}
 .foota a{color:var(--green);text-decoration:none}
 """
@@ -205,7 +277,7 @@ Here is how those blind calls held up against what actually happened — accurac
 well its confidence matched reality. <b>{m['n']}</b> matches so far; this updates as the tournament plays out.</p>
 
 <div class="cards">{kpis}</div>
-
+{funnel_html}
 <h2>Is it well calibrated?</h2>
 <div class="panel"><div class="calib">
 <div>{reliability_svg(m['bins'])}</div>
@@ -241,6 +313,8 @@ def main():
     if pr.empty:
         print("no reviewable matches yet")
         return
+    if "stage" in pr.columns:                       # group rows are unlabelled -> name them
+        pr["stage"] = pr["stage"].fillna("group")
     m = compute(pr)
     (OUT / "report.html").write_text(build(pr, m), encoding="utf-8")
     print(f"wrote outputs/report.html — {m['n']} matches, acc {m['acc']*100:.0f}%, "
