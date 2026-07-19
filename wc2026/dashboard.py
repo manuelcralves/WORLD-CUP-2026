@@ -470,6 +470,19 @@ tr.mdclick:hover{background:#152033}
 .lbpts{font-weight:800}
 .lbmac{color:#ffcb5c}.lbmac .lbrank{color:#ffcb5c}.lbme{color:#2ee6a6}.lbme .lbpts{color:#2ee6a6}
 .lbrow.lbrival{color:#ff9d6b}.lbrow.lbrival .lbpts{color:#ff9d6b}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:2px 0 14px}
+.pod{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 8px;text-align:center;min-width:0}
+.pod.p0{border-color:var(--gold);background:linear-gradient(160deg,rgba(255,203,92,.14),var(--panel2))}
+.pod .podm{font-size:26px;line-height:1}
+.pod .podn{font-weight:700;font-size:14px;margin:6px 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .podp{font-family:Outfit,sans-serif;font-weight:800;font-variant-numeric:tabular-nums;color:var(--gold)}
+.pod .podp span{font-size:11px;color:var(--muted);font-weight:600;margin-left:2px}
+.rchamps{border-top:1px solid var(--line2);margin-top:4px}
+.rchrow{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line2);font-size:13.5px}
+.rchrow:last-child{border-bottom:0}
+.rcl{width:116px;flex:none;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.rcw{flex:1;font-weight:600;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis}
+.rcn{font-family:Outfit,sans-serif;font-weight:700;font-variant-numeric:tabular-nums;color:var(--green)}
 .pbadges{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:-6px 0 16px}
 .pbadge{background:rgba(255,203,92,.12);border:1px solid rgba(255,203,92,.35);color:#ffcb5c;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;cursor:default}
 .prival{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:13.5px;text-align:center}
@@ -1392,6 +1405,30 @@ function bracketLB(){   // separate bracket leaderboard — dormant (all 0) unti
     h+=`<div class="lbrow pbrow${me?" lbme":""}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}" title="See their bracket"><span class="lbrank">${i+1}</span><span class="lbname">${me?"🟢":"🧑"} ${r.name}${me?" · you":""}</span><span class="lbpts">${r.pts}</span></div>`;});
   return h+`</div>`;
 }
+function roundChampions(){   // "hall of champions": overall podium + who nailed each knockout round (bracket game, scored per round)
+  const real=realBracket();
+  if(!Object.values(real).filter(Boolean).length)return "";                 // nothing scored yet
+  const nm={};lbRows.forEach(r=>{if(!r.is_model)nm[r.uid]=r.name||"Player";});if(sbUser&&myName)nm[sbUser.id]=myName;
+  const esc=s=>String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+  const players=(allBrackets||[]).map(b=>({name:esc(nm[b.user_id]||"Player"),picks:b.picks||{}})).filter(p=>Object.keys(p.picks).length);
+  if(!players.length)return "";
+  const withTot=players.map(p=>({name:p.name,picks:p.picks,pts:bracketScore(p.picks,real)})).sort((a,b)=>b.pts-a.pts);
+  const ROUNDS=[["Round of 32",m=>m<=88],["Round of 16",m=>m>88&&m<=96],["Quarter-finals",m=>m>96&&m<=100],["Semi-finals",m=>m>100&&m<=102],["Champion",m=>m>102]];
+  const medal=["🥇","🥈","🥉"];
+  let h=`<h3 class="psec">🏅 Hall of champions <span class="tag">the bracket game, by round</span></h3>`;
+  h+=`<div class="podium">`;
+  withTot.slice(0,3).forEach((p,i)=>{h+=`<div class="pod p${i}"><div class="podm">${medal[i]}</div><div class="podn" title="${p.name}">${p.name}</div><div class="podp">${p.pts}<span>pts</span></div></div>`;});
+  h+=`</div><div class="rchamps">`;
+  ROUNDS.forEach(([label,filt])=>{
+    const slots=Object.keys(real).map(Number).filter(m=>real[m]&&filt(m));
+    if(!slots.length)return;                                                 // that round hasn't been played
+    let best=0,winners=[];
+    players.forEach(p=>{const c=slots.filter(m=>p.picks[m]===real[m]).length;
+      if(c>best){best=c;winners=[p.name];}else if(c===best&&c>0)winners.push(p.name);});
+    const who=best>0?(winners.slice(0,3).join(", ")+(winners.length>3?` +${winners.length-3}`:"")):`<span class="note">nobody called it</span>`;
+    h+=`<div class="rchrow"><span class="rcl">${label}</span><span class="rcw">${who}</span><span class="rcn">${best}/${slots.length}</span></div>`;});
+  return h+`</div>`;
+}
 function showBracketModal(name,picks){   // another player's locked bracket (read-only): hit/miss outline + eliminated strikethrough
   const {ties,champ}=pbBracket(picks||{});
   const {real,elim}=realProgress();
@@ -1429,7 +1466,7 @@ function predBracketRender(){
     :`<div class="note" style="text-align:center;margin:0 0 8px">Tap a team to send them through · ${n}/${ties.length} ties picked</div>`;
   const champKO=champ&&elim.has(champ);
   el.innerHTML=`<div class="bywchamp">🏆 Your champion: ${champ?flag(champ,'sm')+` <b${champKO?' class="kox"':''}>`+champ+"</b>"+(champKO?' <span class="note" style="color:var(--red)">· eliminated</span>':''):'<span class="note">tap your way through the bracket</span>'}</div>`
-    +sub+bracketTree(rounds)+bracketLB();
+    +sub+bracketTree(rounds)+bracketLB()+roundChampions();
   if(!LOCKED)el.querySelectorAll(".tt[data-m]").forEach(tt=>tt.onclick=()=>{if(tt.dataset.team)pbSet(+tt.dataset.m,tt.dataset.team);});
   el.querySelectorAll(".pbrow[data-uid]").forEach(row=>row.onclick=()=>{   // tap a leaderboard player -> their bracket
     const b=(allBrackets||[]).find(x=>x.user_id===row.dataset.uid);if(b)showBracketModal(row.dataset.name||"Player",b.picks);});
