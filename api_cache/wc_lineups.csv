@@ -5270,3 +5270,55 @@ match_id,side,team,formation,starter,player_id,player,number,position
 1354677899,away,England,4-1-2-3,no,3118080,Ollie Watkins,19,Forward
 1354677899,away,England,4-1-2-3,no,29778,Harry Kane,9,Forward
 1354677899,away,England,4-1-2-3,no,22012557,Noni Madueke,20,Forward
+1354678750,home,Spain,4-2-3-1,yes,7610624,Unai Simón,23,Goalkeeper
+1354678750,home,Spain,4-2-3-1,yes,7628334,Marc Cucurella,24,Defender
+1354678750,home,Spain,4-2-3-1,yes,100296,Aymeric Laporte,14,Defender
+1354678750,home,Spain,4-2-3-1,yes,63856457,Pau Cubarsí,22,Defender
+1354678750,home,Spain,4-2-3-1,yes,7650713,Pedro Porro,12,Defender
+1354678750,home,Spain,4-2-3-1,yes,52962,Fabián Ruiz,8,Midfielder
+1354678750,home,Spain,4-2-3-1,yes,7238,Rodri,16,Midfielder
+1354678750,home,Spain,4-2-3-1,yes,29337413,Alex Baena,15,Midfielder
+1354678750,home,Spain,4-2-3-1,yes,213157,Dani Olmo,10,Midfielder
+1354678750,home,Spain,4-2-3-1,yes,62279462,Lamine Yamal,19,Midfielder
+1354678750,home,Spain,4-2-3-1,yes,7619157,Mikel Oyarzabal,21,Forward
+1354678750,home,Spain,4-2-3-1,no,3134019,David Raya,1,Goalkeeper
+1354678750,home,Spain,4-2-3-1,no,29417752,Joan García,13,Goalkeeper
+1354678750,home,Spain,4-2-3-1,no,99813,Eric García,4,Defender
+1354678750,home,Spain,4-2-3-1,no,47622827,Marc Pubill,2,Defender
+1354678750,home,Spain,4-2-3-1,no,121387,Marcos Llorente,5,Midfielder
+1354678750,home,Spain,4-2-3-1,no,90797,Alejandro Grimaldo,3,Defender
+1354678750,home,Spain,4-2-3-1,no,7617869,Martín Zubimendi,18,Midfielder
+1354678750,home,Spain,4-2-3-1,no,7617225,Mikel Merino,6,Midfielder
+1354678750,home,Spain,4-2-3-1,no,29591793,Nico Williams,17,Forward
+1354678750,home,Spain,4-2-3-1,no,47763541,Pablo Gavi,9,Midfielder
+1354678750,home,Spain,4-2-3-1,no,21511203,Pedri,20,Midfielder
+1354678750,home,Spain,4-2-3-1,no,7623182,Borja Iglesias,26,Forward
+1354678750,home,Spain,4-2-3-1,no,150045,Ferran Torres,7,Forward
+1354678750,home,Spain,4-2-3-1,no,54539065,Víctor Muñoz,25,Forward
+1354678750,home,Spain,4-2-3-1,no,29660540,Yéremy Pino,11,Midfielder
+1354678750,away,Argentina,4-4-2,yes,3155593,Emiliano Martínez,23,Goalkeeper
+1354678750,away,Argentina,4-4-2,yes,85323,Nicolás Tagliafico,3,Defender
+1354678750,away,Argentina,4-4-2,yes,397341,Lisandro Martínez,6,Defender
+1354678750,away,Argentina,4-4-2,yes,4955090,Cristian Romero,13,Defender
+1354678750,away,Argentina,4-4-2,yes,397502,Gonzalo Montiel,4,Defender
+1354678750,away,Argentina,4-4-2,yes,4236869,Nicolás González,15,Midfielder
+1354678750,away,Argentina,4-4-2,yes,965510,Enzo Fernández,24,Midfielder
+1354678750,away,Argentina,4-4-2,yes,1081430,Alexis Mac Allister,20,Midfielder
+1354678750,away,Argentina,4-4-2,yes,398146,Rodrigo De Paul,7,Midfielder
+1354678750,away,Argentina,4-4-2,yes,967603,Julián Alvarez,9,Forward
+1354678750,away,Argentina,4-4-2,yes,24948,Lionel Messi,10,Forward
+1354678750,away,Argentina,4-4-2,no,7614810,Gerónimo Rulli,12,Goalkeeper
+1354678750,away,Argentina,4-4-2,no,397019,Juan Musso,1,Goalkeeper
+1354678750,away,Argentina,4-4-2,no,1003345,Facundo Medina,25,Defender
+1354678750,away,Argentina,4-4-2,no,1064364,Marcos Senesi,2,Defender
+1354678750,away,Argentina,4-4-2,no,100618,Nicolás Otamendi,19,Defender
+1354678750,away,Argentina,4-4-2,no,1047137,Nahuel Molina,26,Defender
+1354678750,away,Argentina,4-4-2,no,966476,Exequiel Palacios,14,Midfielder
+1354678750,away,Argentina,4-4-2,no,976941,Thiago Almada,16,Midfielder
+1354678750,away,Argentina,4-4-2,no,51451246,Valentín Barco,8,Midfielder
+1354678750,away,Argentina,4-4-2,no,56356111,Nico Paz,18,Forward
+1354678750,away,Argentina,4-4-2,no,52153689,Giuliano Simeone,17,Forward
+1354678750,away,Argentina,4-4-2,no,254212,Giovani Lo Celso,11,Midfielder
+1354678750,away,Argentina,4-4-2,no,43785,Leandro Paredes,5,Midfielder
+1354678750,away,Argentina,4-4-2,no,47577747,José Manuel López,21,Forward
+1354678750,away,Argentina,4-4-2,no,35091,Lautaro Martínez,22,Forward

@@ -1644,3 +1644,22 @@ match_id,minute,team,type,player,player_id,assist,out,out_pid
 1354677899,90+3,England,Substitution,M. Guehi,10943485,,T. Chalobah,3175074
 1354677899,90+6,France,Goal,O. Dembele,24787,D. Upamecano,,185143
 1354677899,90+8,England,Goal,J. Bellingham,20884752,,,
+1354678750,41,Argentina,Yellow Card,Lisandro Martínez,397341,,,
+1354678750,44,Argentina,Substitution,Lisandro Martínez,397341,,Nicolás Otamendi,100618
+1354678750,45,Argentina,Substitution,Nicolás Iván Gonzalez,4236869,,Leandro Paredes,43785
+1354678750,52,Argentina,Yellow Card,Leandro Paredes,43785,,,
+1354678750,58,Argentina,Substitution,Gonzalo Montiel,397502,,Nahuel Molina,1047137
+1354678750,62,Spain,Substitution,Mikel Oyarzabal,7619157,,Ferrán Torres,150045
+1354678750,62,Spain,Substitution,Fabián Ruiz,52962,,Pedri,21511203
+1354678750,70,Argentina,Substitution,Cristian Romero,4955090,,Facundo Medina,1003345
+1354678750,70,Argentina,Substitution,Rodrigo De Paul,398146,,Giuliano Simeone Baldini,52153689
+1354678750,75,Spain,Substitution,Alejandro Baena Rodríguez,29337413,,Nico Williams,29591793
+1354678750,75,Spain,Substitution,Daniel Olmo Carvajal,213157,,Mikel Merino,7617225
+1354678750,82,Argentina,Yellow Card,Enzo Fernández,965510,,,
+1354678750,90+2,Argentina,Yellow Card,Cristian Romero,4955090,,,
+1354678750,99,Spain,Substitution,Rodrigo Hernandez Cascante,7238,,Martín Zubimendi,7617869
+1354678750,99,Spain,Substitution,Aymeric Laporte,100296,,Eric García,99813
+1354678750,102,Argentina,Substitution,Julián Álvarez,967603,,Marcos Senesi,1064364
+1354678750,104,Argentina,Yellow Card,Lionel Sebastián Scaloni,,,,
+1354678750,106,Spain,Goal,Ferrán Torres,150045,Nico Williams,,29591793
+1354678750,111,Argentina,Yellow Card,Alexis Mac Allister,1081430,,,
