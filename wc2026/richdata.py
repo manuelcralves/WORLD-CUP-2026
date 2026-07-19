@@ -23,14 +23,21 @@ def _norm(name: str) -> str:
     return HL_TO_MARTJ42.get(name, name)
 
 
+# Letters NFKD can't decompose to ASCII (distinct glyphs, not base+diacritic) — without this
+# 'Ødegaard' loses the ø entirely ('degaard') and won't meet Highlightly's plain 'Odegaard'.
+_TRANSLIT = str.maketrans({"ø": "o", "ł": "l", "đ": "d", "ı": "i", "ß": "ss",
+                           "æ": "ae", "œ": "oe", "ð": "d", "þ": "th"})
+
+
 def assist_key(name: str) -> str:
     """Stable 'initial|surname' key (accent-stripped, lower-cased) for matching an assister to
     a scorer. Highlightly writes the assister sometimes abbreviated ('K. Mbappe') and sometimes
     full ('Kylian Mbappé') and drops accents inconsistently, so surname-only matching both missed
     Mbappé (accent) and merged the two Díaz (Brahim vs Luis) — the initial keeps them apart while
     the accent-strip lets 'Mbappe' meet 'Mbappé'. Single-name players key on the lone token."""
-    p = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()
-    p = p.replace(".", " ").split()
+    s = name.lower().translate(_TRANSLIT)
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+    p = s.replace(".", " ").split()
     if not p:
         return ""
     return f"{p[0][0]}|{p[-1]}" if len(p) >= 2 else p[0]

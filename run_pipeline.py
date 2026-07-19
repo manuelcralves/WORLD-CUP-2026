@@ -185,6 +185,11 @@ def main(n_sims: int = 1000000, model: str = "poisson", mode: str = "snapshot"):
         RPT.main()
     except Exception as e:
         print("Report card skipped:", type(e).__name__, e)
+    try:                                   # unlisted 'tournament in numbers' -> outputs/competition.html
+        import competition as CMP           # (auto-updates each build; not linked from the site)
+        CMP.main()
+    except Exception as e:
+        print("Competition stats skipped:", type(e).__name__, e)
     print("\nDone.")
 
 
