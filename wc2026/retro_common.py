@@ -15,6 +15,7 @@ _PAGES = [
     ("competition", "/outputs/competition.html", "📊 The numbers"),
     ("report", "/outputs/report.html", "🎯 Report card"),
     ("compare", "/compare.html", "🔮 Predicted vs reality"),
+    ("journeys", "/outputs/journeys.html", "🧭 Team journeys"),
 ]
 
 NAV_CSS = """

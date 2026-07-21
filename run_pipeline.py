@@ -195,6 +195,11 @@ def main(n_sims: int = 1000000, model: str = "poisson", mode: str = "snapshot"):
         RVW.main()
     except Exception as e:
         print("Review skipped:", type(e).__name__, e)
+    try:                                   # per-team recap -> outputs/journeys.html (retrospective)
+        import journeys as JRN
+        JRN.main()
+    except Exception as e:
+        print("Team journeys skipped:", type(e).__name__, e)
     print("\nDone.")
 
 
