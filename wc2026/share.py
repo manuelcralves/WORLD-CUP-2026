@@ -240,6 +240,7 @@ def _actual_stages() -> dict:
 
 
 def comparison_page(snap_csv, pre_csv, out_html, top=14):
+    from . import retro_common as RC
     snap = pd.read_csv(snap_csv).set_index("team")
     pre = pd.read_csv(pre_csv).set_index("team")
     reached = _actual_stages()
@@ -336,8 +337,8 @@ img.fl{width:19px;height:13px;border-radius:2px;object-fit:cover;vertical-align:
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-<style>{css}</style></head><body>
-<a class="homebtn" href="index.html">← Home</a>
+<style>{css}{RC.NAV_CSS}</style></head><body>
+{RC.nav('compare')}
 <span class="eyebrow">Before vs after</span>
 <h1>Predicted vs reality</h1>
 <p class="sub">The model ranked all 48 teams <b>before a ball was kicked</b>. Here is how that blind call

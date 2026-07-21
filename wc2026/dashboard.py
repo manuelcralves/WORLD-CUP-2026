@@ -483,6 +483,9 @@ tr.mdclick:hover{background:#152033}
 .rcl{width:116px;flex:none;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
 .rcw{flex:1;font-weight:600;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis}
 .rcn{font-family:Outfit,sans-serif;font-weight:700;font-variant-numeric:tabular-nums;color:var(--green)}
+.reviewcta{display:block;margin:16px 0 4px;padding:14px 18px;border-radius:14px;text-decoration:none;background:linear-gradient(120deg,rgba(255,203,92,.14),rgba(46,230,166,.10));border:1px solid var(--gold);color:var(--text);font-size:14.5px;font-weight:600}
+.reviewcta:hover{background:linear-gradient(120deg,rgba(255,203,92,.22),rgba(46,230,166,.15))}
+.reviewcta b{color:var(--gold)}
 .pbadges{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin:-6px 0 16px}
 .pbadge{background:rgba(255,203,92,.12);border:1px solid rgba(255,203,92,.35);color:#ffcb5c;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;cursor:default}
 .prival{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:8px 12px;margin-bottom:8px;font-size:13.5px;text-align:center}
@@ -2004,6 +2007,9 @@ def build_interactive(data: dict, out_path) -> Path:
             + _kpi(f"{fl(sec)} {sec['p']*100:.1f}%", f"2nd favourite: {sec['team']}")
             + _kpi(f"{fl(fin[0])} {fl(fin[1])}", "Most likely finalists")
             + _kpi(f"{contenders}", "teams above 5% to win"))
+    review_cta = ("" if not decided else            # once it's over, point into the retrospective
+                  "<a class='reviewcta' href='review.html'>🏆 The World Cup is done — open the full "
+                  "<b>Tournament Review</b>: how it played out &amp; how the model did →</a>")
     mode = (data.get("mode_label") + " · ") if data.get("mode_label") else ""
     pre = "Pre-tournament" in (data.get("mode_label") or "")
     ogdir = "/outputs_pretournament" if pre else "/outputs"
@@ -2066,6 +2072,7 @@ def build_interactive(data: dict, out_path) -> Path:
         "<button data-tab='insights'>📈 Insights</button></div>"
         "<div class='tab' id='tab-overview'>"
         f"<div class='cards'>{kpis_html}</div>"
+        f"{review_cta}"
         "<div id='todaysec'><h2>📅 <span id='todayhead'>Today's matches</span> "
         "<span class='tag'>kickoffs in WEST (UTC+1)</span></h2><div id='today'></div></div>"
         f"{ev_html}"

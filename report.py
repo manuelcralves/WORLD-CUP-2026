@@ -14,6 +14,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from wc2026 import retro_common as RC
+
 OUT = Path(__file__).resolve().parent / "outputs"
 SITE = "https://worldcup2026ml.pt"
 OUTCOMES = [("p_home", "home"), ("p_draw", "draw"), ("p_away", "away")]
@@ -265,11 +267,12 @@ tbody tr:last-child td{border-bottom:0}
 """
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
 <title>Model report card · World Cup 2026</title>
+{RC.og("World Cup 2026 — model report card", "How the blind pre-tournament model did: it called the champion, the final and all four semi-finalists — the accuracy, calibration and sharpest calls.", "/outputs/report.html")}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-<style>{css}</style></head><body>
+<style>{css}{RC.NAV_CSS}</style></head><body>
+{RC.nav('report')}
 <span class="eyebrow">Model report card</span>
 <h1>How good were the blind predictions?</h1>
 <p class="sub">The pre-tournament model made a call on every match with <b>zero knowledge of any 2026 result</b>.

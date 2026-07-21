@@ -14,6 +14,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from wc2026 import retro_common as RC
+
 BASE = Path(__file__).resolve().parent
 OUT = BASE / "outputs"
 CACHE = BASE / "api_cache"
@@ -214,12 +216,12 @@ box-shadow:0 2px 8px rgba(0,0,0,.35);transition:border-color .15s,transform .15s
 """
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
 <title>World Cup 2026 — Tournament Review</title>
+{RC.og("World Cup 2026 — Tournament Review", f"{champ} are world champions — how the first 48-team World Cup played out, and how the blind model's forecast held up.", "/outputs/review.html")}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-<style>{css}</style></head><body>
-<a class="homebtn" href="../index.html">← Home</a>
+<style>{css}{RC.NAV_CSS}</style></head><body>
+{RC.nav('review')}
 <span class="eyebrow">Tournament review</span>
 <h1>{champ} are world champions.</h1>
 <p class="sub">The first 48-team World Cup is done — <b>{champ}</b> beat <b>{runner}</b> <b>{scline}</b> in the final.

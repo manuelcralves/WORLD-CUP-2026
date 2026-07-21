@@ -15,6 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 from wc2026 import richdata as RICH
+from wc2026 import retro_common as RC
 
 BASE = Path(__file__).resolve().parent
 OUT = BASE / "outputs"
@@ -313,11 +314,12 @@ tbody tr:last-child td{border-bottom:0}
     tail = (" One match to go — the final completes these numbers." if pending else "")
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
 <title>World Cup 2026 by the numbers</title>
+{RC.og("World Cup 2026, by the numbers", "Goals, creators, cards and records from the first 48-team World Cup — the whole competition tallied.", "/outputs/competition.html")}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
-<style>{css}</style></head><body>
+<style>{css}{RC.NAV_CSS}</style></head><body>
+{RC.nav('competition')}
 <span class="eyebrow">The tournament in numbers</span>
 <h1>World Cup 2026, by the numbers</h1>
 <p class="sub">Everything the first 48-team World Cup produced across <b>{m['n_matches']}</b> matches —
