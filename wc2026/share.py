@@ -166,35 +166,46 @@ def _hero_pill(d, cx, cy, text, font, textcol, bg, border, h=44, padx=20):
 
 
 def hero_card(table, out):
-    """A 1200x630 branded card (the homepage in a single image) for link previews."""
+    """A 1200x630 branded card (the homepage in a single image) for link previews. Once the title
+    is settled (favourite at 100%) it switches from 'who wins?' + odds to a champions card."""
     W, H = _HERO
     img = _hero_bg(W, H)
     d = ImageDraw.Draw(img)
-
     _hero_trophy(d, 600 - 32 * (118 / 64), 28, 118)         # centred trophy
-    _hero_pill(d, 600, 170, "MACHINE-LEARNING PREDICTION", _ttf(19),
-               _GREEN, (14, 33, 30), (0, 92, 76), h=38)
-    fh = _ttf(62)
-    d.text((600, 238), "Who wins the", font=fh, fill=_WHITE, anchor="mm")
-    d.text((600, 306), "World Cup 2026?", font=fh, fill=_GOLD, anchor="mm")
-    d.text((600, 372), "A machine-learning model — Poisson + Elo, 150 years of football",
-           font=_ttf(25, bold=False), fill=_GREY, anchor="mm")
 
-    # top-3 contenders as pills (a hook, not a chart) — favourite in gold
-    fp = _ttf(26)
-    labels = [f"{r['team']}  {r['p_champion'] * 100:.0f}%"
-              for _, r in table.head(3).iterrows()]
+    champ = table.iloc[0]
+    decided = float(champ["p_champion"]) >= 0.999
+    fh = _ttf(62)
+    if decided:
+        _hero_pill(d, 600, 170, "WORLD CUP 2026  ·  FULL TIME", _ttf(19),
+                   _GOLD, (40, 33, 13), (150, 120, 30), h=38)
+        d.text((600, 238), f"{champ['team']} are", font=fh, fill=_WHITE, anchor="mm")
+        d.text((600, 306), "World Champions", font=fh, fill=_GOLD, anchor="mm")
+        d.text((600, 372), "Our model called it — the champion, the final and all four semi-finalists",
+               font=_ttf(23, bold=False), fill=_GREY, anchor="mm")
+        labels, golds = ["Called the champion", "Called the final", "Called the semis"], {0}
+    else:
+        _hero_pill(d, 600, 170, "MACHINE-LEARNING PREDICTION", _ttf(19),
+                   _GREEN, (14, 33, 30), (0, 92, 76), h=38)
+        d.text((600, 238), "Who wins the", font=fh, fill=_WHITE, anchor="mm")
+        d.text((600, 306), "World Cup 2026?", font=fh, fill=_GOLD, anchor="mm")
+        d.text((600, 372), "A machine-learning model — Poisson + Elo, 150 years of football",
+               font=_ttf(25, bold=False), fill=_GREY, anchor="mm")
+        labels = [f"{r['team']}  {r['p_champion'] * 100:.0f}%" for _, r in table.head(3).iterrows()]
+        golds = {0}
+
+    # pills row (odds contenders, or 'called it' badges once decided) — highlighted ones in gold
+    fp = _ttf(25)
     widths = [d.textlength(s, font=fp) + 40 for s in labels]
     gap, x = 22, 600 - (sum(widths) + 22 * (len(widths) - 1)) / 2
     for i, (s, w) in enumerate(zip(labels, widths)):
-        if i == 0:
+        if i in golds:
             _hero_pill(d, x + w / 2, 448, s, fp, _GOLD, (40, 33, 13), (150, 120, 30), h=54)
         else:
             _hero_pill(d, x + w / 2, 448, s, fp, _WHITE, (22, 29, 43), (36, 48, 73), h=54)
         x += w + gap
 
-    d.text((600, 556), "worldcup2026ml.pt",
-           font=_ttf(24), fill=_GREEN, anchor="mm")
+    d.text((600, 556), "worldcup2026ml.pt", font=_ttf(24), fill=_GREEN, anchor="mm")
     img.save(out, "PNG")
     return out
 
