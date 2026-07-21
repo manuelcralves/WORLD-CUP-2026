@@ -233,6 +233,59 @@ def _highest_xg() -> str | None:
     return best[1] if best else None
 
 
+def _golden_race(goals, top_n=5) -> dict:
+    """Top scorers' cumulative goal tallies over the tournament's scoring days — the Golden Boot
+    race told as a line chart."""
+    g = goals[~goals["og"]].dropna(subset=["date", "min"]).copy()
+    g["d"] = g["date"].dt.strftime("%Y-%m-%d")
+    tot = g.groupby("scorer").size().sort_values(ascending=False)
+    top = list(tot.head(top_n).index)
+    dates = sorted(g["d"].unique())
+    series = []
+    for name in top:
+        by = g[g["scorer"] == name].groupby("d").size()
+        cum, pts = 0, []
+        for d in dates:
+            cum += int(by.get(d, 0))
+            pts.append(cum)
+        series.append({"name": str(name).split()[-1], "total": int(tot[name]), "pts": pts})
+    return {"dates": dates, "series": series}
+
+
+def race_svg(race) -> str:
+    dates, series = race["dates"], race["series"]
+    if not series or len(dates) < 2:
+        return ""
+    W, H, PL, PR, PT, PB = 580, 260, 26, 92, 14, 26
+    n = len(dates)
+    maxg = max((max(s["pts"]) for s in series), default=1) or 1
+    pw, ph = W - PL - PR, H - PT - PB
+    xf = lambda i: PL + (i / (n - 1)) * pw
+    yf = lambda v: PT + (1 - v / maxg) * ph
+    cols = ["var(--gold)", "var(--green)", "#5b8def", "#ff9d6b", "#c084fc"]
+    g = [f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" style="width:100%">']
+    for v in range(0, maxg + 1, 2):                       # y grid + labels
+        g.append(f'<line x1="{PL}" y1="{yf(v):.0f}" x2="{PL + pw:.0f}" y2="{yf(v):.0f}" stroke="var(--line2)"/>')
+        g.append(f'<text x="{PL - 6}" y="{yf(v) + 3:.0f}" fill="var(--faint)" font-size="10" text-anchor="end">{v}</text>')
+    ends = [yf(s["pts"][-1]) for s in series]             # de-overlap the end labels
+    order = sorted(range(len(series)), key=lambda i: ends[i])
+    for j in range(1, len(order)):
+        if ends[order[j]] - ends[order[j - 1]] < 13:
+            ends[order[j]] = ends[order[j - 1]] + 13
+    for i, s in enumerate(series):
+        col = cols[i % len(cols)]
+        pts = " ".join(f"{xf(k):.1f},{yf(v):.1f}" for k, v in enumerate(s["pts"]))
+        g.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.5" stroke-linejoin="round" opacity=".92"/>')
+        g.append(f'<circle cx="{xf(n - 1):.1f}" cy="{yf(s["pts"][-1]):.1f}" r="3" fill="{col}"/>')
+        g.append(f'<text x="{xf(n - 1) + 7:.0f}" y="{ends[i] + 3:.0f}" fill="{col}" font-size="11" font-weight="700">{_html.escape(s["name"])} {s["total"]}</text>')
+    for i in (0, n - 1):                                  # first + last date ticks
+        t = pd.Timestamp(dates[i])
+        g.append(f'<text x="{xf(i):.0f}" y="{H - 8}" fill="var(--faint)" font-size="10" '
+                 f'text-anchor="{"start" if i == 0 else "middle"}">{t.day} {t.strftime("%b")}</text>')
+    g.append("</svg>")
+    return "".join(g)
+
+
 def compute() -> dict:
     played = _wc_played()
     goals = _wc_goals(played)
@@ -266,6 +319,7 @@ def compute() -> dict:
         "assists": _top_assisters(name_map), "cards": _cards(name_map),
         "totals": _stats_totals(), "drama": _knockout_drama(),
         "superlatives": _superlatives(played, goals), "xg": _highest_xg(),
+        "race": _golden_race(goals),
     }
 
 
@@ -428,6 +482,12 @@ goals, creators, cards and knockout drama, from the match data.{tail}</p>
 <p class="note" style="margin:0 0 6px">Goals by 15-minute band — the game bursts open late.</p>
 {bands_svg(m['bands'])}
 </div>
+</div>
+
+<h2>The Golden Boot race</h2>
+<div class="panel">
+<p class="note" style="margin:0 0 10px">Cumulative goals through the tournament — the top {len(m['race']['series'])} scorers, {_html.escape(m['race']['series'][0]['name']) if m['race']['series'] else ''} out in front.</p>
+{race_svg(m['race'])}
 </div>
 
 <h2>Creators &amp; chaos</h2>
