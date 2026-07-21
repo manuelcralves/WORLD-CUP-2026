@@ -401,6 +401,22 @@ def build(m: dict) -> str:
         + _srow("🛡️ Best defence (team)", sup.get("defence"))
         + _srow("📈 Highest-xG match", m.get("xg")))
 
+    aw = []
+    if m["scorers"]:
+        aw.append(("👟", "Golden Boot", m["scorers"][0]["name"], f'{m["scorers"][0]["g"]} goals'))
+    if m["assists"]:
+        aw.append(("🅰️", "Top playmaker", m["assists"][0]["name"], f'{m["assists"][0]["n"]} assists'))
+    if m["superlatives"].get("attack"):
+        a = m["superlatives"]["attack"].split(" — ")
+        aw.append(("⚔️", "Best attack", a[0], a[1] if len(a) > 1 else ""))
+    if m["superlatives"].get("defence"):
+        d = m["superlatives"]["defence"].split(" — ")
+        aw.append(("🧤", "Meanest defence", d[0], d[1] if len(d) > 1 else ""))
+    awards_html = "".join(
+        f'<div class="award"><div class="ae">{e}</div><div class="al">{lbl}</div>'
+        f'<div class="aw" title="{_html.escape(name)}">{_html.escape(name)}</div>'
+        f'<div class="af">{_html.escape(sub)}</div></div>' for e, lbl, name, sub in aw)
+
     css = """
 *{box-sizing:border-box}
 :root{--bg:#0a0e14;--panel:#131a26;--panel2:#1a2434;--line:#263143;--line2:#1b2431;
@@ -448,6 +464,12 @@ tbody tr:last-child td{border-bottom:0}
 .dn{width:24px;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
 .stat{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line2);font-size:14px}
 .stat:last-child{border-bottom:0}.stat b{font-variant-numeric:tabular-nums}
+.awgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:14px}
+.award{background:linear-gradient(158deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+.award .ae{font-size:26px;line-height:1}
+.award .al{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700;margin:9px 0 6px}
+.award .aw{font-family:Outfit,sans-serif;font-size:15px;font-weight:700;color:var(--gold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.award .af{font-size:12px;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums}
 .foota{margin-top:44px;color:var(--faint);font-size:12px;text-align:center}
 .foota a{color:var(--green);text-decoration:none}
 """
@@ -467,6 +489,9 @@ tbody tr:last-child td{border-bottom:0}
 goals, creators, cards and knockout drama, from the match data.{tail}</p>
 
 <div class="cards">{kpis}</div>
+
+<h2>Players of the tournament</h2>
+<div class="awgrid">{awards_html}</div>
 
 <h2>The goals</h2>
 <div class="split">
