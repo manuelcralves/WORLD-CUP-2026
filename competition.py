@@ -159,6 +159,80 @@ def _knockout_drama() -> dict:
     return {"shootouts": sh, "extra_time": et}
 
 
+def _superlatives(played, goals) -> dict:
+    out: dict = {}
+    g = goals[~goals["og"]].dropna(subset=["min"])           # scored goals (own goals excluded)
+    if len(g):
+        fr = g.loc[g["min"].idxmin()]
+        opp = fr["away_team"] if fr["team"] == fr["home_team"] else fr["home_team"]
+        out["fastest"] = f'{fr["scorer"]} {int(fr["min"])}’ ({fr["team"]} v {opp})'
+    ht = g.groupby(["date", "home_team", "away_team", "scorer"]).size()
+    out["hattricks"] = sorted({idx[3] for idx, n in ht.items() if n >= 3})
+
+    gf, ga, cs = defaultdict(int), defaultdict(int), defaultdict(int)
+    for _, r in played.iterrows():
+        hsc, asc = int(r["home_score"]), int(r["away_score"])
+        gf[r["home_team"]] += hsc; ga[r["home_team"]] += asc
+        gf[r["away_team"]] += asc; ga[r["away_team"]] += hsc
+        if asc == 0:
+            cs[r["home_team"]] += 1
+        if hsc == 0:
+            cs[r["away_team"]] += 1
+    if gf:
+        ba = max(gf, key=lambda t: (gf[t], -ga[t]))
+        out["attack"] = f"{ba} — {gf[ba]} goals"
+    if cs:
+        bd = max(cs, key=lambda t: (cs[t], -ga[t]))
+        out["defence"] = f"{bd} — {cs[bd]} clean sheets ({ga[bd]} conceded)"
+
+    # biggest comeback: the winner who trailed by the most (own goals kept in the running score)
+    best = None
+    for (_d, h, a), grp in goals.dropna(subset=["min"]).groupby(["date", "home_team", "away_team"]):
+        hs = as_ = hd = ad = 0
+        for _, ev in grp.sort_values("min").iterrows():
+            if ev["team"] == h:
+                hs += 1
+            elif ev["team"] == a:
+                as_ += 1
+            hd, ad = max(hd, as_ - hs), max(ad, hs - as_)
+        wdef = hd if hs > as_ else ad if as_ > hs else 0
+        if wdef > 0:
+            w, ws, ls = (h, hs, as_) if hs > as_ else (a, as_, hs)
+            if best is None or wdef > best[0]:
+                best = (wdef, f"{w} from {wdef} down to win {ws}-{ls}")
+    out["comeback"] = best[1] if best else None
+    return out
+
+
+def _highest_xg() -> str | None:
+    try:
+        from wc2026.richdata import HL_TO_MARTJ42 as HL
+    except Exception:
+        HL = {}
+    sf = CACHE / "wc_stats.csv"
+    mf = CACHE / "wc_matches.csv"
+    if not sf.exists() or not mf.exists():
+        return None
+    mt = {}
+    with mf.open(encoding="utf-8") as f:
+        for m in csv.DictReader(f):
+            mt[m["match_id"]] = (HL.get(m["home"], m["home"]), HL.get(m["away"], m["away"]))
+    xg: dict = defaultdict(dict)
+    with sf.open(encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["stat"] == "Expected Goals":
+                try:
+                    xg[r["match_id"]][r["side"]] = float(r["value"])
+                except (TypeError, ValueError):
+                    pass
+    best = None
+    for mid, (h, a) in mt.items():
+        d = xg.get(mid, {})
+        if "home" in d and "away" in d and (best is None or d["home"] + d["away"] > best[0]):
+            best = (d["home"] + d["away"], f'{h} v {a} — {d["home"] + d["away"]:.1f} xG')
+    return best[1] if best else None
+
+
 def compute() -> dict:
     played = _wc_played()
     goals = _wc_goals(played)
@@ -191,6 +265,7 @@ def compute() -> dict:
         "hda": {"home": home, "draw": draw, "away": away},
         "assists": _top_assisters(name_map), "cards": _cards(name_map),
         "totals": _stats_totals(), "drama": _knockout_drama(),
+        "superlatives": _superlatives(played, goals), "xg": _highest_xg(),
     }
 
 
@@ -259,6 +334,18 @@ def build(m: dict) -> str:
     # shootouts list
     sh = m["drama"]["shootouts"]
     sh_txt = " · ".join(_html.escape(s) for s in sh) if sh else "none"
+
+    sup = m["superlatives"]
+
+    def _srow(lbl, val):
+        return f'<div class="stat"><span>{lbl}</span><b>{_html.escape(str(val))}</b></div>' if val else ""
+    sup_rows = (
+        _srow("⚡ Fastest goal", sup.get("fastest"))
+        + _srow("🎩 Hat-trick heroes", ", ".join(sup["hattricks"]) if sup.get("hattricks") else None)
+        + _srow("🔄 Biggest comeback", sup.get("comeback"))
+        + _srow("⚔️ Most goals (team)", sup.get("attack"))
+        + _srow("🛡️ Best defence (team)", sup.get("defence"))
+        + _srow("📈 Highest-xG match", m.get("xg")))
 
     css = """
 *{box-sizing:border-box}
@@ -361,6 +448,9 @@ goals, creators, cards and knockout drama, from the match data.{tail}</p>
 <div class="stat"><span>Total shots</span><b>{m['totals']['shots']:,}</b></div>
 <div class="stat"><span>Penalty shootouts</span><b>{sh_txt}</b></div>
 </div>
+
+<h2>Superlatives</h2>
+<div class="panel">{sup_rows}</div>
 
 <p class="foota">Data: martj42 results + Highlightly · <a href="{SITE}">{SITE.replace('https://','')}</a></p>
 </body></html>"""
