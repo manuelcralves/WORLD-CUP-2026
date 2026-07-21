@@ -1,8 +1,12 @@
 name: Update & Deploy
 
 on:
-  schedule:
-    - cron: "0 */2 * * *"   # every 2 hours — refresh projections/standings shortly after each game (Highlightly auto-feeds the results)
+  # schedule DISABLED (freeze) — the World Cup is over, there is no new data to pull, so the
+  # 2-hourly auto-rebuild is switched off. The site is frozen on its last build. Manual deploys
+  # still run on push + workflow_dispatch, so tweaks to the existing pages ship as normal.
+  # Re-enable for a future tournament by uncommenting the two lines below.
+  # schedule:
+  #   - cron: "0 */2 * * *"   # every 2 hours — refresh projections/standings shortly after each game
   workflow_dispatch:          # allow manual runs
   push:
     branches: [main]
