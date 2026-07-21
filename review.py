@@ -100,10 +100,92 @@ def collect() -> dict | None:
 
     return {"champ": champ, "runner": runner, "cs": cs, "rs": rs, "aet": aet,
             "path": path, "fscorers": fscorers, "gb": gb, "goals": goals,
-            "n_matches": len(played), "pre_rank": pre_rank, "funnel": funnel}
+            "n_matches": len(played), "pre_rank": pre_rank, "funnel": funnel,
+            "final_stats": _final_stats(), "title_race": _title_race()}
 
 
 _ORD = {1: "top pick", 2: "2nd pick", 3: "3rd pick"}
+
+
+def _final_stats():
+    """Spain vs Argentina in the final, from the Highlightly match stats."""
+    fin_id = home = away = None
+    mf, sf = CACHE / "wc_matches.csv", CACHE / "wc_stats.csv"
+    if not mf.exists() or not sf.exists():
+        return None
+    with mf.open(encoding="utf-8") as f:
+        for m in csv.DictReader(f):
+            if m["round"] == "Final":
+                fin_id, home, away = m["match_id"], m["home"], m["away"]
+    if not fin_id:
+        return None
+    vals = {"home": {}, "away": {}}
+    with sf.open(encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["match_id"] == fin_id and r["side"] in vals:
+                vals[r["side"]][r["stat"]] = r["value"]
+    order = [("Possession", "Possession", "pct"), ("Expected Goals", "xG", "f2"),
+             ("Shots on target", "Shots on target", "int"), ("Corners", "Corners", "int")]
+    rows = []
+    for stat, label, fmt in order:
+        h, a = vals["home"].get(stat), vals["away"].get(stat)
+        try:
+            hv, av = float(h), float(a)
+        except (TypeError, ValueError):
+            continue
+        d = (lambda v: f"{round(v * 100)}%") if fmt == "pct" else \
+            (lambda v: f"{v:.2f}") if fmt == "f2" else (lambda v: str(int(v)))
+        rows.append({"label": label, "h": d(hv), "a": d(av), "hpct": hv / (hv + av) * 100 if hv + av else 50})
+    return {"home": home, "away": away, "rows": rows} if rows else None
+
+
+def _title_race(topn=5):
+    """Top teams' title-odds over the tournament, from the live odds history."""
+    p = OUT / "history.csv"
+    if not p.exists():
+        return None
+    h = pd.read_csv(p)
+    if not {"date", "team", "p_champion"}.issubset(h.columns):
+        return None
+    dates = sorted(h["date"].unique())
+    top = list(h.groupby("team")["p_champion"].max().sort_values(ascending=False).head(topn).index)
+    series = []
+    for t in top:
+        ht = h[h["team"] == t].set_index("date")["p_champion"]
+        pts = [round(float(ht.get(d, 0)) * 100, 1) for d in dates]
+        series.append({"name": t, "pts": pts, "last": round(pts[-1])})
+    return {"dates": dates, "series": series} if series else None
+
+
+def title_race_svg(race) -> str:
+    dates, series = race["dates"], race["series"]
+    if not series or len(dates) < 2:
+        return ""
+    W, H, PL, PR, PT, PB = 580, 260, 32, 100, 14, 26
+    n, cols = len(dates), ["var(--gold)", "var(--green)", "#5b8def", "#ff9d6b", "#c084fc"]
+    pw, ph = W - PL - PR, H - PT - PB
+    xf = lambda i: PL + (i / (n - 1)) * pw
+    yf = lambda v: PT + (1 - v / 100) * ph
+    g = [f'<svg viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" style="width:100%">']
+    for v in (0, 25, 50, 75, 100):
+        g.append(f'<line x1="{PL}" y1="{yf(v):.0f}" x2="{PL + pw:.0f}" y2="{yf(v):.0f}" stroke="var(--line2)"/>')
+        g.append(f'<text x="{PL - 6}" y="{yf(v) + 3:.0f}" fill="var(--faint)" font-size="10" text-anchor="end">{v}%</text>')
+    ends = [yf(s["pts"][-1]) for s in series]
+    order = sorted(range(len(series)), key=lambda i: ends[i])
+    for j in range(1, len(order)):
+        if ends[order[j]] - ends[order[j - 1]] < 13:
+            ends[order[j]] = ends[order[j - 1]] + 13
+    for i, s in enumerate(series):
+        col = cols[i % len(cols)]
+        pts = " ".join(f"{xf(k):.1f},{yf(v):.1f}" for k, v in enumerate(s["pts"]))
+        g.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="2.5" stroke-linejoin="round" opacity=".92"/>')
+        g.append(f'<text x="{xf(n - 1) + 7:.0f}" y="{ends[i] + 3:.0f}" fill="{col}" font-size="11" font-weight="700">{_html.escape(s["name"])}</text>')
+    for i in (0, n - 1):
+        t = pd.Timestamp(dates[i])
+        g.append(f'<text x="{xf(i):.0f}" y="{H - 8}" fill="var(--faint)" font-size="10" '
+                 f'text-anchor="{"start" if i == 0 else "middle"}">{t.day} {t.strftime("%b")}</text>')
+    g.append("</svg>")
+    return "".join(g)
 
 
 def build(m: dict) -> str:
@@ -163,6 +245,27 @@ model's top&nbsp;N reached the last&nbsp;N — perfect at the sharp end.{rank_bi
 <div class="hd">Who delivered, who beat the odds, who fell short of the forecast.</div></a>
 </div>"""
 
+    fs = m.get("final_stats")
+    final_html = ""
+    if fs:
+        srows = "".join(
+            f'<div class="fsr"><div class="fsv">{r["h"]}</div>'
+            f'<div class="fsbar"><i style="width:{r["hpct"]:.0f}%"></i><span>{r["label"]}</span></div>'
+            f'<div class="fsv a">{r["a"]}</div></div>' for r in fs["rows"])
+        final_html = f"""<h2>The final, in numbers</h2>
+<div class="panel">
+<div class="fhd"><b>{_html.escape(fs["home"])}</b><span>vs</span><b>{_html.escape(fs["away"])}</b></div>
+{srows}
+<p class="note">A one-sided final — {_html.escape(fs["home"])} controlled the ball, the shots and the expected goals.</p></div>"""
+
+    tr = m.get("title_race")
+    race_html = ""
+    if tr:
+        race_html = f"""<h2>How the title race unfolded</h2>
+<div class="panel">
+<p class="sub" style="margin:0 0 10px">The model's live title odds across the tournament — {_html.escape(tr["series"][0]["name"])} climbing to the crown as the field cleared.</p>
+{title_race_svg(tr)}</div>"""
+
     css = """
 *{box-sizing:border-box}
 :root{--bg:#0a0e14;--panel:#131a26;--panel2:#1a2434;--line:#263143;--line2:#1b2431;
@@ -212,6 +315,14 @@ box-shadow:0 2px 8px rgba(0,0,0,.35);transition:border-color .15s,transform .15s
 .hcard:hover{border-color:var(--green);transform:translateY(-2px)}
 .hcard .he{font-size:24px}.hcard .ht{font-family:Outfit,sans-serif;font-size:16px;font-weight:700;color:var(--text);margin:10px 0 4px}
 .hcard .hd{color:var(--muted);font-size:13px}
+.fhd{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 0 14px;font-family:Outfit,sans-serif;font-size:17px;font-weight:700}
+.fhd span{color:var(--faint);font-size:12px;font-weight:400}
+.fsr{display:grid;grid-template-columns:52px 1fr 52px;gap:12px;align-items:center;margin:7px 0}
+.fsv{font-family:Outfit,sans-serif;font-weight:700;font-variant-numeric:tabular-nums;font-size:15px}
+.fsv.a{text-align:right;color:var(--muted)}
+.fsbar{position:relative;height:22px;background:rgba(255,107,107,.14);border-radius:6px;overflow:hidden}
+.fsbar i{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:6px}
+.fsbar span{position:relative;z-index:1;display:block;text-align:center;line-height:22px;font-size:11px;font-weight:600;color:var(--text)}
 .foota{margin-top:44px;color:var(--faint);font-size:12px;text-align:center}.foota a{color:var(--green);text-decoration:none}
 """
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -229,9 +340,13 @@ Here is how it played out, and how the model's blind pre-tournament call held up
 
 <div class="cards">{kpis}</div>
 
+{final_html}
+
 {verdict}
 
 {road}
+
+{race_html}
 
 {cards}
 
