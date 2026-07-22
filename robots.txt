@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /outputs/tweets.html
+Disallow: /outputs/daily_tweets.txt
+
+Sitemap: https://worldcup2026ml.pt/sitemap.xml
