@@ -354,6 +354,18 @@ border:1px solid #263143;border-radius:14px;padding:14px;margin-bottom:8px}
 .pbvs{font-weight:700;font-size:13.5px;text-align:center;flex:1;max-width:170px}
 .pstats{color:#8a95a9;font-size:13px;text-align:center;margin-bottom:18px}
 .psec{font-size:15px;margin:18px 0 10px}
+.scard{background:#131a26;border:1px solid #263143;border-radius:14px;padding:14px 16px;margin:6px 0 4px}
+.scard-t{font-family:'Outfit',sans-serif;font-weight:700;font-size:15px;margin-bottom:8px}
+.scrow{display:grid;grid-template-columns:1fr 54px 54px;align-items:center;padding:7px 0;border-top:1px solid #1a2434}
+.scrow.scr-h{border-top:0;color:#8a95a9;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding:0 0 3px}
+.scr-r{color:#cbd3e1}
+.scr-p{text-align:center;font-variant-numeric:tabular-nums;font-weight:600;color:#8a95a9}
+.scr-p.scw{color:#2ee6a6}
+.scrow.sctot{border-top:2px solid #263143;margin-top:2px}
+.scrow.sctot .scr-r{color:#f0f3f9;font-weight:800}
+.scrow.sctot .scr-p{font-size:18px;font-weight:800;color:#f0f3f9}
+.scrow.sctot .scr-p.scw{color:#2ee6a6}
+.scard-v{margin-top:10px;text-align:center;font-weight:700;font-size:13px;color:#cbd3e1}
 .pdate{font-weight:800;font-size:13px;color:#9fb0c9;margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid #263143;letter-spacing:.3px}
 .presrow{display:flex;justify-content:space-between;font-size:13.5px;margin-top:7px}
 .presrow.mac{color:#9fb0c9}
@@ -950,7 +962,7 @@ function tmatch(m){const wa=m.win&&m.win===m.a,wb=m.win&&m.win===m.b;
   return `<div class="tmatch${vc}${lk?' tmlock':''}${clk?' tmclick':''}"${clk?` data-mh="${m.a}" data-ma="${m.b}"`:''}>
    <div class="tt ${wa?'win':''}"${da}>${flag(m.a,'sm')}<span class="tn${m.ea?' kox':''}">${m.a||'?'}</span><span class="tv">${va}</span></div>
    <div class="tt ${wb?'win':''}"${db}>${flag(m.b,'sm')}<span class="tn${m.eb?' kox':''}">${m.b||'?'}</span><span class="tv">${vb}</span></div>
-   ${m.pe?'<div class="tpe">on penalties</div>':''}${badge}</div>`;}
+   ${m.pe?'<div class="tpe">on penalties</div>':m.aet?'<div class="tpe">a.e.t.</div>':''}${badge}</div>`;}
 function bracketTree(rounds){
   const ord=l=>BORDER[l]||[];
   const S=rounds.map(r=>({label:r.label,
@@ -967,9 +979,17 @@ function bracketTree(rounds){
     h+='</div>';});
   return h+'</div>';
 }
-function renderBracket(){
+function renderBracket(){   // final archive: the real knockout scores (+ pens / a.e.t.), no more probabilities
+  const rev={};(D.played_review||[]).forEach(m=>{rev[m.home+"|"+m.away]=m;});
+  const min90=g=>((parseInt(String(g.minute||"").split("+")[0])||0)>90);
   const rounds=D.bracket.map(rd=>({label:rd.label,
-    ms:rd.matches.map(m=>{const wa=m.adv===m.home;
+    ms:rd.matches.map(m=>{
+      const dir=rev[m.home+"|"+m.away],inv=rev[m.away+"|"+m.home],r=dir||inv;
+      if(r){const hs=dir?r.hs:r["as"],as=dir?r["as"]:r.hs;   // a=m.home goals · b=m.away goals
+        const pe=hs===as,aet=!pe&&(r.goals||[]).some(min90);
+        const win=hs>as?m.home:as>hs?m.away:m.adv;
+        return {a:m.home,b:m.away,win,m:m.m,va:String(hs),vb:String(as),pe,aet};}
+      const wa=m.adv===m.home;   // fallback if a tie has no stored result (shouldn't happen post-tournament)
       return {a:m.home,b:m.away,win:m.adv,m:m.m,va:wa?pct(m.p):"",vb:wa?"":pct(m.p)};})}));
   document.getElementById("bracket").innerHTML=bracketTree(rounds);
 }
@@ -981,22 +1001,28 @@ function renderReview(){
   h+=`<table class="rev"><thead><tr><th>Date</th><th>Match</th><th>Actual result</th>
   <th title="Home win / Draw / Away win — the bold one is the model's pick">Model W / D / L</th>
   <th title="Single most probable exact score">Most likely score</th><th>Verdict</th></tr></thead><tbody>`;
-  [...rv].sort((a,b)=>(predKO(b.home,b.away)||0)-(predKO(a.home,a.away)||0)).forEach(m=>{   // chronological, newest first
+  [...rv].sort((a,b)=>(predKO(b.home,b.away)||0)-(predKO(a.home,a.away)||0)).forEach((m,ri)=>{   // chronological, newest first
     const probs=[["home",m.p_home],["draw",m.p_draw],["away",m.p_away]];
     const wdl=probs.map(([k,v])=>{const pick=k===m.pred;
       const c=pick?(m.hit?"#2ee6a6":"#ff6b6b"):"#8a95a9";
       return `<span style="color:${c};font-weight:${pick?700:400}">${pc0(v)}</span>`;}).join(" / ");
     const gl=(m.goals||[]).map(x=>`${x.minute!=null?x.minute+"'":""} ${x.scorer}${x.pen?" (p)":""}${x.og?" (og)":""}`).join(" · ");
     const md=hasMd(m.home,m.away);
-    h+=`<tr${md?` class="mdclick" data-h="${m.home}" data-a="${m.away}"`:""}><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td>
+    const cls=[md?"mdclick":"",ri>=5?"revx":""].filter(Boolean).join(" ");   // first 5 shown, rest behind 'see more'
+    h+=`<tr${cls?` class="${cls}"`:""}${md?` data-h="${m.home}" data-a="${m.away}"`:""}${ri>=5?' style="display:none"':''}><td style="white-space:nowrap">${koLabel(m.home,m.away,m.date)}</td>
     <td><span class="row-team">${flag(m.home,'sm')} ${m.home} <b>${m.hs}-${m["as"]}</b> ${m.away} ${flag(m.away,'sm')}</span>${gl?`<div class="goalsline">⚽ ${gl}</div>`:""}</td>
     <td>${oc(m.actual)}</td><td>${wdl}</td>
     <td>${m.ml_score===(m.hs+"-"+m["as"])
       ?`<span class="badge2 y" title="nailed the exact score!">🎯 ${m.ml_score} <span style="font-weight:400">${pc0(m.p_ml)}</span></span>`
       :`<span style="color:#8a95a9">${m.ml_score} <span style="font-size:11px">${pc0(m.p_ml)}</span></span>`}</td>
     <td>${m.hit?'<span class="badge2 y">✓ right result</span>':'<span class="badge2 n">✗ (gave it '+pc0(m.p_actual)+')</span>'}</td></tr>`;});
-  el.innerHTML=h+`</tbody></table>`;
+  el.innerHTML=h+`</tbody></table>`
+    +(rv.length>5?`<button class="btn" id="rev-more" style="margin-top:12px">Show all ${rv.length} results ▾</button>`:"");
   el.querySelectorAll(".mdclick").forEach(r=>r.onclick=()=>matchModal(r.dataset.h,r.dataset.a));
+  const _rm=document.getElementById("rev-more");
+  if(_rm)_rm.onclick=()=>{const open=_rm.dataset.open==="1";
+    el.querySelectorAll("tr.revx").forEach(r=>r.style.display=open?"none":"");
+    _rm.dataset.open=open?"0":"1";_rm.textContent=open?`Show all ${rv.length} results ▾`:"Show fewer ▴";};
 }
 
 function renderFifa(){
@@ -1517,6 +1543,21 @@ function predStandings(){   // per-user points by jornada + by football-day, fro
   const srt=B=>{const o={};Object.keys(B).forEach(k=>o[k]=Object.values(B[k]).sort((a,b)=>b.points-a.points||b.played-a.played));return o;};
   return {phases:srt(P),days:srt(DY),complete};
 }
+function predScorecard(scored){   // final scorecard: your points vs the machine, per round + total
+  if(!scored.length)return "";
+  const ORD=["Group stage","Round of 32","Round of 16","Quarter-finals","Semi-finals","Final"];
+  const roundOf={};(D.bracket||[]).forEach(rd=>rd.matches.forEach(m=>{roundOf[m.home+"|"+m.away]=rd.label;roundOf[m.away+"|"+m.home]=rd.label;}));
+  const agg={};scored.forEach(s=>{const rn=roundOf[s.m.home+"|"+s.m.away]||"Group stage",a=agg[rn]=agg[rn]||{you:0,mac:0};a.you+=s.yp;a.mac+=s.mp;});
+  let ty=0,tm=0;
+  const row=(lbl,y,m,tot)=>{const w=y>m?"y":y<m?"m":"";
+    return `<div class="scrow${tot?" sctot":""}"><span class="scr-r">${lbl}</span>`
+      +`<span class="scr-p${w==="y"?" scw":""}">${y}</span><span class="scr-p${w==="m"?" scw":""}">${m}</span></div>`;};
+  const body=ORD.filter(r=>agg[r]).map(r=>{ty+=agg[r].you;tm+=agg[r].mac;return row(r,agg[r].you,agg[r].mac,false);}).join("");
+  const verdict=ty>tm?`🟢 You finished ${ty-tm} ahead of the model`:ty<tm?`🔴 The model finished ${tm-ty} ahead`:`🤝 Dead level with the model`;
+  return `<div class="scard"><div class="scard-t">📊 Your final scorecard <span class="tag">you vs the machine</span></div>`
+    +`<div class="scrow scr-h"><span class="scr-r">Round</span><span class="scr-p">You</span><span class="scr-p">🤖</span></div>`
+    +body+row("Total",ty,tm,true)+`<div class="scard-v">${verdict}</div></div>`;
+}
 function predRender(){
   const el=document.getElementById("predict");if(!el)return;
   const store=predLoad(),now=new Date();
@@ -1544,10 +1585,11 @@ function predRender(){
       +(you>mac?`🟢 ${you-mac} ahead of the model`:you<mac?`🔴 model leads by ${mac-you}`:`🤝 level with the model`)
       +`\n\n🎯 exact · ✅ result · ❌ miss\nCan you beat me? 👇\n${_site}`;
     h+=`<div class="psharerow"><button class="pbtn pshare" id="p-share">📤 Share my run</button></div>`;
+    h+=predScorecard(scored);
   }else h+=`<div class="pstats" style="padding:6px 0 14px">Make your picks below — your score vs the model shows up here after kickoff. 👇</div>`;}
   const ST=predStandings();
   const PHL=[["J2","Matchday 2"],["J3","Matchday 3"],["KO","Knockouts"]].filter(p=>(ST.phases[p[0]]||[]).length);
-  const _ph=lbPhase||(PHL.length?PHL[PHL.length-1][0]:"all");   // default view: the current matchday
+  const _ph=lbPhase||"all";   // final: default to the Overall (whole-tournament) standings
   const _dk=Object.keys(ST.days).sort();   // 🌟 Player of the day — latest football-day's top scorer
   if(_dk.length){const _mb=ST.days[_dk[_dk.length-1]],_hum=_mb.filter(r=>r.uid!=="machine"),_mac=_mb.find(r=>r.uid==="machine"),
       _MO=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],_dp=_dk[_dk.length-1].split("-");
@@ -1558,7 +1600,7 @@ function predRender(){
   const _lb=_ph==="all"?lbRows.filter(r=>!r.is_model&&(r.picks>0||r.played>0||(sbUser&&r.uid===sbUser.id)))
                        :(ST.phases[_ph]||[]).filter(r=>r.uid!=="machine");
   if(_lb.length||PHL.length){const myIdx=sbUser?_lb.findIndex(r=>r.uid===sbUser.id):-1;
-    h+=`<h3 class="psec">🏆 Leaderboard <span class="tag">tap a player to see their picks</span></h3>`;
+    h+=`<h3 class="psec">🏆 Final leaderboard <span class="tag">final standings · tap a player to see their picks</span></h3>`;
     const won=PHL.filter(p=>ST.complete[p[0]]).map(p=>{const ps=(ST.phases[p[0]]||[]).filter(r=>r.uid!=="machine");if(!ps.length)return "";const tied=ps.filter(r=>r.points===ps[0].points);return `🏆 ${p[1]}: <b>${tied.map(r=>r.name).join(" &amp; ")}</b>`;}).filter(Boolean);
     if(won.length)h+=`<div class="pwinners">${won.join(" · ")}</div>`;
     if(PHL.length)h+=`<div class="pphtabs"><button class="pphtab${_ph==="all"?" on":""}" data-ph="all">Overall</button>`+PHL.map(p=>`<button class="pphtab${_ph===p[0]?" on":""}" data-ph="${p[0]}">${p[1]}</button>`).join("")+`</div>`;
@@ -1573,43 +1615,11 @@ function predRender(){
     h+=`<div class="lbx">`;
     _lb.slice(0,30).forEach((r,i)=>{const me=sbUser&&r.uid===sbUser.id,riv=rivalUids.has(r.uid);
       h+=`<div class="lbrow lbclick${me?' lbme':''}${riv?' lbrival':''}" data-uid="${r.uid}" data-name="${(r.name||'Player').replace(/"/g,'&quot;')}"><span class="lbrank">${i+1}</span>`
-        +`<span class="lbname">${me?'🟢':riv?'⚔️':'🧑'} ${r.name||'Player'}${me?' · you':''}</span>`
+        +`<span class="lbname">${i===0?'🥇':me?'🟢':riv?'⚔️':'🧑'} ${r.name||'Player'}${me?' · you':''}</span>`
         +`<span class="lbpts">${r.points}</span></div>`;});
     h+=`</div>`;}
   if(signedIn){
-  const up=(D.matches||[]).map(m=>({m,ko:predKO(m.home,m.away),
-      d:(D.kickoffs[[m.home,m.away].sort().join("|")]||{label:""}).label.split(" · ")[0]}))
-    .sort((a,b)=>(a.ko?a.ko:9e15)-(b.ko?b.ko:9e15));
-  let _n=Math.min(12,up.length);                        // aim for ~12 cards…
-  while(_n<up.length&&up[_n].d===up[_n-1].d)_n++;        // …but never cut a day in half
-  const show=up.slice(0,_n),more=up.length-_n;
-  h+=`<h3 class="psec">📥 Predict the upcoming matches</h3>`;
-  const stp=(key,s,d,l)=>`<button class="wifb" data-k="${key}" data-s="${s}" data-d="${d}">${l}</button>`;
-  let curDate="";
-  show.forEach(({m,ko})=>{const key=m.home+"|"+m.away,mine=key in store,cur=store[key]||predModel(key),
-    locked=ko&&now>=ko,kl=ko?D.kickoffs[[m.home,m.away].sort().join("|")].label:"";
-    const dpart=kl.split(" · ")[0];   // date for the day header (the card keeps the full label)
-    if(dpart&&dpart!==curDate){curDate=dpart;h+=`<div class="pdate">📅 ${dpart}</div>`;}
-    const res=liveRev[key];let sc;   // live Supabase result for a kicked-off match
-    if(res)sc=`<span class="psc"><b>${res.hs}</b><i>-</i><b>${res["as"]}</b></span>`;   // show the actual result
-    else if(locked)sc=mine?`<span class="psc"><b>${cur[0]}</b><i>-</i><b>${cur[1]}</b></span>`:`<span class="psc" style="color:#5d6a85">—</span>`;
-    else{const dh=mine?cur[0]:'—',da=mine?cur[1]:'—';   // — until the user actually picks (don't pre-fill the model's call)
-      sc=`<span class="psc">${stp(key,'h',-1,'−')}<b>${dh}</b>${stp(key,'h',1,'+')}<i>-</i>${stp(key,'a',-1,'−')}<b>${da}</b>${stp(key,'a',1,'+')}</span>`;}
-    h+=`<div class="pcard${locked?' plk':''}${mine?' pmine':''}"><div class="prow"><span class="pteam">${flag(m.home,'sm')} ${m.home}</span>${sc}<span class="pteam ar">${m.away} ${flag(m.away,'sm')}</span></div>`;
-    let meta;
-    if(res){const a=[res.hs,res["as"]],mdl=res.ml_score.split("-").map(Number),mp=predScore(mdl,a),
-      pp=p=>`<b style="color:${p>=30?'#ffcb5c':p>=10?'#2ee6a6':p?'#9fb0c9':'#ff6b6b'}">+${p}</b>`;
-      meta=`✅ `+(mine?`you <b>${cur.join('-')}</b> ${pp(predScore(cur,a))}`:`<span class="note">you didn't predict this one</span>`)+` · 🤖 Machine <b>${mdl.join('-')}</b> ${pp(mp)}`;}
-    else meta=locked?('🔒 locked'+(mine?' · <span class="pdone">✓ your pick</span>':' — not predicted')):('🕒 '+kl+(mine?' · <span class="pdone">✓ your pick</span>':''));
-    h+=`<div class="pmeta">${meta}</div>`;
-    if(res){const ra=[res.hs,res["as"]],mdl=res.ml_score.split("-").map(Number);   // why each side scored what it did
-      if(mine)h+=`<div class="pbreak">↳ <b>your +${predScore(cur,ra)}</b> · ${predBreak(cur,ra)}</div>`;
-      h+=`<div class="pbreak">↳ <b>🤖 +${predScore(mdl,ra)}</b> · ${predBreak(mdl,ra)}</div>`;}
-    if(!locked&&m.top)h+=`<div class="psugg">💡 The model's call: `+m.top.map(s=>`<button class="pchip" data-k="${key}" data-sc="${s.score}">${s.score} · ${pc0(s.p)}</button>`).join("")+`</div>`;
-    const _cw=crowdMap[key];if(_cw&&_cw.n>0)h+=`<div class="pcrowd">👥 Crowd (${_cw.n}): ${m.home} ${_cw.home_pct}% · Draw ${_cw.draw_pct}% · ${m.away} ${_cw.away_pct}%</div>`;
-    h+=`</div>`;});
-  if(more)h+=`<p class="note">…and ${more} more match${more>1?'es':''} to come — predict the imminent ones first.</p>`;
-  if(scored.length){h+=`<h3 class="psec">📊 Your results so far</h3>`;
+  if(scored.length){h+=`<h3 class="psec">🧾 Match by match <span class="tag">your pick vs the machine</span></h3>`;
     const tag=p=>p>=30?'🎯 +'+p:p>=10?'✅ +'+p:p>0?'⚽ +'+p:'❌ +0';
     const _rescards=[];
     scored.slice().reverse().forEach(({m,yp,mp,a})=>{const key=m.home+"|"+m.away;
@@ -1866,14 +1876,17 @@ function makeCollapsible(){
     set(!(mob&&h.classList.contains("mcol")));
   });
 }
-renderRanking();renderDetail();renderGroups();renderMatches();buildLab();
-renderBracket();renderAnalysis();renderBacktest();renderGolden();renderGoldenChart();renderOdds();renderReview();renderFifa();renderGoals();renderCards();
+renderGroups();buildLab();
+renderBracket();renderBacktest();renderGolden();renderGoldenChart();renderOdds();renderReview();renderFifa();renderGoals();renderCards();
 renderToday();renderSurprises();
+if(document.getElementById("ranking")){renderRanking();renderDetail();   // Teams ranking — present only on the pre-tournament/live-in-progress build
+  document.getElementById("search").oninput=e=>{query=e.target.value.toLowerCase();renderRanking();};}
+if(document.getElementById("matches")){renderMatches();
+  const _mf=document.getElementById("mfilter");if(_mf)_mf.onchange=renderMatches;}
+if(document.getElementById("analysis"))renderAnalysis();
 if(D.elo_by_year&&Object.keys(D.elo_by_year).length){renderEloYear();
   document.getElementById("elo-year").oninput=renderEloYear;}
-document.getElementById("mfilter").onchange=renderMatches;
-document.getElementById("search").oninput=e=>{query=e.target.value.toLowerCase();renderRanking();};
-document.getElementById("sim-btn").onclick=rollTournament;
+const _simb=document.getElementById("sim-btn");if(_simb)_simb.onclick=rollTournament;
 if(document.getElementById("whatif")){wifRender();
   const _rb=document.getElementById("wif-reset");if(_rb)_rb.onclick=()=>{wifInit();wifRender();bywRender();};}
 if(document.getElementById("byw")){bywRender();
@@ -1956,22 +1969,12 @@ def build_interactive(data: dict, out_path) -> Path:
                     f'~4500 unseen matches: <b>{f["acc"]*100:.0f}%</b> accuracy · '
                     f'<b>RPS {f["rps"]:.3f}</b> (naive {nv["rps"]:.3f}) — bookmaker level.</p>')
 
-    ev = data.get("evolution")
     oh = data.get("odds_history")
-    ev_html = ""
-    if oh or (ev and ev.get("movers")):
-        parts = ["<h2>📊 Odds over time <span class='tag'>since kickoff</span></h2>"]
-        if oh:
-            parts.append("<div style='position:relative;height:340px'>"
-                         "<canvas id='odds-chart'></canvas></div>")
-        if ev and ev.get("movers"):
-            rows = "".join(
-                f"<tr><td>{m['team']}</td><td>{m['prev']*100:.1f}%</td>"
-                f"<td>{m['now']*100:.1f}%</td><td style='color:{'#2ee6a6' if m['delta']>=0 else '#ff6b6b'};"
-                f"font-weight:700'>{m['delta']*100:+.1f}</td></tr>" for m in ev["movers"])
-            parts.append("<p class='note'>Biggest movers:</p><table><tr><th>Team</th>"
-                         f"<th>Before</th><th>Now</th><th>Δ</th></tr>{rows}</table>")
-        ev_html = "".join(parts)
+    # 'Biggest movers' dropped now the title is settled (every team but the champion sits at 0%);
+    # the odds-over-time chart still tells the story of how the race moved.
+    ev_html = ("<h2>📊 Odds over time <span class='tag'>since kickoff</span></h2>"
+               "<div style='position:relative;height:340px'><canvas id='odds-chart'></canvas></div>"
+               ) if oh else ""
 
     mgroups = sorted({m["group"] for m in data["matches"] if m["group"]})   # knockout rows carry no group
     opts = '<option value="all">All groups</option>' + "".join(
@@ -1989,6 +1992,7 @@ def build_interactive(data: dict, out_path) -> Path:
     # "teams above 5%" KPIs would just show a meaningless 0% team (the alphabetically-first tie) --
     # swap in the runner-up + the Golden Boot leader instead.
     decided = fav["p"] >= 0.999
+    badge_txt = "MACHINE LEARNING PREDICTION · FINAL RECORD" if decided else "MACHINE LEARNING PREDICTION"
     runner = next((f for f in fin if f["team"] != fav["team"]), sec)
     _gb = data.get("golden_boot") or []
 
@@ -2015,13 +2019,20 @@ def build_interactive(data: dict, out_path) -> Path:
     ogdir = "/outputs_pretournament" if pre else "/outputs"
     # Beat-the-Machine prediction game: live version only (needs real results)
     pred_btn = "" if pre else "<button data-tab='predict'>⚔️ Predict</button>"
-    pred_tab = ("" if pre else
-        "<div class='tab' id='tab-predict'>"
-        "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
+    _btm_intro = (
+        "<p class='note'>The tournament's done — here's the final scoreboard. Each result you called "
+        "scored points (✅ right result +10 · ⚽ each team's exact goals +5 · 📏 goal difference +5 · "
+        "🎯 exact score +5, perfect = 30), and the model played every match too. Sign in with Google to "
+        "see your final scorecard, your match-by-match picks and where you finished on the leaderboard.</p>"
+        if decided else
         "<p class='note'>Predict the upcoming matches — tap the model's call to fill it in, "
         "or set your own with −/+. Locked at kickoff. Points stack up: ✅ right result +10 · ⚽ each team's exact goals +5 · 📏 goal "
         "difference +5 · 🎯 exact score +5 (perfect = 30). The model plays too — can you beat it? Sign in with "
-        "Google to make your picks, choose a username and climb the global leaderboard.</p>"
+        "Google to make your picks, choose a username and climb the global leaderboard.</p>")
+    pred_tab = ("" if pre else
+        "<div class='tab' id='tab-predict'>"
+        "<h2>⚔️ Beat the Machine <span class='tag'>you vs the model</span></h2>"
+        f"{_btm_intro}"
         "<div id='predict'></div></div>")
     og = (  # Open Graph (rich link previews) + PWA / add-to-home-screen
         f'<meta property="og:title" content="World Cup 2026 — ML prediction'
@@ -2045,6 +2056,64 @@ def build_interactive(data: dict, out_path) -> Path:
                    "<div id='review'></div>"
                    "<h2 class='col mcol'>😱 Biggest surprises <span class='tag'>model's worst calls</span></h2>"
                    "<div id='surprises'></div>") if data.get("played_review") else ""
+    _pr = data.get("played_review") or []
+    _pr_hits = sum(1 for m in _pr if m.get("hit"))
+    wc_track = (f"<div class='panel' style='border-left:3px solid var(--gold);margin:2px 0 14px'>"
+                f"<b>🏆 The 2026 World Cup:</b> predicting live, the model called "
+                f"<b>{_pr_hits}/{len(_pr)}</b> match results right (home / draw / away) — and it "
+                f"called the champion, <b>{fav['team']}</b>. The historical track record below is how "
+                f"it does on tournaments it had never seen when it was trained.</div>") if _pr else ""
+    # The live dashboard is now the FINAL archive (stripped of the dead live/predict tools). The
+    # pre-tournament blind forecast (decided=False) keeps its full interactive content untouched.
+    if decided:
+        bracket_h2 = "<h2 class='col mcol'>Final bracket <span class='tag'>how the knockouts played out</span></h2>"
+        teams_tab = (
+            "<h2>The 12 groups <span class='tag'>final standings · who advanced</span></h2>"
+            "<p style='color:#8a95a9;font-size:13px;margin:-2px 0 12px;max-width:760px'>"
+            "How the group stage finished. The figure on the right was the model's "
+            "<b>chance each team would reach the knockouts</b> (it already accounted for the "
+            "8-best-third-placed-teams rule) — now settled to who actually went through: "
+            "<b style='color:#2ee6a6'>green</b> = advanced, <b style='color:#ff6b6b'>red</b> = out.</p>"
+            "<div class='grid' id='groups'></div>")
+        play_tab = (
+            "<h2>🆚 Match Lab <span class='tag'>head-to-head</span></h2>"
+            "<p class='note'>Pick any two of the 48 teams and see what the model makes of the "
+            "match-up — win / draw / win odds, the likeliest scorelines, goal markets and more.</p>"
+            "<div class='lab' id='lab'></div><div class='mlab-out' id='lab-out'></div>")
+    else:
+        bracket_h2 = "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
+        teams_tab = (
+            "<h2>Ranking & path <span class='tag'>click a row</span></h2>"
+            "<div class='layout'><div><input class='search' id='search' "
+            "placeholder='🔎 Search a team…'><div id='ranking'></div></div>"
+            "<div class='panel sticky' id='detail'></div></div>"
+            "<h2 class='col mcol'>The 12 groups <span class='tag'>live standings · who advances</span></h2>"
+            "<p style='color:#8a95a9;font-size:13px;margin:-2px 0 12px;max-width:760px'>"
+            "Sorted by points from games already played. The figure on the right is the model's "
+            "<b>chance each team reaches the knockouts</b> — it already accounts for the "
+            "8-best-third-placed-teams rule. <b style='color:#2ee6a6'>Green</b> = very likely, "
+            "<b style='color:#ff6b6b'>red</b> = very unlikely.</p>"
+            "<div class='grid' id='groups'></div>"
+            f"<h2 class='col mcol'>{mtitle} <span class='tag'>times in WEST (UTC+1)</span></h2>"
+            f"{msel}<div id='matches' style='margin-top:10px'></div>"
+            "<h2 class='col mcol'>📈 Extra analysis</h2><div id='analysis'></div>")
+        play_tab = (
+            "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
+            "<div class='lab' id='lab'></div><div class='mlab-out' id='lab-out'></div>"
+            "<h2 class='col mcol'>🏆 Build your World Cup <span class='tag'>you decide</span></h2>"
+            "<p class='note'><b>1.</b> Set the score of every remaining group match (−/+ the "
+            "goals, from the model's prediction); the tables and who qualifies update live. "
+            "<button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset scores</button></p>"
+            "<div id='whatif'></div>"
+            "<p class='note' style='margin-top:20px'><b>2.</b> Now the knockouts — the model picks "
+            "each winner, but <b>tap the other team</b> to send your pick through, all the way to "
+            "your champion. <button class='btn' id='byw-reset' style='padding:6px 12px;font-size:13px'>↺ Model's bracket</button></p>"
+            "<div id='byw'></div>"
+            "<h2 class='col mcol'>🎲 Roll a tournament <span class='tag'>one full simulation</span></h2>"
+            "<p class='note'>One possible World Cup — group tables, every knockout result "
+            "and the champion. Roll again for another timeline.</p>"
+            "<button class='btn' id='sim-btn'>🎲 Roll a World Cup</button>"
+            "<div id='sim-out' style='margin-top:14px'></div>")
 
     html = (
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
@@ -2058,10 +2127,10 @@ def build_interactive(data: dict, out_path) -> Path:
         "<script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>"
         f"<style>{_CSS}</style></head><body>"
         "<div class='wrap'>"
-        "<div class='hero'><div class='badge'>MACHINE LEARNING PREDICTION</div>"
+        f"<div class='hero'><div class='badge'>{badge_txt}</div>"
         "<h1>🏆 FIFA World Cup 2026</h1>"
         f"<p class='sub'>{mode}Poisson (Dixon-Coles) + Elo · {data['n_sims']:,} Monte Carlo "
-        f"simulations · click a team or try the Match Lab</p>"
+        f"simulations · {'the complete record of the 2026 World Cup' if decided else 'click a team or try the Match Lab'}</p>"
         f"{val_html}</div>"
         "<div class='tabnav'>"
         "<a class='tabhome' href='../index.html' aria-label='Home'>🏠</a>"
@@ -2076,49 +2145,21 @@ def build_interactive(data: dict, out_path) -> Path:
         "<div id='todaysec'><h2>📅 <span id='todayhead'>Today's matches</span> "
         "<span class='tag'>kickoffs in WEST (UTC+1)</span></h2><div id='today'></div></div>"
         f"{ev_html}"
-        "<h2 class='col mcol'>Most likely bracket <span class='tag'>the favourites' path</span></h2>"
+        f"{bracket_h2}"
         "<div id='bracket'></div>"
         "</div>"
         "<div class='tab' id='tab-teams'>"
-        "<h2>Ranking & path <span class='tag'>click a row</span></h2>"
-        "<div class='layout'><div><input class='search' id='search' "
-        "placeholder='🔎 Search a team…'><div id='ranking'></div></div>"
-        "<div class='panel sticky' id='detail'></div></div>"
-        "<h2 class='col mcol'>The 12 groups <span class='tag'>live standings · who advances</span></h2>"
-        "<p style='color:#8a95a9;font-size:13px;margin:-2px 0 12px;max-width:760px'>"
-        "Sorted by points from games already played. The figure on the right is the model's "
-        "<b>chance each team reaches the knockouts</b> — it already accounts for the "
-        "8-best-third-placed-teams rule. <b style='color:#2ee6a6'>Green</b> = very likely, "
-        "<b style='color:#ff6b6b'>red</b> = very unlikely.</p>"
-        "<div class='grid' id='groups'></div>"
-        f"<h2 class='col mcol'>{mtitle} <span class='tag'>times in WEST (UTC+1)</span></h2>"
-        f"{msel}<div id='matches' style='margin-top:10px'></div>"
-        "<h2 class='col mcol'>📈 Extra analysis</h2><div id='analysis'></div>"
+        f"{teams_tab}"
         "</div>"
         "<div class='tab' id='tab-play'>"
-        "<h2>🆚 Match Lab <span class='tag'>head-to-head, live</span></h2>"
-        "<div class='lab' id='lab'></div><div class='mlab-out' id='lab-out'></div>"
-        "<h2 class='col mcol'>🏆 Build your World Cup <span class='tag'>you decide</span></h2>"
-        "<p class='note'><b>1.</b> Set the score of every remaining group match (−/+ the "
-        "goals, from the model's prediction); the tables and who qualifies update live. "
-        "<button class='btn' id='wif-reset' style='padding:6px 12px;font-size:13px'>↺ Reset scores</button></p>"
-        "<div id='whatif'></div>"
-        "<p class='note' style='margin-top:20px'><b>2.</b> Now the knockouts — the model picks "
-        "each winner, but <b>tap the other team</b> to send your pick through, all the way to "
-        "your champion. <button class='btn' id='byw-reset' style='padding:6px 12px;font-size:13px'>↺ Model's bracket</button></p>"
-        "<div id='byw'></div>"
-        "<h2 class='col mcol'>🎲 Roll a tournament <span class='tag'>one full simulation</span></h2>"
-        "<p class='note'>One possible World Cup — group tables, every knockout result "
-        "and the champion. Roll again for another timeline.</p>"
-        "<button class='btn' id='sim-btn'>🎲 Roll a World Cup</button>"
-        "<div id='sim-out' style='margin-top:14px'></div>"
+        f"{play_tab}"
         "</div>"
         "<div class='tab' id='tab-insights'>"
         f"{review_html}"
         "<h2 class='col mcol'>🏅 Model vs FIFA ranking <span class='tag'>does the model agree?</span></h2>"
         "<div id='fifa'></div>"
         "<h2 class='col mcol'>🎯 Does it actually work? <span class='tag'>track record</span></h2>"
-        f"{_mega_html(data.get('mega_backtest'))}"
+        f"{wc_track}{_mega_html(data.get('mega_backtest'))}"
         "<p class='note' style='margin-top:16px'>And zooming in on two tournaments the "
         "model had never seen when it was trained:</p>"
         "<div id='backtest'></div>"
