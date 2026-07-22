@@ -285,8 +285,12 @@ def comparison_page(snap_csv, pre_csv, out_html, top=14):
             f'<em> · {pre.loc[t, "p_champion"] * 100:.1f}% to win</em></span></div>'
             for t, st, _ in items)
 
-    # 3) title race — the two finalists' odds, pre-tournament -> live
-    finals = [t for t in snap.sort_values("p_champion", ascending=False).index[:2] if t in pre.index]
+    # 3) title race — the two finalists' odds, pre-tournament -> live. Use p_final (both actual
+    #    finalists sit at ~100% reach-the-final), champion first: sorting by p_champion breaks
+    #    once the title is settled, when every non-champion is tied at 0% (an arbitrary 0% team
+    #    would sneak in as "finalist").
+    finals = [t for t in snap.sort_values(["p_final", "p_champion"], ascending=False).index[:2]
+              if t in pre.index]
     race = "".join(
         f'<div class="stat"><span>{_flag_img(t)}{t}</span>'
         f'<b>{pre.loc[t, "p_champion"] * 100:.1f}% <span class="arrow">→</span> '
