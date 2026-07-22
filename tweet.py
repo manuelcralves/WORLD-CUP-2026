@@ -28,6 +28,7 @@ from pathlib import Path
 import pandas as pd
 
 SITE = "https://worldcup2026ml.pt/"
+REVIEW = SITE + "outputs/review.html"   # retrospective hub — the closing tweets point here
 OUT = Path(__file__).resolve().parent / "outputs"
 KEYS = ("X_API_KEY", "X_API_SECRET", "X_ACCESS_TOKEN", "X_ACCESS_SECRET")
 LIMIT = 280
@@ -469,8 +470,89 @@ def _survival_text() -> str:
     return head + "\n".join(lines) + f"\n\n👇 {SITE}"
 
 
+def _champion():
+    """(team, flag) once the title is settled (a team at ~100% p_champion), else None."""
+    p = OUT / "predictions.csv"
+    if not p.exists():
+        return None
+    try:
+        d = pd.read_csv(p)
+        w = d[d["p_champion"] >= 0.999]
+        if len(w):
+            t = str(w.iloc[0]["team"])
+            return (t, _flag(t))
+    except Exception:
+        pass
+    return None
+
+
+def _model_hits():
+    """(correct results, total played) from played_review.csv, else None."""
+    p = OUT / "played_review.csv"
+    if not p.exists():
+        return None
+    try:
+        d = pd.read_csv(p)
+        return (int(d["hit"].sum()), len(d))
+    except Exception:
+        return None
+
+
+def _champion_tweet(champ) -> str:
+    team, fl = champ
+    return (f"🏆 {fl} {team} are your FIFA World Cup 2026 champions!\n\n"
+            f"And our blind model — trained before a ball was kicked — had them lifting "
+            f"the trophy. 🤖\n\nRelive the whole tournament 👇\n{SITE}")
+
+
+def _reportcard_tweet(champ) -> str:
+    team, fl = champ
+    hits = _model_hits()
+    res = f"📊 {hits[0]}/{hits[1]} match results called right\n" if hits else ""
+    return (f"🤖 Our model's blind, pre-tournament call vs reality:\n\n"
+            f"🏆 Champion: {fl} {team} — called ✅\n"
+            f"{res}\n"
+            f"The full report card 👇\n{REVIEW}")
+
+
+def _golden_final_tweet() -> str:
+    p = OUT / "golden_boot.csv"
+    if not p.exists():
+        return ""
+    try:
+        d = pd.read_csv(p)
+        if "wc" not in d.columns or not int(d["wc"].max() or 0):
+            return ""
+        top = d.sort_values("wc", ascending=False).iloc[0]
+        n = int(top["wc"])
+        if n < 1:
+            return ""
+        team = str(top["team"])
+        return (f"👟 The FIFA World Cup 2026 Golden Boot:\n\n"
+                f"🥇 {_flag(team)} {_surname(top['scorer'])} — {n} goals\n\n"
+                f"See the full scoring race 👇\n{REVIEW}")
+    except Exception:
+        return ""
+
+
+def _farewell_tweet() -> str:
+    return ("👋 That's a wrap on FIFA World Cup 2026.\n\n"
+            "Thanks to everyone who played Beat the Machine and filled in a bracket 🙌\n\n"
+            "The full retrospective is live — the numbers, every team's journey & how the "
+            f"model did 👇\n{REVIEW}")
+
+
 def evergreen_tweets() -> list:
     """(label, text) tweets for the kit — copy-paste only, never auto-posted."""
+    champ = _champion()
+    if champ:                                 # title settled -> a clean CLOSING set, not the live 'come play' stuff
+        out = [("🏆 Champions", _champion_tweet(champ)),
+               ("🤖 Model report card", _reportcard_tweet(champ))]
+        gb = _golden_final_tweet()
+        if gb:
+            out.append(("👟 Golden Boot (final)", gb))
+        out.append(("👋 Farewell & retrospective", _farewell_tweet()))
+        return out
     out = [("Recruitment · post anytime", COME_PLAY)]
     g = _golden_text()
     if g:
@@ -497,7 +579,7 @@ def build_thread() -> list:
         tweets.append(recap)
     tweets += _qualif_today(today)
     title = _title_text()
-    if title:
+    if title and not _champion():             # once the title is settled, drop the now-pointless 'title race'
         tweets.append(title)
     if not tweets:
         return []
@@ -532,11 +614,16 @@ def write_kit(tweets: list, evergreen: list = ()):
 
     cards = "".join(_card(f"t{i}", f"Tweet {i}/{len(tweets)}", t)
                     for i, t in enumerate(tweets, 1))
+    daily_html = (f'<h2 class="sec">📅 Daily thread <span style="font-weight:400;color:#5d6a85">'
+                  f'· refreshed each build</span></h2>{cards}') if tweets else ""
     ever = "".join(_card(f"e{j}", html.escape(lab), t)
                    for j, (lab, t) in enumerate(evergreen, 1))
-    ever_html = (f'<h2 class="sec">♻️ Evergreen &amp; on-demand</h2>'
-                 f'<p class="sub">Post any of these whenever — not part of the daily '
-                 f'thread, never auto-posted.</p>{ever}') if evergreen else ""
+    # once the tournament is over there is no daily thread, so the closing set is the whole kit
+    ever_title = "🏆 Closing tweets — the tournament's over" if not tweets else "♻️ Evergreen &amp; on-demand"
+    ever_sub = ("Post these to wrap up the World Cup — the champion, the model's report card & a farewell."
+                if not tweets else
+                "Post any of these whenever — not part of the daily thread, never auto-posted.")
+    ever_html = (f'<h2 class="sec">{ever_title}</h2><p class="sub">{ever_sub}</p>{ever}') if evergreen else ""
     page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
@@ -561,8 +648,7 @@ button{{background:#243049;color:#eef1f7}}button:hover{{background:#2c3a57}}
 <h1>📋 World Cup 2026 — tweet kit</h1>
 <p class="sub">Tap <b>Copy</b> and paste into X, or <b>Tweet ▸</b> to open X with it ready.
 Post each one with Tweet ▸ as its own tweet (shows better than a thread on a new account), or reply to chain them.</p>
-<h2 class="sec">📅 Daily thread <span style="font-weight:400;color:#5d6a85">· refreshed each build</span></h2>
-{cards}
+{daily_html}
 {ever_html}
 <script>function cp(id){{var el=document.getElementById(id);
 navigator.clipboard.writeText(el.innerText);var b=el.parentNode.querySelector('button');
@@ -610,14 +696,17 @@ def main() -> int:
         return 0
 
     tweets = build_thread()
-    if not tweets:
+    evergreen = evergreen_tweets()
+    if not tweets and not evergreen:
         print("Nothing to post (no data found).")
         return 0
-    write_kit(tweets, evergreen_tweets())         # always — the free manual path
+    write_kit(tweets, evergreen)                  # always — the free manual path
     for i, t in enumerate(tweets, 1):
         print(f"---- tweet {i}/{len(tweets)} ({_eff_len(t)}/{LIMIT} chars) ----\n{t}")
+    for lab, t in evergreen:
+        print(f"---- {lab} ({_eff_len(t)}/{LIMIT} chars) ----\n{t}")
     auto = os.environ.get("AUTO_TWEET", "").lower() in ("1", "true", "yes")
-    print(f"\n({len(tweets)} tweets · kit → outputs/tweets.html · "
+    print(f"\n({len(tweets)} daily + {len(evergreen)} evergreen · kit → outputs/tweets.html · "
           f"auto-post {'ON' if auto else 'OFF'})")
     if dry:
         return 0
