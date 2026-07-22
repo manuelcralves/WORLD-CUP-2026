@@ -988,10 +988,11 @@ function renderBracket(){   // final archive: the real knockout scores (+ pens /
       if(r){const hs=dir?r.hs:r["as"],as=dir?r["as"]:r.hs;   // a=m.home goals · b=m.away goals
         const pe=hs===as,aet=!pe&&(r.goals||[]).some(min90);
         const win=hs>as?m.home:as>hs?m.away:m.adv;
-        return {a:m.home,b:m.away,win,m:m.m,va:String(hs),vb:String(as),pe,aet};}
+        return {a:m.home,b:m.away,win,m:m.m,va:String(hs),vb:String(as),pe,aet,real:hasMd(m.home,m.away)};}
       const wa=m.adv===m.home;   // fallback if a tie has no stored result (shouldn't happen post-tournament)
       return {a:m.home,b:m.away,win:m.adv,m:m.m,va:wa?pct(m.p):"",vb:wa?"":pct(m.p)};})}));
-  document.getElementById("bracket").innerHTML=bracketTree(rounds);
+  const el=document.getElementById("bracket");el.innerHTML=bracketTree(rounds);
+  el.querySelectorAll(".tmclick").forEach(t=>t.onclick=()=>matchModal(t.dataset.mh,t.dataset.ma));   // a played tie -> match detail
 }
 function renderReview(){
   const rv=D.played_review,el=document.getElementById("review");if(!el)return;
