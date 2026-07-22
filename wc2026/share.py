@@ -181,9 +181,9 @@ def hero_card(table, out):
                    _GOLD, (40, 33, 13), (150, 120, 30), h=38)
         d.text((600, 238), f"{champ['team']} are", font=fh, fill=_WHITE, anchor="mm")
         d.text((600, 306), "World Champions", font=fh, fill=_GOLD, anchor="mm")
-        d.text((600, 372), "Our model called it — the champion, the final and all four semi-finalists",
+        d.text((600, 372), "Blind, it nailed both finalists and all four semi-finalists",
                font=_ttf(23, bold=False), fill=_GREY, anchor="mm")
-        labels, golds = ["Called the champion", "Called the final", "Called the semis"], {0}
+        labels, golds = ["Both finalists", "All four semis", "Champion in its top 2"], {0}
     else:
         _hero_pill(d, 600, 170, "MACHINE-LEARNING PREDICTION", _ttf(19),
                    _GREEN, (14, 33, 30), (0, 92, 76), h=38)

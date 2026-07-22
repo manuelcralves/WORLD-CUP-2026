@@ -501,16 +501,17 @@ def _model_hits():
 def _champion_tweet(champ) -> str:
     team, fl = champ
     return (f"🏆 {fl} {team} are your FIFA World Cup 2026 champions!\n\n"
-            f"And our blind model — trained before a ball was kicked — had them lifting "
-            f"the trophy. 🤖\n\nRelive the whole tournament 👇\n{SITE}")
+            f"Our blind model's top two picks were exactly the two finalists 🎯 — "
+            f"{team} lifting it as its co-favourite. 🤖\n\nRelive the whole tournament 👇\n{SITE}")
 
 
 def _reportcard_tweet(champ) -> str:
     team, fl = champ
     hits = _model_hits()
     res = f"📊 {hits[0]}/{hits[1]} match results called right\n" if hits else ""
-    return (f"🤖 Our model's blind, pre-tournament call vs reality:\n\n"
-            f"🏆 Champion: {fl} {team} — called ✅\n"
+    return (f"🤖 Our blind, pre-tournament model vs reality:\n\n"
+            f"🎯 Its top two picks = the two finalists ✅\n"
+            f"🏆 {fl} {team} won it — the model's narrow #2 favourite\n"
             f"{res}\n"
             f"The full report card 👇\n{REVIEW}")
 

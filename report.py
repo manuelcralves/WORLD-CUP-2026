@@ -268,7 +268,7 @@ tbody tr:last-child td{border-bottom:0}
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Model report card · World Cup 2026</title>
-{RC.og("World Cup 2026 — model report card", "How the blind pre-tournament model did: it called the champion, the final and all four semi-finalists — the accuracy, calibration and sharpest calls.", "/outputs/report.html")}
+{RC.og("World Cup 2026 — model report card", "How the blind pre-tournament model did: its top two were the two finalists and its top four the exact four semi-finalists (the champion was its #2) — the accuracy, calibration and sharpest calls.", "/outputs/report.html")}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <style>{css}{RC.NAV_CSS}</style></head><body>

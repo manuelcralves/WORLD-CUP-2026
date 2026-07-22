@@ -2061,9 +2061,10 @@ def build_interactive(data: dict, out_path) -> Path:
     _pr_hits = sum(1 for m in _pr if m.get("hit"))
     wc_track = (f"<div class='panel' style='border-left:3px solid var(--gold);margin:2px 0 14px'>"
                 f"<b>🏆 The 2026 World Cup:</b> predicting live, the model called "
-                f"<b>{_pr_hits}/{len(_pr)}</b> match results right (home / draw / away) — and it "
-                f"called the champion, <b>{fav['team']}</b>. The historical track record below is how "
-                f"it does on tournaments it had never seen when it was trained.</div>") if _pr else ""
+                f"<b>{_pr_hits}/{len(_pr)}</b> match results right (home / draw / away) — and, blind, its "
+                f"top two pre-tournament picks were the two finalists and its top four the four semi-finalists "
+                f"(the champion, <b>{fav['team']}</b>, was its narrow #2). The historical track record below "
+                f"is how it does on tournaments it had never seen when it was trained.</div>") if _pr else ""
     # The live dashboard is now the FINAL archive (stripped of the dead live/predict tools). The
     # pre-tournament blind forecast (decided=False) keeps its full interactive content untouched.
     if decided:
