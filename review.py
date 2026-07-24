@@ -217,7 +217,7 @@ def build(m: dict) -> str:
             f'<span class="fn">{r["hit"]} / {r["N"]}</span></div>' for r in fn)
         rank_bit = (f' Its pre-tournament <b>{_ORD.get(m["pre_rank"], f"#{m['pre_rank']}")}</b>, '
                     f'{champ}, lifted the trophy.' if m["pre_rank"] else "")
-        verdict = f"""<h2>The model called it</h2>
+        verdict = f"""<h2>How the blind forecast held up</h2>
 <div class="panel">
 <p class="sub" style="margin:0 0 14px">Ranked by title odds <b>before a ball was kicked</b>, here is how many of the
 model's top&nbsp;N reached the last&nbsp;N — perfect at the sharp end.{rank_bit}</p>

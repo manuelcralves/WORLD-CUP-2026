@@ -194,7 +194,7 @@ def hero_card(table, out):
         labels = [f"{r['team']}  {r['p_champion'] * 100:.0f}%" for _, r in table.head(3).iterrows()]
         golds = {0}
 
-    # pills row (odds contenders, or 'called it' badges once decided) — highlighted ones in gold
+    # pills row (odds contenders, or the 'what it got right' badges once decided) — highlighted in gold
     fp = _ttf(25)
     widths = [d.textlength(s, font=fp) + 40 for s in labels]
     gap, x = 22, 600 - (sum(widths) + 22 * (len(widths) - 1)) / 2
